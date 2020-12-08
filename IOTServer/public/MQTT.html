@@ -31,7 +31,7 @@
       if(value=="1") var value="on";
       else if(value=="2") var value="off";
       $.ajax({
-         url:"http://192.168.123.166:3000/devices/led/"+value,
+         url:"http://192.168.123.105:3000/devices/led/"+value,
          type:"post",
          success : ledStatus,
          error : function(){ alert("error");}

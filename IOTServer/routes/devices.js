@@ -2,15 +2,15 @@ var express = require('express');
 var router = express.Router();
 
 var mongoDB=require("mongodb").MongoClient;
-var url="mongodb://127.0.0.1:27017/iot";
+var url="mongodb://localhost:27017/iot";
 var dbObj=null;
-mongoDB.connect(url, function(err, db){
+mongoDB.connect(url, {useUnifiedTopology:true}, function(err, db){
 	dbObj=db;
 	console.log("DB Connect.......");
 });
 
 var mqtt=require("mqtt"); 
-var client=mqtt.connect("mqtt://192.168.123.166");
+var client=mqtt.connect("mqtt://192.168.123.105");
 
 /* GET home page. */
 router.post('/led/:flag', function(req, res, next) {

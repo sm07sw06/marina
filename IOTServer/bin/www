@@ -16,34 +16,61 @@ app.set('port', port);
  */
 var server = http.createServer(app);
 
-// MongoDB 접속
-var mongoDB=require("mongodb").MongoClient;
-var url="mongodb://a1ck:topadmin@192.168.123.208:27017/iot";
-var dbObj=null;
-mongoDB.connect(url, function(err, database){
-	dbObj=database.db('iot');
-	console.log("Mongo DB Connect.......");
+const { Pool, clientpg } = require("pg");
+
+const pool = new Pool({
+  user: "postgres",
+  host: "192.168.123.105",
+  database: "postgres",
+  password: "topadmin",
+  port: "5432"
 });
 
 
 // MQTT Server 접속, DHT11 센서 데이터를 읽기
 var mqtt=require("mqtt");
-var client=mqtt.connect("mqtt://192.168.123.208");
+var client=mqtt.connect("mqtt://192.168.123.105");
 client.on("connect" , function(){
-	client.subscribe("dht11");	
+	client.subscribe("common");	  //client.subscribe("dht11");
 });
 
 client.on("message", function(topic, message){
 	   var obj=JSON.parse(message);
-	   obj.created_at=new Date();
-	   console.log(obj);
+//	   obj.created_at=new Date();
+//	   console.log(obj);
+	   var sData = obj.boatData.split(",");
+		var sId 		 = sData[9];
+		var nTemperature = sData[16];
+		var nHumidity 	 = sData[17];
+		var nGradex 	 = sData[18];
+		var nGradey 	 = sData[19];
+		var nGpsquality  = sData[26];
+		
+		var nLatitude 	 = sData[22];
+		if(nLatitude == "") nLatitude = '0';
+		var nLongitude 	 = sData[23];
+		if(nLongitude == "") nLongitude = '0';
+		var nSatellite 	 = sData[27];
+		if(nSatellite == "") nSatellite = '0';
+		var nGpsage 	 = sData[33];	   
+		if(nGpsage == "") nGpsage = '0';
+		var sSenttype 	 = sData[14];
+		if(sSenttype == "") sSenttype = 'r';
+		var tSendtime 	 = sData[15];
+
+
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	   var sQueryString = "INSERT INTO public.common(id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) values('" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + ","  + nLongitude + ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + tSendtime + "' );";
+	   console.log(sQueryString);
+	   pool.query(
+			   sQueryString,(err, res) => {
+				   if(err != undefined)
+					   console.log(err);
+//				console.log(err, res);
+//			   pool.end();
+			   }
+			 );
 	   
-	   // mongodb에 DHT11 센서 정보를 저장하는 부분
-	   var dht11=dbObj.collection("dht11");
-	   dht11.save(obj, function(err, result){
-		   if(err)  console.log(err);
-		   else  console.log(JSON.stringify(result)); // {"n":1, "ok": 1}
-	   });
 });
 
 // 소켓을 이용한 통신방법
@@ -130,3 +157,6 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+	
