@@ -36,41 +36,38 @@ client.on("connect" , function(){
 
 client.on("message", function(topic, message){
 	   var obj=JSON.parse(message);
-//	   obj.created_at=new Date();
-	   console.log(obj);
-	   var sData = obj.boatData.split(",");
-		var sId 		 = sData[9];
-		var nTemperature = sData[16];
-		var nHumidity 	 = sData[17];
-		var nGradex 	 = sData[18];
-		var nGradey 	 = sData[19];
-		var nGpsquality  = sData[26];
-		
-		var nLatitude 	 = sData[22];
-		if(nLatitude == "") nLatitude = '0';
-		var nLongitude 	 = sData[23];
-		if(nLongitude == "") nLongitude = '0';
-		var nSatellite 	 = sData[27];
-		if(nSatellite == "") nSatellite = '0';
-		var nGpsage 	 = sData[33];	   
-		if(nGpsage == "") nGpsage = '0';
-		var sSenttype 	 = sData[14];
-		if(sSenttype == "") sSenttype = 'r';
-		var tSendtime 	 = sData[15];
-
-
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	   var sQueryString = "INSERT INTO public.common(id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) values('" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + ","  + nLongitude + ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + tSendtime + "' );";
-	   console.log(sQueryString);
-	   pool.query(
-			   sQueryString,(err, res) => {
-				   if(err != undefined)
-					   console.log(err);
-//				console.log(err, res);
-//			   pool.end();
-			   }
-			 );
+//	   console.log(obj);
 	   
+	   for (sKey in obj) {
+		   console.log(sKey);
+		   
+		   if(sKey == "larva") {
+			    var sData = obj[sKey].split(",");
+				var sId = sData[0];
+				var sIp = sData[1];
+				var nAmmonia = sData[2];
+				
+				if(sIp == "") sIp = '0';
+				if(nAmmonia == "") nAmmonia = 0;
+
+				console.log(sData[0]);
+				console.log(sData[1]);
+				console.log(sData[2]);
+		
+			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+			   var sQueryString = "INSERT INTO public.larva(id, ip, ammonia) values('" + sId + "','"  + sIp + "',"  + nAmmonia + " );";
+			   console.log(sQueryString);
+			   pool.query(
+					   sQueryString,(err, res) => {
+						   if(err != undefined)
+							   console.log(err);
+		//				console.log(err, res);
+		//			   pool.end();
+					   }
+			   );
+		   }
+	   }
+		   
 });
 
 // 소켓을 이용한 통신방법
