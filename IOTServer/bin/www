@@ -27,7 +27,7 @@ const pool = new Pool({
 });
 
 
-// MQTT Server Á¢¼Ó, DHT11 ¼¾¼­ µ¥ÀÌÅÍ¸¦ ÀĞ±â
+// MQTT Server ì ‘ì†, DHT11 ì„¼ì„œ ë°ì´í„°ë¥¼ ì½ê¸°
 var mqtt=require("mqtt");
 var client=mqtt.connect("mqtt://192.168.123.105");
 client.on("connect" , function(){
@@ -35,42 +35,15 @@ client.on("connect" , function(){
 });
 
 client.on("message", function(topic, message){
-	   var obj=JSON.parse(message);
-//	   console.log(obj);
-	   
-	   for (sKey in obj) {
-		   console.log(sKey);
-		   
-		   if(sKey == "larva") {
-			    var sData = obj[sKey].split(",");
-				var sId = sData[0];
-				var sIp = sData[1];
-				var nAmmonia = sData[2];
-				
-				if(sIp == "") sIp = '0';
-				if(nAmmonia == "") nAmmonia = 0;
+	var DB = require('../public/myModules/db');
 
-				console.log(sData[0]);
-				console.log(sData[1]);
-				console.log(sData[2]);
-		
-			// ¾Æ·¡¿Í °°ÀÌ .query ·Î Äõ¸®¸¦ ³¯¸± ¼ö ÀÖ´Ù
-			   var sQueryString = "INSERT INTO public.larva(id, ip, ammonia) values('" + sId + "','"  + sIp + "',"  + nAmmonia + " );";
-			   console.log(sQueryString);
-			   pool.query(
-					   sQueryString,(err, res) => {
-						   if(err != undefined)
-							   console.log(err);
-		//				console.log(err, res);
-		//			   pool.end();
-					   }
-			   );
-		   }
-	   }
-		   
+	// messageë¥¼ DBì— ë°˜ì˜í•˜ë„ë¡ modules í˜¸ì¶œ
+	var db = new DB(message); // ëª¨ë“ˆì— ì „ë‹¬ì¸ì í• ë‹¹ 
+	db.InsertDB();  
+	
 });
 
-// ¼ÒÄÏÀ» ÀÌ¿ëÇÑ Åë½Å¹æ¹ı
+// ì†Œì¼“ì„ ì´ìš©í•œ í†µì‹ ë°©ë²•
 var io=require("socket.io")(server);
 io.on("connection", function(socket){
 	socket.on("socket_evt_mqtt", function(data){
