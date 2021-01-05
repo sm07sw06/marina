@@ -9,7 +9,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int port = 1883;
 int count = 0;
 int totalCount = 0;
-int delaytime = 60;
+int delaytime = 10;
 int LEDPin4 = 4;
 int LEDPin5 = 5;
 
@@ -19,7 +19,29 @@ char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+// HC-SR04 핀 정의 
+#define triggerPin 13
+#define echoPin 12
+
+// I2C CLCD address 및 사양 정보 정의
+#define lcdAddress 0x27
+#define lcdColumns 16
+#define lcdRows 2
+ 
+LiquidCrystal_I2C lcd(lcdAddress, lcdColumns, lcdRows);
+
+
+// 거리 데이터 저장 mm, inch 단위
+double distanceMm;
+double distanceInch;
+
+// CLCD 에 출력할 문자열 변수
+String mm;
+String inch;
+
+// 데이터 취득 flag 선언, 거리 데이터 취득시 1로 활성화
+int flag = 0; 
+
 WiFiClient client;
 
 void msgReceived(char *topic, byte *payload, unsigned int uLen){
@@ -57,6 +79,7 @@ void msgReceived(char *topic, byte *payload, unsigned int uLen){
   lcd.print(sDevice[1]); //Display a intro message 
   lcd.print("->"); //Display a intro message 
   lcd.print(sMsg[0]); //Display a ammonia in ppm
+  
   if (strcmp("60CA47C40A24",sDevice[1])==0){ 
     Serial.println("In process1");
     if(sMsg[0]=='1'){
@@ -72,7 +95,7 @@ void msgReceived(char *topic, byte *payload, unsigned int uLen){
     }else {
       digitalWrite(LEDPin5, LOW);
     }  
-  }
+  }   
   if (strcmp("2462ABBA5A2C",sDevice[1])==0){ 
     Serial.println("In process3");
     if(sMsg[0]=='1'){
@@ -80,7 +103,7 @@ void msgReceived(char *topic, byte *payload, unsigned int uLen){
     }else {
       digitalWrite(LEDPin5, LOW);
     }  
-  }       
+  }    
 }
 
 PubSubClient mqttClient(server1, port, msgReceived, client);
@@ -169,6 +192,10 @@ void connectWiFi(){
 void setup() {
   pinMode(LEDPin4, OUTPUT);
   pinMode(LEDPin5, OUTPUT);
+
+  pinMode(triggerPin, OUTPUT); 
+  pinMode(echoPin, INPUT); 
+  
   Serial.begin(115200);
   delay(10);
 
@@ -201,10 +228,20 @@ void loop() {
      connectWiFi();
    }
   mqttClient.loop();
+
+   // 신규 데이터 취득시에만 동작
+//    if(flag == 1)
+    {
+        flag = 0;
+        // HC-SR04 거리 측정
+        getDistance();
+        // 측정한 거리 CLCD 출력
+        printDistanceLCD();
+    }   
   
     char message[1024]="", pDistBuf[1024];
-//    dtostrf(distance_sum / count , 5,2, pDistBuf);
-    sprintf(message, "{\"larva\":\"%s,%s,%d\"}", gMac, gIp, totalCount);   
+    dtostrf(distanceMm , 5,2, pDistBuf);
+    sprintf(message, "{\"anchor\":\"%s,%s,%s\"}", gMac, gIp, pDistBuf);   
     if( count == delaytime)  {
       mqttClient.publish(gTopicPub, message); 
       count = 0;
@@ -215,12 +252,80 @@ void loop() {
   totalCount++;    
   if ( totalCount < 0 ) totalCount = 0;
 
+/**
   lcd.setCursor(0, 0);   // set the cursor to column 0, line 1
   lcd.print("                "); //Display a ammonia in ppm
   lcd.setCursor(0, 0);   // set the cursor to column 0, line 1
   lcd.print(gMac); //Display a ammonia in ppm
   lcd.print(","); //Display a ammonia in ppm
   lcd.print(count); //Display a ammonia in ppm
-  
+  **/
   delay(500); 
+}
+
+void myTimer()
+{
+    flag = 1;
+}
+ 
+void getDistance(){
+again:
+    // goto 
+    static int count;
+
+  //  Serial.print("getDistance.......");
+    
+    // Tigger High 지속 시간 10us
+    digitalWrite(triggerPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(triggerPin, HIGH);
+    delayMicroseconds(10); 
+    digitalWrite(triggerPin, LOW); 
+    
+    //echoPin High 유지 시간 측정
+    double Duration = 0;
+    Duration = pulseIn(echoPin, HIGH); 
+    
+    distanceMm = (Duration / 10 )/ 5.8;
+    distanceInch = Duration / 148;
+    
+    // 거리 측정 값이 유효하지 않을 때, 거리를 다시 측정 
+    if ((distanceMm > 4000) && (count < 10)){
+        count++;
+        goto again;
+    }
+    // 거리 측정 값이 유효하지 않을 때 goto문 무한 루프를 방지
+    else if(count >= 10){
+        distanceMm = 9999;
+        distanceInch = 9999;
+    }
+    count = 0;
+}
+
+void printDistanceLCD(){
+    // LCD Clear()를 하지 않기 위해, 공백칸 숫자 입력 변수 
+    // LCD Clear()를 하면 LCD 가 깜빡임..
+    int mmBlank;
+    int inchBlank;
+ 
+    // CLCD 에 출력할 데이터를 문자열로 변경
+    mm = "cm   : " + String(distanceMm);
+    inch = "inch : " + String(distanceInch);
+    
+    // 문자열의 공백 저장
+    mmBlank = lcdColumns - mm.length();
+    inchBlank = lcdColumns - inch.length();
+ 
+    //CLCD 첫번째 줄
+    lcd.setCursor(0,0);
+    lcd.print(mm);
+    for(int i = 0 ; i < mmBlank ; i++){
+        lcd.print(" ");
+    }
+    //CLCD 2번째 줄
+    lcd.setCursor(0,1);
+    lcd.print(inch); 
+    for(int i = 0 ; i < inchBlank ; i++){
+        lcd.print(" ");
+    }
 }

@@ -1,6 +1,8 @@
-#include <WiFi.h>
-#include "PubSubClient.h"
+#include <SPI.h>
+#include <WiFiNINA.h>
 #include <LiquidCrystal_I2C.h>
+
+#include "PubSubClient.h"
 
 char ssid[]="A1CommAP";
 char pass[]="topwifi7000";
@@ -9,7 +11,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int port = 1883;
 int count = 0;
 int totalCount = 0;
-int delaytime = 60;
+int delaytime = 10;
 int LEDPin4 = 4;
 int LEDPin5 = 5;
 
@@ -51,12 +53,14 @@ void msgReceived(char *topic, byte *payload, unsigned int uLen){
   Serial.println(sDevice[1]);
   Serial.print("sMsg:");
   Serial.println(sMsg);
+
   lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
   lcd.print("                "); //Display a intro message 
   lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
   lcd.print(sDevice[1]); //Display a intro message 
   lcd.print("->"); //Display a intro message 
   lcd.print(sMsg[0]); //Display a ammonia in ppm
+  
   if (strcmp("60CA47C40A24",sDevice[1])==0){ 
     Serial.println("In process1");
     if(sMsg[0]=='1'){
@@ -72,7 +76,7 @@ void msgReceived(char *topic, byte *payload, unsigned int uLen){
     }else {
       digitalWrite(LEDPin5, LOW);
     }  
-  }
+  }   
   if (strcmp("2462ABBA5A2C",sDevice[1])==0){ 
     Serial.println("In process3");
     if(sMsg[0]=='1'){
@@ -80,7 +84,7 @@ void msgReceived(char *topic, byte *payload, unsigned int uLen){
     }else {
       digitalWrite(LEDPin5, LOW);
     }  
-  }       
+  }  
 }
 
 PubSubClient mqttClient(server1, port, msgReceived, client);
@@ -153,6 +157,14 @@ void mqttReconnect() {
 void connectWiFi(){
   Serial.println("Connecting Wifi....");
   int i = 0;
+
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
+    while (true);
+  }
+    
   while (WiFi.status() != WL_CONNECTED){
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(ssid);
