@@ -9,7 +9,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int port = 1883;
 int count = 0;
 int totalCount = 0;
-int delaytime = 100;
+int delaytime = 10;
 int LEDPin4 = 4;
 int LEDPin5 = 5;
 
