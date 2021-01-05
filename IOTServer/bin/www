@@ -35,11 +35,15 @@ client.on("connect" , function(){
 });
 
 client.on("message", function(topic, message){
+	
 	var DB = require('../public/myModules/db');
-
 	// message를 DB에 반영하도록 modules 호출
 	var db = new DB(message); // 모듈에 전달인자 할당 
 	db.InsertDB();  
+	
+	var BoatCheck = require('../public/myModules/boatCheck');
+	var boatCheck = new BoatCheck(message); 
+	boatCheck.getBoatCheck();
 	
 });
 
