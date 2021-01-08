@@ -27,6 +27,60 @@ function BoatCheck(message) {
 	this.message = message;
 }
 
+
+//보트 단말기 정박 상태 분석
+function analysisBoatAnchor(sId, nGradex, nGradey) { 
+
+    logger.info('Start getArea........');
+    
+    mObject.iD   = sId;
+    mObject.gpsX = nGradex;
+    mObject.gpsY = nGradey;
+    
+    mObject.gpsX = 100;
+    mObject.gpsY = 55;
+
+    var db = new DB(); 
+    
+    async.waterfall([
+        function(callback) {
+            db.SelectGateBound(mObject, function(rtn){
+                if (rtn === 'OK') {
+                	logger.info('정박상태 확인');
+                    db.SelectAnchorYN(mObject, function(rtn){
+                        if (rtn === 'OK') {
+                        	logger.info('보트출항중');
+                        } else {
+                            logger.info('보트입항중');
+                        }   
+                    });         
+                } else {
+                    logger.info('보트단말기 정박상태 분석');
+                    callback(null, rtn);
+                	// 보트단말기 정박상태 분석
+                	analysisBoatAnchor(mObject, function(rtn){ 
+                    	;;
+                    });                        
+                }   
+            });         
+        },
+        function(callback) {
+        	// 대쉬보드에 현재 운항 상태 적용
+        	setDashBoard(mObject, function(rtn){ 
+            	;;
+            });         
+        }
+        
+    ],
+    function (err, result) {
+        if(err){
+            console.log('Error 발생');
+            throw( err );
+        }  
+    });
+}
+
+
 // 보트 GPS의 위치가 출입구 구역에 있는지 판단 
 function getGPSAreaAnalysis(sId, nGradex, nGradey) { 
 
@@ -38,26 +92,38 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
     
     mObject.gpsX = 100;
     mObject.gpsY = 55;
+
+    var db = new DB(); 
     
     async.waterfall([
         function(callback) {
-            var db = new DB(); 
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
                 	logger.info('정박상태 확인');
                     db.SelectAnchorYN(mObject, function(rtn){
                         if (rtn === 'OK') {
-                        	logger.info('보트정박상태');
+                        	logger.info('보트출항중');
                         } else {
-                            logger.info('보트출항상태');
+                            logger.info('보트입항중');
                         }   
                     });         
                 } else {
                     logger.info('보트단말기 정박상태 분석');
                     callback(null, rtn);
+                	// 보트단말기 정박상태 분석
+                	analysisBoatAnchor(mObject, function(rtn){ 
+                    	;;
+                    });                        
                 }   
             });         
+        },
+        function(callback) {
+        	// 대쉬보드에 현재 운항 상태 적용
+        	setDashBoard(mObject, function(rtn){ 
+            	;;
+            });         
         }
+        
     ],
     function (err, result) {
         if(err){
@@ -67,6 +133,13 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
     });
 }
 
+
+
+BoatCheck.prototype.setDashBoard = function() {
+    
+	logger.info('Start setDashBoard........');
+
+};
 
 BoatCheck.prototype.getBoatCheck = function() {
     
@@ -101,7 +174,10 @@ BoatCheck.prototype.getBoatCheck = function() {
 
 			if ((nGradex > 60) || (nGradey>60)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
 				logger.info("Starting SOS processing.......");
-				//setDashBoard();   // 대쉬보드 적용
+	        	// 대쉬보드에 현재 운항 상태 적용
+	            setDashBoard(mObject, function(rtn){ 
+	            	;;
+	            });     				
 			} else {
 				getGPSAreaAnalysis(sId, nGradex, nGradey); //GPS위치가 출입구 구역인지 확인
 			}
