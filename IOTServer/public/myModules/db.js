@@ -35,6 +35,7 @@ const pool = new Pool({
 
 function MessageObject()
 { 
+	var iD;    // MQTT에서 전달 받은 단말기 ID 
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
 }
@@ -77,15 +78,17 @@ function boatdata(sData) {
 
 
 // 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.boatdata(id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) ";
+	var sQueryString  = "INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) ";
 	sQueryString += " values('" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
-	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + sSendtime + "' );";
+	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "',"  + moment().format('YYYYMMDDhhmmss') + " );";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
 				logger.error(err, res);
 				pool.end();
+			} else {
+				logger.info("Boatdata Insert OK:");
 			}
 		}
 	);
@@ -117,7 +120,7 @@ function larva(sData) {
 **/
 
 //정박지 데이터 분석 처리
-function anchor(sData) {
+function anchordata(sData) {
 
 	logger.info(sData);	
 
@@ -137,7 +140,7 @@ function anchor(sData) {
 	}
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString = "INSERT INTO public.anchor(id, status, sendtime) values('" + sId + "','"  + sStatus + "',"  + moment().format('YYYYMMDDhhmmss') + " );";
+	var sQueryString = "INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('" + sId + "','"  + sStatus + "',"  + moment().format('YYYYMMDDhhmmss') + " );";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,(err, res) => {
@@ -145,6 +148,8 @@ function anchor(sData) {
 				logger.error(err);
 				//logger.info(err, res);
 				//pool.end();
+			} else {
+				logger.info("Anchordata Insert OK:");
 			}
 		}
 	);
@@ -172,7 +177,7 @@ DB.prototype.InsertDB = function(message) {
 			var sData = obj[sKey].split(",");
 
 			if(sKey === "anchor") { 
-				anchor(sData);
+				anchordata(sData);
 			} else if( sKey === "boatData") { 
 				boatdata(sData);
 			}
@@ -185,8 +190,9 @@ DB.prototype.InsertDB = function(message) {
 DB.prototype.SelectGateBound = function(mObject, callback) {
 	
 	logger.info('Start SelectGateBound........');
-	logger.info( 'GPS X: ' + mObject.gpsX);
-	logger.info( 'GPS Y: ' + mObject.gpsY);
+	logger.info( 'Device: ' + mObject.iD);
+	logger.info( 'GPS X : ' + mObject.gpsX);
+	logger.info( 'GPS Y : ' + mObject.gpsY);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "SELECT sector_name FROM public.sector WHERE $1 BETWEEN gpsx1 AND gpsx2 AND $2 BETWEEN gpsy1 AND gpsy2 ";
@@ -213,6 +219,40 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 		}
 	);
 };
+
+
+//기 정박상태 인지 확인
+DB.prototype.SelectAnchorYN = function(mObject, callback) {
+	
+	logger.info('Start SelectAnchorYN........');
+	logger.info( 'Device: ' + mObject.iD);
+
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "SELECT anchor_status FROM anchor_device a JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = $1 ";
+	logger.info(sQueryString);
+	const values = [mObject.iD];
+	pool.query(
+		sQueryString, values, (err, res) => {
+			if(err !== undefined) {
+				logger.error(err, res);
+				pool.end();
+				return -1;
+			} else {
+				logger.info("Command:" + res.command);
+				logger.info("Count:"   + res.rowCount);
+				for(var i = 0; i < res.rowCount ; i ++) {
+					  logger.info("Result2:" +res.rows[i].sector_name);   
+				}
+				if( res.rowCount > 0 ) {
+					callback('OK');
+				} else {
+					callback('ERROR');
+				}
+			}
+		}
+	);
+};
+
 
 //객체를 바로 module.exports에 할당
 module.exports = DB;

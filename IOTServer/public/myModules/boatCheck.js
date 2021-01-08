@@ -16,6 +16,7 @@ var gpsY2;   // GPS 좌표 Y2
 
 function MessageObject()
 { 
+	var iD;    // MQTT에서 전달 받은 단말기 ID 
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
 }
@@ -27,10 +28,11 @@ function BoatCheck(message) {
 }
 
 // 보트 GPS의 위치가 출입구 구역에 있는지 판단 
-function getGPSAreaAnalysis(nGradex, nGradey) { 
+function getGPSAreaAnalysis(sId, nGradex, nGradey) { 
 
     logger.info('Start getArea........');
     
+    mObject.iD   = sId;
     mObject.gpsX = nGradex;
     mObject.gpsY = nGradey;
     
@@ -42,25 +44,25 @@ function getGPSAreaAnalysis(nGradex, nGradey) {
             var db = new DB(); 
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
-                    callback(null, rtn);
+                	logger.info('정박상태 확인');
+                    db.SelectAnchorYN(mObject, function(rtn){
+                        if (rtn === 'OK') {
+                        	logger.info('보트정박상태');
+                        } else {
+                            logger.info('보트출항상태');
+                        }   
+                    });         
                 } else {
-                    logger.info('SelectGateBound1 result : ' + rtn);
-                    callback('err','ERROR');
-                    return;
+                    logger.info('보트단말기 정박상태 분석');
+                    callback(null, rtn);
                 }   
             });         
-        },
-        function(rtn, callback) {
-            logger.info('SelectGateBound2 result : ' + rtn);
-            callback(null, 'completed');
         }
     ],
     function (err, result) {
         if(err){
             console.log('Error 발생');
             throw( err );
-        }else {
-            console.log(result );
         }  
     });
 }
@@ -101,7 +103,7 @@ BoatCheck.prototype.getBoatCheck = function() {
 				logger.info("Starting SOS processing.......");
 				//setDashBoard();   // 대쉬보드 적용
 			} else {
-				getGPSAreaAnalysis(nGradex, nGradey); //GPS위치가 출입구 구역인지 확인
+				getGPSAreaAnalysis(sId, nGradex, nGradey); //GPS위치가 출입구 구역인지 확인
 			}
 		}    
 	}
