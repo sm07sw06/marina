@@ -1,10 +1,14 @@
 #!/usr/bin/env node
+/*jshint esversion: 6 */
 /**
  * Module dependencies.
  */
 var app = require('../app');
 var debug = require('debug')('iotserver:server');
 var http = require('http');
+
+const logger = require('../config/winston')
+
 /**
  * Get port from environment and store in Express.
  */
@@ -36,32 +40,18 @@ client.on("connect" , function(){
 
 client.on("message", function(topic, message){
 	
+	logger.info('MQTT receive........');
+	
 	var DB = require('../public/myModules/db');
 	// message를 DB에 반영하도록 modules 호출
-	var db = new DB(message); // 모듈에 전달인자 할당 
-	db.InsertDB();  
+	var db = new DB(); // 모듈에 전달인자 할당 
+	//db.SetDB(message);
+	db.InsertDB(message);  
 	
 	var BoatCheck = require('../public/myModules/boatCheck');
 	var boatCheck = new BoatCheck(message); 
 	boatCheck.getBoatCheck();
 	
-});
-
-// 소켓을 이용한 통신방법
-var io=require("socket.io")(server);
-io.on("connection", function(socket){
-	socket.on("socket_evt_mqtt", function(data){
-		var dht11=dbObj.collection("dht11");
-		dht11.find({}).sort({_id:-1}).limit(1).toArray(function(err, results){
-			if(!err){
-				socket.emit("socket_evt_mqtt", JSON.stringify(results[0]));
-			}
-		});
-	});	
-	socket.on("socket_evt_led", function(data){ 
-       var obj=JSON.parse(data);
-       client.publish("led", obj.led+"");	
-	});	
 });
 
 /**

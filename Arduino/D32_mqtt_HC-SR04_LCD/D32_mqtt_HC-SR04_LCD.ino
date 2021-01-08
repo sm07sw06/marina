@@ -216,7 +216,8 @@ void setup() {
 
   //MQTT Server 접속
   mqttClient.setServer(server1, 1883);  
-  if(mqttClient.connect("Arduino")){
+//  if(mqttClient.connect("Arduino")){
+  if(mqttClient.connect(gMac)){
     Serial.println("MQTT Broker Connected!");
     mqttClient.subscribe(gTopicSub); //led 구독자를 등록(데이터를 읽어갈 구독자 등록)
   }

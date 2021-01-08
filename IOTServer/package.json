@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+	  "start": "node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -16,6 +16,10 @@
     "mqtt": "^3.0.0",
     "pg": "^8.5.1",
     "socket.io": "~2.0.4",
-    "moment": "~2.29.1"
+    "moment": "~2.29.1",
+    "winston": "~3.3.3-rc1",
+    "winston-daily-rotate-file": "~3.3.3",
+    "app-root-path": "~3.0.0",
+    "async": "~2.3.0"
   }
 }

@@ -11,7 +11,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int port = 1883;
 int count = 0;
 int totalCount = 0;
-int delaytime = 10;
+int delaytime = 60;
 int LEDPin4 = 4;
 int LEDPin5 = 5;
 
@@ -201,7 +201,8 @@ void setup() {
 
   //MQTT Server 접속
   mqttClient.setServer(server1, 1883);  
-  if(mqttClient.connect("Arduino")){
+//  if(mqttClient.connect("Arduino")){
+  if(mqttClient.connect(gMac)){
     Serial.println("MQTT Broker Connected!");
     mqttClient.subscribe(gTopicSub); //led 구독자를 등록(데이터를 읽어갈 구독자 등록)
   }
@@ -216,7 +217,8 @@ void loop() {
   
     char message[1024]="", pDistBuf[1024];
 //    dtostrf(distance_sum / count , 5,2, pDistBuf);
-    sprintf(message, "{\"larva\":\"%s,%s,%d\"}", gMac, gIp, totalCount);   
+//    sprintf(message, "{\"larva\":\"%s,%s,%d\"}", gMac, gIp, totalCount);   
+    sprintf(message, "{\"boatData\":\"%s\"}", "20210106164615,Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R,20210106164252,23,13,04,04,$GPGGA,074615.00,,,,,0,00,99.99,,,,,,*67 , ");   
     if( count == delaytime)  {
       mqttClient.publish(gTopicPub, message); 
       count = 0;
@@ -235,4 +237,7 @@ void loop() {
   lcd.print(count); //Display a ammonia in ppm
   
   delay(500); 
+
+  //{"boatData": "20210106164615,Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R,20210106164252,23,13,04,04,$GPGGA,074615.00,,,,,0,00,99.99,,,,,,*67 ,\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"}
+  
 }

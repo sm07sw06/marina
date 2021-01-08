@@ -1,0 +1,34 @@
+2021-01-07T02:24:20.430Z [winston-test] info: MQTT receive........
+2021-01-07T02:24:20.444Z [winston-test] info: boatData
+2021-01-07T02:24:20.444Z [winston-test] info: 04
+2021-01-07T02:24:20.445Z [winston-test] info: 04
+2021-01-07T02:24:20.445Z [winston-test] info: INSERT INTO public.boatdata(id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',23,13,04,04,0,0,0,00,0,'R','20210106164252' );
+2021-01-07T02:24:20.448Z [winston-test] info: Start getBoatCheck........
+2021-01-07T02:24:20.448Z [winston-test] info: boatData
+2021-01-07T02:24:20.448Z [winston-test] info: 04
+2021-01-07T02:24:20.448Z [winston-test] info: 04
+2021-01-07T02:24:20.449Z [winston-test] info: Start getArea........
+2021-01-07T02:24:20.449Z [winston-test] info: Start SelectGateBound........
+2021-01-07T02:24:20.449Z [winston-test] info: GPS X: %j
+2021-01-07T02:24:20.449Z [winston-test] info: GPS Y: %s
+2021-01-07T02:24:20.449Z [winston-test] info: SELECT * FROM public.sector WHERE 100 BETWEEN gpsx1 AND gpsx2 AND  55 BETWEEN gpsy1 AND gpsy2 
+2021-01-07T02:24:20.527Z [winston-test] info: SELECT
+2021-01-07T02:24:20.528Z [winston-test] info: 1
+2021-01-07T02:24:20.528Z [winston-test] info: 0
+2021-01-07T02:24:53.071Z [winston-test] info: MQTT receive........
+2021-01-07T02:24:53.071Z [winston-test] info: boatData
+2021-01-07T02:24:53.071Z [winston-test] info: 04
+2021-01-07T02:24:53.071Z [winston-test] info: 04
+2021-01-07T02:24:53.071Z [winston-test] info: INSERT INTO public.boatdata(id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',23,13,04,04,0,0,0,00,0,'R','20210106164252' );
+2021-01-07T02:24:53.072Z [winston-test] info: Start getBoatCheck........
+2021-01-07T02:24:53.072Z [winston-test] info: boatData
+2021-01-07T02:24:53.073Z [winston-test] info: 04
+2021-01-07T02:24:53.073Z [winston-test] info: 04
+2021-01-07T02:24:53.073Z [winston-test] info: Start getArea........
+2021-01-07T02:24:53.073Z [winston-test] info: Start SelectGateBound........
+2021-01-07T02:24:53.073Z [winston-test] info: GPS X: %j
+2021-01-07T02:24:53.073Z [winston-test] info: GPS Y: %s
+2021-01-07T02:24:53.073Z [winston-test] info: SELECT * FROM public.sector WHERE 100 BETWEEN gpsx1 AND gpsx2 AND  55 BETWEEN gpsy1 AND gpsy2 
+2021-01-07T02:24:53.152Z [winston-test] info: SELECT
+2021-01-07T02:24:53.152Z [winston-test] info: 1
+2021-01-07T02:24:53.152Z [winston-test] info: 0
