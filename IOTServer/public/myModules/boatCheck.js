@@ -19,6 +19,7 @@ function MessageObject()
 	var iD;    // MQTT에서 전달 받은 단말기 ID 
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
+	var time;  // MQTT에서 전달 받은 시각	
 }
 var mObject = new MessageObject(); //메세지 구조체
 
@@ -135,7 +136,7 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
 
 
 
-BoatCheck.prototype.setDashBoard = function() {
+function setDashBoard() {
     
 	logger.info('Start setDashBoard........');
 
@@ -145,43 +146,33 @@ BoatCheck.prototype.getBoatCheck = function() {
     
 	logger.info('Start getBoatCheck........');
 
-	var obj=JSON.parse(this.message);  // MQTT에서 보내온 메세지
+	var sData = this.message;  // MQTT에서 보내온 메세지
+	var sId          = sData[9];
+	var nTemperature = sData[16];
+	var nHumidity    = sData[17];
+	var nGradex      = sData[18];
+	var nGradey      = sData[19];
+	var nLatitude    = sData[22];
+	var nLongitude   = sData[24];
 
-	for (var sKey in obj) {
-		if (obj.hasOwnProperty(sKey)) {
-			logger.info(sKey);
-			   
-			if(sKey !== "boatData") { return -1; } // 보트 데이터가 아닌면 Skip
+	logger.info(nGradex);
+	logger.info(nGradey);   
 
-			var sData = obj[sKey].split(",");
-			var sId          = sData[9];
-			var nTemperature = sData[16];
-			var nHumidity    = sData[17];
-			var nGradex      = sData[18];
-			var nGradey      = sData[19];
-			var nLatitude    = sData[22];
-			var nLongitude   = sData[24];
+	if(nTemperature === "") { nTemperature = 0; }
+	if(nHumidity    === "") { nHumidity = 0; }
+	if(nGradex      === "") { nGradex = 0; }
+	if(nGradey      === "") { nGradey = 0; }
+	if(nLatitude    === "") { nLatitude = 0; }
+	if(nLongitude   === "") { nLongitude = 0; }
 
-			logger.info(nGradex);
-			logger.info(nGradey);   
-
-			if(nTemperature === "") { nTemperature = 0; }
-			if(nHumidity    === "") { nHumidity = 0; }
-			if(nGradex      === "") { nGradex = 0; }
-			if(nGradey      === "") { nGradey = 0; }
-			if(nLatitude    === "") { nLatitude = 0; }
-			if(nLongitude   === "") { nLongitude = 0; }
-
-			if ((nGradex > 60) || (nGradey>60)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
-				logger.info("Starting SOS processing.......");
-	        	// 대쉬보드에 현재 운항 상태 적용
-	            setDashBoard(mObject, function(rtn){ 
-	            	;;
-	            });     				
-			} else {
-				getGPSAreaAnalysis(sId, nGradex, nGradey); //GPS위치가 출입구 구역인지 확인
-			}
-		}    
+	if ((nGradex > 60) || (nGradey>60)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
+		logger.info("Starting SOS processing.......");
+    	// 대쉬보드에 현재 운항 상태 적용
+        setDashBoard(mObject, function(rtn){ 
+        	;;
+        });     				
+	} else {
+		getGPSAreaAnalysis(sId, nGradex, nGradey); //GPS위치가 출입구 구역인지 확인
 	}
 
     return {message: this.message};

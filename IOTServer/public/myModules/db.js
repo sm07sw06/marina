@@ -38,6 +38,7 @@ function MessageObject()
 	var iD;    // MQTT에서 전달 받은 단말기 ID 
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
+	var time;  // MQTT에서 전달 받은 시각
 }
 var mObject = new MessageObject(); //메세지 구조체
 
@@ -86,7 +87,7 @@ function boatdata(sData) {
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
 				logger.error(err, res);
-				pool.end();
+//				pool.end();
 			} else {
 				logger.info("Boatdata Insert OK:");
 			}
@@ -168,21 +169,14 @@ DB.prototype.SetDB = function(message) {
 
 
 // MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
-DB.prototype.InsertDB = function(message) {
-	var obj=JSON.parse(message);
+DB.prototype.InsertDBBoatData = function(message) {
+	boatdata(message);
+};
 
-	for (var sKey in obj) {
-		if (obj.hasOwnProperty(sKey)) {
-			logger.info(sKey);
-			var sData = obj[sKey].split(",");
 
-			if(sKey === "anchor") { 
-				anchordata(sData);
-			} else if( sKey === "boatData") { 
-				boatdata(sData);
-			}
-		}
-	}
+//MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
+DB.prototype.InsertDBAnchorData = function(message) {
+	anchordata(message);
 };
 
 
@@ -202,7 +196,7 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 		sQueryString, values, (err, res) => {
 			if(err !== undefined) {
 				logger.error(err, res);
-				pool.end();
+//				pool.end();
 				return -1;
 			} else {
 				logger.info("Command:" + res.command);
@@ -235,7 +229,41 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 		sQueryString, values, (err, res) => {
 			if(err !== undefined) {
 				logger.error(err, res);
-				pool.end();
+//				pool.end();
+				return -1;
+			} else {
+				logger.info("Command:" + res.command);
+				logger.info("Count:"   + res.rowCount);
+				for(var i = 0; i < res.rowCount ; i ++) {
+					  logger.info("Result2:" +res.rows[i].sector_name);   
+				}
+				if( res.rowCount > 0 ) {
+					callback('OK');
+				} else {
+					callback('ERROR');
+				}
+			}
+		}
+	);
+};
+
+
+//기준 시간 범위내 단말기 수신 정보 찾기
+DB.prototype.GetBoatDataSearch = function(mObject, callback) {
+	
+	logger.info('Start GetBoatDataSearch........');
+	logger.info( 'Device: ' + mObject.iD);
+	logger.info( 'time  : ' + mObject.time);
+
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "SELECT anchor_status FROM anchor_device a JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = $1 ";
+	logger.info(sQueryString);
+	const values = [mObject.iD, mObject.time ];
+	pool.query(
+		sQueryString, values, (err, res) => {
+			if(err !== undefined) {
+				logger.error(err, res);
+//				pool.end();
 				return -1;
 			} else {
 				logger.info("Command:" + res.command);

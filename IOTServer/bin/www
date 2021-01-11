@@ -46,11 +46,33 @@ client.on("message", function(topic, message){
 	// message를 DB에 반영하도록 modules 호출
 	var db = new DB(); // 모듈에 전달인자 할당 
 	//db.SetDB(message);
-	db.InsertDB(message);  
 	
-	var BoatCheck = require('../public/myModules/boatCheck');
-	var boatCheck = new BoatCheck(message); 
-	boatCheck.getBoatCheck();
+	var obj=JSON.parse(message);  // MQTT에서 보내온 메세지
+	
+	for (var sKey in obj) {
+		
+		logger.info('sKey:' + sKey);
+		
+		if (obj.hasOwnProperty(sKey)) {
+			
+			var sData = obj[sKey].split(",");
+			
+			if(sKey === "boatData") {
+				db.InsertDBBoatData(sData);  
+				// 보트 단말기에서 보내온 신호 분석
+				var BoatCheck = require('../public/myModules/boatCheck');
+				var boatCheck = new BoatCheck(sData); 
+				boatCheck.getBoatCheck();
+			} else {
+				db.InsertDBAnchorData(sData);  
+				// 정박지 단말기에서 보내온 신호 분석
+				var AnchorCheck = require('../public/myModules/anchorCheck');
+				var anchorCheck = new AnchorCheck(sData); 
+				anchorCheck.getAnchorCheck();				
+			} // 보트 데이터가 아닌면 Skip
+		}    
+	}
+
 	
 });
 
