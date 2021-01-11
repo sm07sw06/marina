@@ -255,12 +255,42 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 	logger.info( 'Device: ' + mObject.iD);
 	logger.info( 'time  : ' + mObject.time);
 
+	
+	/*
+	 *
+select *
+  from boatdata a,(
+select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2
+  from anchor_device b, anchor c, sector d
+ where b.machine_id = '60CA47C40A24'
+   and b.anchor_id = c.anchor_id 
+   and c.sector_id = d.sector_id 
+ ) AA    
+ where a.latitude  between AA.gpsx1 and AA.gpsx2
+   and a.longitude between AA.gpsy1 and AA.gpsy2
+   and a.sendtime  between substring('20210111030510',0,13)||'00' and to_char((to_timestamp(substring('20210111030510',0,13)||'00', 'YYYYMMDDHHMISS') + interval '1 min'),'YYYYMMDDHHMISS')
+
+   
+	 */
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT anchor_status FROM anchor_device a JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = $1 ";
-	logger.info(sQueryString);
-	const values = [mObject.iD, mObject.time ];
+	var sQueryString  = "select *";
+    sQueryString += "  from boatdata a,(";
+    sQueryString += "select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2";
+    sQueryString += "  from anchor_device b, anchor c, sector d";
+    sQueryString += " where b.machine_id = '" + mObject.iD + "'";
+    sQueryString += "   and b.anchor_id = c.anchor_id ";
+    sQueryString += "   and c.sector_id = d.sector_id ";
+    sQueryString += " ) AA    ";
+    sQueryString += " where a.latitude  between AA.gpsx1 and AA.gpsx2";
+    sQueryString += "   and a.longitude between AA.gpsy1 and AA.gpsy2";
+    sQueryString += "   and a.sendtime  between to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '2 min'),'YYYYMMDDHH24MISS')";
+    sQueryString += "   and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '2 min'),'YYYYMMDDHH24MISS')";
+//    sQueryString += "   and a.sendtime  between substring('" + mObject.time + "',0,13)||'00' and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
+    logger.info(sQueryString);
+	//const values = [mObject.iD, mObject.time ];
 	pool.query(
-		sQueryString, values, (err, res) => {
+//			sQueryString, values, (err, res) => {
+			sQueryString,  (err, res) => {
 			if(err !== undefined) {
 				logger.error(err, res);
 //				pool.end();

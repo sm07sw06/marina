@@ -165,7 +165,9 @@ AnchorCheck.prototype.getAnchorCheck = function() {
 		logger.info("boat is anchored !!");
 	    mObject.iD   = sId;
 	    mObject.time = sStime;		
-		db.GetBoatDataSearch(mObject); //기준 시간 범위내 단말기 수신 정보 찾기
+		db.GetBoatDataSearch(mObject, function(rtn){ 
+        	;;
+        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
 	} else {
 		logger.info("boat is not anchored !!");
     	// 대쉬보드에 현재 운항 상태 적용
