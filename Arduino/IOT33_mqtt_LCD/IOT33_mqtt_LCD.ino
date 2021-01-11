@@ -1,6 +1,8 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include <LiquidCrystal_I2C.h>
+#include <WiFiUdp.h>
+
 
 #include "PubSubClient.h"
 
@@ -11,7 +13,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int port = 1883;
 int count = 0;
 int totalCount = 0;
-int delaytime = 60;
+int delaytime = 250;
 int LEDPin4 = 4;
 int LEDPin5 = 5;
 
@@ -20,6 +22,10 @@ char gIp[20];
 char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
+
+const char* ntpServer = "pool.ntp.org";
+const long  gmtOffset_sec = 32400;
+const int   daylightOffset_sec = 32400;
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 WiFiClient client;
@@ -206,9 +212,11 @@ void setup() {
     Serial.println("MQTT Broker Connected!");
     mqttClient.subscribe(gTopicSub); //led 구독자를 등록(데이터를 읽어갈 구독자 등록)
   }
+
 }
 
 void loop() {
+
   // In each loop, make sure there is an Internet connection.
    if (WiFi.status() != WL_CONNECTED) { 
      connectWiFi();
@@ -218,7 +226,7 @@ void loop() {
     char message[1024]="", pDistBuf[1024];
 //    dtostrf(distance_sum / count , 5,2, pDistBuf);
 //    sprintf(message, "{\"larva\":\"%s,%s,%d\"}", gMac, gIp, totalCount);   
-    sprintf(message, "{\"boatData\":\"%s\"}", "20210106164615,Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R,20210106164252,23,13,04,04,$GPGGA,074615.00,,,,,0,00,99.99,,,,,,*67 , ");   
+      sprintf(message, "{\"boatData\":\"%s\"}", "20210106164615,Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R,23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67 , ");   
     if( count == delaytime)  {
       mqttClient.publish(gTopicPub, message); 
       count = 0;
