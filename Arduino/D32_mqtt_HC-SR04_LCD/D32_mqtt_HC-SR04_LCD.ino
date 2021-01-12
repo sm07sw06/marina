@@ -1,8 +1,8 @@
 #include <WiFi.h>
+#include "PubSubClient.h"
 #include <LiquidCrystal_I2C.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-#include "PubSubClient.h"
 
 char ssid[]="A1CommAP";
 char pass[]="topwifi7000";
@@ -34,6 +34,9 @@ const int   daylightOffset_sec = 32400;
 #define lcdColumns 16
 #define lcdRows 2
 
+LiquidCrystal_I2C lcd(lcdAddress, lcdColumns, lcdRows);
+
+
 // 거리 데이터 저장 mm, inch 단위
 double distanceMm;
 double distanceInch;
@@ -45,7 +48,6 @@ String inch;
 // 데이터 취득 flag 선언, 거리 데이터 취득시 1로 활성화
 int flag = 0;
 
-LiquidCrystal_I2C lcd(lcdAddress, lcdColumns, lcdRows);
 WiFiClient client;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
