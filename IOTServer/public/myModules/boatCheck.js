@@ -20,6 +20,9 @@ function MessageObject()
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
 	var time;  // MQTT에서 전달 받은 시각	
+	var machineId;  //보트단말기 ID     
+	var boatId;  //보트 ID     
+	var anchorId;   // 정박지단말기 ID  
 }
 var mObject = new MessageObject(); //메세지 구조체
 
