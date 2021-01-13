@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevenuesAnalysis>
+	<RegionalRevenue>
+		<Year rowSpan="16">2013</Year>
+		<Quarter rowSpan="3">1/4</Quarter>
+		<Month>1</Month>
+		<Seoul>109520</Seoul>
+		<Busan>40454</Busan>
+		<Incheon>82477</Incheon>
+		<NewYork>47424</NewYork>
+		<LA>103225</LA>
+		<Washington>61161</Washington>
+		<Revenue>444260</Revenue>
+		<Percent>40</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>1/4</Quarter>
+		<Month>2</Month>
+		<Seoul>15749</Seoul>
+		<Busan>29714</Busan>
+		<Incheon>31393</Incheon>
+		<NewYork>45006</NewYork>
+		<LA>17945</LA>
+		<Washington>90148</Washington>
+		<Revenue>229956</Revenue>
+		<Percent>20</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>1/4</Quarter>
+		<Month>3</Month>
+		<Seoul>14766</Seoul>
+		<Busan>97314</Busan>
+		<Incheon>103216</Incheon>
+		<NewYork>86072</NewYork>
+		<LA>52863</LA>
+		<Washington>93789</Washington>
+		<Revenue>448020</Revenue>
+		<Percent>40</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2013</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">1/4 SUM</Quarter>
+		<Seoul>140034</Seoul>
+		<Busan>167482</Busan>
+		<Incheon>217086</Incheon>
+		<NewYork>178502</NewYork>
+		<LA>174033</LA>
+		<Washington>245098</Washington>
+		<Revenue>1122235</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter rowSpan="3">2/4</Quarter>
+		<Month>4</Month>
+		<Seoul>52352</Seoul>
+		<Busan>56859</Busan>
+		<Incheon>15688</Incheon>
+		<NewYork>65438</NewYork>
+		<LA>39181</LA>
+		<Washington>109514</Washington>
+		<Revenue>339031</Revenue>
+		<Percent>31</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>2/4</Quarter>
+		<Month>5</Month>
+		<Seoul>100842</Seoul>
+		<Busan>30391</Busan>
+		<Incheon>23745</Incheon>
+		<NewYork>72742</NewYork>
+		<LA>102195</LA>
+		<Washington>30407</Washington>
+		<Revenue>360322</Revenue>
+		<Percent>33</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>2/4</Quarter>
+		<Month>6</Month>
+		<Seoul>19217</Seoul>
+		<Busan>75298</Busan>
+		<Incheon>70807</Incheon>
+		<NewYork>36447</NewYork>
+		<LA>100805</LA>
+		<Washington>84934</Washington>
+		<Revenue>387508</Revenue>
+		<Percent>36</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2013</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">2/4 SUM</Quarter>
+		<Seoul>172411</Seoul>
+		<Busan>162547</Busan>
+		<Incheon>110240</Incheon>
+		<NewYork>174627</NewYork>
+		<LA>242180</LA>
+		<Washington>224855</Washington>
+		<Revenue>1086861</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter rowSpan="3">3/4</Quarter>
+		<Month>7</Month>
+		<Seoul>74324</Seoul>
+		<Busan>64947</Busan>
+		<Incheon>101350</Incheon>
+		<NewYork>34673</NewYork>
+		<LA>24486</LA>
+		<Washington>57781</Washington>
+		<Revenue>357561</Revenue>
+		<Percent>28</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>3/4</Quarter>
+		<Month>8</Month>
+		<Seoul>85932</Seoul>
+		<Busan>95733</Busan>
+		<Incheon>40327</Incheon>
+		<NewYork>69255</NewYork>
+		<LA>80024</LA>
+		<Washington>102739</Washington>
+		<Revenue>474011</Revenue>
+		<Percent>37</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>3/4</Quarter>
+		<Month>9</Month>
+		<Seoul>101804</Seoul>
+		<Busan>65098</Busan>
+		<Incheon>79194</Incheon>
+		<NewYork>101669</NewYork>
+		<LA>30608</LA>
+		<Washington>73020</Washington>
+		<Revenue>451393</Revenue>
+		<Percent>35</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2013</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">3/4 SUM</Quarter>
+		<Seoul>262060</Seoul>
+		<Busan>225778</Busan>
+		<Incheon>220871</Incheon>
+		<NewYork>205598</NewYork>
+		<LA>135118</LA>
+		<Washington>233539</Washington>
+		<Revenue>1282965</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter rowSpan="3">4/4</Quarter>
+		<Month>10</Month>
+		<Seoul>92130</Seoul>
+		<Busan>91881</Busan>
+		<Incheon>45166</Incheon>
+		<NewYork>65524</NewYork>
+		<LA>45348</LA>
+		<Washington>72708</Washington>
+		<Revenue>412757</Revenue>
+		<Percent>36</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>4/4</Quarter>
+		<Month>11</Month>
+		<Seoul>80925</Seoul>
+		<Busan>70537</Busan>
+		<Incheon>25347</Incheon>
+		<NewYork>29360</NewYork>
+		<LA>76296</LA>
+		<Washington>42766</Washington>
+		<Revenue>325230</Revenue>
+		<Percent>29</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2013</Year>
+		<Quarter>4/4</Quarter>
+		<Month>12</Month>
+		<Seoul>99008</Seoul>
+		<Busan>30598</Busan>
+		<Incheon>99124</Incheon>
+		<NewYork>22776</NewYork>
+		<LA>107805</LA>
+		<Washington>38384</Washington>
+		<Revenue>397696</Revenue>
+		<Percent>35</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2013</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">4/4 SUM</Quarter>
+		<Seoul>272063</Seoul>
+		<Busan>193016</Busan>
+		<Incheon>169637</Incheon>
+		<NewYork>117660</NewYork>
+		<LA>229449</LA>
+		<Washington>153858</Washington>
+		<Revenue>1135684</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue styleName="allTotalStyle" backgroundColor="#4f7adc">
+		<Year rowSpan="2" colSpan="3" styleName="allTotalHeaderStyle">T O T A L</Year>
+		<Seoul>846568</Seoul>
+		<Busan>748824</Busan>
+		<Incheon>717834</Incheon>
+		<NewYork>676387</NewYork>
+		<LA>780781</LA>
+		<Washington>857351</Washington>
+		<Revenue>4627745</Revenue>
+		<Percent></Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue styleName="allTotalStyle" backgroundColor="#4f7adc">
+		<Seoul colSpan="3">2313226</Seoul>
+		<NewYork colSpan="3">2314519</NewYork>
+		<Revenue>4627745</Revenue>
+		<Percent></Percent>
+	</RegionalRevenue>
+
+
+
+
+	<RegionalRevenue>
+		<Year rowSpan="16">2014</Year>
+		<Quarter rowSpan="3">1/4</Quarter>
+		<Month>1</Month>
+		<Seoul>68503</Seoul>
+		<Busan>10155</Busan>
+		<Incheon>47908</Incheon>
+		<NewYork>60857</NewYork>
+		<LA>104179</LA>
+		<Washington>109097</Washington>
+		<Revenue>400699</Revenue>
+		<Percent>31</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>1/4</Quarter>
+		<Month>2</Month>
+		<Seoul>80573</Seoul>
+		<Busan>75743</Busan>
+		<Incheon>107750</Incheon>
+		<NewYork>76243</NewYork>
+		<LA>79265</LA>
+		<Washington>85345</Washington>
+		<Revenue>504918</Revenue>
+		<Percent>40</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>1/4</Quarter>
+		<Month>3</Month>
+		<Seoul>23435</Seoul>
+		<Busan>30538</Busan>
+		<Incheon>86528</Incheon>
+		<NewYork>36735</NewYork>
+		<LA>96031</LA>
+		<Washington>96928</Washington>
+		<Revenue>370196</Revenue>
+		<Percent>29</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2014</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">1/4 SUM</Quarter>
+		<Seoul>172511</Seoul>
+		<Busan>116436</Busan>
+		<Incheon>242186</Incheon>
+		<NewYork>173834</NewYork>
+		<LA>279475</LA>
+		<Washington>291371</Washington>
+		<Revenue>1275813</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter rowSpan="3">2/4</Quarter>
+		<Month>4</Month>
+		<Seoul>35657</Seoul>
+		<Busan>109415</Busan>
+		<Incheon>45569</Incheon>
+		<NewYork>87683</NewYork>
+		<LA>92773</LA>
+		<Washington>53422</Washington>
+		<Revenue>424520</Revenue>
+		<Percent>45</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>2/4</Quarter>
+		<Month>5</Month>
+		<Seoul>50140</Seoul>
+		<Busan>30142</Busan>
+		<Incheon>83992</Incheon>
+		<NewYork>87292</NewYork>
+		<LA>72324</LA>
+		<Washington>32520</Washington>
+		<Revenue>356410</Revenue>
+		<Percent>37</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>2/4</Quarter>
+		<Month>6</Month>
+		<Seoul>39458</Seoul>
+		<Busan>10848</Busan>
+		<Incheon>10553</Incheon>
+		<NewYork>48474</NewYork>
+		<LA>25642</LA>
+		<Washington>36591</Washington>
+		<Revenue>171565</Revenue>
+		<Percent>18</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2014</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">2/4 SUM</Quarter>
+		<Seoul>125254</Seoul>
+		<Busan>150405</Busan>
+		<Incheon>140114</Incheon>
+		<NewYork>223449</NewYork>
+		<LA>190740</LA>
+		<Washington>122533</Washington>
+		<Revenue>952495</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter rowSpan="3">3/4</Quarter>
+		<Month>7</Month>
+		<Seoul>33761</Seoul>
+		<Busan>49046</Busan>
+		<Incheon>31351</Incheon>
+		<NewYork>46829</NewYork>
+		<LA>97148</LA>
+		<Washington>42630</Washington>
+		<Revenue>300765</Revenue>
+		<Percent>31</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>3/4</Quarter>
+		<Month>8</Month>
+		<Seoul>89645</Seoul>
+		<Busan>72565</Busan>
+		<Incheon>23678</Incheon>
+		<NewYork>78847</NewYork>
+		<LA>62559</LA>
+		<Washington>87722</Washington>
+		<Revenue>415017</Revenue>
+		<Percent>42</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>3/4</Quarter>
+		<Month>9</Month>
+		<Seoul>14844</Seoul>
+		<Busan>30709</Busan>
+		<Incheon>83037</Incheon>
+		<NewYork>23130</NewYork>
+		<LA>65006</LA>
+		<Washington>48367</Washington>
+		<Revenue>265093</Revenue>
+		<Percent>27</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2014</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">3/4 SUM</Quarter>
+		<Seoul>138250</Seoul>
+		<Busan>152321</Busan>
+		<Incheon>220871</Incheon>
+		<NewYork>138066</NewYork>
+		<LA>224714</LA>
+		<Washington>178718</Washington>
+		<Revenue>980874</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter rowSpan="3">4/4</Quarter>
+		<Month>10</Month>
+		<Seoul>30598</Seoul>
+		<Busan>55523</Busan>
+		<Incheon>90576</Incheon>
+		<NewYork>79997</NewYork>
+		<LA>71346</LA>
+		<Washington>63569</Washington>
+		<Revenue>391608</Revenue>
+		<Percent>34</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>4/4</Quarter>
+		<Month>11</Month>
+		<Seoul>64461</Seoul>
+		<Busan>61341</Busan>
+		<Incheon>74479</Incheon>
+		<NewYork>10715</NewYork>
+		<LA>40404</LA>
+		<Washington>93611</Washington>
+		<Revenue>345011</Revenue>
+		<Percent>30</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue>
+		<Year>2014</Year>
+		<Quarter>4/4</Quarter>
+		<Month>12</Month>
+		<Seoul>99229</Seoul>
+		<Busan>95468</Busan>
+		<Incheon>108828</Incheon>
+		<NewYork>27176</NewYork>
+		<LA>28673</LA>
+		<Washington>54816</Washington>
+		<Revenue>414191</Revenue>
+		<Percent>36</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue backgroundColor="#edf1fb">
+		<Year>2014</Year>
+		<Quarter colSpan="2" styleName="subTotalStyle">4/4 SUM</Quarter>
+		<Seoul>194287</Seoul>
+		<Busan>212331</Busan>
+		<Incheon>273883</Incheon>
+		<NewYork>117660</NewYork>
+		<LA>140423</LA>
+		<Washington>211996</Washington>
+		<Revenue>1150809</Revenue>
+		<Percent>100</Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue styleName="allTotalStyle" backgroundColor="#4f7adc">
+		<Year rowSpan="2" colSpan="3" styleName="allTotalHeaderStyle">T O T A L</Year>
+		<Seoul>846568</Seoul>
+		<Busan>631493</Busan>
+		<Incheon>794249</Incheon>
+		<NewYork>663977</NewYork>
+		<LA>835352</LA>
+		<Washington>804618</Washington>
+		<Revenue>4359992</Revenue>
+		<Percent></Percent>
+	</RegionalRevenue>
+
+	<RegionalRevenue styleName="allTotalStyle" backgroundColor="#4f7adc">
+		<Seoul colSpan="3">2272310</Seoul>
+		<NewYork colSpan="3">2303947</NewYork>
+		<Revenue>4359992</Revenue>
+		<Percent></Percent>
+	</RegionalRevenue>
+
+</RevenuesAnalysis>

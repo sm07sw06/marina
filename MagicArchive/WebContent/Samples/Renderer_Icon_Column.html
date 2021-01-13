@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+// 기본 이미지 경로 조정
+rMateGridH5.setAssetsPath("../rMateGridH5/Assets/");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+
+	var itemClickHandler = function(event) {
+		var rowIndex = event.rowIndex;
+		var columnIndex = event.columnIndex;
+		var dataRow = gridRoot.getItemAt(rowIndex);
+		// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
+		var column = dataGrid.getDisplayableColumns()[columnIndex];
+		var dataField = column.getDataField();
+		if (dataField == "Actual")
+			alert("컬럼 클릭");
+	}
+
+	var itemIconClickHandler = function(event) {
+		var rowIndex = event.rowIndex;
+		var columnIndex = event.columnIndex;
+		var dataRow = gridRoot.getItemAt(rowIndex);
+		var column = dataGrid.getColumns()[columnIndex];
+		var dataField = column.getDataField();
+		alert("컬럼 아이콘 클릭");
+	}
+
+	var layoutCompleteHandler = function(event) {
+		dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+		dataGrid.addEventListener("itemClick", itemClickHandler);
+		iconColumn = gridRoot.getObjectById("iconCol");
+		iconColumn.addEventListener("itemIconClick", itemIconClickHandler);
+	}
+	gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+}
+
+var gridApp, gridRoot, dataGrid, iconColumn;
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" selectionMode="singleRow">\
+		<columns>\
+<!--\n\
+itemRenderer 를 "IconItem"로 설정하여 icon을 사용하고, secondDataField에 데이터에서 icon명을 포함하는 필드명을 넣어줍니다. \n\
+\n\
+데이터에서 사용할 수 있는 icon명은 다음과 같습니다.\n\
+Magnifier : 돋보기 (기본)\n\
+Plus : 플러스 기호\n\
+Minus : 마이너스 기호\n\
+FolderOpen : 열린 폴더 모양\n\
+FolderClosed : 닫힌 폴더 모양\n\
+Arrow : 우측 방향 화살표\n\
+DownArrow : 아래 방향 화살표\n\
+Reguired : 빨간색 별표시\n\
+Diskette : 디스켓 표시\n\
+Node : 도큐먼트 모양 표시\n\
+imgBtn : 이미지 버튼 모양\n\
+favorBtn : 즐겨찾기 아이콘 모양\n\
+check : 체크 표시 모양\n\
+\n\
+iconPlacement itemRenderer 를 "IconItem"로 설정할 경우 icon의 위치 정렬 지정 (left,right중 택일, 기본 left)\n\
+-->\
+			<DataGridColumn dataField="Name" id="iconCol2" itemRenderer="IconItem" secondDataField="Icon"/>\
+			<DataGridColumn dataField="Territory" itemRenderer="IconItem" icon="imgBtn" width="150"/>\
+			<DataGridColumn dataField="Territory_Rep" headerText="Territory Rep" width="150"/>\
+			<DataGridColumn dataField="Actual" id="iconCol" itemRenderer="IconItem" icon="Required" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Estimate" itemRenderer="IconItem" icon="favorBtn" iconPlacement="right" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Real" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Price" itemRenderer="IconItem" icon="check" textAlign="right" formatter="{numfmt}"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+
+var gridData = [
+	{
+		"Name": "Jerry",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Actual": 38865,
+		"Icon": "man",
+		"Icon2": "Magnifier",
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3001
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Actual": 29885,
+		"Icon": "man",
+		"Icon2": "Arrow",
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3002
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Central California",
+		"Territory_Rep": "Central California",
+		"Actual": 29134,
+		"Icon": "man",
+		"Icon2": "Diskette",
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3003
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Nevada",
+		"Territory_Rep": "Nevada",
+		"Icon": "man",
+		"Icon2": "Plus3",
+		"Actual": 52888,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3004
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Actual": 38805,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3005
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Actual": 55498,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3006
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Icon": "man",
+		"Icon2": "Minus2",
+		"Actual": 44985,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3007
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Icon": "man",
+		"Actual": 44913,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3008
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Icon": "woman",
+		"Icon2": "noteBtn",
+		"Actual": 38865,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3003
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Icon": "woman",
+		"Actual": 29885,
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3004
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Central California",
+		"Territory_Rep": "Central California",
+		"Icon": "woman",
+		"Actual": 29134,
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3005
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Nevada",
+		"Territory_Rep": "Nevada",
+		"Icon": "woman",
+		"Icon2": "clockBtn",
+		"Actual": 52888,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3006
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Icon": "woman",
+		"Actual": 29885,
+		"Estimate": 30000,
+		"Real": 23230,
+		"Price": 3004
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Central California",
+		"Territory_Rep": "Central California",
+		"Icon": "woman",
+		"Actual": 22342,
+		"Estimate": 343444,
+		"Real": 30000,
+		"Price": 3005
+	},
+	{
+		"Name": "Alice",
+		"Territory": "Nevada",
+		"Territory_Rep": "Nevada",
+		"Icon": "woman",
+		"Icon2": "downArrow2",
+		"Actual": 45433,
+		"Estimate": 13435,
+		"Real": 1234,
+		"Price": 3006
+	},
+	{
+		"Name": "Tom",
+		"Territory": "Nevada",
+		"Territory_Rep": "Nevada",
+		"Icon": "man",
+		"Icon2": "check",
+		"Actual": 52888,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3002
+	},
+	{
+		"Name": "Tom",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Icon2": "secureBtn",
+		"Actual": 38805,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3003
+	},
+	{
+		"Name": "Tom",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Actual": 55498,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3004
+	},
+	{
+		"Name": "Tom",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Actual": 44985,
+		"Icon": "man",
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3005
+	},
+	{
+		"Name": "Tom",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Actual": 44913,
+		"Icon": "man",
+		"Icon2": "xBtn",
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3006
+	},
+	{
+		"Name": "William",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Icon": "man",
+		"Actual": 38865,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3007
+	},
+	{
+		"Name": "William",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Icon": "man",
+		"Actual": 29885,
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3008
+	},
+	{
+		"Name": "William",
+		"Territory": "Central California",
+		"Territory_Rep": "Central California",
+		"Icon": "man",
+		"Icon2": "pencil",
+		"Actual": 29134,
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3009
+	},
+	{
+		"Name": "William",
+		"Territory": "Nevada",
+		"Territory_Rep": "Nevada",
+		"Actual": 52888,
+		"Icon": "man",
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3000
+	},
+	{
+		"Name": "William",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Actual": 38805,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3001
+	},
+	{
+		"Name": "William",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Actual": 55498,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3002
+	},
+	{
+		"Name": "William",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Actual": 44985,
+		"Icon": "man",
+		"Icon2": "Plus2",
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3003
+	},
+	{
+		"Name": "William",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Icon": "man",
+		"Actual": 44913,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3004
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Icon": "man",
+		"Actual": 38865,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3005
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Arizona",
+		"Territory_Rep": "Arizona",
+		"Actual": 29885,
+		"Icon": "man",
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3006
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Central California",
+		"Territory_Rep": "Central California",
+		"Actual": 29134,
+		"Icon": "man",
+		"Estimate": 30000,
+		"Real": 30000,
+		"Price": 3007
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Nevada",
+		"Territory_Rep": "Nevada",
+		"Icon": "man",
+		"Actual": 52888,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3008
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Icon2": "Required",
+		"Actual": 38805,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3009
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "man",
+		"Actual": 55498,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3000
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Actual": 44985,
+		"Icon": "man",
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3001
+	},
+	{
+		"Name": "Jerry",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Icon": "man",
+		"Actual": 44913,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3002
+	},
+	{
+		"Name": "Judy",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "woman",
+		"Actual": 38805,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3007
+	},
+	{
+		"Name": "Judy",
+		"Territory": "Northern California",
+		"Territory_Rep": "Northern California",
+		"Icon": "woman",
+		"Actual": 55498,
+		"Estimate": 40000,
+		"Real": 30000,
+		"Price": 3008
+	},
+	{
+		"Name": "Judy",
+		"Territory": "Southern California",
+		"Territory_Rep": "Southern California",
+		"Icon": "woman",
+		"Actual": 44985,
+		"Estimate": 45000,
+		"Real": 30000,
+		"Price": 3009
+	}
+];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			특정 컬럼의 셀을 아이콘과 라벨로 표현한 예제입니다.
+		</div>
+		<div class="headerDesc">
+			컬럼의 <span class="greenProp">itemRenderer</span> 속성을 <span class="greenProp">IconItem</span>으로 설정하면 해당 셀에 아이콘과 라벨이 표시됩니다.
+			이때 표시되는 아이콘은 <span class="greenProp">icon</span> 속성에 지정하거나 데이터의 필드, 함수등으로 지정가능합니다.<br>
+			<span class="greenProp">iconPlacement</span> 속성으로 아이콘을 왼쪽, 오른쪽에 위치 시킬 수 있으며,
+			아이콘 클릭시 이벤트를 받을 수 있습니다. (Actual 컬럼의 아이콘을 클릭하면 경고창이 뜹니다.)<br>
+			<span class="greenProp">secondDataField</span> 속성을 추가하면 데이터에서 해당 필드의 데이터로 아이콘 정보를 가지고 와서 셀에 적용시킵니다.<br>
+			<span class="classProp">Name</span> 컬럼을 확인하시면 <span class="orangeProp">남자, 여자</span> 아이콘으로 설정한 것을 볼 수 있습니다.<br>
+			아래 탭의 레이아웃과 데이터, 소스를 보시면 자세한 내용을 확인할 수 있습니다.
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

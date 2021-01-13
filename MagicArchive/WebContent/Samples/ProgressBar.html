@@ -1,0 +1,326 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+
+	var layoutCompleteHandler = function(event) {
+		dataGrid = gridRoot.getDataGrid();
+	}
+
+	gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+}
+
+var gridApp, gridRoot, dataGrid;
+var timer, progressBar, percent;
+
+function showProgressBar() {
+	dataGrid.setEnabled(false);
+	gridRoot.addProgressBar();
+	progressBar = gridRoot.getProgressBar();
+	percent = 0;
+	progressBar.setProgress(percent, 100);
+	progressBar.setLabel("Loading "+ percent + "%");
+	timer = setInterval(timerHandler, 500);
+}
+
+function timerHandler() {
+	if (progressBar) {
+		percent += 5;
+		if (percent > 100) {
+			hideProgressBar();
+			return;
+		}
+		// 진행율을 설정합니다. - 기본은 백분율로 표시합니다.
+		progressBar.setProgress(percent, 100);
+		progressBar.setLabel("Loading "+ percent + "%");
+	}
+}
+
+function hideProgressBar() {
+	dataGrid.setEnabled(true);
+	gridRoot.removeProgressBar();
+	progressBar = null;
+	if (timer)
+		clearInterval(timer);
+}
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" verticalAlign="middle" selectionMode="multipleRows" textAlign="center">\
+		<columns>\
+			<DataGridColumn dataField="From" width="80"/>\
+			<DataGridColumn dataField="Subject" width="120"/>\
+			<DataGridColumn dataField="ReceiveDate" headerText="Receive"/>\
+			<DataGridColumn dataField="SendDate" headerText="Send"/>\
+			<DataGridColumn dataField="CC"/>\
+			<DataGridColumn dataField="Level" textAlign="right"/>\
+			<DataGridColumn dataField="Length" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="AttachCount" width="60" textAlign="right" formatter="{numfmt}"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>';
+
+var gridData = [
+	{
+		"Selected": false,
+		"From": "Amit",
+		"Subject": "GMC-1 Release1",
+		"ReceiveDate": "2015/12/07",
+		"SendDate": "2015/12/06",
+		"CC": "Jim",
+		"Length": 75126,
+		"Level": 1,
+		"AttachCount": 1
+	},
+	{
+		"Selected": false,
+		"From": "Amit",
+		"Subject": "GMC-1 Release2",
+		"ReceiveDate": "2015/12/07",
+		"SendDate": "2015/12/06",
+		"CC": "Jim",
+		"Length": 95822,
+		"Level": 1,
+		"AttachCount": 2
+	},
+	{
+		"Selected": false,
+		"From": "Amit",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/11",
+		"SendDate": "2015/12/11",
+		"CC": "Jim",
+		"Length": 1862456,
+		"Level": 3,
+		"AttachCount": 0
+	},
+	{
+		"Selected": false,
+		"From": "Barb",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Anant",
+		"Length": 65488,
+		"Level": 8,
+		"AttachCount": 31
+	},
+	{
+		"Selected": false,
+		"From": "Barb",
+		"Subject": "GMC-1 Release4",
+		"ReceiveDate": "2015/12/06",
+		"SendDate": "2015/12/06",
+		"CC": "Anant",
+		"Length": 4851568,
+		"Level": 8,
+		"AttachCount": 1
+	},
+	{
+		"Selected": true,
+		"From": "Harry",
+		"Subject": "GMC-1 Release2",
+		"ReceiveDate": "2015/11/28",
+		"SendDate": "2015/11/28",
+		"CC": "Ram",
+		"Length": 13548,
+		"Level": 1,
+		"AttachCount": 0
+	},
+	{
+		"Selected": false,
+		"From": "Harry",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Ram",
+		"Length": 1235,
+		"Level": 1,
+		"AttachCount": 12
+	},
+	{
+		"Selected": false,
+		"From": "John",
+		"Subject": "GMC-1 Release2",
+		"ReceiveDate": "2015/12/07",
+		"SendDate": "2015/12/07",
+		"CC": "Jim",
+		"Length": 84621877,
+		"Level": 5,
+		"AttachCount": 20
+	},
+	{
+		"Selected": false,
+		"From": "John",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/07",
+		"SendDate": "2015/12/06",
+		"CC": "Jim",
+		"Length": 51846,
+		"Level": 5,
+		"AttachCount": 3
+	},
+	{
+		"Selected": false,
+		"From": "Phill",
+		"Subject": "GMC-1 Release1",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Jim",
+		"Length": 31680,
+		"Level": 3,
+		"AttachCount": 5
+	},
+	{
+		"Selected": false,
+		"From": "Phill",
+		"Subject": "GMC-1 Release1",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Jim",
+		"Length": 1813,
+		"Level": 2,
+		"AttachCount": 0
+	},
+	{
+		"Selected": false,
+		"From": "Phill",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Jim",
+		"Length": 13548,
+		"Level": 2,
+		"AttachCount": 1
+	},
+	{
+		"Selected": false,
+		"From": "Phill",
+		"Subject": "GMC-1 Release4",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Jim",
+		"Length": 16588,
+		"Level": 1,
+		"AttachCount": 0
+	},
+	{
+		"Selected": false,
+		"From": "김철수",
+		"Subject": "GMC-1 Release4",
+		"ReceiveDate": "2015/11/21",
+		"SendDate": "2015/11/21",
+		"CC": "박순이",
+		"Length": 5158,
+		"Level": 9,
+		"AttachCount": 0
+	},
+	{
+		"Selected": false,
+		"From": "김철수",
+		"Subject": "GMC-1 Release5",
+		"ReceiveDate": "2015/11/19",
+		"SendDate": "2015/11/19",
+		"CC": "이미자",
+		"Length": 216815,
+		"Level": 8,
+		"AttachCount": 2
+	},
+	{
+		"Selected": false,
+		"From": "김철수",
+		"Subject": "GMC-1 Release6",
+		"ReceiveDate": "2015/11/22",
+		"SendDate": "2015/11/20",
+		"CC": "박만수",
+		"Length": 312566,
+		"Level": 7,
+		"AttachCount": 3
+	}
+];
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			Progress Bar(진행바)를 그리드 위에 표시할 수 있는 예제입니다.
+		</div>
+		<div class="headerDesc">
+			아래의 <span class="blueProp">진행바 보이기, 진행바 숨기기</span>를 클릭하여 진행바를 볼 수 있습니다.<br>
+			아래의 소스 탭 부분이나 HTML 소스를 확인하여 진행바를 함수로 제어하는 것을 확인할 수 있습니다.
+		</div>
+		<div class="headerButtons">
+			<span class="button button_top" onclick="showProgressBar();">진행바 보이기<img src="Web/Images/btnRight.png"></span>
+			<span class="button button_top" onclick="hideProgressBar();">진행바 숨기기<img src="Web/Images/btnRight.png"></span>
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,551 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<!-- jQuery UI 라이브러리 -->
+<link rel="stylesheet" href="./Web/jQuery/jquery-ui.css"/>
+<style>
+	.ui-widget-content .ui-icon {
+		background-image: url("./Web/Images/corner.gif");
+	}
+	.ui-icon-gripsmall-diagonal-se { background-position: 9px 9px; }
+</style>
+<script type="text/javascript" src="./Web/jQuery/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="./Web/jQuery/jquery-ui.js"></script>
+
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+}
+
+var gridApp, gridRoot;
+
+// JQuery UI를 통해 resizable 처리
+$(function() {
+	$("#resizable").resizable({
+		// 필요시 최대, 최소 높이와 넓이를 지정합니다.
+		maxWidth: 1200,
+		minWidth: 200,
+		maxHeight: 700,
+		minHeight: 150,
+
+		resize: function(event, ui) {
+			// resize시 그리드의 크기도 gridHolder의 크기에 따라 다시 조정되도록 합니다.
+			gridApp.resize();
+		}
+	});
+});
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" sortableColumns="true" horizontalScrollPolicy="off">\
+		<columns>\
+			<DataGridColumn headerText="No" itemRenderer="IndexNoItem" textAlign="center" width="30"/>\
+			<DataGridColumn id="dg1col0" dataField="상품" textAlign="center" defaultWidth="200"/>\
+			<DataGridColumn id="dg1col1" dataField="작물" textAlign="center"/>\
+			<DataGridColumn id="dg1col2" dataField="축산물" textAlign="center" width="80"/>\
+			<DataGridColumn id="dg1col3" dataField="임산물" textAlign="center" width="80"/>\
+			<DataGridColumn id="dg1col4" dataField="수산물" textAlign="center" width="80"/>\
+			<DataGridColumn id="dg1col5" dataField="농림어업서비스" textAlign="center" width="120"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>';
+
+
+var gridData =
+[
+	{
+		"상품": "작물",
+		"작물": 725542,
+		"축산물": 621538,
+		"임산물": 9656,
+		"수산물": 853,
+		"농림어업서비스": 21128
+	},
+	{
+		"상품": "축산물",
+		"작물": 725542,
+		"축산물": 621538,
+		"임산물": 9656,
+		"수산물": 853,
+		"농림어업서비스": 21128
+	},
+	{
+		"상품": "임산물",
+		"작물": 197128,
+		"축산물": 502407,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "수산물",
+		"작물": 43606,
+		"축산물": 31268,
+		"임산물": 89540,
+		"수산물": 12065,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "농림어업 서비스",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 345772,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "석탄, 원유 및 천연가스",
+		"작물": 934728,
+		"축산물": 154303,
+		"임산물": 168343,
+		"수산물": 118766,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "금속 및 비금속광물",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "식료품",
+		"작물": 474,
+		"축산물": 227,
+		"임산물": 0,
+		"수산물": 248,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "음료품",
+		"작물": 14930,
+		"축산물": 9217509,
+		"임산물": 153,
+		"수산물": 266070,
+		"농림어업서비스": 3835
+	},
+	{
+		"상품": "담배",
+		"작물": 1717,
+		"축산물": 1232,
+		"임산물": 144,
+		"수산물": 98761,
+		"농림어업서비스": 1855
+	},
+	{
+		"상품": "섬유 및 의복",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "가죽제품",
+		"작물": 168122,
+		"축산물": 12345,
+		"임산물": 2377,
+		"수산물": 275108,
+		"농림어업서비스": 8543
+	},
+	{
+		"상품": "목재 및 목제품",
+		"작물": 2821,
+		"축산물": 1287,
+		"임산물": 174,
+		"수산물": 4570,
+		"농림어업서비스": 2882
+	},
+	{
+		"상품": "펄프 및 종이제품",
+		"작물": 33933,
+		"축산물": 26340,
+		"임산물": 1225,
+		"수산물": 236424,
+		"농림어업서비스": 1820
+	},
+	{
+		"상품": "인쇄 및 복제",
+		"작물": 275219,
+		"축산물": 22361,
+		"임산물": 274,
+		"수산물": 9784,
+		"농림어업서비스": 4136
+	},
+	{
+		"상품": "석탄 및 석유제품",
+		"작물": 3530,
+		"축산물": 1010,
+		"임산물": 0,
+		"수산물": 505,
+		"농림어업서비스": 6025
+	},
+	{
+		"상품": "기초화학물질",
+		"작물": 776624,
+		"축산물": 51789,
+		"임산물": 21266,
+		"수산물": 890899,
+		"농림어업서비스": 158732
+	},
+	{
+		"상품": "합성수지 및 합성고무",
+		"작물": 0,
+		"축산물": 1786,
+		"임산물": 0,
+		"수산물": 3218,
+		"농림어업서비스": 244
+	},
+	{
+		"상품": "화학섬유",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "의약품",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "비료 및 농약",
+		"작물": 0,
+		"축산물": 124464,
+		"임산물": 8,
+		"수산물": 22610,
+		"농림어업서비스": 17833
+	},
+	{
+		"상품": "기타 화학제품",
+		"작물": 2871443,
+		"축산물": 36833,
+		"임산물": 87052,
+		"수산물": 103,
+		"농림어업서비스": 49636
+	},
+	{
+		"상품": "플라스틱 제품",
+		"작물": 170,
+		"축산물": 2077,
+		"임산물": 157,
+		"수산물": 40029,
+		"농림어업서비스": 1590
+	},
+	{
+		"상품": "고무제품",
+		"작물": 542988,
+		"축산물": 56477,
+		"임산물": 8265,
+		"수산물": 182529,
+		"농림어업서비스": 3122
+	},
+	{
+		"상품": "유리 및 유리제품",
+		"작물": 5787,
+		"축산물": 5011,
+		"임산물": 169,
+		"수산물": 14280,
+		"농림어업서비스": 1277
+	},
+	{
+		"상품": "기타 비금속광물제품",
+		"작물": 0,
+		"축산물": 18324,
+		"임산물": 0,
+		"수산물": 635,
+		"농림어업서비스": 902
+	},
+	{
+		"상품": "철강1차제품",
+		"작물": 1897,
+		"축산물": 1410,
+		"임산물": 81,
+		"수산물": 601,
+		"농림어업서비스": 502
+	},
+	{
+		"상품": "철강가공제품",
+		"작물": 18749,
+		"축산물": 42880,
+		"임산물": 0,
+		"수산물": 4824,
+		"농림어업서비스": 1890
+	},
+	{
+		"상품": "비철금속괴 및 1차제품",
+		"작물": 161,
+		"축산물": 1781,
+		"임산물": 0,
+		"수산물": 204,
+		"농림어업서비스": 31
+	},
+	{
+		"상품": "금속 주물",
+		"작물": 597,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 2630,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "금속제품",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "일반목적용기계",
+		"작물": 13220,
+		"축산물": 8273,
+		"임산물": 10798,
+		"수산물": 6302,
+		"농림어업서비스": 8016
+	},
+	{
+		"상품": "특수목적용기계",
+		"작물": 229,
+		"축산물": 26721,
+		"임산물": 405,
+		"수산물": 98829,
+		"농림어업서비스": 3838
+	},
+	{
+		"상품": "전기장비",
+		"작물": 80846,
+		"축산물": 47662,
+		"임산물": 4690,
+		"수산물": 2101,
+		"농림어업서비스": 18067
+	},
+	{
+		"상품": "반도체",
+		"작물": 1465,
+		"축산물": 14194,
+		"임산물": 530,
+		"수산물": 109922,
+		"농림어업서비스": 6297
+	},
+	{
+		"상품": "전자표시장치",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "기타 전자부품",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 0,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "컴퓨터 및 주변기기",
+		"작물": 0,
+		"축산물": 153,
+		"임산물": 0,
+		"수산물": 797,
+		"농림어업서비스": 286
+	},
+	{
+		"상품": "통신, 방송 및 영상, 음향기기",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 195,
+		"농림어업서비스": 982
+	},
+	{
+		"상품": "가정용 전기기기",
+		"작물": 1949,
+		"축산물": 501,
+		"임산물": 0,
+		"수산물": 4013,
+		"농림어업서비스": 1337
+	},
+	{
+		"상품": "정밀기기",
+		"작물": 298,
+		"축산물": 3280,
+		"임산물": 0,
+		"수산물": 2064,
+		"농림어업서비스": 1344
+	},
+	{
+		"상품": "자동차",
+		"작물": 10650,
+		"축산물": 40187,
+		"임산물": 177,
+		"수산물": 11805,
+		"농림어업서비스": 3544
+	},
+	{
+		"상품": "선박",
+		"작물": 10124,
+		"축산물": 9224,
+		"임산물": 3588,
+		"수산물": 7259,
+		"농림어업서비스": 3896
+	},
+	{
+		"상품": "기타 운송장비",
+		"작물": 0,
+		"축산물": 0,
+		"임산물": 0,
+		"수산물": 259475,
+		"농림어업서비스": 0
+	},
+	{
+		"상품": "기타 제조업 제품 및 임가공",
+		"작물": 23559,
+		"축산물": 17047,
+		"임산물": 803,
+		"수산물": 603,
+		"농림어업서비스": 891
+	},
+	{
+		"상품": "전력 및 신재생에너지",
+		"작물": 517,
+		"축산물": 1565,
+		"임산물": 10,
+		"수산물": 4115,
+		"농림어업서비스": 2152
+	},
+	{
+		"상품": "가스, 증기 및 온수",
+		"작물": 64180,
+		"축산물": 78081,
+		"임산물": 6815,
+		"수산물": 22941,
+		"농림어업서비스": 121985
+	},
+	{
+		"상품": "수도",
+		"작물": 3690,
+		"축산물": 268,
+		"임산물": 11,
+		"수산물": 4140,
+		"농림어업서비스": 2255
+	},
+	{
+		"상품": "폐수처리",
+		"작물": 2265,
+		"축산물": 29755,
+		"임산물": 33,
+		"수산물": 16259,
+		"농림어업서비스": 6455
+	},
+	{
+		"상품": "폐기물 및 자원재활용서비스",
+		"작물": 0,
+		"축산물": 703,
+		"임산물": 0,
+		"수산물": 1200,
+		"농림어업서비스": 10687
+	},
+	{
+		"상품": "건물건설및건축보수",
+		"작물": 2617,
+		"축산물": 7300,
+		"임산물": 7,
+		"수산물": 3827,
+		"농림어업서비스": 31951
+	}
+];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			<a href="https://jqueryui.com/resizable/" target="_blank">JQuery UI</a>의 resizable기능을 이용하여 그리드의 크기를 사용자가 조작할 수 있는 예제입니다.
+		</div>
+		<div class="headerDesc">
+			그리드의 우측하단의 리사이즈 아이콘을 Drag하십시오.<br>
+			그리드의 컬럼은 상품컬럼은 defaultWidth를 설정하고, 작물 컬럼은 크기를 주지 않고(defaultWidth를 100으로 지정된 것과 동일) 나머지 컬럼은 고정크기를 주었으며,
+			<span class="greenProp">horizontalScrollPolicy</span>를 off로 주어 크기 조정시 상품, 작물컬럼이 비율에 따라 넓이가 조정되도록 하였습니다.
+			(상품 또는 작물컬럼의 크기가 최소크기(minWidth)보다 작아지면 전체 컬럼이 같은 비율로 줄어듭니다)
+		</div>
+	</div>
+	<div class="container">
+		<div id="resizable" class="ui-widget-content" style="width:800px; height:400px; border:0">
+			<!-- 그리드가 삽입될 DIV -->
+			<div id="gridHolder" style="width:100%; height:100%;margin-left:0px;">
+			</div>
+		</div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

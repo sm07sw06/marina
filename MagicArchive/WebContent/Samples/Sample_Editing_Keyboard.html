@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+
+	var menuItemSelectedHandler = function(event) {
+		contextMenuHandler(event.menuItemCaption);
+	}
+
+	var layoutCompleteHandler = function(event) {
+		dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+		dataGrid.addEventListener("menuItemSelect", menuItemSelectedHandler);
+		columns = dataGrid.getColumns();
+	}
+
+	gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+}
+
+var gridApp, gridRoot, dataGrid, collection, columns;
+
+function contextMenuHandler(caption) {
+	if (caption == "Insert Row") {
+		var item = {"Selected": false,"From": "Jerry","Subject": "GMC-1 Release1","ReceiveDate": "2015/12/31","SendDate": "2015/12/31","CC": "Camy","Length": 0,"Level": 0,"AttachCount": 0};
+		gridRoot.addItemAt(item, gridRoot.getLastRollOverIndex());
+	} else if (caption == "Delete Row") {
+		var lastRollOverIndex = gridRoot.getLastRollOverIndex();
+		if (lastRollOverIndex >= 0)
+			gridRoot.removeItemAt(lastRollOverIndex);
+		else
+			alert("삭제할 행을 선택하세요");
+	}
+}
+
+// 수정 작업 결과 가져오기 (그리드에서 작업된 입력,수정,삭제 내용을 가져옵니다)
+// 데이터는 배열 형태로
+// 	idx: 행번호
+//	job: 수행 작업 (I:입력, U:수정, D:삭제)
+//	data: 행의 자료
+// 를 가지고 있으며 삭제가 먼저 오도록 정렬되어 있습니다.
+function getChangedData() {
+	var changedData = gridRoot.getChangedData();
+	if (changedData.length == 0)
+		alert("변경된 자료가 없습니다");
+	else {
+		for (var i = 0; i < changedData.length; i++)
+			alert("index:"+changedData[i].idx+"\n"+"job:"+changedData[i].job+"\n"+"data:"+changedData[i].data);
+	}
+}
+
+// 수정 작업 결과 XML로 가져오기 (그리드에서 작업된 입력,수정,삭제 내용을 XML로 가져옵니다)
+// 데이터는 XML 형태로
+// 	idx: 행번호
+//	job: 수행 작업 (I:입력, U:수정, D:삭제)
+//	data: 행의 자료
+// node를 가지고 있으며 삭제가 먼저 오도록 정렬되어 있습니다.
+function getChangedDataXML() {
+	var changedDataXML = gridRoot.getChangedDataXML();
+	if (changedDataXML == null)
+		alert("변경된 자료가 없습니다");
+	else
+		alert(changedDataXML);
+}
+
+// itemEditEndJsFunction 기능을 이용하여 에티팅후 값을 받아 편집 적용여부를 제어할 수 있습니다.
+// 	rowIndex: 해당 행의 index번호
+// 	columnIndex: 해당 열의 index번호
+//	item: 해당 행의 data 객체
+//	dataField: 필드명
+//	oldValue: 수정전의 값
+//	newValue: 수정후의 값
+//	reason: 수정이 끝난 이유 (cancelled : 사용자가 수정 취소, sameValue : 같은 값을 유지, newColumn : 수정후 다른 열로 이동, newRow : 수정후 다른 행으로 이동, other : 포커스 이동이나 설정값 변경등등)
+// 에러메세지를 반환할 경우 에디팅 결과가 반영되지 않으며 해당 셀에 에러메세지가 표시되며, null을 반환할 경우 에디팅 결과가 적용됩니다.
+function itemEditEndFunction(rowIndex, columnIndex, item, dataField, oldValue, newValue, reason) {
+	// 실제 수정이 안 일어났으면 return
+	if (reason == "cancelled" || reason == "sameValue")
+		return null;
+
+	// 마지막 행, 열에 대하여 값이 변경되었고 엔터키로 다음 라인 이동을 명령했다면 새로운 행을 만든다.
+	if (reason == "newRow") {
+		var len = gridRoot.getLength();
+		if(newValue && len - 1 == rowIndex)
+			gridRoot.addItemAt({}, len, true, columnIndex);
+	}
+	return null;
+}
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<ContextMenu id="cMenu">\
+		<ContextMenuItem caption="Insert Row"/>\
+		<ContextMenuItem caption="Delete Row"/>\
+	</ContextMenu>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" editable="true" doubleClickEnabled="true" contextMenu="{cMenu}" horizontalScrollPolicy="auto" verticalAlign="middle" selectionMode="singleCell" textAlign="center" itemEditEndJsFunction="itemEditEndFunction">\
+		<columns>\
+<!--\n\
+itemEditor 를 "CheckBoxEditor"로 설정하여 체크박스로 데이터를 수정할 수 있도록 합니다.\n\
+editorDataField: item editor에서 수정된 결과값을 받아 올 속성을 지정합니다.(기본 text)\n\
+-->\n\
+			<DataGridColumn dataField="From" width="80"/>\
+<!--\n\
+itemEditor 를 "ComboBoxEditor"로 설정하여 콤보박스로 데이터를 수정할 수 있도록 합니다.\n\
+editorDataField: item editor에서 수정된 결과값을 받아 올 속성을 지정합니다.(기본 text)\n\
+itemRendererDataProvider: ComboBoxEditor에서 선택할 수 있는 내용을 지정합니다.\n\
+-->\n\
+			<DataGridColumn dataField="Subject" width="150" fontWeight="bold" itemEditor="ComboBoxEditor" editorDataField="selectedDataField" itemRendererDataProvider="[{\'label\'\:\'GMC-1 Release1\'},{\'label\'\:\'GMC-1 Release2\'},{\'label\':\'GMC-1 Release3\'},{\'label\'\:\'GMC-1 Release4\'},{\'label\':\'GMC-1 Release5\'},{\'label\'\:\'GMC-1 Release6\'}]"/>\
+<!--\n\
+itemEditor 를 "DateEditor"로 설정하여 달력으로 데이터를 수정할 수 있도록 합니다.\n\
+-->\n\
+			<DataGridColumn dataField="ReceiveDate" fontWeight="bold" itemEditor="DateEditor"/>\
+<!--\n\
+itemEditor 를 "AutocompleteTextInput"로 설정하여 브라우저의 자동완성기능이 지원되는 에디터로 데이터를 수정할 수 있도록 합니다.\n\
+-->\n\
+			<DataGridColumn dataField="CC" itemEditor="AutocompleteTextInput"/>\
+			<DataGridColumn dataField="Length" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="AttachCount" textAlign="right" formatter="{numfmt}"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+var gridData = [
+	{
+		"Selected": false,
+		"From": "Amit",
+		"Subject": "GMC-1 Release1",
+		"ReceiveDate": "2015/12/07",
+		"SendDate": "2015/12/06",
+		"CC": "Jim",
+		"Length": 75126,
+		"Level": 1,
+		"AttachCount": 1
+	},
+	{
+		"Selected": false,
+		"From": "Amit",
+		"Subject": "GMC-1 Release2",
+		"ReceiveDate": "2015/12/07",
+		"SendDate": "2015/12/06",
+		"CC": "Jim",
+		"Length": 95822,
+		"Level": 1,
+		"AttachCount": 2
+	},
+	{
+		"Selected": false,
+		"From": "Amit",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/11",
+		"SendDate": "2015/12/11",
+		"CC": "Jim",
+		"Length": 1862456,
+		"Level": 3,
+		"AttachCount": 0
+	},
+	{
+		"Selected": false,
+		"From": "Barb",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Anant",
+		"Length": 65488,
+		"Level": 8,
+		"AttachCount": 31
+	},
+	{
+		"Selected": false,
+		"From": "Barb",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Anant",
+		"Length": 64342,
+		"Level": 3,
+		"AttachCount": 1
+	},
+	{
+		"Selected": false,
+		"From": "Barb",
+		"Subject": "GMC-1 Release3",
+		"ReceiveDate": "2015/12/08",
+		"SendDate": "2015/12/08",
+		"CC": "Anant",
+		"Length": 12434,
+		"Level": 5,
+		"AttachCount": 61
+	}
+];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			키보드로 그리드를 수정하도록 설정한 예제입니다.
+		</div>
+		<div class="headerDesc">
+			<span class="classProp">&lt;DataGrid&gt;</span>의 <span class="greenProp">selectionMode</span> 속성을 <span class="greenProp">singleCell</span>로 설정하면 방향키로 셀별로 이동이 가능합니다.<br><br>
+			※ 그리드 내 키보드 입력<br>
+			&nbsp;&nbsp;- 셀 이동 : 방향키<br>
+			&nbsp;&nbsp;- 편집모드 : F2 키<br>
+			&nbsp;&nbsp;- 편집 후 아래 셀 이동 : Enter 키 (Shift 함께 입력시 상단 셀 이동)<br>
+			&nbsp;&nbsp;- 편집 후 우측 셀 이동 : Tab 키 (Shift 함께 입력시 좌측 셀 이동)<br>
+			&nbsp;&nbsp;- 편집 모드 취소 : ESC 키
+		</div>
+		<div class="headerButtons">
+			<span class="button button_top" onclick="getChangedData();">수정내역 보기<img src="Web/Images/btnRight.png"></span>
+			<span class="button button_top" onclick="getChangedDataXML();">수정내역 XML로 보기<img src="Web/Images/btnRight.png"></span>
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rMateGrid>
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" horizontalGridLines="true" horizontalGridLineColor="#CCCCCC" verticalAlign="middle" selectionMode="multipleRows" textAlign="center">
+		<columns>
+			<DataGridColumn dataField="From" width="80"/>
+			<DataGridColumn dataField="Subject" width="120"/>
+			<DataGridColumn dataField="ReceiveDate" headerText="Receive"/>
+			<DataGridColumn dataField="SendDate" headerText="Send"/>
+			<DataGridColumn dataField="CC"/>
+			<DataGridColumn dataField="Level"/>
+			<DataGridColumn dataField="Length" textAlign="right" formatter="{numfmt}"/>
+			<DataGridColumn dataField="AttachCount" textAlign="right" formatter="{numfmt}" width="60"/>
+		</columns>
+	</DataGrid>
+</rMateGrid>
