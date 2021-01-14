@@ -141,25 +141,6 @@ void checkWifiStatus() {
     }    
 }
 
-void mqttReconnect() {
-  // Loop until we're reconnected
-  while (!mqttClient.connected()) {
-    Serial.println("Attempting MQTT connection...");
-    // Attempt to connect
-    if (mqttClient.connect("arduinoClient")) {
-      Serial.println("connected");
-      mqttClient.subscribe(gTopicSub);
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(mqttClient.state());
-      Serial.println(" try again in 1 seconds");
-      // Wait 1 seconds before retrying
-      delay(1000);
-    }
-    delay(50);
-  }
-}
-
 void connectWiFi(){
   Serial.println("Connecting Wifi....");
   int i = 0;
@@ -182,6 +163,25 @@ void connectWiFi(){
   Serial.println("Connected");
   printWifiStatus();
   //Serial.println(WiFi.localIP());
+}
+
+void mqttReconnect() {
+  // Loop until we're reconnected
+  while (!mqttClient.connected()) {
+    Serial.println("Attempting MQTT connection...");
+    // Attempt to connect
+    if (mqttClient.connect(gMac)) {
+      Serial.println("MQTT Broker ReConnected!");
+      mqttClient.subscribe(gTopicSub);
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(mqttClient.state());
+      Serial.println(" try again in 1 seconds");
+      // Wait 1 seconds before retrying
+      delay(1000);
+    }
+    delay(50);
+  }
 }
 
 void setup() {
@@ -221,6 +221,8 @@ void loop() {
    if (WiFi.status() != WL_CONNECTED) { 
      connectWiFi();
    }
+  mqttReconnect();
+
   mqttClient.loop();
   
     char message[1024]="", pDistBuf[1024];

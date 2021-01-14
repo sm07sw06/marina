@@ -163,22 +163,22 @@ void checkWifiStatus() {
 }
 
 void mqttReconnect() {
-    // Loop until we're reconnected
-    while (!mqttClient.connected()) {
-        Serial.println("Attempting MQTT connection...");
-        // Attempt to connect
-        if (mqttClient.connect("arduinoClient")) {
-            Serial.println("connected");
-            mqttClient.subscribe(gTopicSub);
-        } else {
-            Serial.print("failed, rc=");
-            Serial.print(mqttClient.state());
-            Serial.println(" try again in 1 seconds");
-            // Wait 1 seconds before retrying
-            delay(1000);
-        }
-        delay(50);
+  // Loop until we're reconnected
+  while (!mqttClient.connected()) {
+    Serial.println("Attempting MQTT connection...");
+    // Attempt to connect
+    if (mqttClient.connect(gMac)) {
+      Serial.println("MQTT Broker ReConnected!");
+      mqttClient.subscribe(gTopicSub);
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(mqttClient.state());
+      Serial.println(" try again in 1 seconds");
+      // Wait 1 seconds before retrying
+      delay(1000);
     }
+    delay(50);
+  }
 }
 
 void connectWiFi(){
@@ -236,6 +236,13 @@ void setup() {
 
 void loop() {
 
+    // In each loop, make sure there is an Internet connection.
+    if (WiFi.status() != WL_CONNECTED) {
+        connectWiFi();
+    }
+
+    mqttReconnect();
+
     while(!timeClient.update()) {
         timeClient.forceUpdate();
     }
@@ -268,11 +275,7 @@ void loop() {
     Serial.println(&timeinfo, "%S");
     Serial.println("-------------------------------");
     **/
-
-    // In each loop, make sure there is an Internet connection.
-    if (WiFi.status() != WL_CONNECTED) {
-        connectWiFi();
-    }
+   
     mqttClient.loop();
 
     // 신규 데이터 취득시에만 동작
