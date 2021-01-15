@@ -37,7 +37,7 @@ public class GetServerList extends HttpServlet {
 	}
 
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

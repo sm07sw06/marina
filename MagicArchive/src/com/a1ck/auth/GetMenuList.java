@@ -70,7 +70,7 @@ public class GetMenuList extends HttpServlet {
    			sQuery += "        ) T1																			\n";
    			sQuery += "  ORDER BY 4     														            \n";
 			
-			logger.debug("GetMenuList\n" + sQuery);
+			//logger.debug("GetMenuList\n" + sQuery);
 			
 			rs = stmt.executeQuery(sQuery);
 

@@ -233,7 +233,7 @@
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
 	<script src="assets/a1ck/js/a1ck-js.js"></script>		
-	<script src="assets/a1ck/js/serverInfo.js"></script>
+	<script src="assets/a1ck/js/serverInfo2.js"></script>
 
 </body>
 </html>

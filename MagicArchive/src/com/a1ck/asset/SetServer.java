@@ -93,6 +93,11 @@ public class SetServer extends HttpServlet {
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
 
+				    updateSql      = "DELETE FROM MDDB.TB_SERVER \n";
+					updateSql = updateSql + " WHERE 1 = 1 \n ";
+					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
+
+					
 					stmt = connectionDest.createStatement();
 					logger.debug("SetServer sql:" + updateSql);
 					stmt.execute(updateSql);

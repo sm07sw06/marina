@@ -14,7 +14,7 @@
 				<div class="logo">
 					<a href="index.jsp">
 						<!--  img src="assets/images/logo@2x.png" width="120" alt="" / -->
-						<h_2>Magic Archive</h_2>
+						<h_2>마리나 &nbsp;항만</h_2>
 					</a>
 				</div>
 
@@ -50,6 +50,12 @@
 							<a href="noAuth.jsp" id="menu00001" >
 								<i class="entypo-user"></i>
 								<span class="title">서버 등록</span>
+							</a>
+						</li>
+						<li >
+							<a href="noAuth.jsp" id="menu00016" >
+								<i class="entypo-user"></i>
+								<span class="title">서버 등록(old)</span>
 							</a>
 						</li>
 						<li>

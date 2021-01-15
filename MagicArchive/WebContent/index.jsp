@@ -12,7 +12,7 @@
 
 <link rel="icon" href="assets/images/favicon.ico">
 
-<title>Magic Archive</title>
+<title>스마트 마리나항만 불법계류 통합안전관리 시스템</title>
 
 <link rel="stylesheet" href="assets/jquery-ui-1.12.1.custom/jquery-ui.min.css">
 <!-- 
