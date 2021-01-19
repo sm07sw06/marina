@@ -23,6 +23,7 @@ function MessageObject()
 	var machineId;  //보트단말기 ID     
 	var boatId;  //보트 ID     
 	var anchorId;   // 정박지단말기 ID  
+	var leftRight;  // 좌우구분  
 }
 var mObject = new MessageObject(); //메세지 구조체
 
@@ -35,7 +36,7 @@ function BoatCheck(message) {
 //보트 단말기 정박 상태 분석
 function analysisBoatAnchor(sId, nGradex, nGradey) { 
 
-    logger.info('Start getArea........');
+    logger.info('Start analysisBoatAnchor........');
     
     mObject.iD   = sId;
     mObject.gpsX = nGradex;
@@ -50,16 +51,16 @@ function analysisBoatAnchor(sId, nGradex, nGradey) {
         function(callback) {
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
-                	logger.info('정박상태 확인');
+                	logger.info('정박상태 확인1');
                     db.SelectAnchorYN(mObject, function(rtn){
                         if (rtn === 'OK') {
-                        	logger.info('보트출항중');
+                        	logger.info('보트출항중1');
                         } else {
-                            logger.info('보트입항중');
+                            logger.info('보트입항중1');
                         }   
                     });         
                 } else {
-                    logger.info('보트단말기 정박상태 분석');
+                    logger.info('보트단말기 정박상태 분석1');
                     callback(null, rtn);
                 	// 보트단말기 정박상태 분석
                 	analysisBoatAnchor(mObject, function(rtn){ 
@@ -78,7 +79,7 @@ function analysisBoatAnchor(sId, nGradex, nGradey) {
     ],
     function (err, result) {
         if(err){
-            console.log('Error 발생');
+            console.log('Error ');
             throw( err );
         }  
     });
@@ -88,7 +89,7 @@ function analysisBoatAnchor(sId, nGradex, nGradey) {
 // 보트 GPS의 위치가 출입구 구역에 있는지 판단 
 function getGPSAreaAnalysis(sId, nGradex, nGradey) { 
 
-    logger.info('Start getArea........');
+    logger.info('Start getGPSAreaAnalysis........');
     
     mObject.iD   = sId;
     mObject.gpsX = nGradex;
@@ -103,16 +104,16 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
         function(callback) {
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
-                	logger.info('정박상태 확인');
+                	logger.info('정박상태 확인2'); //정박상태 확인
                     db.SelectAnchorYN(mObject, function(rtn){
                         if (rtn === 'OK') {
-                        	logger.info('보트출항중');
+                        	logger.info('보트출항중2'); //보트출항중
                         } else {
-                            logger.info('보트입항중');
+                            logger.info('보트 입항중2'); //보트 입항중
                         }   
                     });         
                 } else {
-                    logger.info('보트단말기 정박상태 분석');
+                    logger.info('보트단말기 정박상태 분석2'); //보트단말기 정박상태 분석
                     callback(null, rtn);
                 	// 보트단말기 정박상태 분석
                 	analysisBoatAnchor(mObject, function(rtn){ 
@@ -131,7 +132,7 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
     ],
     function (err, result) {
         if(err){
-            console.log('Error 발생');
+            console.log('Error ');
             throw( err );
         }  
     });

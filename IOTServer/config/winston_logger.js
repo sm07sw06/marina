@@ -23,7 +23,11 @@ const options = {
     maxFiles: 5,
     colorize: false,
     format: combine(
-      label({ label: 'winston-test' }),
+      //label({ label: 'winston-test' }),
+      label({label : function (callingModule) {
+    	    var parts = callingModule.filename.split('/');
+    	    return parts[parts.length - 2] + '/' + parts.pop();
+    	}}),      
       timestamp(),
       myFormat    // log 출력 포맷
     )

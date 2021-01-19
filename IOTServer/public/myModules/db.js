@@ -42,6 +42,7 @@ function MessageObject()
 	var machineId;  //보트단말기 ID     
 	var boatId;  //보트 ID     
 	var anchorId;   // 정박지단말기 ID  
+	var leftRight;  // 좌우구분  
 }
 var mObject = new MessageObject(); //메세지 구조체
 
@@ -149,10 +150,67 @@ function anchordata(sData) {
 	pool.query(
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
-				logger.info(err, res);
+				logger.error(err, res);
 				//pool.end();
 			} else {
 				logger.info("Anchordata Insert OK:");
+			}
+		}
+	);
+}
+
+
+//정박지 데이터 분석 처리
+function ridardata(sData) {
+
+	var sId       		= sData[00];
+	var nAngleMin   	= sData[01];
+	var nAngleMax 		= sData[02];
+	var nLoadMin 		= sData[03];
+	var nShipMax 		= sData[04];
+	var nLoadThreshold 	= sData[05];
+	var nShipThreshold 	= sData[06];
+	var nTempo 			= sData[07];
+	var nHuminity 		= sData[08];
+	var sSendtime 		= sData[09];
+	var nLoadLeftCount 	= sData[10];
+	var nShipLeftCount 	= sData[11];
+	var nLoadRightCount = sData[12];
+	var nShipRightCount = sData[13];
+	var sLoadLeftYn 	= sData[14];
+	var sShipLeftYn 	= sData[15];
+	var sLoadRightYn 	= sData[16];
+	var sShipRightYn 	= sData[17];
+
+    if(nAngleMin       === "")  { nAngleMin       = 0; }
+    if(nAngleMax       === "")  { nAngleMax       = 0; }
+    if(nLoadMin        === "")  { nLoadMin        = 0; }
+    if(nShipMax        === "")  { nShipMax        = 0; }
+    if(nLoadThreshold  === "")  { nLoadThreshold  = 0; }
+    if(nShipThreshold  === "")  { nShipThreshold  = 0; }
+    if(nTempo          === "")  { nTempo          = 0; }
+    if(nHuminity       === "")  { nHuminity        = 0; }
+    if(nLoadLeftCount  === "")  { nLoadLeftCount  = 0; }
+    if(nShipLeftCount  === "")  { nShipLeftCount  = 0; }
+    if(nLoadRightCount === "")  { nLoadRightCount = 0; }
+    if(nShipRightCount === "")  { nShipRightCount = 0; }
+
+	logger.info('Start ridardata........');
+
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString = "INSERT INTO public.ridardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
+	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn) ";
+	sQueryString += " values('" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
+	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + sSendtime ;
+	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "' )" ;
+	logger.info(sQueryString);
+	pool.query(
+		sQueryString,(err, res) => {
+			if(err !== undefined) {
+				logger.error(err, res);
+				//pool.end();
+			} else {
+				logger.info("Ridardata Insert OK:");
 			}
 		}
 	);
@@ -181,6 +239,11 @@ DB.prototype.InsertDBAnchorData = function(message) {
 	anchordata(message);
 };
 
+//MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
+DB.prototype.InsertDBRidarData = function(message) {
+	ridardata(message);
+};
+
 
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.SelectGateBound = function(mObject, callback) {
@@ -191,22 +254,25 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 	logger.info( '  GPS Y : ' + mObject.gpsY);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT sector_name FROM public.sector WHERE $1 BETWEEN gpsx1 AND gpsx2 AND $2 BETWEEN gpsy1 AND gpsy2 ";
+	var sQueryString  = "SELECT sector_name FROM public.sector  ";
+	 sQueryString  += " WHERE gpsx1 <= " + mObject.gpsX + " AND gpsx2 >= " + mObject.gpsX ;
+	 sQueryString  += "   AND gpsy1 <= " + mObject.gpsY + " AND gpsy2 >= " + mObject.gpsY ;
 	logger.info(sQueryString);
-	const values = [mObject.gpsX, mObject.gpsY];
 	pool.query(
-		sQueryString, values, (err, res) => {
+		sQueryString, (err, res) => {
 			if(err !== undefined) {
-				logger.error(err, res);
+				logger.error("SelectGateBound Count######:");
+				logger.error("SelectGateBound Count######:"   + res.rowCount);
+				logger.error(err);
+				logger.error(res);
 //				pool.end();
 				return -1;
 			} else {
-				logger.info("SelectGateBound Command:" + res.command);
-				logger.info("SelectGateBound Count:"   + res.rowCount);
 				//for(var i = 0; i < res.rowCount ; i ++) {
 				//	  logger.info("Result2:" +res.rows[i].sector_name);   
 				//}
 				if( res.rowCount > 0 ) {
+					logger.info("정박상태 확인..........!!");
 					callback('OK');
 				} else {
 					callback('ERROR');
@@ -224,21 +290,21 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	logger.info('  Device: ' + mObject.iD);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT anchor_status FROM anchor_device a JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = $1 ";
+	var sQueryString  = "SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '" + mObject.iD + "'";
 	logger.info(sQueryString);
-	const values = [mObject.iD];
 	pool.query(
-		sQueryString, values, (err, res) => {
+		sQueryString,  (err, res) => {
 			if(err !== undefined) {
-				logger.error(err, res);
+				logger.error("SelectAnchorYN Count@@@@@@:"   + res.rowCount);
+				logger.error(err);
+				logger.error(res);
+
 //				pool.end();
 				return -1;
 			} else {
-				logger.info("SelectAnchorYN Command:" + res.command);
-				logger.info("SelectAnchorYN Count:"   + res.rowCount);
-				for(var i = 0; i < res.rowCount ; i ++) {
-					  logger.info("SelectAnchorYNResult:" +res.rows[i].sector_name);   
-				}
+//				for(var i = 0; i < res.rowCount ; i ++) {
+//					  logger.info("SelectAnchorYNResult:" +res.rows[i].anchor_status);   
+//				}
 				if( res.rowCount > 0 ) {
 					callback('OK');
 				} else {
@@ -250,7 +316,7 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 };
 
 
-//기준 시간 범위내 단말기 수신 정보 찾기
+//기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
 DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 	
 	
@@ -259,30 +325,17 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 	logger.info('Start GetBoatDataSearch........');
 	logger.info('  GetBoatDataSearch Device: ' + mObject.iD);
 	logger.info('  GetBoatDataSearch time  : ' + mObject.time);
+	logger.info('  GetBoatDataSearch time  : ' + mObject.leftRight);
 
-	
-	/*
-	 *
-select *
-  from boatdata a,(
-select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2
-  from anchor_device b, anchor c, sector d
- where b.machine_id = '60CA47C40A24'
-   and b.anchor_id = c.anchor_id 
-   and c.sector_id = d.sector_id 
- ) AA    
- where a.latitude  between AA.gpsx1 and AA.gpsx2
-   and a.longitude between AA.gpsy1 and AA.gpsy2
-   and a.sendtime  between substring('20210111030510',0,13)||'00' and to_char((to_timestamp(substring('20210111030510',0,13)||'00', 'YYYYMMDDHHMISS') + interval '1 min'),'YYYYMMDDHHMISS')
 
-   
-	 */
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "select a.machine_id, x.boat_id, AA.anchor_id";
     sQueryString += "  from boatdata a,boat_device x,(";
     sQueryString += "select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2";
-    sQueryString += "  from anchor_device b, anchor c, sector d";
-    sQueryString += " where b.machine_id = '" + mObject.iD + "'";
+    sQueryString += "  from anchor_ridar b, anchor c, sector d";
+    sQueryString += " where 1 = 1 ";
+    sQueryString += "   and b.machine_id = '" + mObject.iD + "'";
+    sQueryString += "   and b.left_right = '" + mObject.leftRight + "'";
     sQueryString += "   and b.anchor_id = c.anchor_id ";
     sQueryString += "   and c.sector_id = d.sector_id ";
     sQueryString += " ) AA    ";
@@ -292,7 +345,7 @@ select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy
     sQueryString += "   and a.sendtime  between to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')";
     sQueryString += "   and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
 //    sQueryString += "   and a.sendtime  between substring('" + mObject.time + "',0,13)||'00' and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
-    logger.info(sQueryString);
+    logger.info("보트 찾기:" + sQueryString);
 	//const values = [mObject.iD, mObject.time ];
 	pool.query(
 //			sQueryString, values, (err, res) => {
@@ -343,7 +396,7 @@ DB.prototype.SetBoatAnchor = function(mObject, callback) {
 	pool.query(
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
-				logger.info(err, res);
+				logger.error(err, res);
 				//pool.end();
 			} else {
 				logger.info("Anchor Update OK:");
@@ -363,14 +416,14 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 	logger.info('   machineId: ' + mObject.machineId);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_device b where  b.machine_id = '" + mObject.machineId + "') " ;
+	var sQueryString  = "UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '" + mObject.machineId + "') " ;
 
     logger.info(sQueryString);
 
 	pool.query(
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
-				logger.info(err, res);
+				logger.error(err, res);
 				//pool.end();
 			} else {
 				logger.info("Anchor Update OK:");

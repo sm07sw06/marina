@@ -40,7 +40,7 @@ client.on("connect" , function(){
 
 client.on("message", function(topic, message){
 	
-	logger.info('MQTT receive........');
+//	logger.info('MQTT receive........');
 	
 	var DB = require('../public/myModules/db');
 	// message를 DB에 반영하도록 modules 호출
@@ -51,7 +51,7 @@ client.on("message", function(topic, message){
 	
 	for (var sKey in obj) {
 		
-		logger.info('sKey:' + sKey);
+//		logger.info('sKey:' + sKey);
 		
 		if (obj.hasOwnProperty(sKey)) {
 			
@@ -63,12 +63,18 @@ client.on("message", function(topic, message){
 				var BoatCheck = require('../public/myModules/boatCheck');
 				var boatCheck = new BoatCheck(sData); 
 				boatCheck.getBoatCheck();
-			} else {
+			} else if(sKey === "anchorData") {
 				db.InsertDBAnchorData(sData);  
 				// 정박지 단말기에서 보내온 신호 분석
 				var AnchorCheck = require('../public/myModules/anchorCheck');
 				var anchorCheck = new AnchorCheck(sData); 
 				anchorCheck.getAnchorCheck();				
+			} else if(sKey === "ridarData3") {
+				db.InsertDBRidarData(sData);  
+				// 정박지 단말기에서 보내온 신호 분석
+				var RidarCheck = require('../public/myModules/ridarCheck');
+				var ridarCheck = new RidarCheck(sData); 
+				ridarCheck.getRidarCheck();				
 			} // 보트 데이터가 아닌면 Skip
 		}    
 	}
