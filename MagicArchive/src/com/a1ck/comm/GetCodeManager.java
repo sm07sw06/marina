@@ -70,6 +70,7 @@ public class GetCodeManager extends HttpServlet {
 				logger.debug("getCodeManager sGroupCd:" + sGroupCd);
 				logger.debug("getCodeManager sGroupNm:" + sGroupNm);
 				logger.debug("getCodeManager sUseYn  :" + sUseYn);
+				logger.debug("getCodeManager sCrud:" + sCrud);
 				logger.debug("getCodeManager nRows:" + sRows);
 				logger.debug("getCodeManager nPage:" + sPage);
 			}
@@ -133,7 +134,7 @@ public class GetCodeManager extends HttpServlet {
 				jsonobj.put("result"  , "NOTFOUND");  
 			}
 				
-			//logger.debug(jsonobj.toString());
+			logger.debug(jsonobj.toString());
 
 			//�쓳�떟�쓣 �븯湲� �쐞�븳 以�鍮� �옉�뾽
 	        response.setContentType("text/plain");

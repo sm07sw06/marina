@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=utf-8"%>
 <jsp:useBean id="codeClass" class="com.a1ck.util.CodeClass" scope="page"/>
-
 <html lang="en">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,8 +15,6 @@
 <title>스마트 마리나항만 불법계류 통합안전관리 시스템</title>
 
 <link rel="stylesheet" href="assets/jquery-ui-1.12.1.custom/jquery-ui.min.css">
-
-
 <link rel="stylesheet" href="assets/css/font-icons/entypo/css/entypo.css">
 <link rel="stylesheet" href="assets/css/bootstrap.css">
 
@@ -30,8 +27,6 @@
 <link rel="stylesheet" href="assets/js/datatables/datatables.css">
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
 <link rel="stylesheet" href="assets/js/select2/select2.css">
-
-
 	
 <script src="assets/js/jquery-1.12.4.js"></script>
 <script src="assets/js/jquery.form.js"></script>
@@ -187,6 +182,7 @@
 										<div class="col-sm-8" >
 									        <input class="icheck-13" type="radio" id="F_USE_Y" name="F_USE_YN" value="Y">
 									        <label>사용</label>
+									        &nbsp;&nbsp;&nbsp;
 									        <input class="icheck-13" type="radio" id="F_USE_N" name="F_USE_YN" value="N">
 									        <label>미사용</label>
 										</div>

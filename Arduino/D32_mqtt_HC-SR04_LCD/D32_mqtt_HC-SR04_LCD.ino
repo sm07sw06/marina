@@ -293,7 +293,8 @@ void loop() {
 
     char timeStringBuff[50]; //50 chars should be enough
     strftime(timeStringBuff, sizeof(timeStringBuff), "%Y%m%d%H%M%S", &timeinfo);
-    sprintf(message, "{\"anchorData\":\"%s,%s,%s,%s\"}", gMac, gIp, pDistBuf, timeStringBuff);
+    sprintf(message, "{\"ridarData\":\"000102030405,1,20,100,200,10,10,0,0,20210118152747,20,0,20,0,1,0,1,0\"}", gMac, gIp, pDistBuf, timeStringBuff);
+//    sprintf(message, "{\"anchorData\":\"%s,%s,%s,%s\"}", gMac, gIp, pDistBuf, timeStringBuff);
     if( count == delaytime)  {
         mqttClient.publish(gTopicPub, message);
         count = 0;

@@ -102,9 +102,6 @@
 	
 
 	$('#btnQuery').click(function (e) {
-		$("#tableDivID").replaceWith(function () {
-			  return "<div id='tableDivID'><table id='jqGrid'></table><div id='jqGridPager'></div></div>";
-		});
 		refreshData();
 	});
 	
@@ -120,6 +117,7 @@
 		$('#F_SERVER_CLASS_CD option:eq(0)').prop("selected", true);
 		$('#CRUD'         ).val("C");
 		$('#F_SERVER_ID'  ).attr("readonly", true); //설정
+		$("input#F_SERVER_NM").focus();
 	});
 
 	$('#btnSave').click(function (e) {
@@ -173,6 +171,9 @@
 		obj.server_id   = $("input#F_SERVER_ID").val();
 		obj.crud        = "D";
 		
+		var input = confirm('삭제하시겠습니까?'); 
+		if(!input) return;
+
 		if(obj.server_id == ''){
 			alert("[알림] 서버를 선택하세요.");
 			$("input#F_SERVER_NM").focus();
@@ -205,6 +206,7 @@
 		});	
 		$("#SetServerForm").submit() ;
 	});
+	
 	
 	// 엑셀 export
 	// excelExportSave(url:String, async:Boolean);

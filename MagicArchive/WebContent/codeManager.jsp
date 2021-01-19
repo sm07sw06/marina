@@ -28,8 +28,6 @@
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
 <link rel="stylesheet" href="assets/js/select2/select2.css">
 
-<link rel="stylesheet" href="assets/a1ck/css/a1ck.css">	
-	
 <script src="assets/js/jquery-1.12.4.js"></script>
 <script src="assets/js/jquery.form.js"></script>
 <script src="assets/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
@@ -48,15 +46,27 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="./rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="./LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="./rMateGridH5/JS/rMateGridH5.js"></script>
+
+<!-- 페이징 관련 스타일 -->
+<link rel="stylesheet" type="text/css" href="./assets/a1ck/css/a1ckRef.css">	
+
+
 </head>
 
 <body class="page-body" data-url="http://neon.dev">
 
 	<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 
-	<!-- menu start -->
-	<%@ include file="menuInfo.jsp" %>
-	<!-- menu end-->
+		<!-- menu start -->
+		<%@ include file="menuInfo.jsp" %>
+		<!-- menu end-->
 
 		<div class="main-content">
 					
@@ -128,6 +138,7 @@
 											<div >
 										        <input class="icheck-13" type="radio" id="F_USE_YN" name="F_USE_YN" value="Y">
 										        <label for="F_USE_YN">예</label>
+										        &nbsp;&nbsp;&nbsp;
 										        <input class="icheck-13" type="radio" id="F_USE_YN" name="F_USE_YN" value="N">
 										        <label for="F_USE_YN">아니요</label>
 											</div>
@@ -137,11 +148,17 @@
 								</div>
 								
 									
-								<div id= "tableDivID1">
-									<table id="jqGrid1"></table>
-								    <div id="jqGridPager1"></div>
+								<div >
+									<div id="gridHolder1" style="width:100%; height:100%;"></div>
+									<div class="gridPaging" id="gridPageNavigationDiv1"></div>
+									<div style="width:100px; height:300px;float:left;text-align:center;vertical-align:middle;">
+										<br><br><br><br><br>
+										<a href="javascript:moveRight()"><img style="border-style:none;" src="./rMateGridH5/Web/Images/right.png" onmouseover="this.src='./rMateGridH5/Web/Images/over_right.png';" onmouseout="this.src='./rMateGridH5/Web/Images/right.png';"></a>
+										<br><br><br><br>
+										<a href="javascript:moveLeft()"><img style="border-style:none;" src="./rMateGridH5/Web/Images/left.png" onmouseover="this.src='./rMateGridH5/Web/Images/over_left.png';" onmouseout="this.src='./rMateGridH5/Web/Images/left.png';"></a>
+									</div>
+											
 								</div>
-									
 
 								</form>		
 							<!-- panel body end -->
@@ -204,6 +221,7 @@
 											<div >
 										        <input class="icheck-13" type="radio" id="F_USE_SUB_YN" name="F_USE_SUB_YN" value="Y">
 										        <label for="F_USE_SUB_YN">예</label>
+										        &nbsp;&nbsp;&nbsp;
 										        <input class="icheck-13" type="radio" id="F_USE_SUB_YN" name="F_USE_SUB_YN" value="N">
 										        <label for="F_USE_SUB_YN">아니요</label>
 											</div>
@@ -216,8 +234,8 @@
 									<div class="panel-body">
 										<div class="row">
 											<div id= "tableDivID2">
-												<table id="jqGrid2"></table>
-											    <div id="jqGridPager2"></div>
+												<div id="gridHolder2" style="width:100%; height:400px;"></div>
+												<div class="gridPaging" id="gridPageNavigationDiv2"></div>
 											</div>
 										</div>
 									</div>
