@@ -69,7 +69,7 @@ client.on("message", function(topic, message){
 				var AnchorCheck = require('../public/myModules/anchorCheck');
 				var anchorCheck = new AnchorCheck(sData); 
 				anchorCheck.getAnchorCheck();				
-			} else if(sKey === "ridarData3") {
+			} else if(sKey === "ridarData") {
 				db.InsertDBRidarData(sData);  
 				// 정박지 단말기에서 보내온 신호 분석
 				var RidarCheck = require('../public/myModules/ridarCheck');

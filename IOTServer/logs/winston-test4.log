@@ -3002,3 +3002,19 @@
 2021-01-19T02:51:43.232Z [winston-test] info: Ridardata Insert OK:
 2021-01-19T02:51:43.290Z [winston-test] info: GetBoatDataSearch Command:SELECT
 2021-01-19T02:51:43.290Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-19T02:52:13.286Z [winston-test] info: Start ridardata........
+2021-01-19T02:52:13.287Z [winston-test] info: INSERT INTO public.ridardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime,  load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn)  values('000102030405',1,20,100,200,10,10, 0,0,'20210119115212', 20,0,20,0,'1','1','1','0' )
+2021-01-19T02:52:13.287Z [winston-test] info: Start getRidarCheck........
+2021-01-19T02:52:13.287Z [winston-test] info:   sId:000102030405
+2021-01-19T02:52:13.287Z [winston-test] info:   sSendtime:20210119115212
+2021-01-19T02:52:13.287Z [winston-test] info:   sShipLeftYn:1
+2021-01-19T02:52:13.287Z [winston-test] info:   sShipRightYn:0
+2021-01-19T02:52:13.287Z [winston-test] info: boat is left ridared !!
+2021-01-19T02:52:13.287Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-19T02:52:13.287Z [winston-test] info:   GetBoatDataSearch Device: 000102030405
+2021-01-19T02:52:13.288Z [winston-test] info:   GetBoatDataSearch time  : 20210119115212
+2021-01-19T02:52:13.288Z [winston-test] info:   GetBoatDataSearch time  : 0
+2021-01-19T02:52:13.288Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '000102030405'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210119115212',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210119115212',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-19T02:52:13.362Z [winston-test] info: Ridardata Insert OK:
+2021-01-19T02:52:13.373Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-19T02:52:13.373Z [winston-test] info: GetBoatDataSearch Count:0
