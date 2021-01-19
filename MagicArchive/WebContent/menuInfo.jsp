@@ -89,6 +89,12 @@
 								<span class="title">코드관리</span>
 							</a>
 						</li>
+						<li>
+							<a href="noAuth.jsp" id="menu00017" >
+								<i class="entypo-users"></i>
+								<span class="title">코드관리2</span>
+							</a>
+						</li>
 					</ul>	
 
 				</li>

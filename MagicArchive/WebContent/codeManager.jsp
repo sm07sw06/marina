@@ -28,6 +28,8 @@
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
 <link rel="stylesheet" href="assets/js/select2/select2.css">
 
+<link rel="stylesheet" href="assets/a1ck/css/a1ck.css">	
+	
 <script src="assets/js/jquery-1.12.4.js"></script>
 <script src="assets/js/jquery.form.js"></script>
 <script src="assets/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
@@ -47,6 +49,7 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
 <!-- rMateGridH5 CSS -->
 <link rel="stylesheet" type="text/css" href="./rMateGridH5/Assets/rMateH5.css"/>
 <!-- rMateGridH5 라이센스 -->
@@ -64,9 +67,9 @@
 
 	<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 
-		<!-- menu start -->
-		<%@ include file="menuInfo.jsp" %>
-		<!-- menu end-->
+	<!-- menu start -->
+	<%@ include file="menuInfo.jsp" %>
+	<!-- menu end-->
 
 		<div class="main-content">
 					
@@ -103,7 +106,7 @@
 									<!-- div class=" search_cond" -->
 									<div class="row">
 										<div class="col-sm-12" >
-											<!-- <button onclick="return false;" id="btnQuery"    class="btn btn-icon btn-sm btn-default">조회<i class="entypo-search"></i></button> -->
+											<button onclick="return false;" id="btnQuery"    style="display:none;"  class="btn btn-icon btn-sm btn-default">조회<i class="entypo-search"></i></button>
 											<button onclick="return false;" id="btnAdd"      class="btn btn-icon btn-sm btn-primary">추가<i class="entypo-plus"></i></button>
  											<button onclick="return false;" id="btnDelete"   class="btn btn-icon btn-sm btn-red">삭제<i class="entypo-minus"></i></button>
 											<button onclick="return false;" id="btnSave"     class="btn btn-icon btn-sm btn-blue">저장<i class="entypo-check"></i></button>
@@ -134,8 +137,9 @@
 										</div>
 
  										<div class="form-group">
-											<label for="f_status" class="control-label">사용여부</label>
 											<div >
+												<label for="f_status" class="control-label">사용여부</label>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										        <input class="icheck-13" type="radio" id="F_USE_YN" name="F_USE_YN" value="Y">
 										        <label for="F_USE_YN">예</label>
 										        &nbsp;&nbsp;&nbsp;
@@ -148,17 +152,12 @@
 								</div>
 								
 									
-								<div >
-									<div id="gridHolder1" style="width:100%; height:100%;"></div>
-									<div class="gridPaging" id="gridPageNavigationDiv1"></div>
-									<div style="width:100px; height:300px;float:left;text-align:center;vertical-align:middle;">
-										<br><br><br><br><br>
-										<a href="javascript:moveRight()"><img style="border-style:none;" src="./rMateGridH5/Web/Images/right.png" onmouseover="this.src='./rMateGridH5/Web/Images/over_right.png';" onmouseout="this.src='./rMateGridH5/Web/Images/right.png';"></a>
-										<br><br><br><br>
-										<a href="javascript:moveLeft()"><img style="border-style:none;" src="./rMateGridH5/Web/Images/left.png" onmouseover="this.src='./rMateGridH5/Web/Images/over_left.png';" onmouseout="this.src='./rMateGridH5/Web/Images/left.png';"></a>
-									</div>
-											
-								</div>
+						<div class="content">
+							<!-- 그리드가 삽입될 DIV -->
+							<div id="gridHolder" style="width:100%; height:410px;"></div>
+							<div class="gridPaging" id="gridPageNavigationDiv"></div>
+						</div>
+									
 
 								</form>		
 							<!-- panel body end -->
@@ -217,8 +216,9 @@
 										</div>	
 										
  										<div class="form-group">
-											<label for="f_status" class="control-label">사용여부</label>
 											<div >
+												<label for="f_status" class="control-label">사용여부</label>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										        <input class="icheck-13" type="radio" id="F_USE_SUB_YN" name="F_USE_SUB_YN" value="Y">
 										        <label for="F_USE_SUB_YN">예</label>
 										        &nbsp;&nbsp;&nbsp;
@@ -231,14 +231,12 @@
 									</div>
 									
 
-									<div class="panel-body">
-										<div class="row">
-											<div id= "tableDivID2">
-												<div id="gridHolder2" style="width:100%; height:400px;"></div>
-												<div class="gridPaging" id="gridPageNavigationDiv2"></div>
-											</div>
-										</div>
-									</div>
+						<div class="content">
+							<!-- 그리드가 삽입될 DIV -->
+							<div id="gridHolder2" style="width:100%; height:410px;"></div>
+							<div class="gridPaging" id="gridPageNavigationDiv2"></div>
+						</div>
+									
 									
 								</form>
 							</div> <!-- panel-body  -->

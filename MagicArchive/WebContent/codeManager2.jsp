@@ -262,7 +262,7 @@
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
 	<script src="assets/a1ck/js/a1ck-js.js"></script>	
-	<script src="assets/a1ck/js/codeManager.js"></script>
+	<script src="assets/a1ck/js/codeManager2.js"></script>
 
 </body>
 </html>
