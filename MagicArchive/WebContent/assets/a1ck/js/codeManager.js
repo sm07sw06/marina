@@ -493,7 +493,7 @@
 					$('#btnAttrQuery').click();
 					alert("정상적으로 처리 되었습니다.");
 				} else {
-					alert("처리중 오류발생:\n" + json_data.msg );
+					alert("처리중 오류발생:\n(" + json_data.msg + ")");
 				}
 			},
 			error : function(data, status){

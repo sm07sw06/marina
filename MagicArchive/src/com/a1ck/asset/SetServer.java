@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 
 import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
+import com.a1ck.util.UtilClass;
 
 
 public class SetServer extends HttpServlet {
@@ -28,6 +29,8 @@ public class SetServer extends HttpServlet {
  //   	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
 
+    UtilClass  utilClass = new UtilClass();
+    
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 				
@@ -122,7 +125,14 @@ public class SetServer extends HttpServlet {
 
 			   }
 			   connectionDest.commit();
-			   
+			} catch (SQLException se) {
+				try {
+					connectionDest.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				se.printStackTrace();
+				logger.error("error :" + utilClass.getDbMsg(se.getSQLState()) );				
 			} catch (Exception e) {
 				try {
 					connectionDest.rollback();

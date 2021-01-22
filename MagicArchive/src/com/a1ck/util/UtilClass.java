@@ -23,8 +23,10 @@ import java.util.Iterator;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.ini4j.Ini;
+import org.json.simple.JSONObject;
 
 public class UtilClass {
 
@@ -1104,4 +1106,42 @@ public class UtilClass {
 		return file_map;
 	}
 
+	public String getDbMsg(String sCode) {
+
+		Connection connectionManage = null;
+		ConnectionManager conMgr = null;
+		conMgr = new ConnectionManagerAll4("postgresql");
+		
+		String sMsg = "Not Found";
+		try {
+			String sQuery;
+			// connectionManage = GetManagerConnection();
+			connectionManage = conMgr.getConnection();
+			Statement mStatment = connectionManage.createStatement();
+			sQuery = "SELECT DETAIL_NM \n";
+			sQuery += " FROM MDDB.TB_CODE_DETAIL \n";
+			sQuery += "  WHERE GROUP_CD  = 'POSTGRESQL'  \n ";
+			sQuery += "    AND DETAIL_CD = '" + sCode + "' \n";
+
+			ResultSet mResultSet = mStatment.executeQuery(sQuery);
+			while (mResultSet.next()) {
+				sMsg = mResultSet.getString("DETAIL_NM");	
+			}
+
+			mStatment.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (connectionManage != null)
+				try {
+					// connectionManage.close();
+					conMgr.freeConnection(connectionManage);
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+					e.printStackTrace();
+				}
+		}
+		return sMsg;
+	}
+	
 }

@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 
 import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
+import com.a1ck.util.UtilClass;
 
 
 public class SetCodeManager extends HttpServlet {
@@ -26,6 +27,8 @@ public class SetCodeManager extends HttpServlet {
     public SetCodeManager() {
  //   	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
+    
+    UtilClass  utilClass = new UtilClass();
 
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -176,7 +179,7 @@ public class SetCodeManager extends HttpServlet {
 				try {
 					connectionDest.rollback();
 					jsonobj.put("result"  , "NOTOK");
-					jsonobj.put("msg"     , se.getSQLState());   
+					jsonobj.put("msg"     , utilClass.getDbMsg(se.getSQLState()));   
 					jsonobj.put("genKey"  , 0);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
