@@ -104,7 +104,8 @@
                                     <!-- div class=" search_cond" -->
                                     <div class="row">
                                         <div class="col-sm-12" >
-                                            <button onclick="return false;" id="btnQuery"    style="display:none;"  class="btn btn-icon btn-sm btn-default">조회<i class="entypo-search"></i></button>
+                                            <!--  button onclick="return false;" id="btnQuery"    style="display:none;"  class="btn btn-icon btn-sm btn-default">조회<i class="entypo-search"></i></button> -->
+                                            <button onclick="return false;" id="btnQuery"    class="btn btn-icon btn-sm btn-default">조회<i class="entypo-search"></i></button>
                                             <button onclick="return false;" id="btnAdd"      class="btn btn-icon btn-sm btn-primary">추가<i class="entypo-plus"></i></button>
                                             <button onclick="return false;" id="btnDelete"   class="btn btn-icon btn-sm btn-red">삭제<i class="entypo-minus"></i></button>
                                             <button onclick="return false;" id="btnSave"     class="btn btn-icon btn-sm btn-blue">저장<i class="entypo-check"></i></button>
@@ -151,7 +152,7 @@
                                     <div class="content">
                                         <!-- 그리드가 삽입될 DIV -->
                                         <div id="gridHolder" style="width:100%; height:410px;"></div>
-                                        <div class="gridPagingDiv" id="gridPageNavigationDiv" ></div>
+                                        <div class="gridPagingDiv" id="gridPageNavigationDiv"  ></div>
                                     </div>
 
                                 </form>     
@@ -180,10 +181,10 @@
                                 <form role="form" method="post" name="SetATTRForm" id="SetATTRForm"  class="validate" action="" >
                                                                         
                                     <div>
-                                        <button onclick="return false;" id="btnAttrQuery"  style="display:none;"  class="btn btn-icon btn-sm btn-default">조회<i class="entypo-search"></i></button>
-                                        <button onclick="return false;" id="btnAttrAdd"    class="btn btn-icon btn-sm btn-primary">추가<i class="entypo-plus"></i></button>
-                                        <button onclick="return false;" id="btnAttrDel"    class="btn btn-icon btn-sm btn-red">삭제<i class="entypo-minus"></i></button>
-                                        <button onclick="return false;" id="btnAttrSave"   class="btn btn-icon btn-sm btn-blue">저장<i class="entypo-check"></i></button>
+                                        <button onclick="return false;" id="btnAttrAdd"   class="btn btn-sm btn-primary"><i class="entypo-plus"></i>&nbsp;추가</button>
+                                        <button onclick="return false;" id="btnAttrDel"   class="btn btn-sm btn-red"><i class="entypo-minus"></i>&nbsp;삭제</button> 
+                                        <button onclick="return false;" id="btnAttrSave"  class="btn btn-sm btn-blue"><i class="entypo-check"></i>&nbsp;저장</button>
+
                                     </div>  
 
                                     <input type="hidden" class="form-control" id="CRUD2" name="CRUD2"  value="UD">
@@ -228,7 +229,7 @@
                                     <div class="content">
                                         <!-- 그리드가 삽입될 DIV -->
                                         <div id="gridHolder2" style="width:100%; height:410px;"></div>
-                                        <div class="gridPagingDiv" id="gridPageNavigationDiv" ></div>
+                                        <div class="gridPagingDiv" id="gridPageNavigationDiv2"  ></div>
                                     </div>
                                                 
                                     
@@ -272,7 +273,7 @@
     <!-- Demo Settings -->
     <!-- script src="assets/js/neon-demo.js"></script -->
     <script src="assets/a1ck/js/a1ck-js.js"></script>   
-    <script src="assets/a1ck/js/codeManager.js"></script>
+    <script src="assets/a1ck/js/codeManager3.js"></script>
 
 </body>
 </html>

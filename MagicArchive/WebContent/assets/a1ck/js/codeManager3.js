@@ -9,8 +9,11 @@
 	var cnt=0;
 	var jsonObj = new Object();
 
-	var gridData = [];
+	var gridData  = [];
+	var gridData2 = [];
 	
+// 	var gridData2 = [{"DETAIL_NM":"01","DETAIL_CD":"01","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"02","DETAIL_CD":"02","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"03","DETAIL_CD":"03","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"04","DETAIL_CD":"04","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"05","DETAIL_CD":"05","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"06","DETAIL_CD":"06","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"07","DETAIL_CD":"07","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"08","DETAIL_CD":"08","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"09","DETAIL_CD":"09","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"11111","DETAIL_CD":"1","USE_YN":"N","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"10","DETAIL_CD":"10","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"11","DETAIL_CD":"11","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"12","DETAIL_CD":"12","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"13","DETAIL_CD":"13","USE_YN":"Y","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"22222","DETAIL_CD":"2","USE_YN":"N","GROUP_CD":"MSG_CD"},{"DETAIL_NM":"정상적으로 처리되었습니다.","DETAIL_CD":"S","USE_YN":"Y","GROUP_CD":"MSG_CD"}];
+
 	// rMateDataGrid 를 생성합니다.
 	// 파라메터 (순서대로)
 	//  1. 그리드의 id ( 임의로 지정하십시오. )
@@ -75,7 +78,7 @@
 			gridMovePage(1);
 		}
 
-		refreshData();
+//		refreshData();
 		
 		gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
 		gridRoot.addEventListener("dataComplete", dataCompleteHandler);
@@ -91,7 +94,7 @@
 		gridRoot2 = gridApp2.getRoot();	// 데이터와 그리드를 포함하는 객체
 
 		gridApp2.setLayout(layoutStr2);
-		gridApp2.setData(gridData);
+		gridApp2.setData(gridData2);
 
 		var menuItemSelectedHandler2 = function(event) {
 			console.log("menuItemSelectedHandler2 in......");
@@ -156,27 +159,24 @@
 			$('#F_GROUP_CD').val(dataGrid.getSelectedItem().GROUP_CD);
 			$('#F_GROUP_NM').val(dataGrid.getSelectedItem().GROUP_NM);
 			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
-			$('#CRUD1').val("U");
-			$('#F_GROUP_CD').attr("readonly", true ); //설정		
+			$('#CRUD').val("U");
 			
 			refreshData2() ; 
 		}
 	}
 	function dblclickHandler2(event) {
 		if(dataGrid2.getSelectedIndex() >= 0 ) {
-			$('#F_DETAIL_ID').val(dataGrid2.getSelectedIndex());
-			$('#F_DETAIL_CD').val(dataGrid2.getSelectedItem().DETAIL_CD);
-			$('#F_DETAIL_NM').val(dataGrid2.getSelectedItem().DETAIL_NM);
+			$('#F_GROUP_CD').val(dataGrid2.getSelectedItem().GROUP_CD);
+			$('#F_GROUP_NM').val(dataGrid2.getSelectedItem().GROUP_NM);
 			$('input[name=F_USE_YN][value="' + dataGrid2.getSelectedItem().USE_YN + '"]').prop("checked", true);
-			$('#CRUD2').val("UD");
-			$('#F_DETAIL_CD').attr("readonly", true ); //설정		
+			$('#CRUD').val("U");
 		}
 	}
 
 
 	function refreshData()  
 	{
-		var gridData0 = [];
+		var gridData = [];
 		jsonObj = {};
 
 		jsonObj.__crud = 'R';
@@ -184,7 +184,6 @@
 		jsonObj.__page = '1';
 		
 		$('#CRUD1').val("C")
-		$('#CRUD2').val("CD")
 		
 		$('input[name="F_USE_YN"]').val(["Y"]);	
 
@@ -197,7 +196,7 @@
 			success: function(json_data) {
 		        if(json_data.result == 'OK') {
 			   		$.each(json_data.rows, function(index, value) {
-			   			gridData0.push(value);
+			   			gridData.push(value);
 			   		});
 				} else {
 					console.log(json_data.result); 
@@ -206,13 +205,13 @@
 		});	
 		//gridApp.clear();
 		gridApp.setLayout(layoutStr);
-		gridApp.setData(gridData0);
+		gridApp.setData(gridData);
 	}
 	
 	function refreshData2()  
 	{
 		
-		var gridData0 = [];		
+		var gridData2 = [];		
 		
 		console.log("### refreshData2 in......");
 
@@ -236,8 +235,13 @@
 		jsonObj.__rows = '20';
 		jsonObj.__page = '1';
 		
-		$('input[name="F_USE_SUB_YN"]').val(["Y"]);	
+		$('#CRUD2').val("C")
 		
+		$('input[name="F_USE_SUB_YN"]').val(["Y"]);	
+
+		console.log(gridData2); 
+//		gridApp2.clear();
+ 		
 		$.ajax({
 		   	url:"GetCodeManager",
 			data:{param:JSON.stringify(jsonObj)},
@@ -247,34 +251,30 @@
 			success: function(json_data) {
 		        if(json_data.result == 'OK') {
 			   		$.each(json_data.rows, function(index, value) {
-			   			gridData0.push(value);
+			   			gridData2.push(value);
 			   		});
 				} else {
 					console.log(json_data.result); 
 				}
 			}
 		});	
+		console.log(gridData2); 
 		gridApp2.setLayout(layoutStr2);
-		gridApp2.setData(gridData0);		
-	
+		gridApp2.setData(gridData2);		
+		console.log(gridData2); 
+
 	}
 	
 
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
-
-	$('#btnAttrQuery').click(function (e) {
-		refreshData2();
-	});
-	
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_GROUP_CD').val("");
-		$('#F_GROUP_NM').val("");
+		$('#F_GROUP_CD'  ).val("");
+		$('#F_GROUP_NM'    ).val("");
 		$('input[name="F_USE_YN"]').val(["Y"]);
-		$('#CRUD1').val("C");
-		$('#F_GROUP_CD').attr("readonly", false ); //설정		
+		$('#CRUD'         ).val("C");
 		$("input#F_GROUP_CD").focus();
 	});
 
@@ -400,130 +400,6 @@
 	});
 	
 	
-	
-	
-	$('#btnAttrAdd').on( 'click', function () {
-		
-        $('#F_DETAIL_CD'   ).val("");
-        $('#F_DETAIL_NM'   ).val("");
-        $('input[name="F_USE_SUB_YN"]').val(["Y"]);        
-	    $('#F_GROUP_CD' ).attr("readonly", false ); //설정
-	    $('#F_DETAIL_CD').attr("readonly", false); //설정	
-        $('#CRUD2'   ).val("CD");
-        
-		$("input#F_DETAIL_CD").focus();	
-        
-	 });
-	
-	$('#btnAttrDel').click(function (e) {
-		
-		var formData = new FormData();
-
-		var inputString = confirm('삭제후 복구 할수 없습니다.\n삭제 하시겠습니까?');
-		
-		if (inputString) {
-	
-			var obj = new Object();
-			obj.__group_cd    = $("input#F_GROUP_CD").val();
-			obj.__detail_cd   = $("input#F_DETAIL_CD").val();
-			obj.__detail_nm   = $("input#F_DETAIL_NM").val().toUpperCase();
-			obj.__use_yn      = "N";
-			obj.__crud        = "DD";
-			
-			if($.trim(obj.__group_cd) == '' ){
-				alert("[알림] 그릅코드1를 먼저 선택하세요");
-				$("input#F_GROUP_CD").focus();
-			    return;
-			} else if($.trim(obj.__detail_cd) == ''){
-				alert("[알림] 코드를 입력하세요.");
-				$("input#F_DETAIL_CD").focus();
-			    return;
-			} else {
-				$("#SetATTRForm").ajaxForm({
-					url : 'SetCodeManager',
-					dataType:'json',
-					type: 'post',
-					data:{param:JSON.stringify(obj)},
-					success: function(json_data) {
-						$("input#F_DETAIL_CD").val('');
-						$("input#F_DETAIL_NM").val('');
-						$('#btnAttrQuery').click();
-						alert("정상적으로 처리 되었습니다.");
-					},
-					error : function(data, status){
-				    	if (data != null){
-				    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 서버에서 전달
-				    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
-				    			alert("이미 등록되어 있는 아이디 입니다.");
-				    		} else {
-				    			alert("Error");
-				    		}
-				    	}
-					}
-				});	
-				$("#SetATTRForm").submit() ;
-			}
-		}
-	});
-
-	$('#btnAttrSave').click(function (e) {
-		var formData = new FormData();
-		
-		var obj = new Object();
-		obj.__group_cd    = $("input#F_GROUP_CD").val();
-		obj.__detail_cd   = $("input#F_DETAIL_CD").val();
-		obj.__detail_nm   = $("input#F_DETAIL_NM").val().toUpperCase();
-		obj.__use_yn      = $('input[name="F_USE_SUB_YN"]:checked').val()
-		obj.__crud        = $("input#CRUD2").val();
-		
-		if($.trim(obj.__group_cd) == '' ){
-			alert("[알림] 그릅코드1를 먼저 선택하세요");
-			$("input#F_GROUP_CD").focus();
-		    return;
-		}
-
-		 if($.trim(obj.__detail_cd) == ''){
-			alert("[알림] 코드를 입력하세요.");
-			$("input#F_DETAIL_CD").focus();
-		    return;
-		}
-		
-		if($.trim(obj.__detail_nm) == ''){
-			alert("[알림] 코드명을 입력하세요.");
-			$("input#F_DETAIL_NM").focus();
-		    return;
-		}
-
-		$("#SetATTRForm").ajaxForm({
-			url : 'SetCodeManager',
-			dataType:'json',
-			type: 'post',
-			data:{param:JSON.stringify(obj)},
-			success: function(json_data) {
-//				console.log(json_data);
-				if (json_data.result == "OK" ) {	
-					$('#btnAttrQuery').click();
-					alert("정상적으로 처리 되었습니다.");
-				} else {
-					alert("처리중 오류발생:\n" + json_data.msg );
-				}
-			},
-			error : function(data, status){
-		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 서버에서 전달
-		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
-		    			alert("이미 등록되어 있는 아이디 입니다.");
-		    		} else {
-		    			alert("Error");
-		    		}
-		    	}
-			}
-		});	
-		$("#SetATTRForm").submit() ;
-	});
-		
-	
-	
 	// 엑셀 export
 	// excelExportSave(url:String, async:Boolean);
 //	    url : 업로드할 서버의 url, 기본값 null
@@ -568,7 +444,7 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<columns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="GROUP_CD" id="colGroupId" width="120"/>\
+				<DataGridColumn dataField="GROUP_CD" id="colGroupId" width="80"/>\
 				<DataGridColumn dataField="GROUP_NM" id="colGroupNm" width="200"/>\
 				<DataGridColumn dataField="USE_YN" id="colUseYn" width="80"/>\
 			</columns>\
@@ -583,14 +459,14 @@
 			<NumberFormatter id="numfmt2" useThousandsSeparator="true"/>\
 			<DataGrid id="dg2" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 				<columns>\
-					<DataGridColumn dataField="DETAIL_ID" id="colDetailNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-					<DataGridColumn dataField="GROUP_CD" id="colGroupCd" visible="false" width="120"/>\
-					<DataGridColumn dataField="DETAIL_CD" id="colDetailCd" width="120"/>\
+					<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+					<DataGridColumn dataField="GROUP_CD" id="colGroupCd" width="80"/>\
+					<DataGridColumn dataField="DETAIL_CD" id="colDetailCd" width="80"/>\
 					<DataGridColumn dataField="DETAIL_NM" id="colDetailNm" width="200"/>\
 					<DataGridColumn dataField="USE_YN" id="colUseYn" width="80"/>\
 				</columns>\
 				<dataProvider>\
-					<PagingCollection rowsPerPage="12" source="{$gridData}"/>\
+					<PagingCollection rowsPerPage="12" source="{$gridData2}"/>\
 				</dataProvider>\
 			</DataGrid>\
 		</rMateGrid>';	

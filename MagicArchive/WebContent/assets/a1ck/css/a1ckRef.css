@@ -14,6 +14,22 @@
 .gridPagingDisable { font-weight:bold; color:#cccccc; border:1px solid #e0e0e0; background-color:#f6f4f4; padding:3px 5px 3px 5px;}
 .gridPagingCurrent { font-weight:bold; color:#ffffff; border:1px solid #2f3d64; background-color:#2f3d64; padding:3px 5px 3px 5px;}
 
+.gridPagingDiv { 
+	text-align:center; 
+	font-family:verdana; 
+	font-size:12px; 
+	width:400px; 
+	padding-top:15px; 
+}
+.gridPagingDiv a { color:#797674; text-decoration:none; border:1px solid #e0e0e0; background-color:#f6f4f4; padding:3px 5px 3px 5px;}
+.gridPagingDiv a:link { color:#797674; text-decoration:none; }
+.gridPagingDiv a:visited { color:#797674; text-decoration:none; }
+.gridPagingDiv a:hover { text-decoration:none; border:1px solid #7a8ba2; text-decoration:none; }
+.gridPagingDiv a:active { text-decoration:none; }
+.gridPagingMove { font-weight:bold; }
+.gridPagingDisable { font-weight:bold; color:#cccccc; border:1px solid #e0e0e0; background-color:#f6f4f4; padding:3px 5px 3px 5px;}
+.gridPagingCurrent { font-weight:bold; color:#ffffff; border:1px solid #2f3d64; background-color:#2f3d64; padding:3px 5px 3px 5px;}
+
 
 h_1, h_2, h_3, h_4, h_5 {
     font-family: inherit;

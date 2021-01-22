@@ -58,18 +58,7 @@ function gridReadyHandler(id) {
 			dataGrid1 = gridRoot1.getDataGrid();	// 그리드 객체
 			dataGrid1.addEventListener("itemClick", itemClickHandler);
 		}
-		
-		// 사용자가 import를 완료하면 불려집니다.
-		var dataCompleteHandler = function() {
-			console.log("dataCompleteHandler in......");
-			collection = gridRoot.getCollection();
-			gridMovePage(1);
-		}
-		
-		
 		gridRoot1.addEventListener("layoutComplete", layoutCompleteHandler2);
-		gridRoot1.addEventListener("dataComplete", dataCompleteHandler2);
-		
 	} else {
 		gridApp2 = document.getElementById(id);	// 그리드를 포함하는 div 객체
 		gridRoot2 = gridApp2.getRoot();	// 데이터와 그리드를 포함하는 객체
@@ -80,17 +69,7 @@ function gridReadyHandler(id) {
 		var layoutCompleteHandler = function(event) {
 			dataGrid2 = gridRoot2.getDataGrid();	// 그리드 객체
 		}
-		
-		// 사용자가 import를 완료하면 불려집니다.
-		var dataCompleteHandler2 = function() {
-			console.log("dataCompleteHandler2 in......");			
-			collection2 = gridRoot2.getCollection();
-	//		gridMovePage2(1);
-		}
-		
 		gridRoot2.addEventListener("layoutComplete", layoutCompleteHandler);
-		gridRoot2.addEventListener("layoutComplete", layoutCompleteHandler);
-		gridRoot2.addEventListener("dataComplete", dataCompleteHandler);
 	}
 }
 
@@ -107,20 +86,17 @@ function filterFunction(item) {
 
 var layoutStr =
 '<rMateGrid>\
-	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
-	<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\	<columns>\
+	<DataGrid id="dg1" sortableColumns="true" selectionMode="singleRow" textAlign="center" alternatingItemColors="[#ffffff,#f9f9f9]" headerHeight="37" rowHeight="34" verticalAlign="middle">\
+		<columns>\
 			<DataGridColumn dataField="country" textAlign="center" />\
 		</columns>\
-		<dataProvider>\
-		<PagingCollection rowsPerPage="12" source="{$gridData2}"/>\
-	</dataProvider>\
 	</DataGrid>\
 </rMateGrid>';
 
 var layoutStr2 =
 '<rMateGrid>\
-	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
-	<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\	<columns>\
+	<DataGrid id="dg1" sortableColumns="true" selectionMode="singleRow" textAlign="center" alternatingItemColors="[#ffffff,#f9f9f9]" headerHeight="37" rowHeight="34" verticalAlign="middle">\
+		<columns>\
 			<DataGridColumn dataField="worldRank" textAlign="center" sortCompareFunction="numericSort"/>\
 			<DataGridColumn dataField="institution" textAlign="center" />\
 			<DataGridColumn dataField="country" textAlign="center" />\
@@ -135,199 +111,8 @@ var layoutStr2 =
 			<DataGridColumn dataField="patents" textAlign="center" visible="false" />\
 			<DataGridColumn dataField="score" textAlign="center" />\
 		</columns>\
-		<dataProvider>\
-			<PagingCollection rowsPerPage="12" source="{$gridData2}"/>\
-		</dataProvider>\
 	</DataGrid>\
 </rMateGrid>';
-
-//페이징 관련 자바스크립트
-var gridTotalRowCount;	// 전체 데이터 건수 - html이 서버에서 작성될때 반드시 넣어줘야 하는 변수입니다.
-var gridRowsPerPage;	// 1페이지에서 보여줄 행 수
-var gridViewPageCount = 10;		// 페이지 네비게이션에서 보여줄 페이지의 수
-var gridCurrentPage;	// 현재 페이지
-var gridTotalPage;	// 전체 페이지 계산
-
-// 페이징 관련 자바스크립트
-var gridTotalRowCount2;	// 전체 데이터 건수 - html이 서버에서 작성될때 반드시 넣어줘야 하는 변수입니다.
-var gridRowsPerPage2;	// 1페이지에서 보여줄 행 수
-var gridViewPageCount2 = 10;		// 페이지 네비게이션에서 보여줄 페이지의 수
-var gridCurrentPage2;	// 현재 페이지
-var gridTotalPage2;	// 전체 페이지 계산
-
-// 화면에 표시할 맨앞으로 와 맨뒤로, 앞으로, 뒤로 문구 - 이미지를 쓸 경우 img 태그로 대체
-var gridStartTxt = "≪";
-var gridEndTxt = "≫";
-var gridPrevTxt = "◀";
-var gridNextTxt = "▶";
-var gridPageGapTxt = " ";	// 페이지 사이의 구분을 위한 문자 - 사용하지 않을 경우 공백을 넣습니다.
-
-var gridStartTxt2 = "≪";
-var gridEndTxt2 = "≫";
-var gridPrevTxt2 = "◀";
-var gridNextTxt2 = "▶";
-var gridPageGapTxt2 = " ";	// 페이지 사이의 구분을 위한 문자 - 사용하지 않을 경우 공백을 넣습니다.
-
-// 주어진 페이지 번호에 따라 페이지 네비게이션 html을 만들고 gridPageNavigationDiv에 innerHTML로 넣어줍니다.
-function drawGridPagingNavigation(goPage) {
-	if (gridTotalPage == 0) {
-		gridPageNavigationDiv.innerHTML = "<span class='gridPagingDisable'>" + gridStartTxt + "</span> <span class='gridPagingDisable'>" + gridPrevTxt + "</span> <span class='gridPagingDisable'>" + gridNextTxt + "</span> <span class='gridPagingDisable'>" + gridEndTxt + "</span>";
-		return;
-	}
-
-	var retStr = "";
-	var prepage = parseInt((goPage - 1)/gridViewPageCount) * gridViewPageCount;
-	var nextpage = ((parseInt((goPage - 1)/gridViewPageCount)) * gridViewPageCount) + gridViewPageCount + 1;
-
-	// 맨앞으로
-	retStr += "<span class="; 	
-	if (goPage > 1) {
-		retStr += "'gridPagingMove'><a href='javascript:gridMovePage(1)'>" + gridStartTxt + "</a></span> ";
-	} else {
-		retStr += "'gridPagingDisable'>" + gridStartTxt + "</span> ";
-	}
-
-	// 앞으로
-	retStr += "<span class=";
-	if (goPage > gridViewPageCount) {
-		retStr += "'gridPagingMove'><a href='javascript:gridMovePage(" + prepage + ")'>" + gridPrevTxt + "</a></span>&nbsp; ";
-	} else {
-		retStr += "'gridPagingDisable'>" + gridPrevTxt + "</span>&nbsp; ";
-	}
-
-	for (var i = (1 + prepage); i < gridViewPageCount + 1 + prepage; i++) {
-		if (goPage == i) {
-			retStr += "<span class='gridPagingCurrent'>";
-			retStr += i;
-			retStr += "</span>";
-		} else {
-			retStr += "<span>";
-			retStr += "<a href='javascript:gridMovePage(" + i + ")'>" + i + "</a>";
-			retStr += "</span>";
-		}
-
-		if (i >= gridTotalPage) {
-			retStr += " ";
-			break;
-		}
-
-		if (i == gridViewPageCount + prepage)
-			retStr += " ";
-		else
-			retStr += gridPageGapTxt;
-	}
-
-	// 뒤로
-	retStr += "&nbsp;<span class=";
-	if (nextpage <= gridTotalPage) {
-		retStr += "'gridPagingMove'><a href='javascript:gridMovePage(" + nextpage + ")'>" + gridNextTxt + "</a></span> ";
-	} else {
-		retStr += "'gridPagingDisable'>" + gridNextTxt + "</span> ";
-	}
-
-	// 맨뒤로
-	retStr += "<span class=";
-	if (goPage != gridTotalPage) {
-		retStr += "'gridPagingMove'><a href='javascript:gridMovePage(" + gridTotalPage + ")'>" + gridEndTxt + "</span>";
-	} else {
-		retStr += "'gridPagingDisable'>" + gridEndTxt + "</span>";
-	}
-	gridPageNavigationDiv.innerHTML = retStr;
-}
-
-// 주어진 페이지 번호에 따라 페이지 네비게이션 html을 만들고 gridPageNavigationDiv에 innerHTML로 넣어줍니다.
-function drawGridPagingNavigation2(goPage) {
-	if (gridTotalPage2 == 0) {
-		gridPageNavigationDiv2.innerHTML = "<span class='gridPagingDisable'>" + gridStartTxt2 + "</span> <span class='gridPagingDisable'>" + gridPrevTxt2 + "</span> <span class='gridPagingDisable'>" + gridNextTxt + "</span> <span class='gridPagingDisable'>" + gridEndTxt + "</span>";
-		return;
-	}
-
-	var retStr2 = "";
-	var prepage2 = parseInt((goPage2 - 1)/gridViewPageCount2) * gridViewPageCount2;
-	var nextpage2 = ((parseInt((goPage2 - 1)/gridViewPageCount2)) * gridViewPageCount2) + gridViewPageCount2 + 1;
-
-	// 맨앞으로
-	retStr2 += "<span class="; 	
-	if (goPage2 > 1) {
-		retStr2 += "'gridPagingMove'><a href='javascript:gridMovePage2(1)'>" + gridStartTxt2 + "</a></span> ";
-	} else {
-		retStr2 += "'gridPagingDisable'>" + gridStartTxt2 + "</span> ";
-	}
-
-	// 앞으로
-	retStr2 += "<span class=";
-	if (goPage2 > gridViewPageCoun2t) {
-		retStr2 += "'gridPagingMove'><a href='javascript:gridMovePage2(" + prepage2 + ")'>" + gridPrevTxt2 + "</a></span>&nbsp; ";
-	} else {
-		retStr2 += "'gridPagingDisable'>" + gridPrevTxt2 + "</span>&nbsp; ";
-	}
-
-	for (var i = (1 + prepage2); i < gridViewPageCount2 + 1 + prepage2; i++) {
-		if (goPage2 == i) {
-			retStr2 += "<span class='gridPagingCurrent'>";
-			retStr2 += i;
-			retStr2 += "</span>";
-		} else {
-			retStr2 += "<span>";
-			retStr2 += "<a href='javascript:gridMovePage2(" + i + ")'>" + i + "</a>";
-			retStr2 += "</span>";
-		}
-
-		if (i >= gridTotalPage2) {
-			retStr2 += " ";
-			break;
-		}
-
-		if (i == gridViewPageCount2 + prepage2)
-			retStr2 += " ";
-		else
-			retStr2 += gridPageGapTxt2;
-	}
-
-	// 뒤로
-	retStr2 += "&nbsp;<span class=";
-	if (nextpage2 <= gridTotalPage2) {
-		retStr2 += "'gridPagingMove'><a href='javascript:gridMovePage2(" + nextpage2 + ")'>" + gridNextTxt2 + "</a></span> ";
-	} else {
-		retStr2 += "'gridPagingDisable'>" + gridNextTxt2 + "</span> ";
-	}
-
-	// 맨뒤로
-	retStr2 += "<span class=";
-	if (goPage2 != gridTotalPage2) {
-		retStr2 += "'gridPagingMove'><a href='javascript:gridMovePage2(" + gridTotalPage2 + ")'>" + gridEndTxt2 + "</span>";
-	} else {
-		retStr2 += "'gridPagingDisable'>" + gridEndTxt2 + "</span>";
-	}
-	gridPageNavigationDiv2.innerHTML = retStr2;
-}	
-
-function gridMovePage(goPage) {
-	gridTotalRowCount = collection.getTotalLength();
-	gridRowsPerPage = collection.getRowsPerPage();
-	gridTotalPage = collection.getTotalPageCount();
-	gridCurrentPage = goPage <= gridTotalPage ? goPage : gridTotalPage;
-
-	drawGridPagingNavigation(gridCurrentPage);
-	collection.setCurrentPage(gridCurrentPage);
-	var colNo = gridRoot.getObjectById("colNo");
-	if (colNo)
-		colNo.indexStartNo = (gridCurrentPage - 1) * gridRowsPerPage + 1;
-}
-
-function gridMovePage2(goPage) {
-	gridTotalRowCount2 = collection2.getTotalLength();
-	gridRowsPerPage2 = collection2.getRowsPerPage();
-	gridTotalPage2 = collection2.getTotalPageCount();
-	gridCurrentPage2 = goPage <= gridTotalPage2 ? goPage : gridTotalPage2;
-
-	drawGridPagingNavigation2(gridCurrentPage2);
-	collection2.setCurrentPage(gridCurrentPage2);
-	var colNo2 = gridRoot2.getObjectById("colNo");
-	if (colNo2)
-		colNo2.indexStartNo = (gridCurrentPage2 - 1) * gridRowsPerPage2 + 1;
-}
-
 
 var gridData = [
 {"country":"USA"},
@@ -1417,9 +1202,7 @@ var gridData2 = [
 	<div class="content" style="width:800px; display: inline-block;">
 		<!-- 그리드가 삽입될 DIV -->
 		<div id="gridHolder1" style="width:250px; height:300px;float:left;"></div>
-		<div class="gridPagingDiv" id="gridPageNavigationDiv"  ></div>
 		<div id="gridHolder2" style="width:550px; height:300px; float:left;"></div>
-		<div class="gridPagingDiv" id="gridPageNavigationDiv2"  ></div>
 	</div>
 	<div id="updater">
 		<div id="updaterTab">
