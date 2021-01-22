@@ -181,6 +181,7 @@ function ridardata(sData) {
 	var sShipLeftYn 	= sData[15];
 	var sLoadRightYn 	= sData[16];
 	var sShipRightYn 	= sData[17];
+	var sLongData  		= sData[18];
 
     if(nAngleMin       === "")  { nAngleMin       = 0; }
     if(nAngleMax       === "")  { nAngleMax       = 0; }
@@ -199,10 +200,10 @@ function ridardata(sData) {
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString = "INSERT INTO public.ridardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
-	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn) ";
+	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata) ";
 	sQueryString += " values('" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
 	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + sSendtime ;
-	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "' )" ;
+	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )" ;
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,(err, res) => {
