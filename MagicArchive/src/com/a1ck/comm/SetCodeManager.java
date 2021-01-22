@@ -172,17 +172,27 @@ public class SetCodeManager extends HttpServlet {
 				jsonobj.put("msg"     , "���������� ó�� �Ǿ����ϴ�.");
 				jsonobj.put("genKey"  , 0);
 				
+			} catch (SQLException se) {
+				try {
+					connectionDest.rollback();
+					jsonobj.put("result"  , "NOTOK");
+					jsonobj.put("msg"     , se.getSQLState());   
+					jsonobj.put("genKey"  , 0);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				logger.debug("error :" + se.getSQLState() );			
 			} catch (Exception e) {
 				try {
 					connectionDest.rollback();
 					jsonobj.put("result"  , "NOTOK");
-					jsonobj.put("msg"     , e.getMessage());
+					jsonobj.put("msg"     , e.getMessage());  
 					jsonobj.put("genKey"  , 0);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 				e.printStackTrace();
-				logger.debug("error :" + e.getMessage() );				
+				logger.debug("error :" + e.getMessage() );			
 			} finally {
 				try{
 					if(stmt != null)

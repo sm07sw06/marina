@@ -94,17 +94,14 @@
 		gridApp2.setData(gridData);
 
 		var menuItemSelectedHandler2 = function(event) {
-			console.log("menuItemSelectedHandler2 in......");
 			contextMenuHandler(event.menuItemCaption);
 		};
 		
 		var layoutCompleteHandler2 = function(event) {
-			console.log("layoutCompleteHandler2 in......");
 			dataGrid2 = gridRoot2.getDataGrid();	// 그리드 객체
 		}
 		
 		function contextMenuHandler2(caption) {
-			console.log("contextMenuHandler2 in......");
 			dataGrid2.setSelectedIndex(idx);
 		    var idx = dataGrid2.getSelectedIndex();
 		    // 맨 위의 행이면 skip
@@ -131,10 +128,9 @@
 		var dataCompleteHandler2 = function() {
 			console.log("dataCompleteHandler2 in......");			
 			collection2 = gridRoot2.getCollection();
-	//		gridMovePage2(1);
+			gridMovePage2(1);
 		}
 
-		//refreshData2();
 		
 		gridRoot2.addEventListener("layoutComplete", layoutCompleteHandler2);
 		gridRoot2.addEventListener("dataComplete", dataCompleteHandler2);
@@ -150,7 +146,6 @@
 
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
-		console.log(dataGrid.getSelectedItem().GROUP_CD);
 		
 		if(dataGrid.getSelectedIndex() >= 0 ) {
 			$('#F_GROUP_CD').val(dataGrid.getSelectedItem().GROUP_CD);
@@ -214,13 +209,6 @@
 		
 		var gridData0 = [];		
 		
-		console.log("### refreshData2 in......");
-
- /*       $('#F_GROUP_CD'   ).val(selectdRow.GROUP_CD);
-        $('#F_GROUP_NM'   ).val(selectdRow.GROUP_NM);
-		$('input[name="F_USE_YN"]').val([selectdRow.USE_YN]);
-		$('#CRUD1').val("U")
-*/
         $('#F_DETAIL_CD'   ).val("");
         $('#F_DETAIL_NM'   ).val("");
 		$('input[name="F_USE_SUB_YN"]').val(["Y"]);
@@ -689,7 +677,7 @@
 	}
 
 	// 주어진 페이지 번호에 따라 페이지 네비게이션 html을 만들고 gridPageNavigationDiv에 innerHTML로 넣어줍니다.
-	function drawGridPagingNavigation2(goPage) {
+	function drawGridPagingNavigation2(goPage2) {
 		if (gridTotalPage2 == 0) {
 			gridPageNavigationDiv2.innerHTML = "<span class='gridPagingDisable'>" + gridStartTxt2 + "</span> <span class='gridPagingDisable'>" + gridPrevTxt2 + "</span> <span class='gridPagingDisable'>" + gridNextTxt + "</span> <span class='gridPagingDisable'>" + gridEndTxt + "</span>";
 			return;
@@ -709,7 +697,7 @@
 
 		// 앞으로
 		retStr2 += "<span class=";
-		if (goPage2 > gridViewPageCoun2t) {
+		if (goPage2 > gridViewPageCount2) {
 			retStr2 += "'gridPagingMove'><a href='javascript:gridMovePage2(" + prepage2 + ")'>" + gridPrevTxt2 + "</a></span>&nbsp; ";
 		} else {
 			retStr2 += "'gridPagingDisable'>" + gridPrevTxt2 + "</span>&nbsp; ";
@@ -752,6 +740,8 @@
 		} else {
 			retStr2 += "'gridPagingDisable'>" + gridEndTxt2 + "</span>";
 		}
+		
+		console.log(retStr2);
 		gridPageNavigationDiv2.innerHTML = retStr2;
 	}	
 	
