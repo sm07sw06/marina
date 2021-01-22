@@ -4486,3 +4486,211 @@ SyntaxError: Unexpected token l in JSON at position 1
 2021-01-22T06:02:49.925Z [winston-test] info:   Device: 0013A20041BB95F7
 2021-01-22T06:02:49.925Z [winston-test] info: SELECT b.anchor_status FROM anchor_lidar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
 2021-01-22T06:02:49.927Z [winston-test] info: 보트출항중2
+2021-01-22T06:54:50.629Z [winston-test] info: Start boatdata........
+2021-01-22T06:54:50.630Z [winston-test] info:   nGradex:04
+2021-01-22T06:54:50.630Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T06:54:50.635Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67,'R',20210122155450 );
+2021-01-22T06:54:50.648Z [winston-test] info: Start getBoatCheck........
+2021-01-22T06:54:50.648Z [winston-test] info: 04
+2021-01-22T06:54:50.649Z [winston-test] info: $GPGGA
+2021-01-22T06:54:50.649Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T06:54:50.649Z [winston-test] info: Start SelectGateBound........
+2021-01-22T06:54:50.650Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T06:54:50.650Z [winston-test] info:   GPS X : 100
+2021-01-22T06:54:50.650Z [winston-test] info:   GPS Y : 55
+2021-01-22T06:54:50.650Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T06:54:50.727Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T06:54:50.730Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T06:54:50.730Z [winston-test] info: 정박상태 확인2
+2021-01-22T06:54:50.731Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T06:54:50.731Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T06:54:50.731Z [winston-test] info: SELECT b.anchor_status FROM anchor_lidar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T06:54:50.733Z [winston-test] info: 보트출항중2
+2021-01-22T06:55:30.629Z [winston-test] info: Start boatdata........
+2021-01-22T06:55:30.630Z [winston-test] info:   nGradex:04
+2021-01-22T06:55:30.630Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T06:55:30.630Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67,'R',20210122155530 );
+2021-01-22T06:55:30.630Z [winston-test] info: Start getBoatCheck........
+2021-01-22T06:55:30.630Z [winston-test] info: 04
+2021-01-22T06:55:30.631Z [winston-test] info: $GPGGA
+2021-01-22T06:55:30.631Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T06:55:30.631Z [winston-test] info: Start SelectGateBound........
+2021-01-22T06:55:30.631Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T06:55:30.631Z [winston-test] info:   GPS X : 100
+2021-01-22T06:55:30.631Z [winston-test] info:   GPS Y : 55
+2021-01-22T06:55:30.631Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T06:55:30.727Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T06:55:30.729Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T06:55:30.729Z [winston-test] info: 정박상태 확인2
+2021-01-22T06:55:30.729Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T06:55:30.729Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T06:55:30.730Z [winston-test] info: SELECT b.anchor_status FROM anchor_lidar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T06:55:30.732Z [winston-test] info: 보트출항중2
+2021-01-22T06:56:08.223Z [winston-test] error: uncaughtException: Unexpected token l in JSON at position 1
+SyntaxError: Unexpected token l in JSON at position 1
+    at JSON.parse (<anonymous>)
+    at MqttClient.<anonymous> (D:\workspaceiot\marina\IOTServer\bin\www:50:15)
+    at MqttClient.emit (events.js:311:20)
+    at MqttClient._handlePublish (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:1162:12)
+    at MqttClient._handlePacket (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:351:12)
+    at work (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:283:12)
+    at Writable.writable._write (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:294:5)
+    at doWrite (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:428:64)
+    at writeOrBuffer (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:417:5)
+    at Writable.write (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:334:11)
+2021-01-22T07:07:30.812Z [winston-test] info: Start boatdata........
+2021-01-22T07:07:30.813Z [winston-test] info:   nGradex:04
+2021-01-22T07:07:30.813Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T07:07:30.818Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67,'R',20210122160730 );
+2021-01-22T07:07:30.830Z [winston-test] info: Start getBoatCheck........
+2021-01-22T07:07:30.830Z [winston-test] info: 04
+2021-01-22T07:07:30.830Z [winston-test] info: $GPGGA
+2021-01-22T07:07:30.830Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T07:07:30.831Z [winston-test] info: Start SelectGateBound........
+2021-01-22T07:07:30.831Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:07:30.831Z [winston-test] info:   GPS X : 100
+2021-01-22T07:07:30.831Z [winston-test] info:   GPS Y : 55
+2021-01-22T07:07:30.831Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T07:07:30.898Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T07:07:30.905Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T07:07:30.905Z [winston-test] info: 정박상태 확인2
+2021-01-22T07:07:30.905Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T07:07:30.905Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:07:30.905Z [winston-test] info: SELECT 1 FROM anchor_lidar a WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T07:07:30.907Z [winston-test] info: 보트출항중2
+2021-01-22T07:08:10.791Z [winston-test] info: Start boatdata........
+2021-01-22T07:08:10.792Z [winston-test] info:   nGradex:04
+2021-01-22T07:08:10.792Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T07:08:10.792Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67,'R',20210122160810 );
+2021-01-22T07:08:10.792Z [winston-test] info: Start getBoatCheck........
+2021-01-22T07:08:10.792Z [winston-test] info: 04
+2021-01-22T07:08:10.792Z [winston-test] info: $GPGGA
+2021-01-22T07:08:10.792Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T07:08:10.793Z [winston-test] info: Start SelectGateBound........
+2021-01-22T07:08:10.793Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:08:10.793Z [winston-test] info:   GPS X : 100
+2021-01-22T07:08:10.793Z [winston-test] info:   GPS Y : 55
+2021-01-22T07:08:10.793Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T07:08:10.868Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T07:08:10.877Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T07:08:10.877Z [winston-test] info: 정박상태 확인2
+2021-01-22T07:08:10.878Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T07:08:10.878Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:08:10.878Z [winston-test] info: SELECT 1 FROM anchor_lidar a WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T07:08:10.880Z [winston-test] info: 보트출항중2
+2021-01-22T07:08:50.793Z [winston-test] info: Start boatdata........
+2021-01-22T07:08:50.794Z [winston-test] info:   nGradex:04
+2021-01-22T07:08:50.794Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T07:08:50.794Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67,'R',20210122160850 );
+2021-01-22T07:08:50.795Z [winston-test] info: Start getBoatCheck........
+2021-01-22T07:08:50.795Z [winston-test] info: 04
+2021-01-22T07:08:50.795Z [winston-test] info: $GPGGA
+2021-01-22T07:08:50.795Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T07:08:50.796Z [winston-test] info: Start SelectGateBound........
+2021-01-22T07:08:50.796Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:08:50.796Z [winston-test] info:   GPS X : 100
+2021-01-22T07:08:50.796Z [winston-test] info:   GPS Y : 55
+2021-01-22T07:08:50.796Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T07:08:50.883Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T07:08:50.883Z [winston-test] info: 정박상태 확인2
+2021-01-22T07:08:50.883Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T07:08:50.883Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:08:50.883Z [winston-test] info: SELECT 1 FROM anchor_lidar a WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T07:08:50.886Z [winston-test] info: 보트출항중2
+2021-01-22T07:08:50.886Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T07:09:08.867Z [winston-test] error: uncaughtException: Unexpected end of JSON input
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at MqttClient.<anonymous> (D:\workspaceiot\marina\IOTServer\bin\www:50:15)
+    at MqttClient.emit (events.js:311:20)
+    at MqttClient._handlePublish (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:1162:12)
+    at MqttClient._handlePacket (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:351:12)
+    at work (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:283:12)
+    at Writable.writable._write (D:\workspaceiot\marina\IOTServer\node_modules\mqtt\lib\client.js:294:5)
+    at doWrite (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:428:64)
+    at writeOrBuffer (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:417:5)
+    at Writable.write (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:334:11)
+2021-01-22T07:09:56.687Z [winston-test] info: Start lidardata........
+2021-01-22T07:09:56.688Z [winston-test] info: INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime,  load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  values('F832E4878CBB',1,20,100,200,10,10, 0,0,'20210118160139', 20,0,20,0,'1','0','1','0','3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107' )
+2021-01-22T07:09:56.688Z [winston-test] info: 3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107
+2021-01-22T07:09:56.697Z [winston-test] info: Start getLidarCheck........
+2021-01-22T07:09:56.698Z [winston-test] info:   sId:F832E4878CBB
+2021-01-22T07:09:56.698Z [winston-test] info:   sSendtime:20210118160139
+2021-01-22T07:09:56.698Z [winston-test] info:   sShipLeftYn:0
+2021-01-22T07:09:56.698Z [winston-test] info:   sShipRightYn:0
+2021-01-22T07:09:56.698Z [winston-test] info: boat is not anchored !!
+2021-01-22T07:09:56.698Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T07:09:56.699Z [winston-test] info:    machineId: F832E4878CBB
+2021-01-22T07:09:56.699Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = 'F832E4878CBB') 
+2021-01-22T07:09:56.792Z [winston-test] info: Lidardata Insert OK:
+2021-01-22T07:09:56.793Z [winston-test] info: Anchor Update OK:
+2021-01-22T07:09:56.793Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T07:09:56.793Z [winston-test] info: Start setDashBoard........
+2021-01-22T07:10:10.844Z [winston-test] info: Start boatdata........
+2021-01-22T07:10:10.844Z [winston-test] info:   nGradex:04
+2021-01-22T07:10:10.844Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T07:10:10.847Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67,'R',20210122161010 );
+2021-01-22T07:10:10.849Z [winston-test] info: Start getBoatCheck........
+2021-01-22T07:10:10.849Z [winston-test] info: 04
+2021-01-22T07:10:10.849Z [winston-test] info: $GPGGA
+2021-01-22T07:10:10.849Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T07:10:10.850Z [winston-test] info: Start SelectGateBound........
+2021-01-22T07:10:10.850Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:10:10.850Z [winston-test] info:   GPS X : 100
+2021-01-22T07:10:10.850Z [winston-test] info:   GPS Y : 55
+2021-01-22T07:10:10.850Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T07:10:10.945Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T07:10:10.947Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T07:10:10.947Z [winston-test] info: 정박상태 확인2
+2021-01-22T07:10:10.947Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T07:10:10.947Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T07:10:10.947Z [winston-test] info: SELECT anchor.anchor_status FROM anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '0013A20041BB95F7'
+2021-01-22T07:10:10.950Z [winston-test] info: 보트출항중2
+2021-01-22T07:10:14.252Z [winston-test] info: Start lidardata........
+2021-01-22T07:10:14.253Z [winston-test] info: INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime,  load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  values('F832E4878CBB',1,20,100,200,10,10, 0,0,'20210118160139', 20,0,20,0,'1','0','1','0','3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107' )
+2021-01-22T07:10:14.253Z [winston-test] info: 3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107
+2021-01-22T07:10:14.253Z [winston-test] info: Start getLidarCheck........
+2021-01-22T07:10:14.253Z [winston-test] info:   sId:F832E4878CBB
+2021-01-22T07:10:14.253Z [winston-test] info:   sSendtime:20210118160139
+2021-01-22T07:10:14.254Z [winston-test] info:   sShipLeftYn:0
+2021-01-22T07:10:14.254Z [winston-test] info:   sShipRightYn:0
+2021-01-22T07:10:14.254Z [winston-test] info: boat is not anchored !!
+2021-01-22T07:10:14.254Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T07:10:14.254Z [winston-test] info:    machineId: F832E4878CBB
+2021-01-22T07:10:14.254Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = 'F832E4878CBB') 
+2021-01-22T07:10:14.264Z [winston-test] info: Lidardata Insert OK:
+2021-01-22T07:10:14.336Z [winston-test] info: Anchor Update OK:
+2021-01-22T07:10:14.336Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T07:10:14.336Z [winston-test] info: Start setDashBoard........
+2021-01-22T07:10:22.995Z [winston-test] info: Start lidardata........
+2021-01-22T07:10:22.995Z [winston-test] info: INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime,  load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  values('F832E4878CBB',1,20,100,200,10,10, 0,0,'20210118160139', 20,0,20,0,'1','0','1','0','3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107' )
+2021-01-22T07:10:22.995Z [winston-test] info: 3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107
+2021-01-22T07:10:22.996Z [winston-test] info: Start getLidarCheck........
+2021-01-22T07:10:22.996Z [winston-test] info:   sId:F832E4878CBB
+2021-01-22T07:10:22.996Z [winston-test] info:   sSendtime:20210118160139
+2021-01-22T07:10:22.996Z [winston-test] info:   sShipLeftYn:0
+2021-01-22T07:10:22.996Z [winston-test] info:   sShipRightYn:0
+2021-01-22T07:10:22.996Z [winston-test] info: boat is not anchored !!
+2021-01-22T07:10:22.996Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T07:10:22.996Z [winston-test] info:    machineId: F832E4878CBB
+2021-01-22T07:10:22.996Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = 'F832E4878CBB') 
+2021-01-22T07:10:22.999Z [winston-test] info: Anchor Update OK:
+2021-01-22T07:10:22.999Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T07:10:22.999Z [winston-test] info: Start setDashBoard........
+2021-01-22T07:10:22.999Z [winston-test] info: Lidardata Insert OK:
+2021-01-22T07:10:40.594Z [winston-test] info: Start lidardata........
+2021-01-22T07:10:40.594Z [winston-test] info: INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime,  load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  values('F832E4878CBB',1,20,100,200,10,10, 0,0,'20210118160139', 20,0,20,0,'1','0','1','0','3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107' )
+2021-01-22T07:10:40.594Z [winston-test] info: 3|93|94|94|94|94|94|95|95|96|96|97|97|116|126|126|126|127|128|128|129|131|132|132|132|134|138|176|176|177|575|602|611|616|623|624|639|640|640|655|653|632|625|620|588|587|585|585|583|561|481|232|229|228|224|7|7|5|10|30|32|42|46|41|41|33|34|34|106|116|117|117|115|128|151|32|17|12|11|10|12|11|5|5|4|4|3|3|4|7|6|7|37|36|74|74|59|58|44|19|11|14|12|10|17|16|14|11|10|8|22|34|36|106|107|107|108|220|414|526|574|588|590|614|659|674|675|676|677|692|710|706|704|705|678|451|103|59|56|56|55|56|56|56|53|53|54|54|55|55|56|56|56|499|169|170|168|168|168|168|166|165|164|164|163|161|162|160|160|159|159|106|107|109|108|107|106|107|107|106|107
+2021-01-22T07:10:40.595Z [winston-test] info: Start getLidarCheck........
+2021-01-22T07:10:40.595Z [winston-test] info:   sId:F832E4878CBB
+2021-01-22T07:10:40.595Z [winston-test] info:   sSendtime:20210118160139
+2021-01-22T07:10:40.595Z [winston-test] info:   sShipLeftYn:0
+2021-01-22T07:10:40.595Z [winston-test] info:   sShipRightYn:0
+2021-01-22T07:10:40.595Z [winston-test] info: boat is not anchored !!
+2021-01-22T07:10:40.595Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T07:10:40.596Z [winston-test] info:    machineId: F832E4878CBB
+2021-01-22T07:10:40.596Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = 'F832E4878CBB') 
+2021-01-22T07:10:40.713Z [winston-test] info: Lidardata Insert OK:
+2021-01-22T07:10:40.714Z [winston-test] info: Anchor Update OK:
+2021-01-22T07:10:40.714Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T07:10:40.714Z [winston-test] info: Start setDashBoard........

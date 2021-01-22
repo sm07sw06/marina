@@ -292,7 +292,8 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	logger.info('  Device: ' + mObject.iD);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT b.anchor_status FROM anchor_lidar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '" + mObject.iD + "'";
+	var sQueryString  = "SELECT anchor.anchor_status FROM anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
+//	var sQueryString  = "SELECT 1 FROM anchor_lidar a WHERE a.machine_id = '" + mObject.iD + "'";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,  (err, res) => {
