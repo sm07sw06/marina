@@ -161,7 +161,7 @@ function anchordata(sData) {
 
 
 //정박지 데이터 분석 처리
-function ridardata(sData) {
+function lidardata(sData) {
 
 	var sId       		= sData[00];
 	var nAngleMin   	= sData[01];
@@ -196,22 +196,23 @@ function ridardata(sData) {
     if(nLoadRightCount === "")  { nLoadRightCount = 0; }
     if(nShipRightCount === "")  { nShipRightCount = 0; }
 
-	logger.info('Start ridardata........');
+	logger.info('Start lidardata........');
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString = "INSERT INTO public.ridardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
+	var sQueryString = "INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
 	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata) ";
 	sQueryString += " values('" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
 	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + sSendtime ;
 	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )" ;
 	logger.info(sQueryString);
+	logger.info(sLongData);
 	pool.query(
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
 				logger.error(err, res);
 				//pool.end();
 			} else {
-				logger.info("Ridardata Insert OK:");
+				logger.info("Lidardata Insert OK:");
 			}
 		}
 	);
@@ -241,8 +242,8 @@ DB.prototype.InsertDBAnchorData = function(message) {
 };
 
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
-DB.prototype.InsertDBRidarData = function(message) {
-	ridardata(message);
+DB.prototype.InsertDBLidarData = function(message) {
+	lidardata(message);
 };
 
 
@@ -291,7 +292,7 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	logger.info('  Device: ' + mObject.iD);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '" + mObject.iD + "'";
+	var sQueryString  = "SELECT b.anchor_status FROM anchor_lidar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '" + mObject.iD + "'";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,  (err, res) => {
@@ -326,14 +327,14 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 	logger.info('Start GetBoatDataSearch........');
 	logger.info('  GetBoatDataSearch Device: ' + mObject.iD);
 	logger.info('  GetBoatDataSearch time  : ' + mObject.time);
-	logger.info('  GetBoatDataSearch time  : ' + mObject.leftRight);
+	logger.info('  GetBoatDataSearch leftRight  : ' + mObject.leftRight);
 
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "select a.machine_id, x.boat_id, AA.anchor_id";
     sQueryString += "  from boatdata a,boat_device x,(";
     sQueryString += "select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2";
-    sQueryString += "  from anchor_ridar b, anchor c, sector d";
+    sQueryString += "  from anchor_lidar b, anchor c, sector d";
     sQueryString += " where 1 = 1 ";
     sQueryString += "   and b.machine_id = '" + mObject.iD + "'";
     sQueryString += "   and b.left_right = '" + mObject.leftRight + "'";
@@ -417,7 +418,7 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 	logger.info('   machineId: ' + mObject.machineId);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '" + mObject.machineId + "') " ;
+	var sQueryString  = "UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = '" + mObject.machineId + "') " ;
 
     logger.info(sQueryString);
 

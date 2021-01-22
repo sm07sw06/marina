@@ -69,6 +69,7 @@ AnchorCheck.prototype.getAnchorCheck = function() {
 		logger.info("boat is anchored !!");
 	    mObject.iD   = sId;
 	    mObject.time = sStime;		
+	    mObject.leftRight = 0;		
 
 	    db.GetBoatDataSearch(mObject, function(mObject2){ 
 			
