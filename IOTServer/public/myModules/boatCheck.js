@@ -54,9 +54,9 @@ function analysisBoatAnchor(sId, nGradex, nGradey) {
                 	logger.info('정박상태 확인1');
                     db.SelectAnchorYN(mObject, function(rtn){
                         if (rtn === 'OK') {
-                        	logger.info('보트출항중1');
+                        	logger.info('보트출항중1-1');
                         } else {
-                            logger.info('보트입항중1');
+                            logger.info('보트입항중1-2');
                         }   
                     });         
                 } else {
@@ -107,9 +107,9 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
                 	logger.info('정박상태 확인2'); //정박상태 확인
                     db.SelectAnchorYN(mObject, function(rtn){
                         if (rtn === 'OK') {
-                        	logger.info('보트출항중2'); //보트출항중
+                        	logger.info('보트출항중2-1'); //보트출항중
                         } else {
-                            logger.info('보트 입항중2'); //보트 입항중
+                            logger.info('보트 입항중2-2'); //보트 입항중
                         }   
                     });         
                 } else {

@@ -68,6 +68,7 @@ function boatdata(sData) {
 	var sSendtime    = sData[15];
 
 	logger.info('Start boatdata........');
+	logger.info(sData);
 	logger.info("  nGradex:"+nGradex);
 	logger.info("  nGradey:"+nGradey);	
 
@@ -81,13 +82,12 @@ function boatdata(sData) {
 	if(nSatellite   === "") { nSatellite = 0; }
 	if(nGpsage      === "") { nGpsage = 0; }
 	if(sSenttype    === "") { sSenttype = 'R'; }
-
-
 // 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) ";
+	var sQueryString  = "INSERT INTO boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) ";
 	sQueryString += " values('" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
 	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "',"  + moment().format('YYYYMMDDHHmmss') + " );";
-	logger.info(sQueryString);
+	logger.info("INSERT INTO boatdata:"+sQueryString);
+ 
 	pool.query(
 		sQueryString,(err, res) => {
 			if(err !== undefined) {
@@ -143,7 +143,7 @@ function anchordata(sData) {
 	} else {
 		sStatus = '0';
 	}
-
+ 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString = "INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('" + sId + "','"  + sStatus + "',"  + moment().format('YYYYMMDDHHmmss') + " );";
 	logger.info(sQueryString);
@@ -157,6 +157,7 @@ function anchordata(sData) {
 			}
 		}
 	);
+	 
 }
 
 
@@ -198,6 +199,7 @@ function lidardata(sData) {
 
 	logger.info('Start lidardata........');
 
+	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString = "INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
 	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata) ";
@@ -216,6 +218,8 @@ function lidardata(sData) {
 			}
 		}
 	);
+	
+ 
 }
 
 
@@ -254,14 +258,14 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 	logger.info( '  Device: ' + mObject.iD);
 	logger.info( '  GPS X : ' + mObject.gpsX);
 	logger.info( '  GPS Y : ' + mObject.gpsY);
-
+ 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "SELECT sector_name FROM anchor_sector  ";
 	 sQueryString  += " WHERE gpsx1 <= " + mObject.gpsX + " AND gpsx2 >= " + mObject.gpsX ;
 	 sQueryString  += "   AND gpsy1 <= " + mObject.gpsY + " AND gpsy2 >= " + mObject.gpsY ;
 	logger.info(sQueryString);
 	pool.query(
-		sQueryString, (err, res) => {
+		sQueryString , (err, res) => {
 			if(err !== undefined) {
 				logger.error("SelectGateBound Count######:");
 				logger.error("SelectGateBound Count######:"   + res.rowCount);
@@ -270,9 +274,6 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 //				pool.end();
 				return -1;
 			} else {
-				//for(var i = 0; i < res.rowCount ; i ++) {
-				//	  logger.info("Result2:" +res.rows[i].sector_name);   
-				//}
 				if( res.rowCount > 0 ) {
 					logger.info("정박상태 확인..........!!");
 					callback('OK');
@@ -282,6 +283,8 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 			}
 		}
 	);
+ 
+ 
 };
 
 
@@ -290,7 +293,7 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	
 	logger.info('Start SelectAnchorYN........');
 	logger.info('  Device: ' + mObject.iD);
-
+ 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 //	var sQueryString  = "SELECT anchor.anchor_status FROM anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
 	var sQueryString  = "SELECT 1 FROM anchor_lidar  WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
@@ -305,9 +308,6 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 //				pool.end();
 				return -1;
 			} else {
-//				for(var i = 0; i < res.rowCount ; i ++) {
-//					  logger.info("SelectAnchorYNResult:" +res.rows[i].anchor_status);   
-//				}
 				if( res.rowCount > 0 ) {
 					callback('OK');
 				} else {
@@ -316,13 +316,12 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 			}
 		}
 	);
+ 
 };
 
 
 //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
 DB.prototype.GetBoatDataSearch = function(mObject, callback) {
-	
-	
 	var machine_id ;
 	
 	logger.info('Start GetBoatDataSearch........');
@@ -330,7 +329,7 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 	logger.info('  GetBoatDataSearch time  : ' + mObject.time);
 	logger.info('  GetBoatDataSearch leftRight  : ' + mObject.leftRight);
 
-
+ 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "select a.machine_id, x.boat_id, AA.anchor_id";
     sQueryString += "  from boatdata a,boat_device x,(";
@@ -376,6 +375,7 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 			}
 		}
 	);
+ 
 };
 
 
@@ -390,7 +390,7 @@ DB.prototype.SetBoatAnchor = function(mObject, callback) {
 	logger.info('   boatId: ' + mObject.boatId);
 	logger.info('   time  : ' + mObject.time);
 
-
+ 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "UPDATE ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where anchor_id = " + mObject.anchorId;
 
@@ -407,6 +407,7 @@ DB.prototype.SetBoatAnchor = function(mObject, callback) {
 			}
 		}
 	);
+ 
 };
 
 
@@ -417,6 +418,7 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 	
 	logger.info('Start SetBoatNotAnchor........');
 	logger.info('   machineId: ' + mObject.machineId);
+
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = '" + mObject.machineId + "') " ;
@@ -434,6 +436,7 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 			}
 		}
 	);
+
 };
 
 
