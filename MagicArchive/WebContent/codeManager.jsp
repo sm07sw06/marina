@@ -151,7 +151,7 @@
                                     <div class="content">
                                         <!-- 그리드가 삽입될 DIV -->
                                         <div id="gridHolder" style="width:100%; height:410px;"></div>
-                                        <div class="gridPagingDiv" id="gridPageNavigationDiv" ></div>
+                                        <div class="gridPaging" id="gridPageNavigationDiv" ></div>
                                     </div>
 
                                 </form>     
@@ -228,7 +228,7 @@
                                     <div class="content">
                                         <!-- 그리드가 삽입될 DIV -->
                                         <div id="gridHolder2" style="width:100%; height:410px;"></div>
-                                        <div class="gridPagingDiv" id="gridPageNavigationDiv2" ></div>
+                                        <div class="gridPaging" id="gridPageNavigationDiv2" ></div>
                                     </div>
                                                 
                                     
