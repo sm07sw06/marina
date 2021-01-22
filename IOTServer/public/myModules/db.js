@@ -256,7 +256,7 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 	logger.info( '  GPS Y : ' + mObject.gpsY);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT sector_name FROM public.sector  ";
+	var sQueryString  = "SELECT sector_name FROM sector  ";
 	 sQueryString  += " WHERE gpsx1 <= " + mObject.gpsX + " AND gpsx2 >= " + mObject.gpsX ;
 	 sQueryString  += "   AND gpsy1 <= " + mObject.gpsY + " AND gpsy2 >= " + mObject.gpsY ;
 	logger.info(sQueryString);
@@ -293,7 +293,6 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "SELECT anchor.anchor_status FROM anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
-//	var sQueryString  = "SELECT 1 FROM anchor_lidar a WHERE a.machine_id = '" + mObject.iD + "'";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,  (err, res) => {
