@@ -3018,3 +3018,456 @@
 2021-01-19T02:52:13.362Z [winston-test] info: Ridardata Insert OK:
 2021-01-19T02:52:13.373Z [winston-test] info: GetBoatDataSearch Command:SELECT
 2021-01-19T02:52:13.373Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:42:26.174Z [winston-test] info: Start anchordata........
+2021-01-22T00:42:26.176Z [winston-test] info:   nDistance:61.34
+2021-01-22T00:42:26.179Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094226 );
+2021-01-22T00:42:26.191Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:42:26.191Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:42:26.192Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:42:26.192Z [winston-test] info:   nDistance:61.34
+2021-01-22T00:42:26.192Z [winston-test] info: boat is anchored !!
+2021-01-22T00:42:26.192Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:42:26.193Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:42:26.193Z [winston-test] info:   GetBoatDataSearch time  : 20210122094224
+2021-01-22T00:42:26.193Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:42:26.193Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094224',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094224',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:42:26.284Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:42:26.293Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:42:26.293Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:42:39.863Z [winston-test] info: Start boatdata........
+2021-01-22T00:42:39.863Z [winston-test] info:   nGradex:04
+2021-01-22T00:42:39.863Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:42:39.863Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094239 );
+2021-01-22T00:42:39.865Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:42:39.865Z [winston-test] info: 04
+2021-01-22T00:42:39.865Z [winston-test] info: $GPGGA
+2021-01-22T00:42:39.865Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:42:39.866Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:42:39.866Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:42:39.866Z [winston-test] info:   GPS X : 100
+2021-01-22T00:42:39.866Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:42:39.866Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:42:39.942Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:42:39.950Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:42:39.951Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:42:39.951Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:42:39.951Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:42:39.951Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:42:39.955Z [winston-test] info: 보트출항중2
+2021-01-22T00:42:56.212Z [winston-test] info: Start anchordata........
+2021-01-22T00:42:56.212Z [winston-test] info:   nDistance:58.22
+2021-01-22T00:42:56.213Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094256 );
+2021-01-22T00:42:56.213Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:42:56.213Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:42:56.213Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:42:56.213Z [winston-test] info:   nDistance:58.22
+2021-01-22T00:42:56.213Z [winston-test] info: boat is anchored !!
+2021-01-22T00:42:56.213Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:42:56.213Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:42:56.214Z [winston-test] info:   GetBoatDataSearch time  : 20210122094255
+2021-01-22T00:42:56.214Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:42:56.214Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094255',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094255',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:42:56.305Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:42:56.309Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:42:56.309Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:43:19.858Z [winston-test] info: Start boatdata........
+2021-01-22T00:43:19.858Z [winston-test] info:   nGradex:04
+2021-01-22T00:43:19.858Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:43:19.858Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094319 );
+2021-01-22T00:43:19.858Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:43:19.859Z [winston-test] info: 04
+2021-01-22T00:43:19.859Z [winston-test] info: $GPGGA
+2021-01-22T00:43:19.859Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:43:19.859Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:43:19.859Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:43:19.859Z [winston-test] info:   GPS X : 100
+2021-01-22T00:43:19.859Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:43:19.859Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:43:19.939Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:43:19.940Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:43:19.942Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:43:19.942Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:43:19.942Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:43:19.942Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:43:19.944Z [winston-test] info: 보트출항중2
+2021-01-22T00:43:26.251Z [winston-test] info: Start anchordata........
+2021-01-22T00:43:26.252Z [winston-test] info:   nDistance:189.41
+2021-01-22T00:43:26.252Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094326 );
+2021-01-22T00:43:26.252Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:43:26.252Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:43:26.252Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:43:26.252Z [winston-test] info:   nDistance:189.41
+2021-01-22T00:43:26.252Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:43:26.252Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:43:26.253Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:43:26.253Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:43:26.259Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:43:26.324Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:43:26.325Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:43:26.325Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:43:56.292Z [winston-test] info: Start anchordata........
+2021-01-22T00:43:56.293Z [winston-test] info:   nDistance:60.05
+2021-01-22T00:43:56.293Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094356 );
+2021-01-22T00:43:56.293Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:43:56.293Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:43:56.293Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:43:56.293Z [winston-test] info:   nDistance:60.05
+2021-01-22T00:43:56.293Z [winston-test] info: boat is anchored !!
+2021-01-22T00:43:56.293Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:43:56.294Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:43:56.294Z [winston-test] info:   GetBoatDataSearch time  : 20210122094355
+2021-01-22T00:43:56.294Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:43:56.294Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094355',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094355',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:43:56.378Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:43:56.379Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:43:56.379Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:43:59.855Z [winston-test] info: Start boatdata........
+2021-01-22T00:43:59.855Z [winston-test] info:   nGradex:04
+2021-01-22T00:43:59.855Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:43:59.856Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094359 );
+2021-01-22T00:43:59.856Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:43:59.856Z [winston-test] info: 04
+2021-01-22T00:43:59.856Z [winston-test] info: $GPGGA
+2021-01-22T00:43:59.856Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:43:59.856Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:43:59.856Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:43:59.856Z [winston-test] info:   GPS X : 100
+2021-01-22T00:43:59.856Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:43:59.856Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:43:59.859Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:43:59.863Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:43:59.863Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:43:59.863Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:43:59.863Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:43:59.863Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:43:59.867Z [winston-test] info: 보트출항중2
+2021-01-22T00:44:26.335Z [winston-test] info: Start anchordata........
+2021-01-22T00:44:26.336Z [winston-test] info:   nDistance:60.48
+2021-01-22T00:44:26.336Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094426 );
+2021-01-22T00:44:26.336Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:44:26.336Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:44:26.336Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:44:26.337Z [winston-test] info:   nDistance:60.48
+2021-01-22T00:44:26.337Z [winston-test] info: boat is anchored !!
+2021-01-22T00:44:26.337Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:44:26.337Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:44:26.337Z [winston-test] info:   GetBoatDataSearch time  : 20210122094425
+2021-01-22T00:44:26.337Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:44:26.337Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094425',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094425',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:44:26.421Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:44:26.425Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:44:26.425Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:44:39.897Z [winston-test] info: Start boatdata........
+2021-01-22T00:44:39.898Z [winston-test] info:   nGradex:04
+2021-01-22T00:44:39.899Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:44:39.899Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094439 );
+2021-01-22T00:44:39.900Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:44:39.900Z [winston-test] info: 04
+2021-01-22T00:44:39.900Z [winston-test] info: $GPGGA
+2021-01-22T00:44:39.900Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:44:39.901Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:44:39.901Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:44:39.901Z [winston-test] info:   GPS X : 100
+2021-01-22T00:44:39.901Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:44:39.901Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:44:39.976Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:44:39.981Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:44:39.981Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:44:39.981Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:44:39.981Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:44:39.981Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:44:39.984Z [winston-test] info: 보트출항중2
+2021-01-22T00:44:56.400Z [winston-test] info: Start anchordata........
+2021-01-22T00:44:56.401Z [winston-test] info:   nDistance:189.52
+2021-01-22T00:44:56.401Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094456 );
+2021-01-22T00:44:56.401Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:44:56.401Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:44:56.401Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:44:56.401Z [winston-test] info:   nDistance:189.52
+2021-01-22T00:44:56.401Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:44:56.401Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:44:56.401Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:44:56.401Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:44:56.495Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:44:56.499Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:44:56.500Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:44:56.500Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:45:19.914Z [winston-test] info: Start boatdata........
+2021-01-22T00:45:19.914Z [winston-test] info:   nGradex:04
+2021-01-22T00:45:19.914Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:45:19.914Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094519 );
+2021-01-22T00:45:19.915Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:45:19.915Z [winston-test] info: 04
+2021-01-22T00:45:19.915Z [winston-test] info: $GPGGA
+2021-01-22T00:45:19.915Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:45:19.915Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:45:19.915Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:45:19.915Z [winston-test] info:   GPS X : 100
+2021-01-22T00:45:19.915Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:45:19.915Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:45:19.996Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:45:20.003Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:45:20.004Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:45:20.004Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:45:20.004Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:45:20.004Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:45:20.007Z [winston-test] info: 보트출항중2
+2021-01-22T00:45:26.458Z [winston-test] info: Start anchordata........
+2021-01-22T00:45:26.459Z [winston-test] info:   nDistance:58.67
+2021-01-22T00:45:26.459Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094526 );
+2021-01-22T00:45:26.459Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:45:26.459Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:45:26.459Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:45:26.459Z [winston-test] info:   nDistance:58.67
+2021-01-22T00:45:26.459Z [winston-test] info: boat is anchored !!
+2021-01-22T00:45:26.459Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:45:26.460Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:45:26.460Z [winston-test] info:   GetBoatDataSearch time  : 20210122094525
+2021-01-22T00:45:26.460Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:45:26.460Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094525',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094525',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:45:26.466Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:45:26.537Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:45:26.537Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:45:56.489Z [winston-test] info: Start anchordata........
+2021-01-22T00:45:56.489Z [winston-test] info:   nDistance:55.69
+2021-01-22T00:45:56.489Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094556 );
+2021-01-22T00:45:56.489Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:45:56.490Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:45:56.490Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:45:56.490Z [winston-test] info:   nDistance:55.69
+2021-01-22T00:45:56.490Z [winston-test] info: boat is anchored !!
+2021-01-22T00:45:56.490Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:45:56.490Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:45:56.491Z [winston-test] info:   GetBoatDataSearch time  : 20210122094555
+2021-01-22T00:45:56.491Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:45:56.491Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094555',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094555',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:45:56.582Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:45:56.585Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:45:56.585Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:45:59.923Z [winston-test] info: Start boatdata........
+2021-01-22T00:45:59.924Z [winston-test] info:   nGradex:04
+2021-01-22T00:45:59.924Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:45:59.924Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094559 );
+2021-01-22T00:45:59.924Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:45:59.924Z [winston-test] info: 04
+2021-01-22T00:45:59.924Z [winston-test] info: $GPGGA
+2021-01-22T00:45:59.924Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:45:59.924Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:45:59.924Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:45:59.924Z [winston-test] info:   GPS X : 100
+2021-01-22T00:45:59.924Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:45:59.924Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:45:59.932Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:45:59.939Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:45:59.939Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:45:59.939Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:45:59.939Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:45:59.939Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:45:59.949Z [winston-test] info: 보트출항중2
+2021-01-22T00:46:26.515Z [winston-test] info: Start anchordata........
+2021-01-22T00:46:26.515Z [winston-test] info:   nDistance:189.64
+2021-01-22T00:46:26.515Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094626 );
+2021-01-22T00:46:26.516Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:46:26.516Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:46:26.516Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:46:26.516Z [winston-test] info:   nDistance:189.64
+2021-01-22T00:46:26.516Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:46:26.516Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:46:26.516Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:46:26.516Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:46:26.594Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:46:26.601Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:46:26.601Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:46:26.601Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:46:39.945Z [winston-test] info: Start boatdata........
+2021-01-22T00:46:39.946Z [winston-test] info:   nGradex:04
+2021-01-22T00:46:39.946Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:46:39.946Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094639 );
+2021-01-22T00:46:39.946Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:46:39.946Z [winston-test] info: 04
+2021-01-22T00:46:39.946Z [winston-test] info: $GPGGA
+2021-01-22T00:46:39.946Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:46:39.947Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:46:39.947Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:46:39.947Z [winston-test] info:   GPS X : 100
+2021-01-22T00:46:39.947Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:46:39.947Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:46:40.028Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:46:40.029Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:46:40.029Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:46:40.029Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:46:40.029Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:46:40.029Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:46:40.032Z [winston-test] info: 보트출항중2
+2021-01-22T00:46:56.587Z [winston-test] info: Start anchordata........
+2021-01-22T00:46:56.587Z [winston-test] info:   nDistance:189.64
+2021-01-22T00:46:56.588Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094656 );
+2021-01-22T00:46:56.588Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:46:56.588Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:46:56.588Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:46:56.588Z [winston-test] info:   nDistance:189.64
+2021-01-22T00:46:56.588Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:46:56.589Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:46:56.589Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:46:56.589Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:46:56.671Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:46:56.675Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:46:56.675Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:46:56.676Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:47:19.946Z [winston-test] info: Start boatdata........
+2021-01-22T00:47:19.946Z [winston-test] info:   nGradex:04
+2021-01-22T00:47:19.946Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:47:19.947Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094719 );
+2021-01-22T00:47:19.947Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:47:19.947Z [winston-test] info: 04
+2021-01-22T00:47:19.947Z [winston-test] info: $GPGGA
+2021-01-22T00:47:19.948Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:47:19.948Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:47:19.948Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:47:19.948Z [winston-test] info:   GPS X : 100
+2021-01-22T00:47:19.948Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:47:19.948Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:47:20.027Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:47:20.032Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:47:20.032Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:47:20.032Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:47:20.032Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:47:20.033Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:47:20.035Z [winston-test] info: 보트출항중2
+2021-01-22T00:47:26.635Z [winston-test] info: Start anchordata........
+2021-01-22T00:47:26.635Z [winston-test] info:   nDistance:189.69
+2021-01-22T00:47:26.636Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094726 );
+2021-01-22T00:47:26.636Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:47:26.636Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:47:26.636Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:47:26.636Z [winston-test] info:   nDistance:189.69
+2021-01-22T00:47:26.636Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:47:26.636Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:47:26.637Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:47:26.637Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:47:26.645Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:47:26.712Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:47:26.713Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:47:26.713Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:47:56.707Z [winston-test] info: Start anchordata........
+2021-01-22T00:47:56.707Z [winston-test] info:   nDistance:58.22
+2021-01-22T00:47:56.707Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094756 );
+2021-01-22T00:47:56.708Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:47:56.708Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:47:56.708Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:47:56.708Z [winston-test] info:   nDistance:58.22
+2021-01-22T00:47:56.708Z [winston-test] info: boat is anchored !!
+2021-01-22T00:47:56.708Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:47:56.708Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:47:56.708Z [winston-test] info:   GetBoatDataSearch time  : 20210122094755
+2021-01-22T00:47:56.708Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:47:56.708Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094755',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094755',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:47:56.806Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:47:56.806Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-22T00:47:56.806Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:47:59.954Z [winston-test] info: Start boatdata........
+2021-01-22T00:47:59.954Z [winston-test] info:   nGradex:04
+2021-01-22T00:47:59.954Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:47:59.954Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094759 );
+2021-01-22T00:47:59.954Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:47:59.954Z [winston-test] info: 04
+2021-01-22T00:47:59.954Z [winston-test] info: $GPGGA
+2021-01-22T00:47:59.955Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:47:59.955Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:47:59.955Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:47:59.955Z [winston-test] info:   GPS X : 100
+2021-01-22T00:47:59.955Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:47:59.955Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:47:59.960Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:47:59.960Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:47:59.960Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:47:59.960Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:47:59.960Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:47:59.961Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:47:59.963Z [winston-test] info: 보트출항중2
+2021-01-22T00:48:26.738Z [winston-test] info: Start anchordata........
+2021-01-22T00:48:26.739Z [winston-test] info:   nDistance:189.64
+2021-01-22T00:48:26.739Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094826 );
+2021-01-22T00:48:26.739Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:48:26.739Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:48:26.739Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:48:26.740Z [winston-test] info:   nDistance:189.64
+2021-01-22T00:48:26.740Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:48:26.740Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:48:26.740Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:48:26.740Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:48:26.819Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:48:26.823Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:48:26.824Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:48:26.824Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:48:39.965Z [winston-test] info: Start boatdata........
+2021-01-22T00:48:39.966Z [winston-test] info:   nGradex:04
+2021-01-22T00:48:39.966Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:48:39.966Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094839 );
+2021-01-22T00:48:39.966Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:48:39.966Z [winston-test] info: 04
+2021-01-22T00:48:39.966Z [winston-test] info: $GPGGA
+2021-01-22T00:48:39.966Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:48:39.967Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:48:39.967Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:48:39.967Z [winston-test] info:   GPS X : 100
+2021-01-22T00:48:39.967Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:48:39.967Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:48:40.053Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:48:40.057Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:48:40.057Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:48:40.057Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:48:40.057Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:48:40.057Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:48:40.059Z [winston-test] info: 보트출항중2
+2021-01-22T00:48:56.815Z [winston-test] info: Start anchordata........
+2021-01-22T00:48:56.815Z [winston-test] info:   nDistance:189.66
+2021-01-22T00:48:56.815Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','0',20210122094856 );
+2021-01-22T00:48:56.815Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:48:56.815Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:48:56.815Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:48:56.815Z [winston-test] info:   nDistance:189.66
+2021-01-22T00:48:56.815Z [winston-test] info: boat is not anchored !!
+2021-01-22T00:48:56.815Z [winston-test] info: Start SetBoatNotAnchor........
+2021-01-22T00:48:56.816Z [winston-test] info:    machineId: 60CA47C40A24
+2021-01-22T00:48:56.816Z [winston-test] info: UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_ridar b where  b.machine_id = '60CA47C40A24') 
+2021-01-22T00:48:56.897Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:48:56.901Z [winston-test] info: Anchor Update OK:
+2021-01-22T00:48:56.901Z [winston-test] info: SetBoatAnchor result:OK
+2021-01-22T00:48:56.902Z [winston-test] info: Start setDashBoard........
+2021-01-22T00:49:19.978Z [winston-test] info: Start boatdata........
+2021-01-22T00:49:19.978Z [winston-test] info:   nGradex:04
+2021-01-22T00:49:19.978Z [winston-test] info:   nGradey:$GPGGA
+2021-01-22T00:49:19.978Z [winston-test] info: INSERT INTO public.boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',13,04,04,$GPGGA,00,0,0,99.99,*67 ,'R',20210122094919 );
+2021-01-22T00:49:19.978Z [winston-test] info: Start getBoatCheck........
+2021-01-22T00:49:19.978Z [winston-test] info: 04
+2021-01-22T00:49:19.978Z [winston-test] info: $GPGGA
+2021-01-22T00:49:19.978Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-01-22T00:49:19.979Z [winston-test] info: Start SelectGateBound........
+2021-01-22T00:49:19.979Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:49:19.979Z [winston-test] info:   GPS X : 100
+2021-01-22T00:49:19.979Z [winston-test] info:   GPS Y : 55
+2021-01-22T00:49:19.979Z [winston-test] info: SELECT sector_name FROM public.sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-01-22T00:49:20.056Z [winston-test] error: error: 구문 오류, "$" 부근
+2021-01-22T00:49:20.061Z [winston-test] info: 정박상태 확인..........!!
+2021-01-22T00:49:20.061Z [winston-test] info: 정박상태 확인2
+2021-01-22T00:49:20.061Z [winston-test] info: Start SelectAnchorYN........
+2021-01-22T00:49:20.061Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-01-22T00:49:20.061Z [winston-test] info: SELECT b.anchor_status FROM anchor_ridar a LEFT JOIN anchor b ON a.anchor_id = b.anchor_id WHERE a.machine_id = '0013A20041BB95F7'
+2021-01-22T00:49:20.064Z [winston-test] info: 보트출항중2
+2021-01-22T00:49:26.823Z [winston-test] info: Start anchordata........
+2021-01-22T00:49:26.823Z [winston-test] info:   nDistance:60.03
+2021-01-22T00:49:26.823Z [winston-test] info: INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('60CA47C40A24','1',20210122094926 );
+2021-01-22T00:49:26.823Z [winston-test] info: Start getAnchorCheck........
+2021-01-22T00:49:26.823Z [winston-test] info:   sId:60CA47C40A24
+2021-01-22T00:49:26.824Z [winston-test] info:   sIp:192.168.123.108
+2021-01-22T00:49:26.824Z [winston-test] info:   nDistance:60.03
+2021-01-22T00:49:26.824Z [winston-test] info: boat is anchored !!
+2021-01-22T00:49:26.824Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-22T00:49:26.824Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-22T00:49:26.824Z [winston-test] info:   GetBoatDataSearch time  : 20210122094925
+2021-01-22T00:49:26.824Z [winston-test] info:   GetBoatDataSearch time  : undefined
+2021-01-22T00:49:26.824Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_ridar b, anchor c, sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = 'undefined'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210122094925',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210122094925',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-22T00:49:26.831Z [winston-test] info: Anchordata Insert OK:
+2021-01-22T00:49:27.019Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-22T00:49:27.019Z [winston-test] info: GetBoatDataSearch Count:0

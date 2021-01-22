@@ -22,21 +22,21 @@ function MessageObject()
 	var time;  // MQTT에서 전달 받은 시각	
 	var machineId;  //보트단말기 ID     
 	var boatId;  //보트 ID     
-	var ridarId;   // 정박지단말기 ID  
+	var lidarId;   // 정박지단말기 ID  
 	var leftRight;  // 좌우구분  
 }
 var mObject  = new MessageObject(); //메세지 구조체
 var mObject2 = new MessageObject(); //메세지 구조체
 
 
-function RidarCheck(message) {
+function LidarCheck(message) {
 	this.message = message;
 }
 
 /**
 
 //보트 단말기 정박 상태 분석
-function analysisBoatRidar(sId, nGradex, nGradey) { 
+function analysisBoatLidar(sId, nGradex, nGradey) { 
 
     logger.info('Start getArea........');
     
@@ -54,7 +54,7 @@ function analysisBoatRidar(sId, nGradex, nGradey) {
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
                 	logger.info('정박상태 확인');
-                    db.SelectRidarYN(mObject, function(rtn){
+                    db.SelectLidarYN(mObject, function(rtn){
                         if (rtn === 'OK') {
                         	logger.info('보트출항중');
                         } else {
@@ -65,7 +65,7 @@ function analysisBoatRidar(sId, nGradex, nGradey) {
                     logger.info('보트단말기 정박상태 분석');
                     callback(null, rtn);
                 	// 보트단말기 정박상태 분석
-                	analysisBoatRidar(mObject, function(rtn){ 
+                	analysisBoatLidar(mObject, function(rtn){ 
                     	;;
                     });                        
                 }   
@@ -107,7 +107,7 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
                 	logger.info('정박상태 확인');
-                    db.SelectRidarYN(mObject, function(rtn){
+                    db.SelectLidarYN(mObject, function(rtn){
                         if (rtn === 'OK') {
                         	logger.info('보트출항중');
                         } else {
@@ -118,7 +118,7 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
                     logger.info('보트단말기 정박상태 분석');
                     callback(null, rtn);
                 	// 보트단말기 정박상태 분석
-                	analysisBoatRidar(mObject, function(rtn){ 
+                	analysisBoatLidar(mObject, function(rtn){ 
                     	;;
                     });                        
                 }   
@@ -148,9 +148,9 @@ function  setDashBoard() {
 
 };
 
-RidarCheck.prototype.getRidarCheck = function() {
+LidarCheck.prototype.getLidarCheck = function() {
     
-	logger.info('Start getRidarCheck........');
+	logger.info('Start getLidarCheck........');
 
     var db = new DB(); 
     
@@ -167,16 +167,16 @@ RidarCheck.prototype.getRidarCheck = function() {
 
 	
 	mObject.boatId   = "";
-	mObject.ridarId = "";
+	mObject.lidarId = "";
 	
 	mObject2.machineId = "";
 	mObject2.boatId = "";
-	mObject2.ridarId = "";
+	mObject2.lidarId = "";
 	
-	if ((sShipLeftYn === "1")||(sShipRightYn === "1")) { //ridar 왼쪽 또는 오른쪽에 정박한 경우
+	if ((sShipLeftYn === "1")||(sShipRightYn === "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
 		
-		if (sShipLeftYn === "1") { //ridar 왼쪽에 정박한 경우
-			logger.info("boat is left ridared !!");
+		if (sShipLeftYn === "1") { //lidar 왼쪽에 정박한 경우
+			logger.info("boat is left lidared !!");
 		    mObject.iD        = sId;
 		    mObject.time      = sSendtime;	
 		    mObject.leftRight = '0';	
@@ -198,8 +198,8 @@ RidarCheck.prototype.getRidarCheck = function() {
 				}
 	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
 		}
-		if (sShipRightYn === "1") { //ridar 왼쪽에 정박한 경우
-			logger.info("boat is right ridared !!");
+		if (sShipRightYn === "1") { //lidar 왼쪽에 정박한 경우
+			logger.info("boat is right lidared !!");
 		    mObject.iD        = sId;
 		    mObject.time      = sSendtime;	
 		    mObject.leftRight = '0';	
@@ -239,13 +239,13 @@ RidarCheck.prototype.getRidarCheck = function() {
 
 
 //객체를 바로 module.exports에 할당
-module.exports = RidarCheck;
+module.exports = LidarCheck;
 
 /***
-var RidarCheck = require('./ridar');
-var ridarCheck = new RidarCheck(message); 
+var LidarCheck = require('./lidar');
+var lidarCheck = new LidarCheck(message); 
 
-ridarCheck.getRidarCheck();
+lidarCheck.getLidarCheck();
 
 ***/
 

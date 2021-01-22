@@ -69,12 +69,12 @@ client.on("message", function(topic, message){
 				var AnchorCheck = require('../public/myModules/anchorCheck');
 				var anchorCheck = new AnchorCheck(sData); 
 				anchorCheck.getAnchorCheck();				
-			} else if(sKey === "ridarData") {
-				db.InsertDBRidarData(sData);  
+			} else if(sKey === "lidarData") {
+				db.InsertDBLidarData(sData);  
 				// 정박지 단말기에서 보내온 신호 분석
-				var RidarCheck = require('../public/myModules/ridarCheck');
-				var ridarCheck = new RidarCheck(sData); 
-				ridarCheck.getRidarCheck();				
+				var LidarCheck = require('../public/myModules/lidarCheck');
+				var lidarCheck = new LidarCheck(sData); 
+				lidarCheck.getLidarCheck();				
 			} // 보트 데이터가 아닌면 Skip
 		}    
 	}
