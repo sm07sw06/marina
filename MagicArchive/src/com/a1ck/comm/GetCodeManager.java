@@ -20,7 +20,6 @@ import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
 import com.a1ck.util.UtilClass;
 
-
 public class GetCodeManager extends HttpServlet {
     private static final long serialVersionUID = 1L;
     ResultSet rs;
@@ -51,6 +50,8 @@ public class GetCodeManager extends HttpServlet {
 			String sPage     = "";			
 			
 			String jsonParam = request.getParameter("param");
+			
+			logger.debug("getCodeManager jsonParam:" + jsonParam); 
 			
 			if(jsonParam != null){ 
 				JSONParser parser = new JSONParser();

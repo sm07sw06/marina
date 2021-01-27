@@ -124,6 +124,12 @@
 								<span class="title">사용자 권한관리</span>
 							</a>
 						</li>
+						<li >
+							<a href="noAuth.jsp" id="menu00018" >
+								<i class="entypo-user"></i>
+								<span class="title">메뉴관리</span>
+							</a>
+						</li>
 					</ul>	
 				</li>
 								

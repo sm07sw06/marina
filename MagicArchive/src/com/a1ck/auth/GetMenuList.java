@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,7 +25,12 @@ public class GetMenuList extends HttpServlet {
     Statement stmt;
  
     public Logger logger = Logger.getLogger(this.getClass().getName()+".class");
+    ConnectionManager conMgr = new ConnectionManagerAll4("postgresql");
 	public Connection connectionDest = null;
+	
+    public GetMenuList() {
+    	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
+	}	
 	
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,13 +44,15 @@ public class GetMenuList extends HttpServlet {
 			
 			String jsonParam = request.getParameter("param");
 			
+			logger.debug("getCodeManager jsonParam:" + jsonParam); 
+			
 			if(jsonParam != null){
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(jsonParam.toString());
 
-	            logger.debug("getAgentList json:" + json); 
+	            logger.debug("getMenuList json:" + json); 
 	              
-	            sUserCd = (String)json.get("user_cd");
+	            sUserCd   = (String)json.get("user_cd");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
 			}
