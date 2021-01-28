@@ -6,31 +6,30 @@ var multer  = require('multer');
 var app = express();
 
 var dir = './uploadedFiles';
-if (!fs.existsSync(dir)) fs.mkdirSync(dir); // 2
+if (!fs.existsSync(dir)) {
+	fs.mkdirSync(dir); 
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+	res.render('index', { title: 'Express' });
 });
 
  
-var storage  = multer.diskStorage({ // 2
-  destination(req, file, cb) {
-    cb(null, 'uploadedFiles/');
-  },
-  filename(req, file, cb) {
-	  cb(null, `${Date.now()}__${file.originalname}`);
-  },
+var storage  = multer.diskStorage({  
+	destination(req, file, cb) {
+		cb(null, 'uploadedFiles/');
+	},
+	filename(req, file, cb) {
+		cb(null, `${Date.now()}__${file.originalname}`);
+	},
 });
 var upload = multer({ storage: storage }); 
-//var upload = multer({ dest: 'uploadedFiles/' }); // 3-1
-//var uploadWithOriginalFilename = multer({ storage: storage }); // 3-2
- 
 	
 router.post('/uploadFile', upload.single('attachment'), function(req,res){
 	console.log(req.file.originalname)
 	console.log(req.cameraId)
-	res.render('confirmation', { file:req.file, files:null });
+	res.render('confirmation', { file:req.file.originalname, files:null });
 });
 
 module.exports = router;
@@ -39,8 +38,9 @@ module.exports = router;
 /**
 
 var form = new FormData();
-form.append("attachment", "C:\\Users\\dhlee\\Pictures\\20210112_172133.jpg");
+form.append("attachment", "C:\\Users\\dhlee\\Pictures\\APR2020_1920x1080.png");
 form.append("cameraId", "1234567890");
+form.append("sendtime", "20210128101010");
 
 var settings = {
   "async": true,
@@ -49,7 +49,7 @@ var settings = {
   "method": "POST",
   "headers": {
     "cache-control": "no-cache",
-    "Postman-Token": "236202ff-fbe1-4e22-9b57-8c19cea36a7b"
+    "Postman-Token": "7e64c887-12a6-4637-9c5b-b532a850c553"
   },
   "processData": false,
   "contentType": false,
@@ -64,23 +64,23 @@ $.ajax(settings).done(function (response) {
 
 
 
-
 var fs = require("fs");
 var request = require("request");
 
 var options = { method: 'POST',
   url: 'http://localhost:3000/uploadfile',
   headers: 
-   { 'Postman-Token': '7db11a39-88c8-42f9-9bf3-d4368f4d3b1b',
+   { 'Postman-Token': 'a3274671-f7a8-4ce8-a7f5-8ab625bac0f7',
      'cache-control': 'no-cache',
      'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
   formData: 
    { attachment: 
-      { value: 'fs.createReadStream("C:\\Users\\dhlee\\Pictures\\20210112_172133.jpg")',
+      { value: 'fs.createReadStream("C:\\Users\\dhlee\\Pictures\\APR2020_1920x1080.png")',
         options: 
-         { filename: 'C:\\Users\\dhlee\\Pictures\\20210112_172133.jpg',
+         { filename: 'C:\\Users\\dhlee\\Pictures\\APR2020_1920x1080.png',
            contentType: null } },
-     cameraId: '1234567890' } };
+     cameraId: '1234567890',
+     sendtime: '20210128101010' } };
 
 request(options, function (error, response, body) {
   if (error) throw new Error(error);
