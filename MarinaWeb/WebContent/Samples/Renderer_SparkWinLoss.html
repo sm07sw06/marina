@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+}
+
+var gridApp, gridRoot;
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" verticalAlign="middle" selectionMode="multipleRows" textAlign="center" lockedColumnCount="2">\
+		<columns>\
+			<DataGridColumn dataField="CodeName" width="150"/>\
+<!--\n\
+columnWidthRatio : SparkColumn 렌더러 사용시 컬럼이 그려질 영역의 비율 설정. (기본 0.7)\n\
+dataFields : 차트에 그려질 데이터 필드명들. (,로 연결하여 넣음)\n\
+horizontalAxisInvert : 가로 축 값 반대방향으로 출력 여부. (true,false중 택일, 기본 false)\n\
+radius : SparkLine 렌더러 사용시 점의 반지름. (기본 2)\n\
+showAllPoints : 모든 점 표시 여부 - SparkLine에서만 작동 (true,false중 택일, 기본 false)\n\
+showFirstPoint : 첫 점 표시 여부 (true,false중 택일, 기본 false)\n\
+showLastPoint : 마지막 점 표시 여부 (true,false중 택일, 기본 false)\n\
+showMaxPoint : 높은 점 표시 여부 (true,false중 택일, 기본 false)\n\
+showMinPoint : 낮은 점 표시 여부 (true,false중 택일, 기본 false)\n\
+showMinusPoints : 음수 점 표시 여부 (true,false중 택일, 기본 false)\n\
+showZeroAxis : 축 표시 여부. (true,false중 택일, 기본 false)\n\
+verticalAxisMaximum : 세로 축 최대값. (기본 NaN)\n\
+verticalAxisMinimum : 세로 축 최소값. (기본 NaN)\n\
+\n\
+// 스타일\n\
+stroke : 기본 라인의 색.\n\
+strokeWidth : 기본 라인의 두께 (기본 0 - SparkLine일 경우 1로 작용하며, 나머지의 경우 라인을 그리지 않게 됩니다(그리려면 1로 설정))\n\
+fill : 기본 채우기색\n\
+maxPointStroke : 높은 점 라인 색\n\
+maxPointFill : 높은 점 채우기 색\n\
+minPointStroke : 낮은 점 라인 색\n\
+minPointFill : 낮은 점 채우기 색\n\
+minusPointsStroke : 음수 점 라인 색\n\
+minusPointsFill : 음수 점 채우기 색\n\
+firstPointStroke : 첫 점 라인 색\n\
+firstPointFill : 첫 점 채우기 색\n\
+lastPointStroke : 마지막 점 라인 색\n\
+lastPointFill : 마지막 점 채우기 색\n\
+zeroAxisStroke : 축 라인 색\n\
+zeroAxisStrokeWidth : 축 라인 두께\n\
+-->\n\
+			<DataGridSparkColumn dataFields="Y2004,Y2005,Y2006,Y2007,Y2008,Y2009,Y2010,Y2011,Y2012,Y2013,Y2014" width="130" headerText="Spark WinLoss" itemRenderer="SparkWinLoss" showDataTips="true" showFirstPoint="true" showLastPoint="true" showMaxPoint="true" showMinPoint="true" showMinusPoints="true" showZeroAxis="true"/>\
+			<DataGridColumn dataField="Y2004" width="80" headerText="2004년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2005" width="80" headerText="2005년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2006" width="80" headerText="2006년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2007" width="80" headerText="2007년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2008" width="80" headerText="2008년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2009" width="80" headerText="2009년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2010" width="80" headerText="2010년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2011" width="80" headerText="2011년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2012" width="80" headerText="2012년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2013" width="80" headerText="2013년" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="Y2014" width="80" headerText="2014년" textAlign="right" formatter="{numfmt}"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+var gridData = [
+	{
+		"CodeName": "총지수 (2010=100)",
+		"Y2004": -33,
+		"Y2005": -31,
+		"Y2006": -30.5,
+		"Y2007": -28.7,
+		"Y2008": -0.9,
+		"Y2009": -5,
+		"Y2010": 0,
+		"Y2011": 1.6,
+		"Y2012": 10.8,
+		"Y2013": 2.7,
+		"Y2014": -5.1
+	},
+	{
+		"CodeName": "농산물 (2010=100)",
+		"Y2004": -45,
+		"Y2005": -52.5,
+		"Y2006": -49.8,
+		"Y2007": -36.2,
+		"Y2008": -0.4,
+		"Y2009": -8.2,
+		"Y2010": 0,
+		"Y2011": 23.6,
+		"Y2012": 11.1,
+		"Y2013": 0.6,
+		"Y2014": -8.5
+	},
+	{
+		"CodeName": "식량작물 (2010=100)",
+		"Y2004": -43.4,
+		"Y2005": -53.3,
+		"Y2006": -51.2,
+		"Y2007": -28.8,
+		"Y2008": 11.6,
+		"Y2009": 2.2,
+		"Y2010": 0,
+		"Y2011": 20.4,
+		"Y2012": 17.6,
+		"Y2013": 8,
+		"Y2014": -3.3
+	},
+	{
+		"CodeName": "곡류 (2010=100)",
+		"Y2004": -48.1,
+		"Y2005": -54.9,
+		"Y2006": -51.3,
+		"Y2007": -28.7,
+		"Y2008": 11.5,
+		"Y2009": 1.4,
+		"Y2010": 0,
+		"Y2011": 21.5,
+		"Y2012": 15.1,
+		"Y2013": 4.1,
+		"Y2014": -7.2
+	},
+	{
+		"CodeName": "콩류 (2010=100)",
+		"Y2004": -16.1,
+		"Y2005": -44,
+		"Y2006": -50.6,
+		"Y2007": -29.8,
+		"Y2008": 12.2,
+		"Y2009": 6.6,
+		"Y2010": 0,
+		"Y2011": 14.3,
+		"Y2012": 29.7,
+		"Y2013": 27.8,
+		"Y2014": 15.6
+	},
+	{
+		"CodeName": "채소및과실 (2010=100)",
+		"Y2004": -26.8,
+		"Y2005": -31.8,
+		"Y2006": -29.1,
+		"Y2007": -21.6,
+		"Y2008": -8.9,
+		"Y2009": 6,
+		"Y2010": 0,
+		"Y2011": -8.6,
+		"Y2012": -12.9,
+		"Y2013": -11.5,
+		"Y2014": -7.4
+	},
+	{
+		"CodeName": "과실 (2010=100)",
+		"Y2004": -26.8,
+		"Y2005": -31.8,
+		"Y2006": -29.1,
+		"Y2007": -21.6,
+		"Y2008": -8.9,
+		"Y2009": 6,
+		"Y2010": 0,
+		"Y2011": -8.6,
+		"Y2012": -12.9,
+		"Y2013": -11.5,
+		"Y2014": -7.4
+	},
+	{
+		"CodeName": "기타식용작물 (2010=100)",
+		"Y2004": -52.4,
+		"Y2005": -36.9,
+		"Y2006": -28.3,
+		"Y2007": -13.9,
+		"Y2008": 17.9,
+		"Y2009": 1.5,
+		"Y2010": 0,
+		"Y2011": 34.4,
+		"Y2012": 17,
+		"Y2013": 0.5,
+		"Y2014": 5.8
+	},
+	{
+		"CodeName": "비식용작물 (2010=100)",
+		"Y2004": -54.5,
+		"Y2005": -59,
+		"Y2006": -51.8,
+		"Y2007": -49.9,
+		"Y2008": -29.8,
+		"Y2009": -39.3,
+		"Y2010": 0,
+		"Y2011": 38.6,
+		"Y2012": 8.7,
+		"Y2013": -5.8,
+		"Y2014": -21.9
+	},
+	{
+		"CodeName": "천연고무 (2010=100)",
+		"Y2004": -64.9,
+		"Y2005": -64.2,
+		"Y2006": -52.5,
+		"Y2007": -49.4,
+		"Y2008": -30.3,
+		"Y2009": -45,
+		"Y2010": 0,
+		"Y2011": 34.7,
+		"Y2012": -4.6,
+		"Y2013": -28.7,
+		"Y2014": -52.4
+	},
+	{
+		"CodeName": "기타비식용작물 (2010=100)",
+		"Y2004": -31.5,
+		"Y2005": -48,
+		"Y2006": -50.3,
+		"Y2007": -50.8,
+		"Y2008": -28.9,
+		"Y2009": -27.2,
+		"Y2010": 0,
+		"Y2011": 52.7,
+		"Y2012": 26.6,
+		"Y2013": 24.9,
+		"Y2014": 19.5
+	},
+	{
+		"CodeName": "축산물 (2010=100)",
+		"Y2004": -19.1,
+		"Y2005": -24.5,
+		"Y2006": -28.6,
+		"Y2007": -25.3,
+		"Y2008": -8.6,
+		"Y2009": -10.1,
+		"Y2010": 0,
+		"Y2011": 7.8,
+		"Y2012": 10.9,
+		"Y2013": 10.9,
+		"Y2014": 20.9
+	},
+	{
+		"CodeName": "임산물 (2010=100)",
+		"Y2004": -31.4,
+		"Y2005": -32.6,
+		"Y2006": -33.2,
+		"Y2007": -25.4,
+		"Y2008": -7.6,
+		"Y2009": -12.9,
+		"Y2010": 0,
+		"Y2011": 2.5,
+		"Y2012": -3.9,
+		"Y2013": 5.6,
+		"Y2014": -0.9
+	},
+	{
+		"CodeName": "수산물 (2010=100)",
+		"Y2004": -18.7,
+		"Y2005": -26.7,
+		"Y2006": -33.5,
+		"Y2007": -34.4,
+		"Y2008": -24.3,
+		"Y2009": -4.9,
+		"Y2010": 0,
+		"Y2011": 9.1,
+		"Y2012": -0.4,
+		"Y2013": -6,
+		"Y2014": -0.6
+	},
+	{
+		"CodeName": "냉동건조수산물 (2010=100)",
+		"Y2004": -25.1,
+		"Y2005": -32.5,
+		"Y2006": -33.9,
+		"Y2007": -38,
+		"Y2008": -28.5,
+		"Y2009": -6.1,
+		"Y2010": 0,
+		"Y2011": 7.6,
+		"Y2012": -4.7,
+		"Y2013": -8.5,
+		"Y2014": 1.1
+	},
+	{
+		"CodeName": "석탄,원유및천연가스 (2010=100)",
+		"Y2004": -55.3,
+		"Y2005": -41.6,
+		"Y2006": -33.3,
+		"Y2007": -29.8,
+		"Y2008": 10.4,
+		"Y2009": -13.5,
+		"Y2010": 0,
+		"Y2011": 28.2,
+		"Y2012": 32.4,
+		"Y2013": 22.7,
+		"Y2014": 10.3
+	},
+	{
+		"CodeName": "석탄 (2010=100)",
+		"Y2004": -48.5,
+		"Y2005": -31.2,
+		"Y2006": -37.3,
+		"Y2007": -42.7,
+		"Y2008": -28.1,
+		"Y2009": -26.3,
+		"Y2010": 0,
+		"Y2011": 19.6,
+		"Y2012": 5.3,
+		"Y2013": -14.3,
+		"Y2014": -27.6
+	},
+	{
+		"CodeName": "유연탄 (2010=100)",
+		"Y2004": -45.2,
+		"Y2005": -26.9,
+		"Y2006": -32.6,
+		"Y2007": -39.3,
+		"Y2008": -28.2,
+		"Y2009": -26.5,
+		"Y2010": 0,
+		"Y2011": 19.2,
+		"Y2012": 4.8,
+		"Y2013": -14.3,
+		"Y2014": -27.4
+	},
+	{
+		"CodeName": "원유및천연가스 (2010=100)",
+		"Y2004": -55.9,
+		"Y2005": -42.6,
+		"Y2006": -33,
+		"Y2007": -28.6,
+		"Y2008": 13.8,
+		"Y2009": -12.4,
+		"Y2010": 0,
+		"Y2011": 29,
+		"Y2012": 36.7,
+		"Y2013": 28.9,
+		"Y2014": 16.7
+	},
+	{
+		"CodeName": "원유 (2010=100)",
+		"Y2004": -56.9,
+		"Y2005": -43.3,
+		"Y2006": -34.3,
+		"Y2007": -29.4,
+		"Y2008": 10.7,
+		"Y2009": -13.8,
+		"Y2010": 0,
+		"Y2011": 30.3,
+		"Y2012": 36.2,
+		"Y2013": 27.8,
+		"Y2014": 12.4
+	},
+	{
+		"CodeName": "천연가스(LNG) (2010=100)",
+		"Y2004": -49.8,
+		"Y2005": -38.6,
+		"Y2006": -26,
+		"Y2007": -24.6,
+		"Y2008": 29.8,
+		"Y2009": -5.3,
+		"Y2010": 0,
+		"Y2011": 21.6,
+		"Y2012": 37.9,
+		"Y2013": 33.2,
+		"Y2014": 33.1
+	},
+	{
+		"CodeName": "금속광석 (2010=100)",
+		"Y2004": -76.8,
+		"Y2005": -70,
+		"Y2006": -52.4,
+		"Y2007": -50.3,
+		"Y2008": -37.9,
+		"Y2009": -28.5,
+		"Y2010": 0,
+		"Y2011": 29.4,
+		"Y2012": 17.9,
+		"Y2013": 5.1,
+		"Y2014": -5.9
+	},
+	{
+		"CodeName": "철광석 (2010=100)",
+		"Y2004": -85.4,
+		"Y2005": -79.1,
+		"Y2006": -75.6,
+		"Y2007": -73.1,
+		"Y2008": -50.5,
+		"Y2009": -30.9,
+		"Y2010": 0,
+		"Y2011": 40.7,
+		"Y2012": 21.7,
+		"Y2013": 7.8,
+		"Y2014": -9
+	},
+	{
+		"CodeName": "동광석 (2010=100)",
+		"Y2004": -63.6,
+		"Y2005": -57.3,
+		"Y2006": -27,
+		"Y2007": -29.7,
+		"Y2008": -18,
+		"Y2009": -26.8,
+		"Y2010": 0,
+		"Y2011": 12.2,
+		"Y2012": 3,
+		"Y2013": -12,
+		"Y2014": -21.2
+	},
+	{
+		"CodeName": "연및아연광석 (2010=100)",
+		"Y2004": -59.5,
+		"Y2005": -51.6,
+		"Y2006": 10.5,
+		"Y2007": 21.7,
+		"Y2008": -18.1,
+		"Y2009": -19.3,
+		"Y2010": 0,
+		"Y2011": 1,
+		"Y2012": -11,
+		"Y2013": -13.7,
+		"Y2014": -10.1
+	}
+];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			<span class="classProp">DataGridSparkColumn</span>과 <span class="greenProp">SparkWinLoss</span>렌더러를 사용하여 스파크 라인 셀을 구현한 예제입니다.
+		</div>
+		<div class="headerDesc">
+			레이아웃을 보시면 두번째 열에 <span class="classProp">&lt;DataGridSparkColumn&gt;</span>을 설정하고<br>
+			<span class="greenProp">dataFields</span>에 적용할 필드들을 설정하는 것을 보실 수 있습니다.
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

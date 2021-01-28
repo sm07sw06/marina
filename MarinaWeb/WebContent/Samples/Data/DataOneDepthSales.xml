@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Market>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>38865</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3001</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>29885</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3002</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Central California</Territory>
+		<Territory_Rep>Central California</Territory_Rep>
+		<Actual>29134</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3003</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Nevada</Territory>
+		<Territory_Rep>Nevada</Territory_Rep>
+		<Actual>52888</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3004</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>38805</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3005</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>55498</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3006</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44985</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3007</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44913</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3008</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>38865</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3009</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>29885</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3000</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Central California</Territory>
+		<Territory_Rep>Central California</Territory_Rep>
+		<Actual>29134</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3001</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Nevada</Territory>
+		<Territory_Rep>Nevada</Territory_Rep>
+		<Actual>52888</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3002</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>38805</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3003</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>55498</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3004</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44985</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3005</Price>
+	</Sale>
+	<Sale>
+		<Region>Nor</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44913</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3006</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>38865</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3007</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>29885</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3008</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Central California</Territory>
+		<Territory_Rep>Central California</Territory_Rep>
+		<Actual>29134</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3009</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Nevada</Territory>
+		<Territory_Rep>Nevada</Territory_Rep>
+		<Actual>52888</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3000</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>38805</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3001</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>55498</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3002</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44985</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3003</Price>
+	</Sale>
+	<Sale>
+		<Region>Southeast</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44913</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3004</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>38865</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3005</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>29885</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3006</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Central California</Territory>
+		<Territory_Rep>Central California</Territory_Rep>
+		<Actual>29134</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3007</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Nevada</Territory>
+		<Territory_Rep>Nevada</Territory_Rep>
+		<Actual>52888</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3008</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>38805</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3009</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>55498</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3000</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44985</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3001</Price>
+	</Sale>
+	<Sale>
+		<Region>Southwest</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44913</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3002</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>38865</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3003</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Arizona</Territory>
+		<Territory_Rep>Arizona</Territory_Rep>
+		<Actual>29885</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3004</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Central California</Territory>
+		<Territory_Rep>Central California</Territory_Rep>
+		<Actual>29134</Actual>
+		<Estimate>30000</Estimate>
+		<Real>30000</Real>
+		<Price>3005</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Nevada</Territory>
+		<Territory_Rep>Nevada</Territory_Rep>
+		<Actual>52888</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3006</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>38805</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3007</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Northern California</Territory>
+		<Territory_Rep>Northern California</Territory_Rep>
+		<Actual>55498</Actual>
+		<Estimate>40000</Estimate>
+		<Real>30000</Real>
+		<Price>3008</Price>
+	</Sale>
+	<Sale>
+		<Region>Northwest</Region>
+		<Territory>Southern California</Territory>
+		<Territory_Rep>Southern California</Territory_Rep>
+		<Actual>44985</Actual>
+		<Estimate>45000</Estimate>
+		<Real>30000</Real>
+		<Price>3009</Price>
+	</Sale>
+</Market>
