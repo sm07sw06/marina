@@ -42,7 +42,7 @@ $(document).ready(function() {
 		        	newHtml = "<div class='icon'><i class='entypo-users'></i></div><div class='num' data-start='0' data-end='";
 		    		newHtml = newHtml + "0' data-postfix='' data-duration='1500' data-delay='0'>"
 		    		newHtml = newHtml + cur_license +"TB/"+all_license+"TB";
-		    		newHtml = newHtml + "</div><h5>MagicArchive License</h5><p>Current License Size</p>";		    		
+		    		newHtml = newHtml + "</div><h5>MarinaWeb License</h5><p>Current License Size</p>";		    		
 		    		$("#cur_license").html(newHtml);
 		    		
 		    		

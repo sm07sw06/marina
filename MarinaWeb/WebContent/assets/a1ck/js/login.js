@@ -106,8 +106,8 @@ var neonLogin = neonLogin || {};
 									setTimeout(function()
 									{
 										//console.log("1");
-										//var redirect_url = baseurl; //http://localhost:8080/MagicArchive
-										var redirect_url = "/MagicArchive/index.jsp";
+										//var redirect_url = baseurl; //http://localhost:8080/MarinaWeb
+										var redirect_url = "/MarinaWeb/index.jsp";
 										//console.log("1");
 										
 										if(response.redirect_url && response.redirect_url.length)

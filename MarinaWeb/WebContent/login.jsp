@@ -55,7 +55,7 @@ var baseurl = '';
 			
 			<a href="index.jsp" class="logo">
 				<!-- img src="assets/images/logo@2x.png" width="120" alt="" / -->
-				<h_1>Magic Archive</h_1>
+				<h_1>Marina Web</h_1>
 			</a>
 			
 			<!-- p class="description">Dear user, log in to access the admin area!</p -->

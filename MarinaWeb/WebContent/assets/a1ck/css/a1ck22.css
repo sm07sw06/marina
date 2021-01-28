@@ -30,7 +30,7 @@ html, body {
 	width:1920px;
     height:980px;
     background-color: #fff;
-    background:url("/MagicArchive/images/map1.jpg") no-repeat;
+    background:url("/MarinaWeb/images/map1.jpg") no-repeat;
     background-position: center;    
 }
 
@@ -41,7 +41,7 @@ html, body {
 	width:1920px;
     height:980px;
     background-color: #fff;
-    background:url("/MagicArchive/images/monitor2.jpg") no-repeat;
+    background:url("/MarinaWeb/images/monitor2.jpg") no-repeat;
     background-position: center;    
 }
 
@@ -50,7 +50,7 @@ html, body {
     height:989px;
     background-color: #fff;
     position:absolute;
-    background:url("/MagicArchive/images/monitor3.png") no-repeat;
+    background:url("/MarinaWeb/images/monitor3.png") no-repeat;
     background-position: center;    
 }
 
@@ -74,7 +74,7 @@ html, body {
     left:30px;
     width:700px;
     height:400px;    
-    background:url("/MagicArchive/images/titlebox.jpg") no-repeat;
+    background:url("/MarinaWeb/images/titlebox.jpg") no-repeat;
     background-position: center;     
 }
 #titleBox99 #dateText99 {

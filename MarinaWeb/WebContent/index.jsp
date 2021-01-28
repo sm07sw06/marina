@@ -254,7 +254,7 @@
 					<div class="icon"><i class="entypo-users"></i></div>
 					<div class="num" data-start="0" data-end="25" data-postfix="TB/40TB" data-duration="1500" data-delay="300">0</div>
 		
-					<h3>MagicArchive License</h3>
+					<h3>MarinaWeb License</h3>
 					<p>Current License Size</p>
 				</div>
 		

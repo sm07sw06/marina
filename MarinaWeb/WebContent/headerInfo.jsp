@@ -8,7 +8,7 @@ String orgNm     = (String)session.getAttribute("orgNm"    );
 String approwait = (String)session.getAttribute("approwait");
 if (userid == ""||userid == null) { %>
 <script>
-window.location.href = "/MagicArchive/login.jsp";
+window.location.href = "/MarinaWeb/login.jsp";
 </script>
 <% } %>
 
