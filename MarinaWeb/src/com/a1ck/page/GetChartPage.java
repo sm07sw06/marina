@@ -75,7 +75,7 @@ public class GetChartPage extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " select substr(job_tm,1,4) as sYear, round(sum(source_size)/1024/1024/1024/1024,2) as sSrcSize  from mddb.tb_job_history ";
+			sQuery  = " select substr(job_tm,1,4) as sYear, round(sum(source_size)/1024/1024/1024/1024,2) as sSrcSize  from tb_job_history ";
 			sQuery += "  GROUP BY substr(job_tm,1,4) ";		
 			sQuery += "  ORDER BY substr(job_tm,1,4) \n ";
 			

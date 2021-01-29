@@ -89,12 +89,12 @@ public class GetAuthList extends HttpServlet {
 	   			sQuery += " SELECT DISTINCT USER_ID,USER_NM \n";
 	   			sQuery += "   FROM ( \n";
 	   			sQuery += "         SELECT I.USER_ID, I.USER_NM    		\n";
-	   			sQuery += "           FROM MDDB.TB_USER_INFO I   				\n";
+	   			sQuery += "           FROM TB_USER_INFO I   				\n";
 	   			sQuery += "          WHERE I.USE_YN ='Y'         		\n";
 	   			sQuery += "            AND '1' = '" + sUserGb + "' 		\n";
 	   			sQuery += "          UNION ALL							\n";
 	   			sQuery += "         SELECT I.USER_GRP_ID, I.USER_GRP_NM \n";
-	   			sQuery += "           FROM MDDB.TB_USER_GROUP I   				\n";
+	   			sQuery += "           FROM TB_USER_GROUP I   				\n";
 	   			sQuery += "          WHERE I.USE_YN ='Y'         		\n";
 	   			sQuery += "            AND '2' = '" + sUserGb + "' 		\n";
 	   			sQuery += "        ) T1									\n";
@@ -108,14 +108,14 @@ public class GetAuthList extends HttpServlet {
 				if( StringUtils.equals(sUserGb, "1")) {
 		   			sQuery  = "\n";
 		   			sQuery += " SELECT MENU_ID,MENU_NM,MENU_URL \n";
-		   			sQuery += "   FROM MDDB.TB_MENU M \n";
-		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM MDDB.TB_USER_AUTH A WHERE A.USER_GB = '1' AND A.USER_ID = " + sUserId + " )  \n";
+		   			sQuery += "   FROM TB_MENU M \n";
+		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM TB_USER_AUTH A WHERE A.USER_GB = '1' AND A.USER_ID = " + sUserId + " )  \n";
 		   			sQuery += "  ORDER BY 2     							\n";
 				} else {
 		   			sQuery  = "\n";
 		   			sQuery += " SELECT MENU_ID,MENU_NM,MENU_URL \n";
-		   			sQuery += "   FROM MDDB.TB_MENU M \n";
-		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM MDDB.TB_USER_AUTH A WHERE A.USER_GB = '2' AND A.USER_ID = " + sUserId + " )  \n";
+		   			sQuery += "   FROM TB_MENU M \n";
+		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM TB_USER_AUTH A WHERE A.USER_GB = '2' AND A.USER_ID = " + sUserId + " )  \n";
 		   			sQuery += "  ORDER BY 2     							\n";
 				}
 			}
@@ -124,13 +124,13 @@ public class GetAuthList extends HttpServlet {
 	   			sQuery += " SELECT DISTINCT MENU_ID, MENU_CD, MENU_NM, MENU_URL, MENU_ORDER \n";
 	   			sQuery += "   FROM ( \n";
 	   			sQuery += "         SELECT M.MENU_ID, lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER   \n";
-	   			sQuery += "           FROM MDDB.TB_MENU M, MDDB.TB_USER_AUTH A, MDDB.TB_USER_INFO I	   								    \n";
+	   			sQuery += "           FROM TB_MENU M, TB_USER_AUTH A, TB_USER_INFO I	   								    \n";
 	   			sQuery += "          WHERE A.USER_ID = I.USER_ID AND I.USER_ID = " + sUserId + "	            \n";
 	   			sQuery += "            AND A.MENU_ID = M.MENU_ID												\n";
 	   			sQuery += "            AND '" + sUserGb + "' = A.USER_GB										\n";
 	   			sQuery += "          UNION ALL																	\n";
 	   			sQuery += "         SELECT M.MENU_ID, lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER	\n";
-	   			sQuery += "           FROM MDDB.TB_MENU M, MDDB.TB_USER_AUTH A, MDDB.TB_USER_MEMBER U, MDDB.TB_USER_INFO I							\n";
+	   			sQuery += "           FROM TB_MENU M, TB_USER_AUTH A, TB_USER_MEMBER U, TB_USER_INFO I							\n";
 	   			sQuery += "          WHERE U.USER_ID = I.USER_ID AND U.USER_GRP_ID = " + sUserId + "				\n";
 	   			sQuery += "            AND A.MENU_ID = M.MENU_ID												\n";
 	   			sQuery += "            AND U.USER_GRP_ID = A.USER_ID											\n";

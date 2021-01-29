@@ -149,7 +149,7 @@ public class SetUser extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_USER_INFO (USER_CD, USER_NM, PASSWORD, TELEPHONE, EMAIL,APPROWAITCNT, USE_YN, PICTURE) \n";
+				    String insertSql = "INSERT INTO TB_USER_INFO (USER_CD, USER_NM, PASSWORD, TELEPHONE, EMAIL,APPROWAITCNT, USE_YN, PICTURE) \n";
 					insertSql = insertSql + "VALUES ( '" + sUserCd + "', '" + sUserNm + "', '" + pwd + "', '" + sTelephone + "', '" + sEmail + "',0, 'Y' , '" + sPic + "' )";
 		
 					stmt = connectionDest.createStatement();
@@ -166,7 +166,7 @@ public class SetUser extends HttpServlet {
 					
 					stmt.close();
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "DELETE FROM MDDB.TB_USER_INFO \n";
+				    String updateSql      = "DELETE FROM TB_USER_INFO \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND USER_ID =   " + sUserId  + "   \n ";
 
@@ -177,7 +177,7 @@ public class SetUser extends HttpServlet {
 					stmt.close();	
 			   } else if(sCrud.equals("U")) {
 				   
-				    String updateSql      = "UPDATE MDDB.TB_USER_INFO \n";
+				    String updateSql      = "UPDATE TB_USER_INFO \n";
 				    updateSql = updateSql + "   SET USER_NM    = '" + sUserNm     + "'   \n ";
 				    if(!sPassword.equals(sPasswordorg)) {
 				    	updateSql = updateSql + "      ,PASSWORD   = '" + pwd         + "'   \n ";

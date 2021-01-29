@@ -78,7 +78,7 @@ public class SetUserGroup extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_USER_GROUP (USER_GRP_NM) \n";
+				    String insertSql = "INSERT INTO TB_USER_GROUP (USER_GRP_NM) \n";
 					insertSql = insertSql + "VALUES ( '" + sUserGrpNm + " )";
 		
 					stmt = connectionDest.createStatement();
@@ -88,7 +88,7 @@ public class SetUserGroup extends HttpServlet {
 					stmt.execute(insertSql);
 					stmt.close();
 			   } else if(sCrud.equals("U")) {
-				    String updateSql      = "UPDATE MDDB.TB_USER_GROUP \n";
+				    String updateSql      = "UPDATE TB_USER_GROUP \n";
 				    updateSql = updateSql + "   SET USER_GRP_NM     = '" + sUserGrpNm     + "'   \n ";
 				    updateSql = updateSql + "      ,DESCRIPTION     = '" + sDescription     + "'   \n ";
 				    updateSql = updateSql + "      ,USE_YN          = '" + sUseYn    + "'   \n ";

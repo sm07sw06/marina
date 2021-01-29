@@ -84,12 +84,12 @@ public class GetCodeManager extends HttpServlet {
 
 			 if(sCrud.equals("R")) {
 		    	sQuery =          "\nSELECT GROUP_CD, GROUP_NM, USE_YN \n";
-				sQuery = sQuery + "    FROM MDDB.TB_CODE_GROUP \n";
+				sQuery = sQuery + "    FROM TB_CODE_GROUP \n";
 				sQuery = sQuery + "   WHERE 1 = 1 \n";
 				sQuery = sQuery + "   ORDER BY GROUP_CD \n";
 			 } else if(sCrud.equals("RD")) {
 			    	sQuery =          "\nSELECT GROUP_CD, DETAIL_CD, DETAIL_NM, USE_YN \n";
-					sQuery = sQuery + "    FROM MDDB.TB_CODE_DETAIL 						\n";
+					sQuery = sQuery + "    FROM TB_CODE_DETAIL 						\n";
 					sQuery = sQuery + "   WHERE 1 = 1 							\n";
 					sQuery = sQuery + "     AND GROUP_CD = '" + sGroupCd + "' 	\n";
 					sQuery = sQuery + "   ORDER BY DETAIL_CD \n";

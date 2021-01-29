@@ -84,7 +84,7 @@ public class GetFirstPage extends HttpServlet {
 			sQuery += "   count(case when scan_stat_cd = 'E' then 1 end ) as scanfail, ";
 			sQuery += "    count(case when load_stat_cd = 'S' then 1 end ) as loadsuccess, ";
 			sQuery += "    count(case when load_stat_cd = 'E' then 1 end ) as loadfail ";
-			sQuery += "from mddb.tb_job_history ";
+			sQuery += "from tb_job_history ";
 			
 			
 			logger.debug("getFirstPage sQuery1:" + sQuery); 

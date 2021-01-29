@@ -93,8 +93,8 @@ public class GetTableList extends HttpServlet {
 			if( StringUtils.equals(sGb, "A") || StringUtils.equals(sGb, "T") ) {
 				
 				sQuery  = " SELECT T.TABLE_ID, T.TABLE_CD, T.TABLE_NM, T.SAVE_PREQ_CD, T.SAVE_PREQ, T.DESCRIPTION, T.USE_YN , C.DETAIL_NM AS SAVE_PREQ_NM ,S.SERVER_ID,S.SERVER_NM, T.EXP_PATH, T.EXP_ZIP_YN \n ";
-				sQuery += "   FROM MDDB.TB_TABLE_INFO T LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C ON T.SAVE_PREQ_CD = C.DETAIL_CD AND 'SAVE_PREQ_CD' = C.GROUP_CD AND 'Y' = C.USE_YN \n ";
-				sQuery += "      LEFT OUTER JOIN MDDB.TB_SERVER S ON T.SERVER_ID = s.SERVER_ID ";
+				sQuery += "   FROM TB_TABLE_INFO T LEFT OUTER JOIN TB_CODE_DETAIL C ON T.SAVE_PREQ_CD = C.DETAIL_CD AND 'SAVE_PREQ_CD' = C.GROUP_CD AND 'Y' = C.USE_YN \n ";
+				sQuery += "      LEFT OUTER JOIN TB_SERVER S ON T.SERVER_ID = s.SERVER_ID ";
 				sQuery += "  WHERE 1 = 1    \n ";
 				
 				if( !StringUtils.equals(sUseYn, "A")) {
@@ -113,7 +113,7 @@ public class GetTableList extends HttpServlet {
 				
 			} else {
 				sQuery  = " SELECT C.TABLE_ID, C.ATTR_SEQ, C.ATTR_CD, C.ATTR_NM, C.ATTR_TYPE_CD, D.DETAIL_NM AS ATTR_TYPE_NM, C.ATTR_SIZE, C.DECIMAL_SIZE, C.ATTR_NULL_YN, C.USE_YN  AS ATTR_USE_YN  \n ";
-				sQuery += "   FROM MDDB.TB_TABLE_INFO I LEFT OUTER JOIN MDDB.TB_TABLE_ATTR C ON I.TABLE_ID = C.TABLE_ID  AND 'Y' = C.USE_YN LEFT OUTER JOIN MDDB.TB_CODE_DETAIL D ON C.ATTR_TYPE_CD = D.DETAIL_CD AND 'ATTR_TYPE_CD' = D.GROUP_CD \n ";
+				sQuery += "   FROM TB_TABLE_INFO I LEFT OUTER JOIN TB_TABLE_ATTR C ON I.TABLE_ID = C.TABLE_ID  AND 'Y' = C.USE_YN LEFT OUTER JOIN TB_CODE_DETAIL D ON C.ATTR_TYPE_CD = D.DETAIL_CD AND 'ATTR_TYPE_CD' = D.GROUP_CD \n ";
 				sQuery += "  WHERE 1 = 1   \n ";
 				sQuery += "    AND I.USE_YN   = 'Y'  \n ";
 				sQuery += "    AND I.TABLE_ID = '" + sTableId + "' \n";

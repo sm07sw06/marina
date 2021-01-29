@@ -63,6 +63,7 @@
 			$('#F_MENU_NM').val(dataGrid.getSelectedItem().MENU_NM);
 			$('#F_MENU_DESC').val(dataGrid.getSelectedItem().MENU_DESC);
 			$('#F_MENU_URL').val(dataGrid.getSelectedItem().MENU_URL);
+			$('#F_MENU_ORDER').val(dataGrid.getSelectedItem().MENU_ORDER);
 			$('#CRUD').val("U");
 		}
 	}
@@ -75,18 +76,17 @@
 		var gridData = [];
 		jsonObj = {};
 
-		jsonObj.__user_cd = '*';
-		jsonObj.__rows    = '20';
-		jsonObj.__page    = '1';
+		jsonObj.user_cd = '*';
+		//jsonObj.rows    = '20';
+		//jsonObj.page    = '1';
 
 		$.ajax({
 		   	url:"GetMenuList",
 			data:{param:JSON.stringify(jsonObj)},
-			type:"post",
 		   	dataType:"json",
 			success: function(json_data) {
 		        if(json_data.result == 'OK') {
-			   		$.each(json_data.rows, function(index, value) {
+			   		$.each(json_data.menuData, function(index, value) {
 			   			gridData.push(value);
 			   		});
 				} else {
@@ -109,6 +109,7 @@
 		$('#F_MENU_NM'  ).val("");
 		$('#F_MENU_CD'  ).val("");
 		$('#F_MENU_DESC').val("");
+		$('#F_MENU_ORDER').val("");
 		$('#F_MENU_URL' ).val("");
 		$('#CRUD'       ).val("C");
 		$('#F_MENU_ID'  ).attr("readonly", true); //설정
@@ -119,11 +120,12 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.menu_id   = $("input#F_MENU_ID").val();
-		obj.menu_nm   = $("input#F_MENU_NM").val();
-		obj.menu_cd   = $("input#F_MENU_CD").val();
+		obj.menu_id    = $("input#F_MENU_ID").val();
+		obj.menu_nm    = $("input#F_MENU_NM").val();
+		obj.menu_cd    = $("input#F_MENU_CD").val();
 		obj.menu_url   = $("input#F_MENU_URL").val();
-		obj.menu_desc = $("textarea#F_MENU_DESC").val();
+		obj.menu_order = $("input#F_MENU_ORDER").val();
+		obj.menu_desc  = $("textarea#F_MENU_DESC").val();
 		obj.crud        = $("input#CRUD").val();
 
 		if(obj.server_nm == ''){
@@ -133,7 +135,7 @@
 		}
 
 		$("#SetServerForm").ajaxForm({
-			url : 'SetServer',
+			url : 'SetMenuList',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -159,23 +161,23 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.server_id   = $("input#F_MENU_ID").val();
+		obj.menu_id   = $("input#F_MENU_ID").val();
 		obj.crud        = "D";
 		
 		var input = confirm('삭제하시겠습니까?'); 
 		if(!input) return;
 
-		if(obj.server_id == ''){
-			alert("[알림] 서버를 선택하세요.");
+		if(obj.menu_id == ''){
+			alert("[알림] 메뉴를 선택하세요.");
 			$("input#F_MENU_NM").focus();
 		    return;
 		}
 		
-		console.log('F_MENU_ID:'+ obj.server_id);
+		console.log('F_MENU_ID:'+ obj.menu_id);
 		console.log('sCrud:'+ obj.crud);
 
 		$("#SetServerForm").ajaxForm({
-			url : 'SetServer',
+			url : 'SetMenuList',
 			dataType:'json',
 			type: 'post',
 			data : {param:JSON.stringify(obj)},
@@ -242,12 +244,13 @@
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<columns>\
-				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="MENU_ID" id="colMenuId" width="80"/>\
-				<DataGridColumn dataField="MENU_NM" id="colMenuNm" width="200"/>\
-				<DataGridColumn dataField="MENU_CD" id="colMenuCd" width="160"/>\
-				<DataGridColumn dataField="MENU_DESC" id="colMenuesc" width="200" />\
-				<DataGridColumn dataField="MENU_URL" id="colMenuUrl" visible="false" width="80"/>\
+				<DataGridColumn dataField="ID"         id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="MENU_ID"    id="colMenuId"    width="80"  />\
+				<DataGridColumn dataField="MENU_NM"    id="colMenuNm"    width="200" maxChars="50"/>\
+				<DataGridColumn dataField="MENU_CD"    id="colMenuCd"    width="160" maxChars="5"/>\
+				<DataGridColumn dataField="MENU_URL"   id="colMenuUrl"   width="160" maxChars="100"/>\
+				<DataGridColumn dataField="MENU_DESC"  id="colMenuDesc"  width="200" maxChars="1000"/>\
+				<DataGridColumn dataField="MENU_ORDER" id="colMenuOrder" width="100"  />\
 			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
@@ -255,7 +258,7 @@
 		</DataGrid>\
 	</rMateGrid>';
 
-	// 페이징 관련 자바스크립트
+	// 페이징 관련 자바스크립트   visible="false"  
 	var gridTotalRowCount;	// 전체 데이터 건수 - html이 서버에서 작성될때 반드시 넣어줘야 하는 변수입니다.
 
 	var gridRowsPerPage;	// 1페이지에서 보여줄 행 수
@@ -350,5 +353,6 @@
 			colNo.indexStartNo = (gridCurrentPage - 1) * gridRowsPerPage + 1;
 	}
 	
+	$("input#F_MENU_NM").focus();
 
 	

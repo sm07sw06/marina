@@ -82,7 +82,7 @@ public class GetLogin extends HttpServlet implements HttpSessionListener {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = "\nSELECT U.USER_CD, U.USER_NM, E.DEPT_CD, E.DEPT_NM, E.RETIRE_DT, E.STATE_CD, U.PASSWORD, U.APPROWAITCNT, U.PICTURE  \n ";
-			sQuery += "   FROM MDDB.TB_USER_INFO U LEFT OUTER JOIN MDDB.TB_EMP E ON E.USER_CD = E.USER_CD AND E.STATE_CD = '1' \n ";
+			sQuery += "   FROM TB_USER_INFO U LEFT OUTER JOIN TB_EMP E ON E.USER_CD = E.USER_CD AND E.STATE_CD = '1' \n ";
 //			sQuery += "                    LEFT OUTER JOIN AE_INBOX B ON E.USER_ID = B.USER_ID \n ";
 			sQuery += "  WHERE 1 = 1 \n ";
 			sQuery += "    AND U.USER_CD = '" + sUserid + "' \n ";
@@ -133,13 +133,17 @@ public class GetLogin extends HttpServlet implements HttpSessionListener {
 				nCount++;
 			}
 			
+			logger.debug("GetLogin :: sPwd:" + sPwd );
+			logger.debug("GetLogin :: sPassword:" + sPassword );
+			String pwd = utilClass.encryptSHA256(sPwd);
+			logger.debug("GetLogin ::  pwd:" + pwd);
+
 			if (nCount> 0 ) { 
 				
-				logger.debug("GetLogin :: sPwd:" + sPwd );
-				logger.debug("GetLogin :: sPassword:" + sPassword );
-				String pwd = utilClass.encryptSHA256(sPwd);
-//				String pwd = sPwd;
-				logger.debug("GetLogin ::  pwd:" + pwd);
+//				logger.debug("GetLogin :: sPwd:" + sPwd );
+//				logger.debug("GetLogin :: sPassword:" + sPassword );
+//				String pwd = utilClass.encryptSHA256(sPwd);
+//				logger.debug("GetLogin ::  pwd:" + pwd);
 				
 				
 				// 1111 : 0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c
@@ -167,7 +171,7 @@ public class GetLogin extends HttpServlet implements HttpSessionListener {
 				//$resp['redirect_url'] = '';
 			
 			} else {  
-				jsonobj.put("result" , "NotFound");  // 寃곌낵�쓽 �꽦怨듭뿬遺�瑜� �솗�씤
+					jsonobj.put("result" , "NotFound");  // 寃곌낵�쓽 �꽦怨듭뿬遺�瑜� �솗�씤
 			}
 				
 			//logger.debug(jsonobj.toString());

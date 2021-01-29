@@ -85,8 +85,8 @@ public class GetJobList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = "\nSELECT J.SERVER_ID, J.JOB_ID, J.JOB_NM, J.TABLE_ID, J.SOURCE_PATH, J.SOURCE_FILE, J.INFO_PATH, J.INFO_FILE,J.JOB_LOG_PATH, J.JOB_TM, J.SEPARATOR, J.SCHEDULE_YN, J.SOURCE_DEL_YN, J.LAST_COL_YN , J.JOB_CD, J.USE_YN, S.SERVER_NM, T.TABLE_CD, T.TABLE_NM \n ";
-			sQuery += "   FROM MDDB.TB_JOB_MST J LEFT OUTER JOIN MDDB.TB_TABLE_INFO T ON J.TABLE_ID = T.TABLE_ID  \n ";
-			sQuery += "       , MDDB.TB_SERVER S  \n ";
+			sQuery += "   FROM TB_JOB_MST J LEFT OUTER JOIN TB_TABLE_INFO T ON J.TABLE_ID = T.TABLE_ID  \n ";
+			sQuery += "       , TB_SERVER S  \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			sQuery += "    AND J.SERVER_ID = S.SERVER_ID  \n ";
 			

@@ -129,7 +129,7 @@
 							<div class="panel-body">
 								<form role="form" method="post" name="SetServerForm" id="SetServerForm"  class="form-horizontal validate" action="" >
 							
-									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="U">
+									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
 							
 									<div class="form-group">
@@ -142,28 +142,28 @@
 									<div class="form-group">
 										<label for="f_orgNm" class="col-sm-3 control-label">메뉴명</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_MENU_NM"   >
+											<input type="text" class="form-control" id="F_MENU_NM"   maxlength="50" >
+											<input type="hidden" class="form-control" id="F_MENU_CD"   maxlength="5">											
 										</div>
 									</div>
-	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">메뉴CD</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_MENU_CD"  >
-										</div>
-									</div>
-	
+
 									<div class="form-group">
 										<label for="f_orgNm" class="col-sm-3 control-label">메뉴URL</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_MENU_URL"  >
+											<input type="text" class="form-control" id="F_MENU_URL"   maxlength="100">
 										</div>
 									</div>
 
 									<div class="form-group">
 										<label for="f_orgNm" class="col-sm-3 control-label">설명</label>
 										<div class="col-sm-8">
-											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SERVER_DESC" id="F_SERVER_DESC" ></textarea>
+											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_MENU_DESC" id="F_MENU_DESC"  maxlength="1000" ></textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">메뉴순서</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_MENU_ORDER"   maxlength="100">
 										</div>
 									</div>
 	

@@ -86,7 +86,7 @@ public class GetServerList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT S.SERVER_ID, S.SERVER_NM, S.SERVER_CLASS_CD, S.SERVER_IP, S.SERVER_DESC, S.USE_YN, C.DETAIL_NM AS SERVER_CLASS_NM \n ";
-			sQuery += "   FROM MDDB.TB_SERVER S, MDDB.TB_CODE_DETAIL C \n ";
+			sQuery += "   FROM TB_SERVER S, TB_CODE_DETAIL C \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			sQuery += "    AND S.SERVER_CLASS_CD = C.DETAIL_CD  \n ";
 			sQuery += "    AND 'SERVER_CLASS_CD' = C.GROUP_CD   \n ";

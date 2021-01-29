@@ -76,10 +76,10 @@
 			<ol class="breadcrumb bc-3" >
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
 				<li><a href="#">기초등록</a></li>
-				<li class="active"><strong>서버관리</strong></li>
+				<li class="active"><strong>계류구역</strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>서버관리</div>
+			<div class='myTitleBox'>계류구역</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
@@ -136,7 +136,7 @@
 							<div class="panel-body">
 								<form role="form" method="post" name="SetServerForm" id="SetServerForm"  class="form-horizontal validate" action="" >
 							
-									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="U">
+									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
 							
 									<div class="form-group">

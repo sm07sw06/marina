@@ -78,7 +78,7 @@ public class GetWorkList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT W.SERVER_ID, S.SERVER_NM, W.WORK_CD, W.WORK_NM, W.ACCOUNT_CD, W.DESCRIPTION , W.USE_YN  \n ";
-			sQuery += "   FROM MDDB.TB_WORK W, MDDB.TB_SERVER S  \n ";
+			sQuery += "   FROM TB_WORK W, TB_SERVER S  \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			sQuery += "    AND W.SERVER_ID = S.SERVER_ID  \n ";
 			

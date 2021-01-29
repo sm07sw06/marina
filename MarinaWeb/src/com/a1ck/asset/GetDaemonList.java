@@ -77,7 +77,7 @@ public class GetDaemonList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT D.DAEMON_ID, D.DAEMON_NM, D.DAEMON_IP, D.DAEMON_PORT, D.DAEMON_DESC, D.DAEMON_STAT_CD, D.DAEMON_RESTART_YN, D.USE_YN, C.DETAIL_NM AS DAEMON_STAT_NM \n ";
-			sQuery += "   FROM MDDB.TB_DAEMON D LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C ON D.DAEMON_STAT_CD = C.DETAIL_CD AND 'DAEMON_STAT_CD' = C.GROUP_CD \n ";
+			sQuery += "   FROM TB_DAEMON D LEFT OUTER JOIN TB_CODE_DETAIL C ON D.DAEMON_STAT_CD = C.DETAIL_CD AND 'DAEMON_STAT_CD' = C.GROUP_CD \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			
 			if( !StringUtils.equals(sUseYn, "A")) {

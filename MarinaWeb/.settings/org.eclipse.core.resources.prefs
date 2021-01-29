@@ -16,6 +16,7 @@ encoding//src/com/a1ck/auth/GetMenuList.java=UTF-8
 encoding//src/com/a1ck/auth/GetPacsiiAuthList.java=UTF-8
 encoding//src/com/a1ck/auth/SetAuth.java=UTF-8
 encoding//src/com/a1ck/auth/SetLogin.java=UTF-8
+encoding//src/com/a1ck/auth/SetMenuList.java=UTF-8
 encoding//src/com/a1ck/auth/SetPacsiiAuthList.java=UTF-8
 encoding//src/com/a1ck/comm/GetCodeList.java=UTF-8
 encoding//src/com/a1ck/comm/GetCodeManager.java=UTF-8

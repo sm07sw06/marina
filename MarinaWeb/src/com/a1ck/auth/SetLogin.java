@@ -56,7 +56,7 @@ public class SetLogin extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQueryUpdate  = " UPDATE MDDB.TB_DMZ_EMP_A1CK \n ";
+			sQueryUpdate  = " UPDATE TB_DMZ_EMP_A1CK \n ";
 			sQueryUpdate += "    SET PASSWORD = '" + utilClass.encryptSHA256(sPwd) + "' \n ";
 			sQueryUpdate += "  WHERE 1 = 1 \n ";
 			sQueryUpdate += "    AND SABUN     = '" + sUserid + "' \n";

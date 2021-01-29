@@ -78,7 +78,7 @@ public class GetTableListPop extends HttpServlet {
 			
 				
 				sQuery  = " SELECT T.TABLE_ID, T.TABLE_CD, T.TABLE_NM \n ";
-				sQuery += "   FROM MDDB.TB_TABLE_INFO T  \n ";
+				sQuery += "   FROM TB_TABLE_INFO T  \n ";
 				sQuery += "  WHERE 1 = 1    \n ";
 				sQuery += "    AND T.USE_YN = 'Y'  \n ";
 				

@@ -1,4 +1,4 @@
-package com.a1ck.asset;
+package com.a1ck.auth;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,28 +20,29 @@ import com.a1ck.util.ConnectionManagerAll4;
 import com.a1ck.util.UtilClass;
 
 
-public class SetServer extends HttpServlet {
+public class SetMenuList extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public Logger logger = Logger.getLogger(this.getClass().getName()+".class");
     ConnectionManager conMgr = new ConnectionManagerAll4("postgresql"); 
     
-    public SetServer() {
+    public SetMenuList() {
  //   	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
-
-    UtilClass  utilClass = new UtilClass();
+ 
+    UtilClass  utilClass = new UtilClass(); 
     
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 				
-		   logger.debug("SetServer start.............:");
+		   logger.debug("SetMenu start.............:");
 
-		   String sServerId    = "";
-		   String sServerNm      = "";
-		   String sServerClassCd      = "";
-		   String sServerIp   = "";
-		   String sServerDesc = "";
-		   String sUseYn = "";
+		   String sMenuId    = "";
+		   String sMenuNm    = "";
+		   String sMenuCd    = "";
+		   String sMenuUrl   = "";
+		   String sMenuDesc  = "";
+		   String sMenuOrder = "";
+		   String sUpMenuId  = "";
 		   String sCrud        = "";
 		   
  		   resp.setContentType("text/html;charset=UTF-8");
@@ -54,14 +55,15 @@ public class SetServer extends HttpServlet {
 					JSONObject json;
 					json = (JSONObject) parser.parse(jsonParam.toString());
 	
-		            //logger.debug("SetServer json:" + json); 
+		             logger.debug("SetMenu json:" + json); 
 		              
-		            sServerId = (String)json.get("server_id");
-		            sServerNm = (String)json.get("server_nm");
-		            sServerClassCd = (String)json.get("server_class_cd");
-		            sServerIp = (String)json.get("server_ip");
-		            sServerDesc = (String)json.get("server_desc");
-		            sUseYn  = (String)json.get("use_yn");
+		            sMenuId    = (String)json.get("menu_id");
+		            sMenuNm    = (String)json.get("menu_nm");
+		            sMenuCd    = (String)json.get("menu_cd");
+		            sMenuUrl   = (String)json.get("menu_url");
+		            sMenuDesc  = (String)json.get("menu_desc");
+		            sMenuOrder = (String)json.get("menu_order");
+		            sUpMenuId  = (String)json.get("up_menu_id");
 		            sCrud   = (String)json.get("crud");
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
@@ -79,46 +81,45 @@ public class SetServer extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO TB_SERVER (SERVER_NM, SERVER_CLASS_CD, SERVER_IP, SERVER_DESC, USE_YN) \n";
-					insertSql = insertSql + "VALUES ( '" + sServerNm + "', '" + sServerClassCd + "', '" + sServerIp + "', '" + sServerDesc + "', 'Y' )";
-		
+//				    String insertSql = "INSERT INTO TB_MENU (MENU_NM, MENU_CD, MENU_URL, MENU_DESC, MENU_ORDER, UP_MENU_ID) \n";
+//					insertSql = insertSql + "VALUES ( '" + sMenuNm + "', '" + sMenuCd + "', '" + sMenuUrl + "', '" + sMenuDesc + "', 0 , null )";
+				    String insertSql = "INSERT INTO TB_MENU (MENU_NM, MENU_URL, MENU_DESC, MENU_ORDER, UP_MENU_ID) \n";
+					insertSql = insertSql + "VALUES ( '" + sMenuNm + "', '" + sMenuUrl + "', '" + sMenuDesc + "', 0 , null )";
 					stmt = connectionDest.createStatement();
-					
-					logger.debug("SetServer sql:" + insertSql);
-					
+					logger.debug("SetMenu sql:" + insertSql);
 					stmt.execute(insertSql);
-					stmt.close();
+
+					String updateSql      = "update TB_MENU set menu_cd = menu_id \n";
+					updateSql = updateSql + "  where menu_id = (SELECT last_value  from menu_menu_id_seq)   \n ";
+					stmt = connectionDest.createStatement();
+					logger.debug("SetMenu sql:" + updateSql);
+					stmt.execute(updateSql);
 					
-				
+					stmt.close();
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "UPDATE TB_SERVER \n";
-				    updateSql = updateSql + "   SET USE_YN  = 'N'   \n ";
+					String updateSql      = "DELETE FROM TB_MENU \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
-
-				    updateSql      = "DELETE FROM TB_SERVER \n";
-					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
-
+					updateSql = updateSql + "   AND MENU_ID =   " + sMenuId  + "   \n ";
 					
 					stmt = connectionDest.createStatement();
-					logger.debug("SetServer sql:" + updateSql);
+					logger.debug("SetMenu sql:" + updateSql);
 					stmt.execute(updateSql);
 					
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE TB_SERVER \n";
-				    updateSql = updateSql + "   SET SERVER_NM       = '" + sServerNm  + "'   \n ";
-					updateSql = updateSql + "      ,SERVER_CLASS_CD = '" + sServerClassCd    + "'    \n ";
-					updateSql = updateSql + "      ,SERVER_IP       = '" + sServerIp    + "'    \n ";
-					updateSql = updateSql + "      ,SERVER_DESC     = '" + sServerDesc    + "'    \n ";
-					updateSql = updateSql + "      ,USE_YN          = '" + sUseYn     + "'   \n ";
+				    String updateSql      = "UPDATE TB_MENU \n";
+				    updateSql = updateSql + "   SET MENU_NM       = '" + sMenuNm  + "'   \n ";
+					updateSql = updateSql + "      ,MENU_CD    = '" + sMenuCd    + "'    \n ";
+					updateSql = updateSql + "      ,MENU_URL   = '" + sMenuUrl    + "'    \n ";
+					updateSql = updateSql + "      ,MENU_DESC  = '" + sMenuDesc    + "'    \n ";
+ 					updateSql = updateSql + "      ,MENU_ORDER =  " + sMenuOrder    + "    \n ";
+//					updateSql = updateSql + "      ,UP_MENU_ID = '" + sUpMenuId    + "'    \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
+					updateSql = updateSql + "   AND MENU_ID =   " + sMenuId  + "   \n ";
 
 					stmt = connectionDest.createStatement();
-					logger.debug("SetServer sql:" + updateSql);
+					logger.debug("SetMenu sql:" + updateSql);
 					stmt.execute(updateSql);
 
 					stmt.close();	

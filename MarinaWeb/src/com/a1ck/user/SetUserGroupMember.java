@@ -74,7 +74,7 @@ public class SetUserGroupMember extends HttpServlet {
 						
 						//logger.debug("getUserGroupList json:" + json); 
 						
-						String insertSql = "INSERT INTO MDDB.TB_USER_MEMBER  \n";
+						String insertSql = "INSERT INTO TB_USER_MEMBER  \n";
 						insertSql = insertSql + "VALUES ( '" + (String)json.get("user_id") + "' , '" + sUserGrpId + "' )";
 		
 						stmt = connectionDest.createStatement();
@@ -86,7 +86,7 @@ public class SetUserGroupMember extends HttpServlet {
 					connectionDest.commit();
 							            
 				} else {
-				    String updateSql      = "DELETE FROM MDDB.TB_USER_MEMBER \n";
+				    String updateSql      = "DELETE FROM TB_USER_MEMBER \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND USER_GRP_ID =   " + sUserGrpId  + "   \n ";
 

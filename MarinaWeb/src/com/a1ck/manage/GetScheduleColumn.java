@@ -78,8 +78,8 @@ public class GetScheduleColumn extends HttpServlet {
 			stmt = connectionDest.createStatement();
 
 	    	sQuery =          "\nSELECT C.JOB_ID, C.COL_ID, C.COL_CD, C.COL_NM, C.COL_TYPE_CD, D.DETAIL_NM AS COL_TYPE_NM, C.COL_LEN, C.COL_SEQ, C.COL_DATE_YN, C.COL_ENC_YN \n";
-			sQuery = sQuery + "    FROM MDDB.TB_SCHEDULE_COL C LEFT OUTER JOIN MDDB.TB_CODE_DETAIL D ON C.COL_TYPE_CD = D.DETAIL_CD AND D.GROUP_CD ='ATTR_TYPE_CD' \n";
-			sQuery = sQuery + "        ,MDDB.TB_SCHEDULE S \n";
+			sQuery = sQuery + "    FROM TB_SCHEDULE_COL C LEFT OUTER JOIN TB_CODE_DETAIL D ON C.COL_TYPE_CD = D.DETAIL_CD AND D.GROUP_CD ='ATTR_TYPE_CD' \n";
+			sQuery = sQuery + "        ,TB_SCHEDULE S \n";
 			sQuery = sQuery + "   WHERE S.JOB_ID = C.JOB_ID \n";
 			sQuery = sQuery + "     AND C.JOB_ID = " + sJobId + " \n";
 			sQuery = sQuery + "   ORDER BY C.COL_SEQ \n";

@@ -76,8 +76,8 @@ public class GetChartLinePage extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " select substr(a.job_tm,1,4) as sYear, b.table_nm as tableName , round(sum(a.source_size)/1024/1024/1024/1024,3) as sSrcSize  ";
-			sQuery += " from mddb.tb_job_history a,  ";
-			sQuery += " mddb.tb_table_info b    ";
+			sQuery += " from tb_job_history a,  ";
+			sQuery += " tb_table_info b    ";
 			sQuery += " where a.table_id = b.table_id    ";  
 			sQuery += " GROUP BY substr(a.job_tm,1,4) ,tableName    ";
 			sQuery += " ORDER BY substr(a.job_tm,1,4) ,tableName		 ";		

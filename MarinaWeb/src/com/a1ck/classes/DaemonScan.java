@@ -119,7 +119,7 @@ public class DaemonScan {
 			stmt = connection.createStatement();
 			
 			sSelectQuery  = " SELECT DAEMON_ID, DAEMON_NM, DAEMON_STAT_CD, DELAY_TIME \n ";
-			sSelectQuery += "   FROM MDDB.TB_DAEMON  \n ";
+			sSelectQuery += "   FROM TB_DAEMON  \n ";
 			sSelectQuery += "  WHERE USE_YN = 'Y' \n ";
 			sSelectQuery += "    AND DAEMON_NM = 'DaemonScan' \n ";
 				
@@ -171,7 +171,7 @@ public class DaemonScan {
 			stmt = connection.createStatement();
 			
 			sSelectQuery  = " SELECT JOB_ID, JOB_CD, SERVER_ID, TABLE_ID, JOB_NM, SOURCE_PATH, SOURCE_FILE, FILTER_YN  \n ";
-			sSelectQuery += "   FROM MDDB.TB_JOB  \n ";
+			sSelectQuery += "   FROM TB_JOB  \n ";
 			sSelectQuery += "  WHERE USE_YN = 'Y' \n ";
 				
 			//logger.debug("sQuery3 :" + sSelectQuery );

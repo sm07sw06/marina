@@ -80,7 +80,7 @@ public class GetAgentList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = "\nSELECT A.AGENT_ID, A.AGENT_NM, A.AGENT_PORT, A.SERVER_ID, S.SERVER_NM, A.ACCOUNT_CD, a.PASSWORD, A.PATH, A.DESCRIPTION, A.RUN_CD, C.DETAIL_NM as RUN_NM, A.USE_YN\n ";
-			sQuery += "   FROM MDDB.TB_AGENT A LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C ON A.RUN_CD = C.DETAIL_CD AND 'RUN_CD' = C.GROUP_CD , MDDB.TB_SERVER S \n ";
+			sQuery += "   FROM TB_AGENT A LEFT OUTER JOIN TB_CODE_DETAIL C ON A.RUN_CD = C.DETAIL_CD AND 'RUN_CD' = C.GROUP_CD , TB_SERVER S \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			sQuery += "    AND A.SERVER_ID = S.SERVER_ID  \n ";
 			

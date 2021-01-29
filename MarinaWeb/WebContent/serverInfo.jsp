@@ -136,7 +136,7 @@
 							<div class="panel-body">
 								<form role="form" method="post" name="SetServerForm" id="SetServerForm"  class="form-horizontal validate" action="" >
 							
-									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="U">
+									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
 							
 									<div class="form-group">

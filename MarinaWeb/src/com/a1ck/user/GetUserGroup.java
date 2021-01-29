@@ -80,7 +80,7 @@ public class GetUserGroup extends HttpServlet {
 			if( StringUtils.equals(sGb, "A") ) {
 				
 				sQuery  = " SELECT USER_GRP_ID, USER_GRP_NM, DESCRIPTION, '' AS USER_ID, '' AS USER_NM , USE_YN \n ";
-				sQuery += "   FROM MDDB.TB_USER_GROUP\n ";
+				sQuery += "   FROM TB_USER_GROUP\n ";
 				sQuery += "  WHERE 1 = 1    \n ";
 				
 				if( !StringUtils.equals(sUserGroupId, "*") ) {
@@ -95,14 +95,14 @@ public class GetUserGroup extends HttpServlet {
 			} else if( StringUtils.equals(sGb, "B") ) {
 					
 					sQuery  = " SELECT I.USER_ID, I.USER_NM,'' AS USER_GRP_ID,'' AS USER_GRP_NM,'' AS DESCRIPTION, '' as USE_YN  \n ";
-					sQuery += "   FROM MDDB.TB_USER_INFO I       \n ";
+					sQuery += "   FROM TB_USER_INFO I       \n ";
 					sQuery += "  WHERE I.USE_YN != 'D'  \n ";
-					sQuery += "    AND NOT EXISTS (SELECT 1 FROM MDDB.TB_USER_MEMBER M WHERE I.USER_ID = M.USER_ID AND M.USER_GRP_ID = " + sUserGroupId + " )   \n ";
+					sQuery += "    AND NOT EXISTS (SELECT 1 FROM TB_USER_MEMBER M WHERE I.USER_ID = M.USER_ID AND M.USER_GRP_ID = " + sUserGroupId + " )   \n ";
 					sQuery += "  ORDER BY I.USER_NM \n ";
 			} else if( StringUtils.equals(sGb, "C") ) {
 				
 				sQuery  = " SELECT I.USER_ID, I.USER_NM,'' AS USER_GRP_ID,'' AS USER_GRP_NM,'' AS DESCRIPTION , '' as USE_YN\n ";
-				sQuery += "   FROM MDDB.TB_USER_INFO I, MDDB.TB_USER_MEMBER M     \n ";
+				sQuery += "   FROM TB_USER_INFO I, TB_USER_MEMBER M     \n ";
 				sQuery += "  WHERE I.USE_YN != 'D'  \n ";
 				sQuery += "    AND I.USER_ID = M.USER_ID AND M.USER_GRP_ID = " + sUserGroupId + "    \n ";
 				sQuery += "  ORDER BY I.USER_NM \n ";

@@ -133,7 +133,7 @@ public class SetTable extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_TABLE_INFO (TABLE_CD, TABLE_NM, SAVE_PREQ_CD, SAVE_PREQ, DESCRIPTION, USE_YN,SERVER_ID, EXP_PATH, EXP_ZIP_YN) \n";
+				    String insertSql = "INSERT INTO TB_TABLE_INFO (TABLE_CD, TABLE_NM, SAVE_PREQ_CD, SAVE_PREQ, DESCRIPTION, USE_YN,SERVER_ID, EXP_PATH, EXP_ZIP_YN) \n";
 					insertSql = insertSql + "VALUES ( '" + sTableCd + "', '" + sTableNm + "', '" + sSavePreqCd + "', " + sSavePreq + ", '" + sDescription + "', 'Y' , " + sServerId + " , '" + sExpPath + "' , '" + sExpZipYN + "')";
 		
 					stmt = connectionDest.createStatement();
@@ -150,7 +150,7 @@ public class SetTable extends HttpServlet {
 					}
 					
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "UPDATE MDDB.TB_TABLE_INFO \n";
+				    String updateSql      = "UPDATE TB_TABLE_INFO \n";
 				    updateSql = updateSql + "   SET USE_YN  = 'N'   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND TABLE_ID =   " + sTableId  + "   \n ";
@@ -161,7 +161,7 @@ public class SetTable extends HttpServlet {
 					
 					stmt.close();			   
 			   } else if(sCrud.equals("U")) {
-				    String updateSql      = "UPDATE MDDB.TB_TABLE_INFO \n";
+				    String updateSql      = "UPDATE TB_TABLE_INFO \n";
 				    updateSql = updateSql + "   SET TABLE_CD     = '" + sTableCd     + "'   \n ";
 					updateSql = updateSql + "      ,TABLE_NM     = '" + sTableNm     + "'   \n ";
 					updateSql = updateSql + "      ,SAVE_PREQ_CD = '" + sSavePreqCd  + "'   \n ";
@@ -180,7 +180,7 @@ public class SetTable extends HttpServlet {
 
 					stmt.close();	
 			   } else if(sCrud.equals("AC")) {
-				    String insertSql = "INSERT INTO MDDB.TB_TABLE_ATTR (TABLE_ID, ATTR_CD, ATTR_NM, ATTR_TYPE_CD, ATTR_SIZE, DECIMAL_SIZE, ATTR_NULL_YN, ATTR_SEQ, USE_YN) \n";
+				    String insertSql = "INSERT INTO TB_TABLE_ATTR (TABLE_ID, ATTR_CD, ATTR_NM, ATTR_TYPE_CD, ATTR_SIZE, DECIMAL_SIZE, ATTR_NULL_YN, ATTR_SEQ, USE_YN) \n";
 					insertSql = insertSql + "VALUES ( '" + sTableId + "', '" + sAttrCd + "', '" + sAttrNm + "', '" + sAttrTypeCd + "', " + sAttrSize + ", " + sDecimalSize + ", '" + sAttrNullYn + "', 0, 'Y' )";
 		
 					stmt = connectionDest.createStatement();
@@ -190,7 +190,7 @@ public class SetTable extends HttpServlet {
 					stmt.execute(insertSql);
 					stmt.close();
 			   } else if(sCrud.equals("AD")) {
-				    String updateSql      = "UPDATE MDDB.TB_TABLE_ATTR \n";
+				    String updateSql      = "UPDATE TB_TABLE_ATTR \n";
 				    updateSql = updateSql + "   SET USE_YN  = 'N'   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND TABLE_ID =   " + sTableId  + "   \n ";
@@ -202,7 +202,7 @@ public class SetTable extends HttpServlet {
 					
 					stmt.close();			   
 			   } else if(sCrud.equals("AU")) {
-				    String updateSql      = "UPDATE MDDB.TB_TABLE_ATTR \n";
+				    String updateSql      = "UPDATE TB_TABLE_ATTR \n";
 				    updateSql = updateSql + "   SET ATTR_NM       = '" + sAttrNm      + "'  \n ";
 					updateSql = updateSql + "      ,ATTR_TYPE_CD  = '" + sAttrTypeCd  + "'  \n ";
 					updateSql = updateSql + "      ,ATTR_SIZE     =  " + sAttrSize    + "   \n ";
@@ -219,7 +219,7 @@ public class SetTable extends HttpServlet {
 
 					stmt.close();	
 			   } else if(sCrud.equals("RN")) {
-				    String updateSql      = "UPDATE MDDB.TB_TABLE_ATTR \n";
+				    String updateSql      = "UPDATE TB_TABLE_ATTR \n";
 				    updateSql = updateSql + "   SET ATTR_SEQ  = " + sAttrSeq  + "   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND TABLE_ID =   " + sTableId  + "   \n ";

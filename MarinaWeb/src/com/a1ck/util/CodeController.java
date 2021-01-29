@@ -47,7 +47,7 @@ public class CodeController extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT GROUP_CD, DETAIL_CD, DETAIL_NM  \n ";
-			sQuery += "   FROM MDDB.TB_CODE_DETAIL  \n ";
+			sQuery += "   FROM TB_CODE_DETAIL  \n ";
 			sQuery += "  ORDER BY GROUP_CD, DETAIL_CD \n ";
 			
 			//logger.debug("CodeController sQuery1:" + sQuery); 
@@ -86,7 +86,7 @@ public class CodeController extends HttpServlet {
         	String sServerNm = "";
         	
 			sQuery  = " SELECT S.SERVER_ID, S.SERVER_NM \n ";
-			sQuery += "   FROM MDDB.TB_SERVER S  \n ";
+			sQuery += "   FROM TB_SERVER S  \n ";
 			sQuery += "  WHERE S.USE_YN ='Y'   \n ";
 			sQuery += "  ORDER BY S.SERVER_NM  \n ";
 			

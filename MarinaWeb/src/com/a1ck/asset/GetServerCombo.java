@@ -63,7 +63,7 @@ public class GetServerCombo extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT S.SERVER_ID, S.SERVER_NM \n ";
-			sQuery += "   FROM  MDDB.TB_SERVER S  \n ";
+			sQuery += "   FROM  TB_SERVER S  \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			sQuery += "    AND S.USE_YN = 'Y'  \n ";
 			

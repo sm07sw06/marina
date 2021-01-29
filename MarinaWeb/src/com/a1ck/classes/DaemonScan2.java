@@ -267,7 +267,7 @@ public class DaemonScan2 {
 			stmt = connection.createStatement();
 			
 			sSelectQuery  = " SELECT DAEMON_ID, DAEMON_NM, DAEMON_STAT_CD, DELAY_TIME \n ";
-			sSelectQuery += "   FROM MDDB.TB_DAEMON  \n ";
+			sSelectQuery += "   FROM TB_DAEMON  \n ";
 			sSelectQuery += "  WHERE USE_YN = 'Y' \n ";
 			sSelectQuery += "    AND DAEMON_NM = 'DaemonScan' \n ";
 				
@@ -320,7 +320,7 @@ public class DaemonScan2 {
 			stmt = connection.createStatement();
 			
 			sSelectQuery  = " SELECT JOB_ID, JOB_CD, SERVER_ID, TABLE_ID, JOB_NM, SOURCE_PATH, SOURCE_FILE, FILTER_YN  \n ";
-			sSelectQuery += "   FROM MDDB.TB_JOB  \n ";
+			sSelectQuery += "   FROM TB_JOB  \n ";
 			sSelectQuery += "  WHERE USE_YN = 'Y' \n ";
 				
 			//logger.debug("sQuery3 :" + sSelectQuery );
@@ -548,7 +548,7 @@ public class DaemonScan2 {
 		try {
 
 			if ( StringUtils.equalsIgnoreCase(stat,"S")) {
-				insertSql = "INSERT INTO MDDB.TB_JOB_HISTORY (JOB_ID, JOB_TM, SOURCE_file, SOURCE_SIZE, SCAN_REG_TM, SCAN_STAT_CD) \n";
+				insertSql = "INSERT INTO TB_JOB_HISTORY (JOB_ID, JOB_TM, SOURCE_file, SOURCE_SIZE, SCAN_REG_TM, SCAN_STAT_CD) \n";
 				insertSql = insertSql + "SELECT " + jobId + ", '" + JobTm + "', '" + SourceFile + "', 10000000 ,'" + utilClass.getCurrentTime()  + "','S' ";
 	
 				stmt = conn.createStatement();
@@ -566,7 +566,7 @@ public class DaemonScan2 {
 				}
 			
 			} else if ( StringUtils.equalsIgnoreCase(stat,"F")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY  \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY  \n";
 				updateSql += "     SET SCAN_END_TM = '" + JobTm + "' \n";
 				updateSql += "        ,SCAN_STAT_CD = 'F' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -577,7 +577,7 @@ public class DaemonScan2 {
 				stmt.execute(updateSql);
 
 			} else if ( StringUtils.equalsIgnoreCase(stat,"E")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY  \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY  \n";
 				updateSql += "     SET SCAN_MSG_CD = '000' \n";
 				updateSql += "        ,SCAN_MSG    = 'Error' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -605,7 +605,7 @@ public class DaemonScan2 {
 		try {
 
 			if ( StringUtils.equalsIgnoreCase(stat,"S")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY \n";
 				updateSql += "     SET FILTER_REG_TM = '" + JobTm + "' \n";
 				updateSql += "        ,FILTER_STAT_CD = 'S' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -616,7 +616,7 @@ public class DaemonScan2 {
 				stmt.execute(updateSql);
 				
 			} else if ( StringUtils.equalsIgnoreCase(stat,"F")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY  \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY  \n";
 				updateSql += "     SET FILTER_END_TM = '" + JobTm + "' \n";
 				updateSql += "        ,FILTER_STAT_CD = 'F' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -627,7 +627,7 @@ public class DaemonScan2 {
 				stmt.execute(updateSql);
 
 			} else if ( StringUtils.equalsIgnoreCase(stat,"E")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY  \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY  \n";
 				updateSql += "     SET FILTER_MSG_CD = '000' \n";
 				updateSql += "        ,FILTER_MSG    = 'Error' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -656,7 +656,7 @@ public class DaemonScan2 {
 		try {
 
 			if ( StringUtils.equalsIgnoreCase(stat,"S")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY \n";
 				updateSql += "     SET LOAD_REG_TM = '" + JobTm + "' \n";
 				updateSql += "        ,LOAD_STAT_CD = 'S' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -667,7 +667,7 @@ public class DaemonScan2 {
 				stmt.execute(updateSql);
 				
 			} else if ( StringUtils.equalsIgnoreCase(stat,"F")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY  \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY  \n";
 				updateSql += "     SET LOAD_END_TM = '" + JobTm + "' \n";
 				updateSql += "        ,LOAD_STAT_CD = 'F' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";
@@ -678,7 +678,7 @@ public class DaemonScan2 {
 				stmt.execute(updateSql);
 
 			} else if ( StringUtils.equalsIgnoreCase(stat,"E")) {
-				updateSql  = "\nUPDATE MDDB.TB_JOB_HISTORY  \n";
+				updateSql  = "\nUPDATE TB_JOB_HISTORY  \n";
 				updateSql += "     SET LOAD_MSG_CD = '000' \n";
 				updateSql += "        ,LOAD_MSG    = 'Error' \n";
 				updateSql += "   WHERE JOB_SEQ = " + jobSeq + " \n";

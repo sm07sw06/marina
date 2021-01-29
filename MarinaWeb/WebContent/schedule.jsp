@@ -132,7 +132,7 @@
 
 									<div class=" search_cond">
 									
-										<input type="hidden" class="form-control" id="CRUD1" name="CRUD1"  value="U">
+										<input type="hidden" class="form-control" id="CRUD1" name="CRUD1"  value="C">
 										<input type="hidden" class="form-control" id="ROWID1" name="ROWID1"  >
 								
 										<div class="form-group dualPosition">

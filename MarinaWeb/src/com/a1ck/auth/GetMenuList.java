@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONArray;
@@ -60,25 +61,34 @@ public class GetMenuList extends HttpServlet {
 			connectionDest = conMgr.getConnection();
 			 
 			stmt = connectionDest.createStatement();
-   			sQuery  = "\n";
-   			sQuery += " SELECT DISTINCT MENU_CD, MENU_NM, MENU_URL, MENU_ORDER \n";
-   			sQuery += "   FROM ( \n";
-   			sQuery += "         SELECT lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER   \n";
-   			sQuery += "           FROM MDDB.TB_MENU M, MDDB.TB_USER_AUTH A, MDDB.TB_USER_INFO I	   								    \n";
-   			sQuery += "          WHERE A.USER_ID = I.USER_ID AND I.USER_CD = '" + sUserCd + "'	            \n";
-   			sQuery += "            AND A.MENU_ID = M.MENU_ID												\n";
-   			sQuery += "            AND '1'       = A.USER_GB												\n";
-   			sQuery += "          UNION ALL																	\n";
-   			sQuery += "         SELECT lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER	\n";
-   			sQuery += "           FROM MDDB.TB_MENU M, MDDB.TB_USER_AUTH A, MDDB.TB_USER_MEMBER U, MDDB.TB_USER_INFO I							\n";
-   			sQuery += "          WHERE U.USER_ID = I.USER_ID AND I.USER_CD = '" + sUserCd + "'				\n";
-   			sQuery += "            AND A.MENU_ID = M.MENU_ID												\n";
-   			sQuery += "            AND U.USER_GRP_ID = A.USER_ID											\n";
-   			sQuery += "            AND '2' = A.USER_GB														\n";
-   			sQuery += "        ) T1																			\n";
-   			sQuery += "  ORDER BY 4     														            \n";
-			
-			//logger.debug("GetMenuList\n" + sQuery);
+
+            logger.debug("getMenuList sUserCd:" + sUserCd); 
+
+			if ( StringUtils.equalsIgnoreCase(sUserCd,"*") || StringUtils.equalsIgnoreCase(sUserCd,"admin")) { 
+	   			sQuery  = "\n";
+	   			sQuery += " SELECT DISTINCT MENU_CD, MENU_NM, MENU_URL, MENU_ORDER, MENU_ID, MENU_DESC, UP_MENU_ID \n";
+	   			sQuery += "   FROM ( \n";
+	   			sQuery += "         SELECT lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER, M.MENU_ID, M.MENU_DESC, M.UP_MENU_ID   \n";
+	   			sQuery += "           FROM TB_MENU M  \n";
+	   			sQuery += "        ) T1																			\n";
+	   			sQuery += "  ORDER BY 4     														            \n";
+			}	else {
+	   			sQuery  = "\n";
+	   			sQuery += " SELECT DISTINCT MENU_CD, MENU_NM, MENU_URL, MENU_ORDER, MENU_ID, MENU_DESC, UP_MENU_ID \n";
+	   			sQuery += "   FROM ( \n";
+	   			sQuery += "         SELECT lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER, M.MENU_ID, M.MENU_DESC, M.UP_MENU_ID   \n";
+	   			sQuery += "           FROM TB_MENU M  \n";
+	   			sQuery += "          WHERE M.menu_id in (select menu_id from TB_USER_AUTH a , TB_USER_INFO i where '1' = A.USER_GB and A.USER_ID = I.USER_ID  and  I.USER_CD = '" + sUserCd + "')		\n";
+	   			sQuery += "          UNION ALL																	\n";
+	   			sQuery += "         SELECT lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER, M.MENU_ID, M.MENU_DESC, M.UP_MENU_ID   \n";
+	   			sQuery += "           FROM TB_MENU M  \n";
+	   			sQuery += "          WHERE M.menu_id in (select menu_id from TB_USER_AUTH a , TB_USER_INFO i, TB_USER_MEMBER U where '2' = A.USER_GB and A.USER_ID = I.USER_ID  and U.USER_GRP_ID = A.USER_ID and  I.USER_CD = '" + sUserCd + "')		\n";
+	   			sQuery += "        ) T1																			\n";
+	   			sQuery += "  ORDER BY 4     														            \n";
+	   			
+	   			
+			}
+		    logger.debug("GetMenuList\n" + sQuery);
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -87,9 +97,13 @@ public class GetMenuList extends HttpServlet {
 	        
 			while(rs.next()){
 				item = new JSONObject(); 
-				item.put("MENU_CD"  , rs.getString("MENU_CD" ));
-				item.put("MENU_NM"  , rs.getString("MENU_NM" ));
-				item.put("MENU_URL" , rs.getString("MENU_URL"));
+				item.put("MENU_CD"    , rs.getString("MENU_CD"   ));
+				item.put("MENU_NM"    , rs.getString("MENU_NM"   ));
+				item.put("MENU_URL"   , rs.getString("MENU_URL"  ));
+				item.put("MENU_ID"    , rs.getString("MENU_ID"   ));
+				item.put("MENU_DESC"  , rs.getString("MENU_DESC" ));
+				item.put("MENU_ORDER" , rs.getString("MENU_ORDER"));
+				item.put("UP_MENU_ID" , rs.getString("UP_MENU_ID"));
 				
 				items.add(item);
 				sResult = "OK";				
@@ -97,16 +111,15 @@ public class GetMenuList extends HttpServlet {
 
 			JSONObject jsonobj = new JSONObject();
 
-			jsonobj.put("result" , sResult); // 寃곌낵臾� JSON �옉�꽦
-			jsonobj.put("menuData", items); // 寃곌낵臾� JSON �옉�꽦
+			jsonobj.put("result" , sResult); 
+			jsonobj.put("menuData", items); 
 			
-			//�쓳�떟�쓣 �븯湲� �쐞�븳 以�鍮� �옉�뾽
+			//
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
 
-        	//logger.debug(jsonobj.toString());
-
+        	logger.debug(jsonobj.toString());
 			
 			stmt.close();
 			//connectionDest.close();

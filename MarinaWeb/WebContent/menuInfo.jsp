@@ -47,44 +47,38 @@
 					</a>
 					<ul>
 						<li >
-							<a href="noAuth.jsp" id="menu00001" >
+							<a href="noAuth.jsp" id="menu00002" >
 								<i class="entypo-user"></i>
-								<span class="title">서버 등록</span>
-							</a>
-						</li>
-						<li >
-							<a href="noAuth.jsp" id="menu00016" >
-								<i class="entypo-user"></i>
-								<span class="title">서버 등록(old)</span>
+								<span class="title">계류구역</span>
 							</a>
 						</li>
 						<li>
 							<!--  a href="userInfo.jsp" -->
-							<a href="noAuth.jsp" id="menu00002" >
+							<a href="noAuth.jsp" id="menu00003" >
 								<i class="entypo-user"></i>
 								<span class="title">업무 등록</span>
 							</a>
 						</li>
 						<li>
-							<a href="noAuth.jsp" id="menu00003" >
-								<i class="entypo-users"></i>
-								<span class="title">Agent  등록</span>
-							</a>
-						</li>
-						<li>
 							<a href="noAuth.jsp" id="menu00004" >
 								<i class="entypo-users"></i>
-								<span class="title">데몬정보 등록</span>
+								<span class="title">Agent 등록</span>
 							</a>
 						</li>
 						<li>
 							<a href="noAuth.jsp" id="menu00005" >
 								<i class="entypo-users"></i>
+								<span class="title">데몬정보 등록</span>
+							</a>
+						</li>
+						<li>
+							<a href="noAuth.jsp" id="menu00006" >
+								<i class="entypo-users"></i>
 								<span class="title">테이블 등록</span>
 							</a>
 						</li>
 						<li>
-							<a href="noAuth.jsp" id="menu00015" >
+							<a href="noAuth.jsp" id="menu00014" >
 								<i class="entypo-users"></i>
 								<span class="title">코드관리</span>
 							</a>
@@ -93,6 +87,12 @@
 							<a href="noAuth.jsp" id="menu00017" >
 								<i class="entypo-users"></i>
 								<span class="title">코드관리2</span>
+							</a>
+						</li>
+						<li >
+							<a href="noAuth.jsp" id="menu00016" >
+								<i class="entypo-user"></i>
+								<span class="title">서버 등록</span>
 							</a>
 						</li>
 					</ul>	
@@ -107,19 +107,19 @@
 					<ul>
 						<li>
 							<!--  a href="userInfo.jsp" -->
-							<a href="noAuth.jsp" id="menu00006" >
+							<a href="noAuth.jsp" id="menu00007" >
 								<i class="entypo-user"></i>
 								<span class="title">사용자그룹 등록</span>
 							</a>
 						</li>
 						<li >
-							<a href="noAuth.jsp" id="menu00007" >
+							<a href="noAuth.jsp" id="menu00008" >
 								<i class="entypo-user"></i>
 								<span class="title">사용자 등록</span>
 							</a>
 						</li>
 						<li >
-							<a href="noAuth.jsp" id="menu00008" >
+							<a href="noAuth.jsp" id="menu00009" >
 								<i class="entypo-user"></i>
 								<span class="title">사용자 권한관리</span>
 							</a>
@@ -142,19 +142,19 @@
 					<ul>
 						<li>
 							<!--  a href="userInfo.jsp" -->
-							<a href="noAuth.jsp" id="menu00009" >
+							<a href="noAuth.jsp" id="menu00010" >
 								<i class="entypo-user"></i>
 								<span class="title">작업 등록</span>
 							</a>
 						</li>
 						<li >
-							<a href="noAuth.jsp" id="menu00010" >
+							<a href="noAuth.jsp" id="menu00011" >
 								<i class="entypo-user"></i>
 								<span class="title">작업 이력</span>
 							</a>
 						</li>
 						<li >
-							<a href="noAuth.jsp" id="menu00011" >
+							<a href="noAuth.jsp" id="menu00001" >
 								<i class="entypo-user"></i>
 								<span class="title">스케쥴관리</span>
 							</a>
@@ -213,6 +213,7 @@
 	
 			if(json_data.result == 'OK') {
 			    $.each(json_data.menuData, function(i,n) {
+			    	console.log(n);
 			    	refreshMenu($("#menu" + n.MENU_CD),n.MENU_URL);
 				});
 			}

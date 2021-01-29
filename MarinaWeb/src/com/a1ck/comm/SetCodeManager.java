@@ -90,7 +90,7 @@ public class SetCodeManager extends HttpServlet {
 				connectionDest.setAutoCommit(false);	
 			   
 			   if(sCrud.equals("C")) {
-				    String insertSql = "\nINSERT INTO MDDB.TB_CODE_GROUP (GROUP_CD, GROUP_NM, USE_YN )  \n";
+				    String insertSql = "\nINSERT INTO TB_CODE_GROUP (GROUP_CD, GROUP_NM, USE_YN )  \n";
 					insertSql = insertSql + "VALUES ( '"+sGroupCd.toUpperCase() +"','"+sGroupNm+"','"+sUseYn+"' ) \n";
 		
 					stmt = connectionDest.createStatement();
@@ -104,7 +104,7 @@ public class SetCodeManager extends HttpServlet {
 				   
 				   		connectionDest.setAutoCommit(false);
 				   
-					    String deleteSql    = "\nDELETE FROM MDDB.TB_CODE_GROUP \n";
+					    String deleteSql    = "\nDELETE FROM TB_CODE_GROUP \n";
 						deleteSql = deleteSql + " WHERE GROUP_CD =   '" + sGroupCd + "'   \n ";
 			
 						stmt = connectionDest.createStatement();
@@ -113,7 +113,7 @@ public class SetCodeManager extends HttpServlet {
 						
 						stmt.execute(deleteSql);
 
-					    deleteSql    = "\nDELETE FROM MDDB.TB_CODE_DETAIL \n";
+					    deleteSql    = "\nDELETE FROM TB_CODE_DETAIL \n";
 						deleteSql = deleteSql + " WHERE GROUP_CD  = '" + sGroupCd  + "'   \n ";
 			
 						logger.debug("SetCodeManager sql:" + deleteSql);
@@ -124,7 +124,7 @@ public class SetCodeManager extends HttpServlet {
 					   connectionDest.commit();
 			   
 			   } else if(sCrud.equals("U")) {
-				    String updateSql      = "\nUPDATE MDDB.TB_CODE_GROUP \n";
+				    String updateSql      = "\nUPDATE TB_CODE_GROUP \n";
 				    updateSql = updateSql + "     SET GROUP_NM  = '" + sGroupNm + "'   \n ";
 					updateSql = updateSql + "        ,USE_YN    = '" + sUseYn   + "'   \n ";
 					updateSql = updateSql + "   WHERE GROUP_CD = '" + sGroupCd  + "'   \n ";
@@ -135,7 +135,7 @@ public class SetCodeManager extends HttpServlet {
 					logger.debug("SetCodeManager sql:" + updateSql);
 					stmt.close();			   
 			  } else  if(sCrud.equals("CD")) {
-					    String insertSql = "\nINSERT INTO MDDB.TB_CODE_DETAIL (GROUP_CD, DETAIL_CD, DETAIL_NM, USE_YN )  \n";
+					    String insertSql = "\nINSERT INTO TB_CODE_DETAIL (GROUP_CD, DETAIL_CD, DETAIL_NM, USE_YN )  \n";
 						insertSql = insertSql + "VALUES ( '" + sGroupCd.toUpperCase() + "','"+sDetailCd+"','"+sDetailNm+"','"+sUseYn+"' ) \n";
 			
 						stmt = connectionDest.createStatement();
@@ -146,7 +146,7 @@ public class SetCodeManager extends HttpServlet {
 						
 						stmt.close();
 				   } else if(sCrud.equals("DD")) {
-						    String deleteSql    = "\nDELETE FROM MDDB.TB_CODE_DETAIL \n";
+						    String deleteSql    = "\nDELETE FROM TB_CODE_DETAIL \n";
 							deleteSql = deleteSql + " WHERE GROUP_CD  = '" + sGroupCd  + "'   \n ";
 							deleteSql = deleteSql + "   AND DETAIL_CD = '" + sDetailCd + "'   \n ";
 				
@@ -157,7 +157,7 @@ public class SetCodeManager extends HttpServlet {
 							stmt.execute(deleteSql);
 							stmt.close();
 				  } else if(sCrud.equals("UD")) {
-					    String updateSql      = "\nUPDATE MDDB.TB_CODE_DETAIL \n";
+					    String updateSql      = "\nUPDATE TB_CODE_DETAIL \n";
 					    updateSql = updateSql + "     SET DETAIL_NM  = '" + sDetailNm + "'   \n ";
 						updateSql = updateSql + "        ,USE_YN    = '" + sUseYn   + "'   \n ";
 						updateSql = updateSql + " WHERE GROUP_CD  = '" + sGroupCd  + "'   \n ";

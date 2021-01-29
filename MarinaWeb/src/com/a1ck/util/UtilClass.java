@@ -1119,7 +1119,7 @@ public class UtilClass {
 			connectionManage = conMgr.getConnection();
 			Statement mStatment = connectionManage.createStatement();
 			sQuery = "SELECT DETAIL_NM \n";
-			sQuery += " FROM MDDB.TB_CODE_DETAIL \n";
+			sQuery += " FROM TB_CODE_DETAIL \n";
 			sQuery += "  WHERE GROUP_CD  = 'POSTGRESQL'  \n ";
 			sQuery += "    AND DETAIL_CD = '" + sCode + "' \n";
 

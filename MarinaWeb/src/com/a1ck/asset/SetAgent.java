@@ -90,7 +90,7 @@ public class SetAgent extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_AGENT (AGENT_NM, AGENT_PORT, SERVER_ID, ACCOUNT_CD, PASSWORD, PATH, RUN_CD, USE_YN, DESCRIPTION) \n";
+				    String insertSql = "INSERT INTO TB_AGENT (AGENT_NM, AGENT_PORT, SERVER_ID, ACCOUNT_CD, PASSWORD, PATH, RUN_CD, USE_YN, DESCRIPTION) \n";
 					insertSql = insertSql + "VALUES ( '" + sAgentNm + "', " + sAgentPort + ", " + sServerId + ", '" + sAccountCd + "', '" + sPassword + "','" + sPath + "', '" + sRunCd + "', '" + sUseYn + "', '" + sDescription + "' )";
 		
 					stmt = connectionDest.createStatement();
@@ -102,7 +102,7 @@ public class SetAgent extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "DELETE FROM MDDB.TB_AGENT \n";
+				    String updateSql      = "DELETE FROM TB_AGENT \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId + "   \n ";
 					updateSql = updateSql + "   AND AGENT_ID   =  " + sAgentId  + "   \n "; 
@@ -114,7 +114,7 @@ public class SetAgent extends HttpServlet {
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE MDDB.TB_AGENT \n";
+				    String updateSql      = "UPDATE TB_AGENT \n";
 				    updateSql = updateSql + "   SET AGENT_NM    = '" + sAgentNm     + "'    \n ";
 					updateSql = updateSql + "      ,AGENT_PORT  =  " + sAgentPort   + "     \n ";
 					updateSql = updateSql + "      ,ACCOUNT_CD  = '" + sAccountCd   + "'    \n ";

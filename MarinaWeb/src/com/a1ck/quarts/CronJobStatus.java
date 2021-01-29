@@ -23,7 +23,7 @@ public class CronJobStatus {
 		
 		try
 		{
-			String insertSql = "\nINSERT INTO MDDB.TB_JOB_STATUS (JOB_CD, JOB_STATUS_CD, JOB_MSG, JOB_START,  lastupdatetime)  \n";
+			String insertSql = "\nINSERT INTO TB_JOB_STATUS (JOB_CD, JOB_STATUS_CD, JOB_MSG, JOB_START,  lastupdatetime)  \n";
 			insertSql = insertSql + " SELECT  ?,  'S', 'JOB STARTED', to_timestamp(?,'yyyymmddhh24miss'),  now() ";
 
 			PreparedStatement pstmt = connectionMng.prepareStatement(insertSql);
@@ -53,7 +53,7 @@ public class CronJobStatus {
 		
 		try
 		{
-			String updateSql = "\nUPDATE MDDB.TB_JOB_STATUS   \n";
+			String updateSql = "\nUPDATE TB_JOB_STATUS   \n";
 			updateSql = updateSql + "  SET JOB_STATUS_CD = 'F'  			\n";   
 			updateSql = updateSql + "     ,JOB_MSG    = 'JOB COMPLETED' \n";   
 			updateSql = updateSql + "     ,JOB_END    = now()           \n";   
@@ -91,7 +91,7 @@ public class CronJobStatus {
 			////logger.debug("SetJobStatus:" + dataTime );
 			//System.out.println("SetJobStatus:" + dataTime );
 			
-			String updateSql = "\nUPDATE MDDB.TB_JOB_STATUS \n";
+			String updateSql = "\nUPDATE TB_JOB_STATUS \n";
 			updateSql = updateSql + "  SET JOB_STATUS_CD = ? \n";   
 			updateSql = updateSql + "     ,JOB_MSG    = ? \n";   
 			updateSql = updateSql + "WHERE 1 = 1 		  \n";   

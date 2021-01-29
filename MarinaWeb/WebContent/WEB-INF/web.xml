@@ -101,6 +101,16 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>SetMenuList</servlet-name>
+		<servlet-class>com.a1ck.auth.SetMenuList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetMenuList</servlet-name>
+		<url-pattern>/SetMenuList</url-pattern>
+	</servlet-mapping>
+
+	
+	<servlet>
 		<servlet-name>GetFirstPage</servlet-name>
 		<servlet-class>com.a1ck.page.GetFirstPage</servlet-class>
 	</servlet>

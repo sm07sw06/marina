@@ -52,7 +52,7 @@ public class GetCodeList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT GROUP_CD, DETAIL_CD, DETAIL_NM  \n ";
-			sQuery += "   FROM MDDB.TB_CODE_DETAIL  \n ";
+			sQuery += "   FROM TB_CODE_DETAIL  \n ";
 			sQuery += "  WHERE GROUP_CD = '" + sClass + "'  \n ";
 			
 			if( !StringUtils.equals(sCode, "*")) {

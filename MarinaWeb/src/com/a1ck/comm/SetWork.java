@@ -84,7 +84,7 @@ public class SetWork extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_WORK (SERVER_ID, WORK_CD, WORK_NM, ACCOUNT_CD, DESCRIPTION, USE_YN ) \n";
+				    String insertSql = "INSERT INTO TB_WORK (SERVER_ID, WORK_CD, WORK_NM, ACCOUNT_CD, DESCRIPTION, USE_YN ) \n";
 					insertSql = insertSql + "VALUES ( " + sServerId + ", '" + sWorkCd + "', '" + sWorkNm + "', '" + sAccountCd + "', '" + sDescription + "','" + sUseYn + "' )";
 		
 					stmt = connectionDest.createStatement();
@@ -96,7 +96,7 @@ public class SetWork extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "UPDATE MDDB.TB_WORK \n";
+				    String updateSql      = "UPDATE TB_WORK \n";
 				    updateSql = updateSql + "   SET USE_YN  = 'D'   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
@@ -109,7 +109,7 @@ public class SetWork extends HttpServlet {
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE MDDB.TB_WORK \n";
+				    String updateSql      = "UPDATE TB_WORK \n";
 				    updateSql = updateSql + "   SET WORK_NM       = '" + sWorkNm  + "'   \n ";
 					updateSql = updateSql + "      ,ACCOUNT_CD    = '" + sAccountCd    + "'    \n ";
 					updateSql = updateSql + "      ,DESCRIPTION     = '" + sDescription     + "'   \n ";

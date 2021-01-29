@@ -82,11 +82,11 @@ public class GetScheduleList extends HttpServlet {
 			sQuery = sQuery + "        ,S.SRC_SQL, S.DEST_IP, S.DEST_PORT, S.DEST_DBMS_CD, S.DEST_DB, S.DEST_USER, S.DEST_PASSWD, S.JOB_METHOD_CD, S.DEST_TABLE, S.DESCRIPTION \n";
 			sQuery = sQuery + "        ,S.JOB_CLASS, S.JOB_TYPE_CD, S.JOB_PATH, S.SAVE_PREQ_CD, S.SAVE_PREQ, S.USE_YN, S.SELECT_YN, C1.DETAIL_NM AS JOB_METHOD_NM \n";
 			sQuery = sQuery + "        ,C2.DETAIL_NM AS JOB_TYPE_NM, C3.DETAIL_NM AS SRC_DBMS_NM, C4.DETAIL_NM AS DEST_DBMS_NM, C5.DETAIL_NM||' ('||S.SAVE_PREQ ||')'  SAVE_PREQ_NM \n";
-			sQuery = sQuery + "    FROM MDDB.TB_SCHEDULE S LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C1 ON S.JOB_METHOD_CD = C1.DETAIL_CD AND C1.GROUP_CD ='JOB_METHOD_CD' \n";
-			sQuery = sQuery + "                    LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C2 ON S.JOB_TYPE_CD   = C2.DETAIL_CD AND C2.GROUP_CD ='JOB_TYPE_CD'   \n";
-			sQuery = sQuery + "                    LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C3 ON S.SRC_DBMS_CD   = C3.DETAIL_CD AND C3.GROUP_CD ='DBMS_CD'       \n";
-			sQuery = sQuery + "                    LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C4 ON S.DEST_DBMS_CD  = C4.DETAIL_CD AND C4.GROUP_CD ='DBMS_CD'  		\n";
-			sQuery = sQuery + "                    LEFT OUTER JOIN MDDB.TB_CODE_DETAIL C5 ON S.SAVE_PREQ_CD  = C5.DETAIL_CD AND C5.GROUP_CD ='SAVE_PREQ_CD'  \n";
+			sQuery = sQuery + "    FROM TB_SCHEDULE S LEFT OUTER JOIN TB_CODE_DETAIL C1 ON S.JOB_METHOD_CD = C1.DETAIL_CD AND C1.GROUP_CD ='JOB_METHOD_CD' \n";
+			sQuery = sQuery + "                    LEFT OUTER JOIN TB_CODE_DETAIL C2 ON S.JOB_TYPE_CD   = C2.DETAIL_CD AND C2.GROUP_CD ='JOB_TYPE_CD'   \n";
+			sQuery = sQuery + "                    LEFT OUTER JOIN TB_CODE_DETAIL C3 ON S.SRC_DBMS_CD   = C3.DETAIL_CD AND C3.GROUP_CD ='DBMS_CD'       \n";
+			sQuery = sQuery + "                    LEFT OUTER JOIN TB_CODE_DETAIL C4 ON S.DEST_DBMS_CD  = C4.DETAIL_CD AND C4.GROUP_CD ='DBMS_CD'  		\n";
+			sQuery = sQuery + "                    LEFT OUTER JOIN TB_CODE_DETAIL C5 ON S.SAVE_PREQ_CD  = C5.DETAIL_CD AND C5.GROUP_CD ='SAVE_PREQ_CD'  \n";
 			sQuery = sQuery + "   WHERE 1 = 1 \n";
 //			sQuery = sQuery + "     AND USE_YN ='Y' \n";
 			

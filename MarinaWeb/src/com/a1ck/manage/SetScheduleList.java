@@ -154,7 +154,7 @@ public class SetScheduleList extends HttpServlet {
 				connectionDest.setAutoCommit(false);	
 			   
 			   if(sCrud.equals("C")) {
-				    String insertSql = "\nINSERT INTO MDDB.TB_SCHEDULE(JOB_NM, JOB_SCHEDULE, SRC_IP, SRC_PORT, SRC_DBMS_CD, SRC_DB, SRC_USER, SRC_PASSWD \n";
+				    String insertSql = "\nINSERT INTO TB_SCHEDULE(JOB_NM, JOB_SCHEDULE, SRC_IP, SRC_PORT, SRC_DBMS_CD, SRC_DB, SRC_USER, SRC_PASSWD \n";
 					insertSql = insertSql + "   ,SRC_SQL, DEST_IP, DEST_PORT, DEST_DBMS_CD, DEST_DB, DEST_USER, DEST_PASSWD, JOB_METHOD_CD, DEST_TABLE ";
 					insertSql = insertSql + "   ,JOB_CLASS, JOB_TYPE_CD, JOB_PATH, SAVE_PREQ_CD, SAVE_PREQ, USE_YN, DESCRIPTION, JOB_CD, SELECT_YN )  \n";
 					insertSql = insertSql + "VALUES ( '"+sJobNm+"','"+sJobSchedule+"','"+sSrcIp+"',"+sSrcPort+",'"+sSrcDbmsCd+"','"+sSrcDb+"','"+sSrcUser+"','"+sSrcPasswd+"', \n";
@@ -180,7 +180,7 @@ public class SetScheduleList extends HttpServlet {
 				   
 			   		connectionDest.setAutoCommit(false);  
 			   
-				    String      deleteSql = "\nDELETE FROM MDDB.TB_SCHEDULE \n";
+				    String      deleteSql = "\nDELETE FROM TB_SCHEDULE \n";
 					deleteSql = deleteSql + " WHERE JOB_ID =   '" + sJobId + "'   \n ";
 		
 					stmt = connectionDest.createStatement();
@@ -190,7 +190,7 @@ public class SetScheduleList extends HttpServlet {
 					
 					stmt.execute(deleteSql);
 	
-				    deleteSql = "\nDELETE FROM MDDB.TB_SCHEDULE_COL \n";
+				    deleteSql = "\nDELETE FROM TB_SCHEDULE_COL \n";
 					deleteSql = deleteSql + " WHERE JOB_ID =   '" + sJobId + "'   \n ";
 		
 					logger.debug("SetScheduleList sql:" + deleteSql);
@@ -202,7 +202,7 @@ public class SetScheduleList extends HttpServlet {
 					connectionDest.commit(); 
 					
 			  } else {
-				    String updateSql      = "\nUPDATE MDDB.TB_SCHEDULE \n";
+				    String updateSql      = "\nUPDATE TB_SCHEDULE \n";
 				    updateSql = updateSql + "   SET JOB_NM        = '" + sJobNm       	+ "'   \n ";
 					updateSql = updateSql + "      ,JOB_SCHEDULE  = '" + sJobSchedule   + "'   \n ";
 					updateSql = updateSql + "      ,SRC_IP        = '" + sSrcIp     	+ "'   \n ";

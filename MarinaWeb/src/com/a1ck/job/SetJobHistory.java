@@ -105,7 +105,7 @@ public class SetJobHistory extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_JOB_MST (SERVER_ID, JOB_NM, TABLE_ID, SOURCE_PATH, SOURCE_FILE, JOB_TM, SEPARATOR, SCHEDULE_YN, SOURCE_DEL_YN, LAST_COL_YN, USE_YN) \n";
+				    String insertSql = "INSERT INTO TB_JOB_MST (SERVER_ID, JOB_NM, TABLE_ID, SOURCE_PATH, SOURCE_FILE, JOB_TM, SEPARATOR, SCHEDULE_YN, SOURCE_DEL_YN, LAST_COL_YN, USE_YN) \n";
 					insertSql = insertSql + "VALUES ( '" + sServerId + "', '" + sJobNm + "', '" + sTableId + "', '" + sSourcePath + "', '" + sSourceFile + "', '" + sJobTm + "', '" + sSeparator + "', '" + sScheduleYn + "','" + sSource_delYn + "', '" + sLast_colYn + "', '" + sUseYn + "' )";
 		
 					stmt = connectionDest.createStatement();
@@ -117,7 +117,7 @@ public class SetJobHistory extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "UPDATE MDDB.TB_JOB_MST \n";
+				    String updateSql      = "UPDATE TB_JOB_MST \n";
 				    updateSql = updateSql + "   SET USE_YN  		= 'N'   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND JOB_ID   =  " + sJobId  + "   \n "; 
@@ -129,7 +129,7 @@ public class SetJobHistory extends HttpServlet {
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE MDDB.TB_JOB_MST \n";
+				    String updateSql      = "UPDATE TB_JOB_MST \n";
 				    updateSql = updateSql + "   SET SERVER_ID  		= '" + sServerId + "'   \n ";
 				    updateSql = updateSql + "      ,JOB_NM  		= '" + sJobNm + "'   \n ";
 				    updateSql = updateSql + "      ,TABLE_ID  		= '" + sTableId + "'   \n ";

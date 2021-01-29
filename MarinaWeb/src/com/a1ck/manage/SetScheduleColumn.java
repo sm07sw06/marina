@@ -100,7 +100,7 @@ public class SetScheduleColumn extends HttpServlet {
 				connectionDest.setAutoCommit(false);	
 			   
 			   if(sCrud.equals("C")) {
-				    String insertSql = "\nINSERT INTO MDDB.TB_SCHEDULE_COL(JOB_ID, COL_CD, COL_NM, COL_TYPE_CD, COL_LEN, COL_SEQ, COL_DATE_YN, COL_ENC_YN ) \n";
+				    String insertSql = "\nINSERT INTO TB_SCHEDULE_COL(JOB_ID, COL_CD, COL_NM, COL_TYPE_CD, COL_LEN, COL_SEQ, COL_DATE_YN, COL_ENC_YN ) \n";
 					insertSql = insertSql + "VALUES ( "+sJobId+",'"+sColCd+"','"+sColNm+"','"+sColTypeCd+"',"+sColLen+","+sColSeq+",'"+sColDateYn+"','"+sColEncYn+"' ) \n";
 		
 					stmt = connectionDest.createStatement();
@@ -119,7 +119,7 @@ public class SetScheduleColumn extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-					    String deleteSql = "DELETE FROM MDDB.TB_SCHEDULE_COL \n";
+					    String deleteSql = "DELETE FROM TB_SCHEDULE_COL \n";
 					    deleteSql = deleteSql + " WHERE JOB_ID = " + sJobId + "   \n ";
 					    deleteSql = deleteSql + "   and COL_ID = " + sColId + "   \n ";
 			
@@ -130,7 +130,7 @@ public class SetScheduleColumn extends HttpServlet {
 						stmt.execute(deleteSql);
 						stmt.close();
 			  } else  if(sCrud.equals("U")) {
-				    String updateSql      = "\nUPDATE MDDB.TB_SCHEDULE_COL \n";
+				    String updateSql      = "\nUPDATE TB_SCHEDULE_COL \n";
 				    updateSql = updateSql + "   SET COL_CD   	= '" + sColCd  	+ "'   \n ";
 					updateSql = updateSql + "      ,COL_NM   	= '" + sColNm  	+ "'   \n ";
 					updateSql = updateSql + "      ,COL_TYPE_CD = '" + sColTypeCd  	+ "'   \n ";
@@ -147,7 +147,7 @@ public class SetScheduleColumn extends HttpServlet {
 					logger.debug("SetScheduleColumn sql:" + updateSql);
 					stmt.close();			   
 			   } else if(sCrud.equals("RN")) {
-				    String updateSql      = "UPDATE MDDB.TB_SCHEDULE_COL \n";
+				    String updateSql      = "UPDATE TB_SCHEDULE_COL \n";
 				    updateSql = updateSql + "   SET COL_SEQ  = " + sColSeq  + "   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND JOB_ID =   " + sJobId  + "  \n ";

@@ -95,7 +95,7 @@ public class SetDaemon extends HttpServlet {
 				
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO MDDB.TB_DAEMON (DAEMON_NM, DAEMON_IP, DAEMON_PORT, DAEMON_DESC, DAEMON_STAT_CD, DAEMON_RESTART_YN, USE_YN) \n";
+				    String insertSql = "INSERT INTO TB_DAEMON (DAEMON_NM, DAEMON_IP, DAEMON_PORT, DAEMON_DESC, DAEMON_STAT_CD, DAEMON_RESTART_YN, USE_YN) \n";
 					insertSql = insertSql + "VALUES ( '" + sDaemonNm + "', '" + sDaemonIp + "', " + sDaemonPort + ", '" + sDaemonDesc + "', '" + sDaemonStatCd + "','" + sAutoRestartYn  + "', 'Y' )";
 		
 					stmt = connectionDest.createStatement();
@@ -115,7 +115,7 @@ public class SetDaemon extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "UPDATE MDDB.TB_DAEMON \n";
+				    String updateSql      = "UPDATE TB_DAEMON \n";
 				    updateSql = updateSql + "   SET USE_YN  = 'N'   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND DAEMON_ID =   " + sDaemonId  + "   \n ";
@@ -127,7 +127,7 @@ public class SetDaemon extends HttpServlet {
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE MDDB.TB_DAEMON \n";
+				    String updateSql      = "UPDATE TB_DAEMON \n";
 				    updateSql = updateSql + "   SET DAEMON_NM       = '" + sDaemonNm      + "'   \n ";
 					updateSql = updateSql + "      ,DAEMON_IP       = '" + sDaemonIp      + "'    \n ";
 					updateSql = updateSql + "      ,DAEMON_PORT     =  " + sDaemonPort    + "    \n ";
