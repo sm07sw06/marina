@@ -109,7 +109,7 @@
 		$('#F_GPSY1'       ).val("");
 		$('#F_GPSY2'       ).val("");
 		$('#F_SECTOR_DESC' ).val("");
-		$('#CRUD'         ).val("C");
+		$('#CRUD'          ).val("C");
 		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
 		$("input#F_SECTOR_NAME").focus();
 	});
@@ -125,6 +125,7 @@
 		obj.gpsy1       = $("input#F_GPSY1").val();
 		obj.gpsy2       = $("input#F_GPSY2").val();
 		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
+		obj.crud        = $("#CRUD").val();
 
 		if(obj.sector_nm == ''){
 			alert("[알림] 구역명을 입력하세요.");
@@ -241,23 +242,27 @@
 	'<rMateGrid>\
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
-			<columns>\
+			<groupedColumns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="SECTOR_ID"   id="colScetorId" width="80"/>\
-				<DataGridColumn dataField="SECTOR_NAME" id="colSectorName" headerText="이름" width="200"/>\
-				<DataGridColumn dataField="GPSX1"       id="colGpsx1" width="100"/>\
-				<DataGridColumn dataField="GPSX2"       id="colGpsx2" width="100" />\
-				<DataGridColumn dataField="GPSY1"       id="colGpsy1" width="100"/>\
-				<DataGridColumn dataField="GPSY2"       id="colGpsy2" width="100"/>\
-				<DataGridColumn dataField="SECTOR_DESC" id="colSectorDesc" width="500"/>\
-			</columns>\
+				<DataGridColumn dataField="SECTOR_ID"   id="colScetorId"   	headerText="ID"  width="100"  visible="false"   />\
+				<DataGridColumn dataField="SECTOR_NAME" id="colSectorName" 	headerText="이름" width="200"/>\
+				<DataGridColumnGroup headerText="위도">\
+					<DataGridColumn dataField="GPSX1"       id="colGpsx1" 	headerText="시작" width="100"/>\
+					<DataGridColumn dataField="GPSX2"       id="colGpsx2" 	headerText="끝" width="100" />\
+				</DataGridColumnGroup>\
+				<DataGridColumnGroup headerText="경도">\
+					<DataGridColumn dataField="GPSY1"       id="colGpsy1" 	headerText="시작" width="100"/>\
+					<DataGridColumn dataField="GPSY2"       id="colGpsy2" 	headerText="끝" width="100"/>\
+				</DataGridColumnGroup>\
+				<DataGridColumn dataField="SECTOR_DESC" id="colSectorDesc" 	headerText="설명" width="500"/>\
+			</groupedColumns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
 			</dataProvider>\
 		</DataGrid>\
 	</rMateGrid>';
 
-	// 페이징 관련 자바스크립트
+	// 페이징 관련 자바스크립트  visible="false"  
 	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
 
 	var gridRowsPerPage;	// 1페이지에서 보여줄 행 수
@@ -353,4 +358,5 @@
 	}
 	
 
+	$("input#F_SECTOR_NAME").focus();
 	

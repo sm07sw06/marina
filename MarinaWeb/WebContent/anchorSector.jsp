@@ -219,10 +219,6 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SECTOR_DESC" id="F_SECTOR_DESC" ></textarea>
 										</div>
 									</div>
-	
-	<button id = "find-me">Show my location</button><br/>
-<p id = "status"></p>
-<a id = "map-link" target="_blank"></a>
 
 								</form>
 							</div> <!-- panel-body  -->

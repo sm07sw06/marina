@@ -1,238 +1,193 @@
-$(document).ready(function() {
-	
+	// ----------------------- 그리드 설정 시작 -------------------------------------
+
+	// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+	var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+	//rMateGrid 관련 객체
+	var collection;	// 그리드의 데이터 객체
+	var cnt=0;
+	//var gridData = [];
+	var jsonObj = new Object();
+
+
+	// rMateDataGrid 를 생성합니다.
+	// 파라메터 (순서대로)
+	//  1. 그리드의 id ( 임의로 지정하십시오. )
+	//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+	//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+	//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+	//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+	rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+
+	// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+	// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+	// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+	// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+	function gridReadyHandler(id) {
+		var gridData = [];
+		// rMateGrid 관련 객체
+		gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+		gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+		gridApp.setLayout(layoutStr);
+		gridApp.setData(gridData);
+
+		var layoutCompleteHandler = function(event) {
+			dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+		}
+		// 사용자가 import를 완료하면 불려집니다.
+		var dataCompleteHandler = function() {
+			collection = gridRoot.getCollection();
+			gridMovePage(1);
+		}
+
+		refreshData();
+		
+		gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+		gridRoot.addEventListener("dataComplete", dataCompleteHandler);
+		gridRoot.addEvent("dblclick", dblclickHandler);
+		
+	}
+
+	var gridApp, gridRoot;	// 데이터와 그리드를 포함하는 객체
+	var dataGrid;	// 그리드
+
+	//레이아웃 로드 완료 이벤트 핸들러 함수
+	function dblclickHandler(event) {
+		if(dataGrid.getSelectedIndex() >= 0 ) {
+			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
+			$('#F_SECTOR_NAME').val(dataGrid.getSelectedItem().SECTOR_NAME);
+			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
+			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
+			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
+			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
+			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
+			$('#CRUD').val("U");
+		}
+	}
 
 	function refreshData()  
 	{
-		var Obj = new Object();
+		var gridData = [];
+		jsonObj = {};
 
-		Obj.__user_cd = '*';
-		Obj.__user_nm =  $('#C_USER_NM').val();
-		Obj.__rows     = "20";
-		Obj.__page     = "1" ;
+		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
+		jsonObj.__sector_id = '*';
+		jsonObj.__rows      = '20';
+		jsonObj.__page      = '1';
 
-		$('#CRUD').val("U")
-
-		console.log("__user_cd:"+Obj.__user_cd)
-		console.log("__user_nm:"+Obj.__user_nm)
-
-        $('#F_USER_ID'  ).val("");
-        $('#F_USER_CD'  ).val("");
-        $('#F_USER_NM'  ).val("");
-        $('#F_TELEPHONE').val("");
-        $('#F_EMAIL'    ).val("");
-        $('#F_PASSWORD' ).val("");
-        $('#F_PASSWORDORG').val("XXXXX");
-        $('#F_USER_ID'  ).val("");
-        $('#F_APPROWAITCNT').val("");
-        $('input[name="F_USE_YN"]').val(["Y"]);        
-        $('#CRUD'     ).val("U");
-        $('#F_USER_CD'  ).attr("readonly", true ); //설정
-        
-		var columns1 = [
-				{name:'USER_CD'     , width: 100 },
-				{name:'USER_NM'     , width: 100 },		
-				{name:'TELEPHONE'   , width: 100 },		
-				{name:'PASSWORD'    , width: 100 ,hidden: true},		
-				{name:'PASSWORDORG' , width: 100 ,hidden: true},		
-				{name:'EMAIL'       , width: 100 },		
-				{name:'USER_ID'     , width: 100 ,hidden: true},		
-				{name:'APPROWAITCNT', width: 100 ,hidden: true},		
-		   		{name:'USE_YN'     , width:  50, 
-		   			edittype: 'select', 
-	                formatter: 'select',
-	                align:'center',
-	                editable:true,                
-	                editoptions:{value: getUseSelectOptions()}
-		   		},		
-				{name:'PICTURE', width: 100 ,hidden: true}		
-			];
-
-		$("#jqGrid").jqGrid({
-			url:"GetUserList",
-			datatype: 'json',
-			mtype: 'POST',
-			postData : {param:JSON.stringify(Obj)},
-			loadComplete : function (data) {
-				$.each(data, function(index, value) {
-					if(index == "total") {
-					}
-				});
-			},
-			colNames:['사용자번호', '이름', '연락처', '비밀번호','비밀번호원본', '이메일', '아이디', '메세지수','사용여부','사진'],
-			hoverrows : false,
-			Regional:'ko',
-			pager: "#jqGridPager",
-			height: 400,
-			rowNum: 20,
-			viewrecords: true, // show the current page, data rang and total records on the toolbar
-			autowidth : true,
-			pageModel: { type: 'local', rPP: 20, rPPOptions: [1, 10, 20, 30, 40, 50, 100] },
-			scrollModel: { lastColumn: null },
-			colModel: columns1,
-			numberCell: { resizable: true, width: 40, title: "#", minWidth: 25 },
-			resizable: true, 
-			loadonce: true,
-			ondblClickRow : function(rowId, iRow, iCol, e) {
-				var curPage =  $("#jqGrid").getGridParam("page");
-				var pageSize = $("#jqGrid").getGridParam("rowNum");
-				var curRowNum = parseInt((curPage-1)*pageSize) + parseInt(rowId); 
-				console.log("curPage:"+curPage + " " + "pageSize:"+pageSize + " " + "curRowNum:"+curRowNum + " " );
-				loadInfo(rowId, pageSize, curPage);
+		$.ajax({
+		   	url:"GetAnchorSectorList",
+			data:{param:JSON.stringify(jsonObj)},
+			type:"post",
+		   	dataType:"json",
+			success: function(json_data) {
+		        if(json_data.result == 'OK') {
+			   		$.each(json_data.rows, function(index, value) {
+			   			gridData.push(value);
+			   		});
+				} else {
+					console.log(json_data.result); 
+				}
 			}
-		}).trigger("reloadGrid");
-		jQuery("#jqGrid").jqGrid('navGrid','#jqGridPager',{edit:false,add:false,del:false});
+		});	
+		gridApp.clear();
+		gridApp.setLayout(layoutStr);
+		gridApp.setData(gridData);
 	}
+	
 
-    $('#btnQuery').click(function (e) {
-		$("#userDivID").replaceWith(function () {
-			  return "<div id= 'userDivID'><table id='jqGrid'></table><div id='jqGridPager'></div></div>";
-		});
-		refreshData();	
-	});
-
-	$('#btnAdd').click(function (e) {
-        $('#F_USER_ID'  ).val("");
-        $('#F_USER_CD'  ).val("");
-        $('#F_USER_NM'  ).val("");
-        $('#F_TELEPHONE').val("");
-        $('#F_PASSWORD' ).val("");
-        $('#F_PASSWORDORG').val("XXXXX");
-        $('#F_EMAIL'  ).val("");
-        $('#F_APPROWAITCNT').val("");
-        $('input[name="F_USE_YN"]').val(["Y"]);        
-        $('#CRUD'     ).val("C");
-        $('#F_USER_CD'  ).attr("readonly", false ); //설정
-        $('#F_PICTURE'  ).attr("src", "assets/images/200x150.png" ); //설정	
-        
+	$('#btnQuery').click(function (e) {
+		refreshData();
 	});
 	
-	$('#btnDelete').click(function (e) {
-		var formData = new FormData();
+	$('#btnAdd').click(function (e) {
+		$('#F_SECTOR_ID'   ).val("");
+		$('#F_SECTOR_NAME' ).val("");
+		$('#F_GPSX1'       ).val("");
+		$('#F_GPSX2'       ).val("");
+		$('#F_GPSY1'       ).val("");
+		$('#F_GPSY2'       ).val("");
+		$('#F_SECTOR_DESC' ).val("");
+		$('#CRUD'          ).val("C");
+		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
+		$("input#F_SECTOR_NAME").focus();
+	});
 
-		$('#CRUD'     ).val("D");
+	$('#btnSave').click(function (e) {
+		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.user_id     = $("input#F_USER_ID").val();
-		obj.user_nm     = $("input#F_USER_NM").val();
+		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.sector_name = $("input#F_SECTOR_NAME").val();
+		obj.gpsx1       = $("input#F_GPSX1").val();
+		obj.gpsx2       = $("input#F_GPSX2").val();
+		obj.gpsy1       = $("input#F_GPSY1").val();
+		obj.gpsy2       = $("input#F_GPSY2").val();
+		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
+		obj.crud        = $("#CRUD").val();
 
-		if(obj.user_id == ''){
-			alert("[알림] 삭제할 사용자를 선택하세요");
+		if(obj.sector_nm == ''){
+			alert("[알림] 구역명을 입력하세요.");
+			$("input#F_SECTOR_NM").focus();
 		    return;
 		}
 
-		var input = confirm('사용자 ['+ obj.user_nm + ']를 삭제시 복구가 불가능 합니다. 삭제하시겠습니까?');
-		if (!input) return;
-		
-		
-		$("#SetUserForm").ajaxForm({
-			url : 'SetUser',
+		$("#SetSectorForm").ajaxForm({
+			url : 'SetAnchorSector',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
 			success: function(json_data) {
-				alert("정상적으로 처리 되었습니다.");
-		        $('#F_USER_CD'  ).val("");
-		        $('#F_USER_NM'  ).val("");
-		        $('#F_TELEPHONE').val("");
-		        $('#F_EMAIL'    ).val("");
-		        $('#F_PASSWORD' ).val("");
-		        $('#F_PASSWORDORG').val("XXXXX");
-		        $('#F_USER_ID'  ).val("");
-		        $('#F_APPROWAITCNT').val("");
-		        $('#CRUD'     ).val("C");
-		        $('#F_USER_CD'  ).attr("readonly", true ); //설정	
-		        $('#F_PICTURE'  ).attr("src", "assets/images/200x150.png" ); //설정	
-
-				$("#jqGrid").jqGrid('delRowData', $('#ROWID').val());
-			},
-			error : function(data, status){
-		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 서버에서 전달
-		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
-		    			alert("이미 등록되어 있는 아이디 입니다.");
-		    		} else {
-		    			alert("Error");
-		    		}
-		    	}
-			}
-		});	
-		$("#SetUserForm").submit() ;
-	});
-
-	
-	$('#btnSave').click(function (e) {
-		var formData = new FormData();
-
-		var obj = new Object();
-		obj.user_cd     = $("input#F_USER_CD").val();
-		obj.user_nm     = $("input#F_USER_NM").val();
-		obj.password    = $("input#F_PASSWORD").val();
-		
-		if(obj.user_cd == ''){
-			alert("[알림] 사용자ID를 입력하세요.");
-			$("input#F_USER_CD").focus();
-		    return;
-		}
-
-		if(obj.user_nm == ''){
-			alert("[알림] 사용자이름을 입력하세요.");
-			$("input#F_USER_NM").focus();
-		    return;
-		}
-
-		if(obj.password == ''){
-			alert("[알림] 비밀번호를  입력하세요.");
-			$("input#F_PASSWORD").focus();
-		    return;
-		}
-
-		$("#SetUserForm").ajaxForm({
-			url : 'SetUser',
-			dataType:'json',
-			enctype : "multipart/form-data",
-			type: 'post',
-//			data:{param:JSON.stringify(obj)},
-			success: function(json_data) {
- 				if (obj.crud == "U" ) {		
-					console.log('grid update.........');
-					var rowData = $('#jqGrid').jqGrid('getRowData', $('#ROWID').val());
-					rowData.USER_ID= obj.user_id; 
-					rowData.USER_CD= obj.user_cd; 
-					rowData.USER_NM= obj.user_nm; 
-					rowData.TELEPHONE= obj.telephone; 
-					rowData.EMAIL= obj.email; 
-					rowData.PASSWORD= obj.password; 
-					rowData.APPROWAITCNT= obj.approwaitcnt; 
-					rowData.USE_YN= obj.use_yn; 
-					$('#jqGrid').jqGrid('setRowData', $('#ROWID').val(), rowData)
-				} else {
-					console.log('grid append.........');
-					var ids = $('#jqGrid').getDataIDs();
-					var idsLen = ids.length + 1;
-					
-					$('#jqGrid').jqGrid('addRowData',idsLen,{});	
-					var ids2 = $('#jqGrid').getDataIDs();
-					var rowData = $('#jqGrid').jqGrid('getRowData', idsLen);
-					rowData.USER_ID = json_data.genKey;
-					rowData.USER_CD= obj.user_cd; 
-					rowData.USER_NM= obj.user_nm; 
-					rowData.TELEPHONE= obj.telephone; 
-					rowData.EMAIL= obj.email; 
-					rowData.PASSWORD= obj.password; 
-					rowData.APPROWAITCNT= obj.approwaitcnt; 
-					rowData.USE_YN= obj.use_yn;
-//					$('#F_PICTURE'  ).attr("src", "assets/images/200x150.png" ); //설정						
-					$('#jqGrid').jqGrid('setRowData',idsLen, rowData)	
-					
-					$('#btnQuery').click();
-				} 
-			//	$('#btnQuery').click();
+				$('#btnQuery').click();
 				$('#btnAdd').click();
 				alert("정상적으로 처리 되었습니다.");
 			},
 			error : function(data, status){
 		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 서버에서 전달
+		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
+		    			alert("이미 등록되어 있는 아이디 입니다.");
+		    		} else {
+		    			alert("Error");
+		    		}
+		    	}
+			}
+		});	
+		$("#SetSectorForm").submit() ;
+	});
+
+	$('#btnDelete').click(function (e) {
+		var formData = new FormData();
+		
+		var obj = new Object();
+		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.crud        = "D";
+		
+		var input = confirm('삭제하시겠습니까?'); 
+		if(!input) return;
+
+		if(obj.sector_id == ''){
+			alert("[알림] 구역를 선택하세요.");
+			$("input#F_SECTOR_NAME").focus();
+		    return;
+		}
+		
+		console.log('F_SECTOR_ID:'+ obj.sector_id);
+		console.log('sCrud:'+ obj.crud);
+
+		$("#SetSectorForm").ajaxForm({
+			url : 'SetAnchorSector',
+			dataType:'json',
+			type: 'post',
+			data : {param:JSON.stringify(obj)},
+			success: function(json_data) {
+				$('#btnQuery').click();
+				$('#btnAdd').click();
+				alert("정상적으로 처리 되었습니다.");
+			},
+			error : function(data, status){
+		    	if (data != null){
+		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
 		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
 		    			alert("이미 등록되어 있는 아이디 입니다.");
 		    		} else {
@@ -241,45 +196,165 @@ $(document).ready(function() {
 		    	}
 			}
 		});	
-		$("#SetUserForm").submit() ;
+		$("#SetSectorForm").submit() ;
 	});
-
-
-	function loadInfo(rowId, currentRow, currentPage) { // user_id, user_cd, user_nm, save_preq_cd, save_preq, description, use_yn) {
-		
-		var selectdRow = $("#jqGrid").jqGrid('getRowData', rowId);
-
-		console.log( "rowId:" + rowId);
-
-		$('#ROWID').val(rowId);
-		
-        $('#F_USER_CD'  ).val(selectdRow.USER_CD);
-        $('#F_USER_NM'  ).val(selectdRow.USER_NM);
-        $('#F_TELEPHONE').val(selectdRow.TELEPHONE);
-        $('#F_EMAIL').val(selectdRow.EMAIL);
-        $('#F_PASSWORD' ).val(selectdRow.PASSWORD);
-        $('#F_PASSWORDORG').val(selectdRow.PASSWORDORG);
-        $('#F_USER_ID'  ).val(selectdRow.USER_ID);
-        $('#F_APPROWAITCNT').val(selectdRow.APPROWAITCNT);
-		$('input[name="F_USE_YN"]').val([selectdRow.USE_YN]);
-        $('#CRUD'     ).val("U");
-        $('#F_USER_CD'  ).attr("readonly", true ); //설정		   
-        
-        console.log( "selectdRow.PICTURE:" + selectdRow.PICTURE.trim());
-        
-        if ( selectdRow.PICTURE.trim() == "" || selectdRow.PICTURE == 'null' ) { 
-        	//console.log('111111');
-        	$('#F_PICTURE').attr('src', "assets/images/" + "200x150.png");
-        	$('.fileinput .fileinput-preview img').attr('src', "assets/images/" + "200x150.png");
-        } else {
-        	//console.log('222222');
-        	$('#F_PICTURE').attr('src', "userImages/" + selectdRow.PICTURE);
-        	$('.fileinput .fileinput-preview img').attr('src', "userImages/" + selectdRow.PICTURE);
-        }
-	};	
 	
-	refreshData();
 	
-	$("#searchVal").focus();
+	// 엑셀 export
+	// excelExportSave(url:String, async:Boolean);
+//	    url : 업로드할 구역의 url, 기본값 null
+//	    async : 비동기 모드로 수행여부, 기본값 false
+	function excelExport() {
+		// PagingCollection의 rowsPerPage를 0으로 세팅하여 전체 데이터를 보여주도록 하며 현재 페이지 번호를 저장합니다.
+		var rowsPerPage = collection.getRowsPerPage();
+		var currentPage = collection.getCurrentPage();
+		collection.setRowsPerPage(0);
+		// colNo 컬럼의 indexStartNo를 1로 초기화 해줍니다.
+		var colNo = gridRoot.getObjectById("colNo");
+		if (colNo)
+			colNo.indexStartNo = 1;
 
-});
+		dataGrid.exportOnlyData = inputForm.dataOnly.checked;
+
+		// excel 파일 종류 지정
+		for (var i = 0; i < inputForm.export_type.length; i++) {
+			if (inputForm.export_type[i].checked) {
+				dataGrid.exportType = inputForm.export_type[i].value;
+				break;
+			}
+		}
+		dataGrid.exportFileName = "export." + dataGrid.exportType;
+
+		gridRoot.addEventListener("exportSaveComplete", function() {
+				// 내보내기 후에 불려져서 PagingCollection의 rowsPerPage, currentPage와 colNo컬럼의 indexStartNo를 원복합니다.
+				collection.setRowsPerPage(rowsPerPage);
+				collection.setCurrentPage(currentPage);
+				if (colNo)
+					colNo.indexStartNo = (currentPage - 1) * rowsPerPage + 1;
+			}
+		);
+		gridRoot.excelExportSave("http://demo.riamore.net/demo/grid/saveExcel.jsp", false);
+	}
+
+	//----------------------- 그리드 설정 끝 -----------------------
+
+	var layoutStr =
+	'<rMateGrid>\
+		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
+			<groupedColumns>\
+				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"   headerText="ID"  width="100"     />\
+				<DataGridColumn dataField="USER_NM" 	 id="colSectorName" headerText="이름" width="200"/>\
+				<DataGridColumn dataField="TELEPHONE"    id="colGpsx1" 		headerText="시작" width="100"/>\
+				<DataGridColumn dataField="EMAIL"        id="colGpsy2" 		headerText="끝" width="100"/>\
+				<DataGridColumn dataField="USER_ID"      id="colGpsy2" 		headerText="끝" width="100"  visible="false"  />\
+				<DataGridColumn dataField="APPROWAITCNT" id="colGpsy2" 		headerText="끝" width="100"  visible="false"  />\
+				<DataGridColumn dataField="PASSWORD"     id="colGpsx2" 		headerText="끝" width="100"   visible="false"  />\
+				<DataGridColumn dataField="PASSWORDORG"  id="colGpsy1" 		headerText="시작" width="100"  visible="false"  />\
+				<DataGridColumn dataField="USE_YN" 		 id="colUseYn" width="80"/>\
+			</groupedColumns>\
+			<dataProvider>\
+				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
+			</dataProvider>\
+		</DataGrid>\
+	</rMateGrid>';
+
+	// 페이징 관련 자바스크립트  visible="false"  
+	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
+
+	var gridRowsPerPage;	// 1페이지에서 보여줄 행 수
+	var gridViewPageCount = 10;		// 페이지 네비게이션에서 보여줄 페이지의 수
+	var gridCurrentPage;	// 현재 페이지
+	var gridTotalPage;	// 전체 페이지 계산
+
+	// 화면에 표시할 맨앞으로 와 맨뒤로, 앞으로, 뒤로 문구 - 이미지를 쓸 경우 img 태그로 대체
+	var gridStartTxt = "≪";
+	var gridEndTxt = "≫";
+	var gridPrevTxt = "◀";
+	var gridNextTxt = "▶";
+	var gridPageGapTxt = " ";	// 페이지 사이의 구분을 위한 문자 - 사용하지 않을 경우 공백을 넣습니다.
+
+	// 주어진 페이지 번호에 따라 페이지 네비게이션 html을 만들고 gridPageNavigationDiv에 innerHTML로 넣어줍니다.
+	function drawGridPagingNavigation(goPage) {
+		if (gridTotalPage == 0) {
+			gridPageNavigationDiv.innerHTML = "<span class='gridPagingDisable'>" + gridStartTxt + "</span> <span class='gridPagingDisable'>" + gridPrevTxt + "</span> <span class='gridPagingDisable'>" + gridNextTxt + "</span> <span class='gridPagingDisable'>" + gridEndTxt + "</span>";
+			return;
+		}
+
+		var retStr = "";
+		var prepage = parseInt((goPage - 1)/gridViewPageCount) * gridViewPageCount;
+		var nextpage = ((parseInt((goPage - 1)/gridViewPageCount)) * gridViewPageCount) + gridViewPageCount + 1;
+
+		// 맨앞으로
+		retStr += "<span class="; 	
+		if (goPage > 1) {
+			retStr += "'gridPagingMove'><a href='javascript:gridMovePage(1)'>" + gridStartTxt + "</a></span> ";
+		} else {
+			retStr += "'gridPagingDisable'>" + gridStartTxt + "</span> ";
+		}
+
+		// 앞으로
+		retStr += "<span class=";
+		if (goPage > gridViewPageCount) {
+			retStr += "'gridPagingMove'><a href='javascript:gridMovePage(" + prepage + ")'>" + gridPrevTxt + "</a></span>&nbsp; ";
+		} else {
+			retStr += "'gridPagingDisable'>" + gridPrevTxt + "</span>&nbsp; ";
+		}
+
+		for (var i = (1 + prepage); i < gridViewPageCount + 1 + prepage; i++) {
+			if (goPage == i) {
+				retStr += "<span class='gridPagingCurrent'>";
+				retStr += i;
+				retStr += "</span>";
+			} else {
+				retStr += "<span>";
+				retStr += "<a href='javascript:gridMovePage(" + i + ")'>" + i + "</a>";
+				retStr += "</span>";
+			}
+
+			if (i >= gridTotalPage) {
+				retStr += " ";
+				break;
+			}
+
+			if (i == gridViewPageCount + prepage)
+				retStr += " ";
+			else
+				retStr += gridPageGapTxt;
+		}
+
+		// 뒤로
+		retStr += "&nbsp;<span class=";
+		if (nextpage <= gridTotalPage) {
+			retStr += "'gridPagingMove'><a href='javascript:gridMovePage(" + nextpage + ")'>" + gridNextTxt + "</a></span> ";
+		} else {
+			retStr += "'gridPagingDisable'>" + gridNextTxt + "</span> ";
+		}
+
+		// 맨뒤로
+		retStr += "<span class=";
+		if (goPage != gridTotalPage) {
+			retStr += "'gridPagingMove'><a href='javascript:gridMovePage(" + gridTotalPage + ")'>" + gridEndTxt + "</span>";
+		} else {
+			retStr += "'gridPagingDisable'>" + gridEndTxt + "</span>";
+		}
+		gridPageNavigationDiv.innerHTML = retStr;
+	}
+
+	function gridMovePage(goPage) {
+		gridTotalRowCount = collection.getTotalLength();
+		gridRowsPerPage = collection.getRowsPerPage();
+		gridTotalPage = collection.getTotalPageCount();
+		gridCurrentPage = goPage <= gridTotalPage ? goPage : gridTotalPage;
+
+		drawGridPagingNavigation(gridCurrentPage);
+		collection.setCurrentPage(gridCurrentPage);
+		var colNo = gridRoot.getObjectById("colNo");
+		if (colNo)
+			colNo.indexStartNo = (gridCurrentPage - 1) * gridRowsPerPage + 1;
+	}
+	
+
+	$("input#F_SECTOR_NAME").focus();
+	

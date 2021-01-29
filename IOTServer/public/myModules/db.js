@@ -128,24 +128,23 @@ function larva(sData) {
 //정박지 데이터 분석 처리
 function anchordata(sData) {
 
-	var sId       = sData[0];
-	var sIp       = sData[1];
-	var nDistance = sData[2];
+	var sId          = sData[0];
+	var nTemperature = sData[1];
+	var nHumidity    = sData[2];
+	var nDistance    = sData[3];
+	var sSendtime    = sData[4];
 	var sStatus   = "";
 
-	if(nDistance === "")  { nDistance = 0; }
+	if(nTemperature === "")  { nTemperature = 0; }
+	if(nHumidity    === "")  { nHumidity = 0; }
+	if(nDistance    === "")  { nDistance = 0; }
 
 	logger.info('Start anchordata........');
 	logger.info("  nDistance:" + nDistance);
 
-	if ( nDistance < 100) { // 버트 계류시 상태변경 ==> status : 1
-		sStatus = '1';
-	} else {
-		sStatus = '0';
-	}
- 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString = "INSERT INTO public.anchordata(machine_id, anchor_status, sendtime) values('" + sId + "','"  + sStatus + "',"  + moment().format('YYYYMMDDHHmmss') + " );";
+	var sQueryString  = "INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) ";
+	    sQueryString += "values('" + sId + "','"  + sSendtime + "',"  + nTemperature + ","  + nHumidity + ","  + nDistance + "  );";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,(err, res) => {

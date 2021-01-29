@@ -106,19 +106,23 @@ public class GetAnchorSectorList extends HttpServlet {
 				
 				datas.put("SECTOR_ID"   	, rs.getString("SECTOR_ID"));	
 				datas.put("SECTOR_NAME"   	, rs.getString("SECTOR_NAME"));	
+				datas.put("SECTOR_DESC"   	, rs.getString("SECTOR_DESC"));	
 
 				if (!StringUtils.isEmpty(rs.getString("GPSX1"))) 
 					datas.put("GPSX1" , rs.getString("GPSX1"));	
 				else
 					datas.put("GPSX1" , "0" );
+				
 				if (!StringUtils.isEmpty(rs.getString("GPSX2"))) 
 					datas.put("GPSX2" , rs.getString("GPSX2"));	
 				else
 					datas.put("GPSX2" , "0" );
+				
 				if (!StringUtils.isEmpty(rs.getString("GPSY1"))) 
 					datas.put("GPSY1" , rs.getString("GPSY1"));	
 				else
 					datas.put("GPSY1" , "0" );
+				
 				if (!StringUtils.isEmpty(rs.getString("GPSY2"))) 
 					datas.put("GPSY2" , rs.getString("GPSY2"));	
 				else

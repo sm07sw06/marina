@@ -28171,3 +28171,344 @@ SyntaxError: Unexpected number in JSON at position 83
     at doWrite (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:428:64)
     at writeOrBuffer (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:417:5)
     at Writable.write (D:\workspaceiot\marina\IOTServer\node_modules\readable-stream\lib\_stream_writable.js:334:11)
+2021-01-29T06:48:25.212Z [winston-test] info: Start anchordata........
+2021-01-29T06:48:25.213Z [winston-test] info:   nDistance:115
+2021-01-29T06:48:25.214Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('F832E4878CBC','20210129154822',28,9,115  );
+2021-01-29T06:48:25.264Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:48:25.264Z [winston-test] info:   sId:F832E4878CBC
+2021-01-29T06:48:25.264Z [winston-test] info:   sIp:28
+2021-01-29T06:48:25.264Z [winston-test] info:   nDistance:9
+2021-01-29T06:48:25.265Z [winston-test] info: boat is anchored !!
+2021-01-29T06:48:25.265Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:48:25.266Z [winston-test] info:   GetBoatDataSearch Device: F832E4878CBC
+2021-01-29T06:48:25.266Z [winston-test] info:   GetBoatDataSearch time  : 115
+2021-01-29T06:48:25.266Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:48:25.266Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = 'F832E4878CBC'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('115',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('115',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:48:25.268Z [winston-test] info: Start anchordata........
+2021-01-29T06:48:25.269Z [winston-test] info:   nDistance:20210129154824
+2021-01-29T06:48:25.269Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,42.93,20210129154824  );
+2021-01-29T06:48:25.269Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:48:25.269Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:48:25.270Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:48:25.270Z [winston-test] info:   nDistance:42.93
+2021-01-29T06:48:25.270Z [winston-test] info: boat is anchored !!
+2021-01-29T06:48:25.270Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:48:25.270Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:48:25.270Z [winston-test] info:   GetBoatDataSearch time  : 20210129154824
+2021-01-29T06:48:25.270Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:48:25.271Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129154824',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129154824',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:48:25.351Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:48:25.366Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:48:25.366Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:48:25.368Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:48:25.372Z [winston-test] error: error: 소스 문자열이 너무 짧아서 "MM" 형식 필드에 사용할 수 없음
+2021-01-29T06:48:55.308Z [winston-test] info: Start anchordata........
+2021-01-29T06:48:55.308Z [winston-test] info:   nDistance:20210129154854
+2021-01-29T06:48:55.308Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,41.71,20210129154854  );
+2021-01-29T06:48:55.310Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:48:55.310Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:48:55.310Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:48:55.310Z [winston-test] info:   nDistance:41.71
+2021-01-29T06:48:55.310Z [winston-test] info: boat is anchored !!
+2021-01-29T06:48:55.310Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:48:55.310Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:48:55.310Z [winston-test] info:   GetBoatDataSearch time  : 20210129154854
+2021-01-29T06:48:55.310Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:48:55.311Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129154854',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129154854',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:48:55.406Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:48:55.406Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:48:55.407Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:49:25.329Z [winston-test] info: Start anchordata........
+2021-01-29T06:49:25.329Z [winston-test] info:   nDistance:20210129154924
+2021-01-29T06:49:25.329Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,42.12,20210129154924  );
+2021-01-29T06:49:25.330Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:49:25.330Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:49:25.330Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:49:25.330Z [winston-test] info:   nDistance:42.12
+2021-01-29T06:49:25.330Z [winston-test] info: boat is anchored !!
+2021-01-29T06:49:25.330Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:49:25.331Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:49:25.331Z [winston-test] info:   GetBoatDataSearch time  : 20210129154924
+2021-01-29T06:49:25.331Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:49:25.331Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129154924',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129154924',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:49:25.427Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:49:25.429Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:49:25.430Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:49:55.361Z [winston-test] info: Start anchordata........
+2021-01-29T06:49:55.361Z [winston-test] info:   nDistance:20210129154954
+2021-01-29T06:49:55.361Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,42.10,20210129154954  );
+2021-01-29T06:49:55.361Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:49:55.362Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:49:55.362Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:49:55.362Z [winston-test] info:   nDistance:42.10
+2021-01-29T06:49:55.362Z [winston-test] info: boat is anchored !!
+2021-01-29T06:49:55.362Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:49:55.362Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:49:55.362Z [winston-test] info:   GetBoatDataSearch time  : 20210129154954
+2021-01-29T06:49:55.362Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:49:55.362Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129154954',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129154954',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:49:55.456Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:49:55.465Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:49:55.466Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:50:25.355Z [winston-test] info: Start anchordata........
+2021-01-29T06:50:25.355Z [winston-test] info:   nDistance:20210129155024
+2021-01-29T06:50:25.356Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,42.10,20210129155024  );
+2021-01-29T06:50:25.356Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:50:25.356Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:50:25.356Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:50:25.356Z [winston-test] info:   nDistance:42.10
+2021-01-29T06:50:25.356Z [winston-test] info: boat is anchored !!
+2021-01-29T06:50:25.356Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:50:25.356Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:50:25.356Z [winston-test] info:   GetBoatDataSearch time  : 20210129155024
+2021-01-29T06:50:25.356Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:50:25.356Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129155024',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129155024',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:50:25.448Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:50:25.461Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:50:25.462Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:50:55.438Z [winston-test] info: Start anchordata........
+2021-01-29T06:50:55.439Z [winston-test] info:   nDistance:20210129155054
+2021-01-29T06:50:55.439Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,41.28,20210129155054  );
+2021-01-29T06:50:55.439Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:50:55.440Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:50:55.440Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:50:55.440Z [winston-test] info:   nDistance:41.28
+2021-01-29T06:50:55.440Z [winston-test] info: boat is anchored !!
+2021-01-29T06:50:55.440Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:50:55.440Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:50:55.440Z [winston-test] info:   GetBoatDataSearch time  : 20210129155054
+2021-01-29T06:50:55.441Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:50:55.441Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129155054',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129155054',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:50:55.533Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:50:55.538Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:50:55.538Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:51:25.487Z [winston-test] info: Start anchordata........
+2021-01-29T06:51:25.487Z [winston-test] info:   nDistance:20210129155124
+2021-01-29T06:51:25.487Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','undefined',192.168.123.108,42.12,20210129155124  );
+2021-01-29T06:51:25.487Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:51:25.487Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:51:25.488Z [winston-test] info:   sIp:192.168.123.108
+2021-01-29T06:51:25.488Z [winston-test] info:   nDistance:42.12
+2021-01-29T06:51:25.488Z [winston-test] info: boat is anchored !!
+2021-01-29T06:51:25.488Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:51:25.488Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:51:25.488Z [winston-test] info:   GetBoatDataSearch time  : 20210129155124
+2021-01-29T06:51:25.488Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:51:25.488Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129155124',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129155124',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:51:25.575Z [winston-test] error: error: 구문 오류, ".123" 부근
+2021-01-29T06:51:25.583Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:51:25.583Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:52:13.961Z [winston-test] info: Start anchordata........
+2021-01-29T06:52:13.961Z [winston-test] info:   nDistance:41.71
+2021-01-29T06:52:13.961Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155213',20,10,41.71  );
+2021-01-29T06:52:13.961Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:52:13.961Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:52:13.961Z [winston-test] info:   sIp:20
+2021-01-29T06:52:13.961Z [winston-test] info:   nDistance:10
+2021-01-29T06:52:13.961Z [winston-test] info: boat is anchored !!
+2021-01-29T06:52:13.962Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:52:13.962Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:52:13.962Z [winston-test] info:   GetBoatDataSearch time  : 41.71
+2021-01-29T06:52:13.962Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:52:13.962Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('41.71',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('41.71',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:52:14.059Z [winston-test] error: error: "41.7" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:52:14.065Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:52:44.032Z [winston-test] info: Start anchordata........
+2021-01-29T06:52:44.033Z [winston-test] info:   nDistance:41.71
+2021-01-29T06:52:44.033Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155243',20,10,41.71  );
+2021-01-29T06:52:44.033Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:52:44.033Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:52:44.033Z [winston-test] info:   sIp:20
+2021-01-29T06:52:44.033Z [winston-test] info:   nDistance:10
+2021-01-29T06:52:44.033Z [winston-test] info: boat is anchored !!
+2021-01-29T06:52:44.033Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:52:44.034Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:52:44.034Z [winston-test] info:   GetBoatDataSearch time  : 41.71
+2021-01-29T06:52:44.034Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:52:44.034Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('41.71',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('41.71',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:52:44.140Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:52:44.147Z [winston-test] error: error: "41.7" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:53:14.029Z [winston-test] info: Start anchordata........
+2021-01-29T06:53:14.029Z [winston-test] info:   nDistance:41.72
+2021-01-29T06:53:14.029Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155313',20,10,41.72  );
+2021-01-29T06:53:14.029Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:53:14.030Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:53:14.030Z [winston-test] info:   sIp:20
+2021-01-29T06:53:14.030Z [winston-test] info:   nDistance:10
+2021-01-29T06:53:14.030Z [winston-test] info: boat is anchored !!
+2021-01-29T06:53:14.030Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:53:14.030Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:53:14.030Z [winston-test] info:   GetBoatDataSearch time  : 41.72
+2021-01-29T06:53:14.030Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:53:14.030Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('41.72',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('41.72',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:53:14.120Z [winston-test] error: error: "41.7" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:53:14.126Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:53:44.117Z [winston-test] info: Start anchordata........
+2021-01-29T06:53:44.118Z [winston-test] info:   nDistance: 8.91
+2021-01-29T06:53:44.118Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155343',20,10, 8.91  );
+2021-01-29T06:53:44.118Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:53:44.118Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:53:44.118Z [winston-test] info:   sIp:20
+2021-01-29T06:53:44.118Z [winston-test] info:   nDistance:10
+2021-01-29T06:53:44.118Z [winston-test] info: boat is anchored !!
+2021-01-29T06:53:44.118Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:53:44.118Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:53:44.118Z [winston-test] info:   GetBoatDataSearch time  :  8.91
+2021-01-29T06:53:44.119Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:53:44.119Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring(' 8.91',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring(' 8.91',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:53:44.227Z [winston-test] error: error: "8.91" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:53:44.230Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:54:14.151Z [winston-test] info: Start anchordata........
+2021-01-29T06:54:14.152Z [winston-test] info:   nDistance:16.84
+2021-01-29T06:54:14.152Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155413',20,10,16.84  );
+2021-01-29T06:54:14.152Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:54:14.152Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:54:14.152Z [winston-test] info:   sIp:20
+2021-01-29T06:54:14.153Z [winston-test] info:   nDistance:10
+2021-01-29T06:54:14.153Z [winston-test] info: boat is anchored !!
+2021-01-29T06:54:14.153Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:54:14.153Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:54:14.153Z [winston-test] info:   GetBoatDataSearch time  : 16.84
+2021-01-29T06:54:14.153Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:54:14.153Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:54:14.242Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:54:14.246Z [winston-test] error: error: "16.8" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:54:44.218Z [winston-test] info: Start anchordata........
+2021-01-29T06:54:44.218Z [winston-test] info:   nDistance:16.86
+2021-01-29T06:54:44.219Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155443',20,10,16.86  );
+2021-01-29T06:54:44.219Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:54:44.219Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:54:44.219Z [winston-test] info:   sIp:20
+2021-01-29T06:54:44.219Z [winston-test] info:   nDistance:10
+2021-01-29T06:54:44.219Z [winston-test] info: boat is anchored !!
+2021-01-29T06:54:44.219Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:54:44.219Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:54:44.219Z [winston-test] info:   GetBoatDataSearch time  : 16.86
+2021-01-29T06:54:44.219Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:54:44.219Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('16.86',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('16.86',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:54:44.314Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:54:44.323Z [winston-test] error: error: "16.8" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:55:14.227Z [winston-test] info: Start anchordata........
+2021-01-29T06:55:14.227Z [winston-test] info:   nDistance:16.84
+2021-01-29T06:55:14.227Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155513',20,10,16.84  );
+2021-01-29T06:55:14.227Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:55:14.227Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:55:14.228Z [winston-test] info:   sIp:20
+2021-01-29T06:55:14.228Z [winston-test] info:   nDistance:10
+2021-01-29T06:55:14.228Z [winston-test] info: boat is anchored !!
+2021-01-29T06:55:14.228Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:55:14.228Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:55:14.228Z [winston-test] info:   GetBoatDataSearch time  : 16.84
+2021-01-29T06:55:14.228Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:55:14.228Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:55:14.316Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:55:14.327Z [winston-test] error: error: "16.8" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:55:44.278Z [winston-test] info: Start anchordata........
+2021-01-29T06:55:44.278Z [winston-test] info:   nDistance:16.86
+2021-01-29T06:55:44.279Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155543',20,10,16.86  );
+2021-01-29T06:55:44.279Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:55:44.279Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:55:44.279Z [winston-test] info:   sIp:20
+2021-01-29T06:55:44.279Z [winston-test] info:   nDistance:10
+2021-01-29T06:55:44.279Z [winston-test] info: boat is anchored !!
+2021-01-29T06:55:44.279Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:55:44.279Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:55:44.279Z [winston-test] info:   GetBoatDataSearch time  : 16.86
+2021-01-29T06:55:44.279Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:55:44.279Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('16.86',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('16.86',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:55:44.365Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:55:44.373Z [winston-test] error: error: "16.8" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:56:14.347Z [winston-test] info: Start anchordata........
+2021-01-29T06:56:14.348Z [winston-test] info:   nDistance:16.84
+2021-01-29T06:56:14.348Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155613',20,10,16.84  );
+2021-01-29T06:56:14.348Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:56:14.348Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:56:14.348Z [winston-test] info:   sIp:20
+2021-01-29T06:56:14.348Z [winston-test] info:   nDistance:10
+2021-01-29T06:56:14.348Z [winston-test] info: boat is anchored !!
+2021-01-29T06:56:14.348Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:56:14.348Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:56:14.348Z [winston-test] info:   GetBoatDataSearch time  : 16.84
+2021-01-29T06:56:14.348Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:56:14.348Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:56:14.442Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:56:14.452Z [winston-test] error: error: "16.8" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:56:44.375Z [winston-test] info: Start anchordata........
+2021-01-29T06:56:44.375Z [winston-test] info:   nDistance:16.84
+2021-01-29T06:56:44.375Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155643',20,10,16.84  );
+2021-01-29T06:56:44.376Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:56:44.376Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:56:44.376Z [winston-test] info:   sIp:20
+2021-01-29T06:56:44.376Z [winston-test] info:   nDistance:10
+2021-01-29T06:56:44.376Z [winston-test] info: boat is anchored !!
+2021-01-29T06:56:44.376Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:56:44.376Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:56:44.376Z [winston-test] info:   GetBoatDataSearch time  : 16.84
+2021-01-29T06:56:44.376Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:56:44.376Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('16.84',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:56:44.482Z [winston-test] error: error: "16.8" 값은 "YYYY"에 유효하지 않음
+2021-01-29T06:56:44.483Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:57:14.398Z [winston-test] info: Start anchordata........
+2021-01-29T06:57:14.399Z [winston-test] info:   nDistance:16.84
+2021-01-29T06:57:14.399Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155713',20,10,16.84  );
+2021-01-29T06:57:14.407Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:57:14.408Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:57:14.408Z [winston-test] info:   sStime:20210129155713
+2021-01-29T06:57:14.408Z [winston-test] info:   nDistance:16.84
+2021-01-29T06:57:14.408Z [winston-test] info: boat is anchored !!
+2021-01-29T06:57:14.408Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:57:14.409Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:57:14.409Z [winston-test] info:   GetBoatDataSearch time  : 20210129155713
+2021-01-29T06:57:14.409Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:57:14.409Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129155713',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129155713',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:57:14.487Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:57:14.487Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T06:57:14.488Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:57:44.450Z [winston-test] info: Start anchordata........
+2021-01-29T06:57:44.450Z [winston-test] info:   nDistance:41.28
+2021-01-29T06:57:44.450Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129155743',20,10,41.28  );
+2021-01-29T06:57:44.451Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T06:57:44.451Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T06:57:44.451Z [winston-test] info:   sStime:20210129155743
+2021-01-29T06:57:44.451Z [winston-test] info:   nDistance:41.28
+2021-01-29T06:57:44.451Z [winston-test] info: boat is anchored !!
+2021-01-29T06:57:44.451Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T06:57:44.451Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T06:57:44.451Z [winston-test] info:   GetBoatDataSearch time  : 20210129155743
+2021-01-29T06:57:44.451Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T06:57:44.451Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129155743',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129155743',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T06:57:44.532Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T06:57:44.544Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T06:57:44.544Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T07:00:14.633Z [winston-test] info: Start anchordata........
+2021-01-29T07:00:14.634Z [winston-test] info:   nDistance:41.71
+2021-01-29T07:00:14.634Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129160014',20,10,41.71  );
+2021-01-29T07:00:14.645Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T07:00:14.645Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T07:00:14.646Z [winston-test] info:   sStime:20210129160014
+2021-01-29T07:00:14.646Z [winston-test] info:   nDistance:41.71
+2021-01-29T07:00:14.646Z [winston-test] info: boat is anchored !!
+2021-01-29T07:00:14.646Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T07:00:14.646Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T07:00:14.647Z [winston-test] info:   GetBoatDataSearch time  : 20210129160014
+2021-01-29T07:00:14.647Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T07:00:14.647Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129160014',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129160014',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T07:00:14.721Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T07:00:14.726Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T07:00:14.727Z [winston-test] info: GetBoatDataSearch Count:0
+2021-01-29T07:00:44.677Z [winston-test] info: Start anchordata........
+2021-01-29T07:00:44.678Z [winston-test] info:   nDistance:41.71
+2021-01-29T07:00:44.678Z [winston-test] info: INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) values('60CA47C40A24','20210129160044',20,10,41.71  );
+2021-01-29T07:00:44.678Z [winston-test] info: Start getAnchorCheck........
+2021-01-29T07:00:44.678Z [winston-test] info:   sId:60CA47C40A24
+2021-01-29T07:00:44.678Z [winston-test] info:   sStime:20210129160044
+2021-01-29T07:00:44.678Z [winston-test] info:   nDistance:41.71
+2021-01-29T07:00:44.678Z [winston-test] info: boat is anchored !!
+2021-01-29T07:00:44.679Z [winston-test] info: Start GetBoatDataSearch........
+2021-01-29T07:00:44.679Z [winston-test] info:   GetBoatDataSearch Device: 60CA47C40A24
+2021-01-29T07:00:44.679Z [winston-test] info:   GetBoatDataSearch time  : 20210129160044
+2021-01-29T07:00:44.679Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-01-29T07:00:44.679Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from boatdata a,boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from anchor_lidar b, anchor c, anchor_sector d where 1 = 1    and b.machine_id = '60CA47C40A24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210129160044',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210129160044',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-01-29T07:00:44.772Z [winston-test] info: Anchordata Insert OK:
+2021-01-29T07:00:44.773Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-01-29T07:00:44.773Z [winston-test] info: GetBoatDataSearch Count:0

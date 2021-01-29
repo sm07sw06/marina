@@ -124,16 +124,16 @@
 							
 							<!-- panel body -->
 							<div class="panel-body">
-								<form role="form" method="post" name="SetUserForm" id="SetUserForm"  class="form-horizontal validate" action=""  >
+								<form role="form" method="post" name="SetUserForm" id="SetUserForm"  class="form-horizontal validate" enctype="multipart/form-data" action="" accept-charset="UTF-8" >
 							
 									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="U">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
 
 							
 									<div class="form-group">
-										<label for="f_sabun" class="col-sm-3 control-label">사용자ID</label>
+										<label for="f_sabun" class="col-sm-3 control-label">사용자번호</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_USER_CD" name="F_USER_CD" placeholder="사용자ID"  >
+											<input type="text" class="form-control" id="F_USER_CD" name="F_USER_CD"  >
 											<input type="hidden" class="form-control" id="F_USER_ID" name="F_USER_ID" >
 										</div>
 									</div>
@@ -141,7 +141,7 @@
 									<div class="form-group">
 										<label for="f_name" class="col-sm-3 control-label">이름</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_USER_NM" placeholder="이름" >
+											<input type="text" class="form-control" id="F_USER_NM" name="F_USER_NM"  >
 										</div>
 									</div>
 																	
@@ -158,19 +158,19 @@
 									</div> -->
 	
 									<div class="form-group">
-										<label for="F_EMAIL" class="col-sm-3 control-label">이메일</label>											
+										<label for="F_TELEPHONE" class="col-sm-3 control-label">연락처</label>											
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_EMAIL" name="F_EMAIL"  placeholder="이메일" >
+											<input type="text" class="form-control" id="F_TELEPHONE" name="F_TELEPHONE"  >
 										</div>
 									</div>
 	
 									<div class="form-group">
-										<label for="F_TELEPHONE" class="col-sm-3 control-label">전화번호</label>											
+										<label for="F_EMAIL" class="col-sm-3 control-label">이메일</label>											
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_TELEPHONE" name="F_TELEPHONE" placeholder="전화번호" >
+											<input type="text" class="form-control" id="F_EMAIL" name="F_EMAIL"  >
 										</div>
 									</div>
-	
+									
 									<div class="form-group">
 										<label for="F_PASSWORD" class="col-sm-3 control-label">비밀번호</label>											
 										<div class="col-sm-8">
@@ -180,7 +180,7 @@
 									</div>
 
 									<div class="form-group">
-										<label for="f_picture" class="col-sm-3 control-label">사진</label>	
+										<label for="f_picture" class="col-sm-3 control-label">얼굴</label>	
 										<div class="col-sm-8">
 											<div class="fileinput fileinput-new" data-provides="fileinput">
 												<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;" data-trigger="fileinput">
@@ -189,7 +189,7 @@
 												<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
 												<div>
 													<span class="btn btn-white btn-file">
-														<span class="fileinput-new">사진등록</span>
+														<span class="fileinput-new">얼굴등록</span>
 														<span class="fileinput-exists">변경</span>
 														<input type="file" name="f_picture_preview" id="f_picture_preview"  accept="images/*">
 													</span>
@@ -206,6 +206,7 @@
 									        <label for="F_USE_YN">사용</label>
 									        <input class="icheck-13" type="radio" id="F_USE_YN" name="F_USE_YN" value="N">
 									        <label for="F_USE_YN">미사용</label>
+									        <input type="hidden" name="F_USE_YN_VAL" id="F_USE_YN_VAL" >
 										</div>
 									</div>
 									

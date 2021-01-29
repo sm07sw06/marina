@@ -29,21 +29,22 @@ $(document).ready(function() {
         $('#F_USER_CD'  ).attr("readonly", true ); //설정
         
 		var columns1 = [
-			{name:'USER_CD'     , width: 100 },
-			{name:'USER_NM'     , width: 100 },		
-			{name:'TELEPHONE'   , width: 100 },		
-			{name:'PASSWORD'    , width: 100 ,hidden: true},		
-			{name:'PASSWORDORG' , width: 100 ,hidden: true},		
-			{name:'EMAIL'       , width: 100 },		
-			{name:'USER_ID'     , width: 100 },		
-			{name:'APPROWAITCNT', width: 100 ,hidden: true},		
-	   		{name:'USE_YN'     , width:  50, 
-	   			edittype: 'select', 
-                formatter: 'select',
-                align:'center',
-                editable:true,                
-                editoptions:{value: getUseSelectOptions()}
-	   		}		
+				{name:'USER_CD'     , width: 100 },
+				{name:'USER_NM'     , width: 100 },		
+				{name:'TELEPHONE'   , width: 100 },		
+				{name:'PASSWORD'    , width: 100 ,hidden: true},		
+				{name:'PASSWORDORG' , width: 100 ,hidden: true},		
+				{name:'EMAIL'       , width: 100 },		
+				{name:'USER_ID'     , width: 100 ,hidden: true},		
+				{name:'APPROWAITCNT', width: 100 ,hidden: true},		
+		   		{name:'USE_YN'     , width:  50, 
+		   			edittype: 'select', 
+	                formatter: 'select',
+	                align:'center',
+	                editable:true,                
+	                editoptions:{value: getUseSelectOptions()}
+		   		},		
+				{name:'PICTURE', width: 100 ,hidden: true}		
 			];
 
 		$("#jqGrid").jqGrid({
@@ -57,7 +58,7 @@ $(document).ready(function() {
 					}
 				});
 			},
-			colNames:['사용자번호', '이름', '연락처', '비밀번호','비밀번호원본', '데일', '아이디', '메세지','사용여부'],
+			colNames:['사용자번호', '이름', '연락처', '비밀번호','비밀번호원본', '이메일', '아이디', '메세지수','사용여부','사진'],
 			hoverrows : false,
 			Regional:'ko',
 			pager: "#jqGridPager",
@@ -100,24 +101,19 @@ $(document).ready(function() {
         $('#F_APPROWAITCNT').val("");
         $('input[name="F_USE_YN"]').val(["Y"]);        
         $('#CRUD'     ).val("C");
-        $('#F_USER_CD'  ).attr("readonly", false ); //설정	
+        $('#F_USER_CD'  ).attr("readonly", false ); //설정
+        $('#F_PICTURE'  ).attr("src", "assets/images/200x150.png" ); //설정	
         
 	});
 	
 	$('#btnDelete').click(function (e) {
 		var formData = new FormData();
 
+		$('#CRUD'     ).val("D");
+		
 		var obj = new Object();
 		obj.user_id     = $("input#F_USER_ID").val();
-		obj.user_cd     = $("input#F_USER_CD").val();
 		obj.user_nm     = $("input#F_USER_NM").val();
-		obj.telephone   = $("input#F_TELEPHONE").val();
-		obj.email       = $("input#F_EMAIL").val();
-		obj.password    = $("input#F_PASSWORD").val();
-		obj.passwordorg = $("input#F_PASSWORDORG").val();
-		obj.approwaitcnt= $("input#F_APPROWAITCNT").val();
-		obj.use_yn       = $('input[name="F_USE_YN"]:checked').val()
-		obj.crud         = "D";
 
 		if(obj.user_id == ''){
 			alert("[알림] 삭제할 사용자를 선택하세요");
@@ -126,18 +122,6 @@ $(document).ready(function() {
 
 		var input = confirm('사용자 ['+ obj.user_nm + ']를 삭제시 복구가 불가능 합니다. 삭제하시겠습니까?');
 		if (!input) return;
-		
-		console.log('sCrud:'+ obj.crud);
-		console.log('F_USER_ID:'+ obj.user_id); 
-		console.log('F_USER_CD:'+ obj.user_cd); 
-		console.log('F_USER_NM:'+ obj.user_nm); 
-		console.log('F_TELEPHONE:'+ obj.telephone); 
-		console.log('F_EMAIL:'+ obj.email); 
-		console.log('F_PASSWORD:'+ obj.password); 
-		console.log('F_PASSWORDORG:'+ obj.passwordorg); 
-		console.log('F_APPROWAITCNT:'+ obj.approwaitcnt); 
-		console.log('F_USE_YN:'+ obj.use_yn); 
-		console.log('CRUD:'+ obj.crud);
 		
 		
 		$("#SetUserForm").ajaxForm({
@@ -157,6 +141,8 @@ $(document).ready(function() {
 		        $('#F_APPROWAITCNT').val("");
 		        $('#CRUD'     ).val("C");
 		        $('#F_USER_CD'  ).attr("readonly", true ); //설정	
+		        $('#F_PICTURE'  ).attr("src", "assets/images/200x150.png" ); //설정	
+
 				$("#jqGrid").jqGrid('delRowData', $('#ROWID').val());
 			},
 			error : function(data, status){
@@ -178,28 +164,9 @@ $(document).ready(function() {
 		var formData = new FormData();
 
 		var obj = new Object();
-		obj.user_id     = $("input#F_USER_ID").val();
 		obj.user_cd     = $("input#F_USER_CD").val();
 		obj.user_nm     = $("input#F_USER_NM").val();
-		obj.telephone   = $("input#F_TELEPHONE").val();
-		obj.email       = $("input#F_EMAIL").val();
 		obj.password    = $("input#F_PASSWORD").val();
-		obj.passwordorg = $("input#F_PASSWORDORG").val();
-		obj.approwaitcnt= $("input#F_APPROWAITCNT").val();
-		obj.use_yn       = $('input[name="F_USE_YN"]:checked').val()
-		obj.crud         = $("input#CRUD").val();
-		
-		console.log('sCrud:'+ obj.crud);
-		console.log('F_USER_ID:'+ obj.user_id); 
-		console.log('F_USER_CD:'+ obj.user_cd); 
-		console.log('F_USER_NM:'+ obj.user_nm); 
-		console.log('F_TELEPHONE:'+ obj.telephone); 
-		console.log('F_EMAIL:'+ obj.email); 
-		console.log('F_PASSWORD:'+ obj.password); 
-		console.log('F_PASSWORDORG:'+ obj.passwordorg); 
-		console.log('F_APPROWAITCNT:'+ obj.approwaitcnt); 
-		console.log('F_USE_YN:'+ obj.use_yn); 
-		console.log('CRUD:'+ obj.crud); 
 		
 		if(obj.user_cd == ''){
 			alert("[알림] 사용자ID를 입력하세요.");
@@ -226,7 +193,7 @@ $(document).ready(function() {
 			type: 'post',
 //			data:{param:JSON.stringify(obj)},
 			success: function(json_data) {
-/*				if (obj.crud == "U" ) {		
+ 				if (obj.crud == "U" ) {		
 					console.log('grid update.........');
 					var rowData = $('#jqGrid').jqGrid('getRowData', $('#ROWID').val());
 					rowData.USER_ID= obj.user_id; 
@@ -242,21 +209,24 @@ $(document).ready(function() {
 					console.log('grid append.........');
 					var ids = $('#jqGrid').getDataIDs();
 					var idsLen = ids.length + 1;
+					
 					$('#jqGrid').jqGrid('addRowData',idsLen,{});	
 					var ids2 = $('#jqGrid').getDataIDs();
 					var rowData = $('#jqGrid').jqGrid('getRowData', idsLen);
-					rowData.USER_ID= obj.user_id; 
+					rowData.USER_ID = json_data.genKey;
 					rowData.USER_CD= obj.user_cd; 
 					rowData.USER_NM= obj.user_nm; 
 					rowData.TELEPHONE= obj.telephone; 
 					rowData.EMAIL= obj.email; 
 					rowData.PASSWORD= obj.password; 
 					rowData.APPROWAITCNT= obj.approwaitcnt; 
-					rowData.USE_YN= obj.use_yn; 					
+					rowData.USE_YN= obj.use_yn;
+//					$('#F_PICTURE'  ).attr("src", "assets/images/200x150.png" ); //설정						
 					$('#jqGrid').jqGrid('setRowData',idsLen, rowData)	
+					
 					$('#btnQuery').click();
-				}*/
-				$('#btnQuery').click();
+				} 
+			//	$('#btnQuery').click();
 				$('#btnAdd').click();
 				alert("정상적으로 처리 되었습니다.");
 			},
@@ -293,7 +263,19 @@ $(document).ready(function() {
         $('#F_APPROWAITCNT').val(selectdRow.APPROWAITCNT);
 		$('input[name="F_USE_YN"]').val([selectdRow.USE_YN]);
         $('#CRUD'     ).val("U");
-        $('#F_USER_CD'  ).attr("readonly", true ); //설정		        
+        $('#F_USER_CD'  ).attr("readonly", true ); //설정		   
+        
+        console.log( "selectdRow.PICTURE:" + selectdRow.PICTURE.trim());
+        
+        if ( selectdRow.PICTURE.trim() == "" || selectdRow.PICTURE == 'null' ) { 
+        	//console.log('111111');
+        	$('#F_PICTURE').attr('src', "assets/images/" + "200x150.png");
+        	$('.fileinput .fileinput-preview img').attr('src', "assets/images/" + "200x150.png");
+        } else {
+        	//console.log('222222');
+        	$('#F_PICTURE').attr('src', "userImages/" + selectdRow.PICTURE);
+        	$('.fileinput .fileinput-preview img').attr('src', "userImages/" + selectdRow.PICTURE);
+        }
 	};	
 	
 	refreshData();

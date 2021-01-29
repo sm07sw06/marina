@@ -34,15 +34,16 @@ public class SetAnchorSector extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 				
-		   logger.debug("SetServer start.............:");
+		   logger.debug("SetSector start.............:");
 
-		   String sServerId    = "";
-		   String sServerNm      = "";
-		   String sServerClassCd      = "";
-		   String sServerIp   = "";
-		   String sServerDesc = "";
-		   String sUseYn = "";
-		   String sCrud        = "";
+		   String sSectorId   = "";
+		   String sSectorName = "";
+		   String sGPSx1      = "";
+		   String sGPSx2      = "";
+		   String sGPSy1      = "";
+		   String sGPSy2      = "";
+		   String sSectorDesc = "";
+		   String sCrud       = "";
 		   
  		   resp.setContentType("text/html;charset=UTF-8");
 		   
@@ -54,15 +55,16 @@ public class SetAnchorSector extends HttpServlet {
 					JSONObject json;
 					json = (JSONObject) parser.parse(jsonParam.toString());
 	
-		            //logger.debug("SetServer json:" + json); 
+		            logger.debug("SetSector json:" + json); 
 		              
-		            sServerId = (String)json.get("server_id");
-		            sServerNm = (String)json.get("server_nm");
-		            sServerClassCd = (String)json.get("server_class_cd");
-		            sServerIp = (String)json.get("server_ip");
-		            sServerDesc = (String)json.get("server_desc");
-		            sUseYn  = (String)json.get("use_yn");
-		            sCrud   = (String)json.get("crud");
+		            sSectorId   = (String)json.get("sector_id");
+		            sSectorName = (String)json.get("sector_name");
+		            sGPSx1      = (String)json.get("gpsx1");
+		            sGPSx2      = (String)json.get("gpsx2");
+		            sGPSy1      = (String)json.get("gpsy1");
+		            sGPSy2      = (String)json.get("gpsy2");
+		            sSectorDesc = (String)json.get("sector_desc");
+		            sCrud       = (String)json.get("crud");
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
 				}
@@ -79,46 +81,42 @@ public class SetAnchorSector extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO TB_SERVER (SERVER_NM, SERVER_CLASS_CD, SERVER_IP, SERVER_DESC, USE_YN) \n";
-					insertSql = insertSql + "VALUES ( '" + sServerNm + "', '" + sServerClassCd + "', '" + sServerIp + "', '" + sServerDesc + "', 'Y' )";
+				    String insertSql = "INSERT INTO ANCHOR_SECTOR (SECTOR_NAME, GPSX1, GPSX2, GPSY1, GPSY2, SECTOR_DESC) \n";
+					insertSql = insertSql + "VALUES ( '" + sSectorName + "', " + sGPSx1 + ", " + sGPSx2 + ", " + sGPSy1 + ", " + sGPSy2 + ", '" + sSectorDesc + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
-					logger.debug("SetServer sql:" + insertSql);
+					logger.debug("SetSector sql:" + insertSql);
 					
 					stmt.execute(insertSql);
 					stmt.close();
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "UPDATE TB_SERVER \n";
-				    updateSql = updateSql + "   SET USE_YN  = 'N'   \n ";
+				    String updateSql      = "DELETE FROM ANCHOR_SECTOR \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
-
-				    updateSql      = "DELETE FROM TB_SERVER \n";
-					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
+					updateSql = updateSql + "   AND SECTOR_ID =   " + sSectorId  + "   \n ";
 
 					
 					stmt = connectionDest.createStatement();
-					logger.debug("SetServer sql:" + updateSql);
+					logger.debug("SetSector sql:" + updateSql);
 					stmt.execute(updateSql);
 					
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE TB_SERVER \n";
-				    updateSql = updateSql + "   SET SERVER_NM       = '" + sServerNm  + "'   \n ";
-					updateSql = updateSql + "      ,SERVER_CLASS_CD = '" + sServerClassCd    + "'    \n ";
-					updateSql = updateSql + "      ,SERVER_IP       = '" + sServerIp    + "'    \n ";
-					updateSql = updateSql + "      ,SERVER_DESC     = '" + sServerDesc    + "'    \n ";
-					updateSql = updateSql + "      ,USE_YN          = '" + sUseYn     + "'   \n ";
+				    String updateSql      = "UPDATE ANCHOR_SECTOR \n";
+				    updateSql = updateSql + "   SET SECTOR_NAME = '" + sSectorName  + "'   \n ";
+					updateSql = updateSql + "      ,GPSX1 		= " + sGPSx1    + "    \n ";
+					updateSql = updateSql + "      ,GPSX2 		= " + sGPSx2    + "    \n ";
+					updateSql = updateSql + "      ,GPSY1 		= " + sGPSy1    + "    \n ";
+					updateSql = updateSql + "      ,GPSY2 		= " + sGPSy2    + "    \n ";
+					updateSql = updateSql + "      ,SECTOR_DESC = '" + sSectorDesc    + "'    \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND SERVER_ID =   " + sServerId  + "   \n ";
+					updateSql = updateSql + "   AND SECTOR_ID =   " + sSectorId  + "   \n ";
 
 					stmt = connectionDest.createStatement();
-					logger.debug("SetServer sql:" + updateSql);
+					logger.debug("SetSector sql:" + updateSql);
 					stmt.execute(updateSql);
 
 					stmt.close();	
@@ -166,7 +164,7 @@ public class SetAnchorSector extends HttpServlet {
 		   resp.setCharacterEncoding("UTF-8");
 		   resp.getWriter().write(jsonobj.toString()); 	
 	}
-
+ 
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		super.doGet(req, resp);

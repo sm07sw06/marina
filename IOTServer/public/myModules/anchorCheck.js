@@ -46,13 +46,15 @@ AnchorCheck.prototype.getAnchorCheck = function() {
     var db = new DB(); 
     
 	var sData = this.message;  // MQTT에서 보내온 메세지
-	var sId       = sData[0];
-	var sIp       = sData[1];
-	var nDistance = sData[2];
-	var sStime    = sData[3];
+	var sId          = sData[0];
+	var nTemperature = sData[1];
+	var nHumidity    = sData[2];
+	var nDistance    = sData[3];
+	var sStime       = sData[4];
+	
 
 	logger.info("  sId:"+sId);
-	logger.info("  sIp:"+sIp);   
+	logger.info("  sStime:"+sStime);   
 	logger.info("  nDistance:"+nDistance);   
 
 	if(nDistance === "") { nDistance = 0; }
