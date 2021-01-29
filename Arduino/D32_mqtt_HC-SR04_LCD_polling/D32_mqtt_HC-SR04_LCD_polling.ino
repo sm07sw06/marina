@@ -259,7 +259,7 @@ void loop() {
     char timeStringBuff[50]; //50 chars should be enough
     strftime(timeStringBuff, sizeof(timeStringBuff), "%Y%m%d%H%M%S", &timeinfo);
 //    sprintf(message, "{\"lidarData3\":\"000102030405,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", timeStringBuff);
-    sprintf(message, "{\"anchorData\":\"%s,%s,%s,%s\"}", gMac, gIp, pDistBuf, timeStringBuff);
+    sprintf(message, "{\"anchorData\":\"%s,%d,%d,%s,%s\"}", gMac, 20, 10, pDistBuf, timeStringBuff);
     if( ( millis() - prev_millis ) > PERIOD ) {
         mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
