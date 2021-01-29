@@ -55,13 +55,14 @@
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
-			$('#F_SECTOR_NAME').val(dataGrid.getSelectedItem().SECTOR_NAME);
+			$('#F_USER_CD').val(dataGrid.getSelectedItem().USER_CD);
+			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
 			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
 			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
 			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
 			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
 			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
+			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
 			$('#CRUD').val("U");
 		}
 	}
@@ -69,15 +70,14 @@
 	function refreshData()  
 	{
 		var gridData = [];
-		jsonObj = {};
 
-		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
-		jsonObj.__sector_id = '*';
-		jsonObj.__rows      = '20';
-		jsonObj.__page      = '1';
+		jsonObj.__user_cd = '*';
+		jsonObj.__user_nm =  $('#C_USER_NM').val();
+		jsonObj.__rows     = "20";
+		jsonObj.__page     = "1" ;
 
 		$.ajax({
-		   	url:"GetAnchorSectorList",
+		   	url:"GetUserList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -103,7 +103,7 @@
 	
 	$('#btnAdd').click(function (e) {
 		$('#F_SECTOR_ID'   ).val("");
-		$('#F_SECTOR_NAME' ).val("");
+		$('#F_SECTOR_NM'   ).val("");
 		$('#F_GPSX1'       ).val("");
 		$('#F_GPSX2'       ).val("");
 		$('#F_GPSY1'       ).val("");
@@ -111,7 +111,7 @@
 		$('#F_SECTOR_DESC' ).val("");
 		$('#CRUD'          ).val("C");
 		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_SECTOR_NAME").focus();
+		$("input#F_SECTOR_NM").focus();
 	});
 
 	$('#btnSave').click(function (e) {
@@ -119,7 +119,7 @@
 		
 		var obj = new Object();
 		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.sector_name = $("input#F_SECTOR_NAME").val();
+		obj.sector_nm   = $("input#F_SECTOR_NM").val();
 		obj.gpsx1       = $("input#F_GPSX1").val();
 		obj.gpsx2       = $("input#F_GPSX2").val();
 		obj.gpsy1       = $("input#F_GPSY1").val();
@@ -168,7 +168,7 @@
 
 		if(obj.sector_id == ''){
 			alert("[알림] 구역를 선택하세요.");
-			$("input#F_SECTOR_NAME").focus();
+			$("input#F_SECTOR_NM").focus();
 		    return;
 		}
 		
@@ -244,8 +244,8 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"   headerText="ID"  width="100"     />\
-				<DataGridColumn dataField="USER_NM" 	 id="colSectorName" headerText="이름" width="200"/>\
+				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     headerText="ID"  width="100"     />\
+				<DataGridColumn dataField="USER_NM" 	 id="colSectorNm"   headerText="이름" width="200"/>\
 				<DataGridColumn dataField="TELEPHONE"    id="colGpsx1" 		headerText="시작" width="100"/>\
 				<DataGridColumn dataField="EMAIL"        id="colGpsy2" 		headerText="끝" width="100"/>\
 				<DataGridColumn dataField="USER_ID"      id="colGpsy2" 		headerText="끝" width="100"  visible="false"  />\
@@ -356,5 +356,5 @@
 	}
 	
 
-	$("input#F_SECTOR_NAME").focus();
+	$("input#F_SECTOR_NM").focus();
 	

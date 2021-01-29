@@ -56,7 +56,7 @@
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
 			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
-			$('#F_SECTOR_NAME').val(dataGrid.getSelectedItem().SECTOR_NAME);
+			$('#F_SECTOR_NM').val(dataGrid.getSelectedItem().SECTOR_NM);
 			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
 			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
 			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
@@ -103,7 +103,7 @@
 	
 	$('#btnAdd').click(function (e) {
 		$('#F_SECTOR_ID'   ).val("");
-		$('#F_SECTOR_NAME' ).val("");
+		$('#F_SECTOR_NM'   ).val("");
 		$('#F_GPSX1'       ).val("");
 		$('#F_GPSX2'       ).val("");
 		$('#F_GPSY1'       ).val("");
@@ -111,7 +111,7 @@
 		$('#F_SECTOR_DESC' ).val("");
 		$('#CRUD'          ).val("C");
 		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_SECTOR_NAME").focus();
+		$("input#F_SECTOR_NM").focus();
 	});
 
 	$('#btnSave').click(function (e) {
@@ -119,7 +119,7 @@
 		
 		var obj = new Object();
 		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.sector_name = $("input#F_SECTOR_NAME").val();
+		obj.sector_nm   = $("input#F_SECTOR_NM").val();
 		obj.gpsx1       = $("input#F_GPSX1").val();
 		obj.gpsx2       = $("input#F_GPSX2").val();
 		obj.gpsy1       = $("input#F_GPSY1").val();
@@ -127,6 +127,8 @@
 		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
 		obj.crud        = $("#CRUD").val();
 
+		console.log('sector_nm:'+ obj.sector_nm);
+		
 		if(obj.sector_nm == ''){
 			alert("[알림] 구역명을 입력하세요.");
 			$("input#F_SECTOR_NM").focus();
@@ -168,7 +170,7 @@
 
 		if(obj.sector_id == ''){
 			alert("[알림] 구역를 선택하세요.");
-			$("input#F_SECTOR_NAME").focus();
+			$("input#F_SECTOR_NM").focus();
 		    return;
 		}
 		
@@ -245,7 +247,7 @@
 			<groupedColumns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
 				<DataGridColumn dataField="SECTOR_ID"   id="colScetorId"   	headerText="ID"  width="100"  visible="false"   />\
-				<DataGridColumn dataField="SECTOR_NAME" id="colSectorName" 	headerText="이름" width="200"/>\
+				<DataGridColumn dataField="SECTOR_NM" id="colSectorNm" 	headerText="이름" width="200"/>\
 				<DataGridColumnGroup headerText="위도">\
 					<DataGridColumn dataField="GPSX1"       id="colGpsx1" 	headerText="시작" width="100"/>\
 					<DataGridColumn dataField="GPSX2"       id="colGpsx2" 	headerText="끝" width="100" />\
@@ -358,5 +360,5 @@
 	}
 	
 
-	$("input#F_SECTOR_NAME").focus();
+	$("input#F_SECTOR_NM").focus();
 	

@@ -105,17 +105,17 @@
 						<span class="title">사용자관리</span>
 					</a>
 					<ul>
+						<li >
+							<a href="noAuth.jsp" id="menu00008" >
+								<i class="entypo-user"></i>
+								<span class="title">사용자 등록</span>
+							</a>
+						</li>
 						<li>
 							<!--  a href="userInfo.jsp" -->
 							<a href="noAuth.jsp" id="menu00007" >
 								<i class="entypo-user"></i>
 								<span class="title">사용자그룹 등록</span>
-							</a>
-						</li>
-						<li >
-							<a href="noAuth.jsp" id="menu00008" >
-								<i class="entypo-user"></i>
-								<span class="title">사용자 등록</span>
 							</a>
 						</li>
 						<li >

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=utf-8"%>
+<jsp:useBean id="codeClass" class="com.a1ck.util.CodeClass" scope="page"/>
 <html lang="en">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +12,7 @@
 
 <link rel="icon" href="assets/images/favicon.ico">
 
-<title>Magic Archive</title>
+<title>스마트 마리나항만 불법계류 통합안전관리 시스템</title>
 
 <link rel="stylesheet" href="assets/jquery-ui-1.12.1.custom/jquery-ui.min.css">
 <link rel="stylesheet" href="assets/css/font-icons/entypo/css/entypo.css">
@@ -26,10 +27,7 @@
 <link rel="stylesheet" href="assets/js/datatables/datatables.css">
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
 <link rel="stylesheet" href="assets/js/select2/select2.css">
-
-<link rel="stylesheet" href="assets/a1ck/css/a1ck.css">	
-<link rel="stylesheet" href="assets/a1ck/css/jqu11ery.prompt.css">	
-
+	
 <script src="assets/js/jquery-1.12.4.js"></script>
 <script src="assets/js/jquery.form.js"></script>
 <script src="assets/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
@@ -37,9 +35,8 @@
 
 <script type="text/javascript" src="jqgrid/js/i18n/grid.locale-kr.js"></script>
 <script type="text/javascript" src="jqgrid/js/jquery.jqGrid.min.js"></script>
-
+		 
 <script src="assets/js/bootstrap.js"></script>
-
 	
 <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -48,6 +45,53 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="./rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="./LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="./rMateGridH5/JS/rMateGridH5.js"></script>
+
+<!-- 페이징 관련 스타일 -->
+<link rel="stylesheet" type="text/css" href="./assets/a1ck/css/a1ckRef.css">	
+
+<script type="text/javascript" >
+
+function geoFindMe() {
+
+  const status = document.querySelector('#status');
+  const mapLink = document.querySelector('#map-link');
+
+  mapLink.href = '';
+  mapLink.textContent = '';
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    status.textContent = '';
+    mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+    mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if(!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    status.textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+}
+
+document.querySelector('#find-me').addEventListener('click', geoFindMe);
+
+</script>
 </head>
 
 <body class="page-body" data-url="http://neon.dev">
@@ -66,12 +110,11 @@
 						
 			<ol class="breadcrumb bc-3" >
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
-				<li><a href="#">계정관리</a></li>
-				<li><a href="#">통합ID관리</a></li>
-				<li class="active"><strong>사용자 정보관리</strong></li>
+				<li><a href="#">사용자관리</a></li>
+				<li class="active"><strong>사용자등록</strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>사용자 정보관리</div>
+			<div class='myTitleBox'>사용자등록</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
@@ -92,27 +135,22 @@
 					<!--  left list start -->
 					<div class="col-lg-8">										
 						<div class="panel panel-primary" data-collapsed="0">
-							<!-- panel head -->
-							<div class="panel-heading">
-								<div class="panel-title">사용자목록</div>
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-								</div>
-							</div>
 							<!-- panel body -->
-							<div class="panel-body">
-								<div id= "userDivID">
-									<table id="jqGrid"></table>
-									<div id="jqGridPager"></div>
-								</div>
-							</div>
+						<div class="content">
+							<!-- 그리드가 삽입될 DIV -->
+							<div id="gridHolder" style="width:100%; height:600px;"></div>
+							<div class="gridPaging" id="gridPageNavigationDiv"></div>
+						</div>
+							
 						</div>
 					</div>
 					<!--  left list end -->
 									
 					<!--  right info start -->
-					<div id="detail-area" class="col-lg-4 container-fluid">	  
+					<div id="detail-area" class="col-lg-4 container-fluid" style="height:600px;">	  
 					 
+
+
 						<div class="panel panel-primary" data-collapsed="0">
 							<!-- panel head -->
 							<div class="panel-heading">
@@ -213,12 +251,17 @@
 								</form>
 							</div> <!-- panel-body  -->
 						</div> <!--  id="pannel"  -->
+
+
+					
 					</div> <!--  id="detail-area"  -->
 					<!--  right info start -->
 					
 				</div>
 				<!-- main-sub-content end-->
 			</div> <!-- myTitleBox -->
+			
+			
 			<!-- Footer start-->
 			<%@ include file="footerInfo.jsp" %>
 			<!-- Footer end-->
@@ -241,14 +284,13 @@
 	
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/neon-custom.js"></script>
-<script>
-	var sessionsabun = "<%=userid%>";
-</script>
+	<script>
+		var sessionsabun = "<%=userid%>";
+	</script>
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
-	<script src="assets/a1ck/js/a1ck-js.js"></script>	
-	<script src="assets/a1ck/js/jquery.prompt.js"></script>	
-	<script src="assets/a1ck/js/userInfo.js"></script>
+	<script src="assets/a1ck/js/a1ck-js.js"></script>		
+	<script src="assets/a1ck/js/userInfo.js"></script>		
 
 </body>
 </html>

@@ -184,7 +184,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 									<div class="form-group">
 										<label for="f_orgNm" class="col-sm-3 control-label">구역명</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SECTOR_NAME"   >
+											<input type="text" class="form-control" id="F_SECTOR_NM"   >
 										</div>
 									</div>
 	

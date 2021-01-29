@@ -82,7 +82,7 @@ public class GetAnchorSectorList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT S.SECTOR_ID, S.SECTOR_NAME, S.GPSX1,  S.GPSX2,  S.GPSY1,  S.GPSY2, S.SECTOR_DESC \n ";
+			sQuery  = " SELECT S.SECTOR_ID, S.SECTOR_NM, S.GPSX1,  S.GPSX2,  S.GPSY1,  S.GPSY2, S.SECTOR_DESC \n ";
 			sQuery += "   FROM ANCHOR_SECTOR S\n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			
@@ -90,7 +90,7 @@ public class GetAnchorSectorList extends HttpServlet {
 				sQuery += "    AND S.SECTOR_ID = " + sAnchorSectorId + " \n";
 			}
 			
-			sQuery += "  ORDER BY S.SECTOR_NAME \n ";
+			sQuery += "  ORDER BY S.SECTOR_NM \n ";
 			
 			logger.debug("getAnchorSectorList sQuery1:" + sQuery); 
 			
@@ -105,7 +105,7 @@ public class GetAnchorSectorList extends HttpServlet {
 				JSONObject datas = new JSONObject();
 				
 				datas.put("SECTOR_ID"   	, rs.getString("SECTOR_ID"));	
-				datas.put("SECTOR_NAME"   	, rs.getString("SECTOR_NAME"));	
+				datas.put("SECTOR_NM"   	, rs.getString("SECTOR_NM"));	
 				datas.put("SECTOR_DESC"   	, rs.getString("SECTOR_DESC"));	
 
 				if (!StringUtils.isEmpty(rs.getString("GPSX1"))) 

@@ -37,7 +37,7 @@ public class SetAnchorSector extends HttpServlet {
 		   logger.debug("SetSector start.............:");
 
 		   String sSectorId   = "";
-		   String sSectorName = "";
+		   String sSectorNm   = "";
 		   String sGPSx1      = "";
 		   String sGPSx2      = "";
 		   String sGPSy1      = "";
@@ -58,7 +58,7 @@ public class SetAnchorSector extends HttpServlet {
 		            logger.debug("SetSector json:" + json); 
 		              
 		            sSectorId   = (String)json.get("sector_id");
-		            sSectorName = (String)json.get("sector_name");
+		            sSectorNm   = (String)json.get("sector_nm");
 		            sGPSx1      = (String)json.get("gpsx1");
 		            sGPSx2      = (String)json.get("gpsx2");
 		            sGPSy1      = (String)json.get("gpsy1");
@@ -81,8 +81,8 @@ public class SetAnchorSector extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO ANCHOR_SECTOR (SECTOR_NAME, GPSX1, GPSX2, GPSY1, GPSY2, SECTOR_DESC) \n";
-					insertSql = insertSql + "VALUES ( '" + sSectorName + "', " + sGPSx1 + ", " + sGPSx2 + ", " + sGPSy1 + ", " + sGPSy2 + ", '" + sSectorDesc + "' )";
+				    String insertSql = "INSERT INTO ANCHOR_SECTOR (SECTOR_NM, GPSX1, GPSX2, GPSY1, GPSY2, SECTOR_DESC) \n";
+					insertSql = insertSql + "VALUES ( '" + sSectorNm + "', " + sGPSx1 + ", " + sGPSx2 + ", " + sGPSy1 + ", " + sGPSy2 + ", '" + sSectorDesc + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
@@ -106,7 +106,7 @@ public class SetAnchorSector extends HttpServlet {
 					
 			   } else {
 				    String updateSql      = "UPDATE ANCHOR_SECTOR \n";
-				    updateSql = updateSql + "   SET SECTOR_NAME = '" + sSectorName  + "'   \n ";
+				    updateSql = updateSql + "   SET SECTOR_NM   = '" + sSectorNm  + "'   \n ";
 					updateSql = updateSql + "      ,GPSX1 		= " + sGPSx1    + "    \n ";
 					updateSql = updateSql + "      ,GPSX2 		= " + sGPSx2    + "    \n ";
 					updateSql = updateSql + "      ,GPSY1 		= " + sGPSy1    + "    \n ";
