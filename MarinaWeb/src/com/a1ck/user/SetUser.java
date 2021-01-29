@@ -165,6 +165,7 @@ public class SetUser extends HttpServlet {
 					}
 					
 					stmt.close();
+					
 			   } else if(sCrud.equals("D")) {
 				    String updateSql      = "DELETE FROM TB_USER_INFO \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";

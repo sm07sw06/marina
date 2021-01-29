@@ -213,7 +213,6 @@
 	
 			if(json_data.result == 'OK') {
 			    $.each(json_data.menuData, function(i,n) {
-			    	console.log(n);
 			    	refreshMenu($("#menu" + n.MENU_CD),n.MENU_URL);
 				});
 			}

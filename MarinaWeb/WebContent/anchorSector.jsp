@@ -57,6 +57,41 @@
 <!-- 페이징 관련 스타일 -->
 <link rel="stylesheet" type="text/css" href="./assets/a1ck/css/a1ckRef.css">	
 
+<script type="text/javascript" >
+
+function geoFindMe() {
+
+  const status = document.querySelector('#status');
+  const mapLink = document.querySelector('#map-link');
+
+  mapLink.href = '';
+  mapLink.textContent = '';
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    status.textContent = '';
+    mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+    mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if(!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    status.textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+}
+
+document.querySelector('#find-me').addEventListener('click', geoFindMe);
+
+</script>
 </head>
 
 <body class="page-body" data-url="http://neon.dev">
@@ -126,7 +161,7 @@
 						<div class="panel panel-primary" data-collapsed="0">
 							<!-- panel head -->
 							<div class="panel-heading">
-								<div class="panel-title">서버정보 상세</div>
+								<div class="panel-title">구역정보 상세</div>
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 								</div>
@@ -134,59 +169,61 @@
 							
 							<!-- panel body -->
 							<div class="panel-body">
-								<form role="form" method="post" name="SetServerForm" id="SetServerForm"  class="form-horizontal validate" action="" >
+								<form role="form" method="post" name="SetSectorForm" id="SetSectorForm"  class="form-horizontal validate" action="" >
 							
 									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
 							
 									<div class="form-group">
-										<label for="f_name" class="col-sm-3 control-label">서버ID</label>
+										<label for="f_name" class="col-sm-3 control-label">구역ID</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SERVER_ID" readonly>
+											<input type="text" class="form-control" id="F_SECTOR_ID" readonly>
 										</div>
 									</div>
 																	
 									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">서버명</label>
+										<label for="f_orgNm" class="col-sm-3 control-label">구역명</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SERVER_NM"   >
+											<input type="text" class="form-control" id="F_SECTOR_NAME"   >
 										</div>
 									</div>
 	
 									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">서버IP</label>
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도시작</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SERVER_IP"  >
+											<input type="text" class="form-control" id="F_GPSX1"  >
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도끝</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSX2"  >
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도시작</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSY1"  >
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도끝</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSY2"  >
 										</div>
 									</div>
 	
-									<div class="form-group">
-										<label for="f_status" class="col-sm-3 control-label">종류</label>
-										<input type="hidden" class="form-control" id="F_SERVER_CLASS_NM"  >
-										<div class="col-sm-8" >
-											<select class="form-control" id="F_SERVER_CLASS_CD" >
-												<%=codeClass.getComboBoxByCodeList("SERVER_CLASS_CD", "", true) %>
-											</select>
-										</div>
-									</div>
-
 									<div class="form-group">
 										<label for="f_orgNm" class="col-sm-3 control-label">설명</label>
 										<div class="col-sm-8">
-											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SERVER_DESC" id="F_SERVER_DESC" ></textarea>
+											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SECTOR_DESC" id="F_SECTOR_DESC" ></textarea>
 										</div>
 									</div>
 	
-									<div class="form-group">
-										<label for="f_status" class="col-sm-3 control-label">사용여부</label>
-										<div class="col-sm-8" >
-									        <input class="icheck-13" type="radio" id="F_USE_Y" name="F_USE_YN" value="Y">
-									        <label>사용</label>
-									        &nbsp;&nbsp;&nbsp;
-									        <input class="icheck-13" type="radio" id="F_USE_N" name="F_USE_YN" value="N">
-									        <label>미사용</label>
-										</div>
-									</div>
+	<button id = "find-me">Show my location</button><br/>
+<p id = "status"></p>
+<a id = "map-link" target="_blank"></a>
+
 								</form>
 							</div> <!-- panel-body  -->
 						</div> <!--  id="pannel"  -->

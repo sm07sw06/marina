@@ -54,17 +54,14 @@
 
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
-//		console.log(dataGrid.getSelectedItem());
-//		console.log(dataGrid.getSelectedItem().SERVER_IP);
-//		console.log(dataGrid.getSelectedIndex());
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_SERVER_ID').val(dataGrid.getSelectedItem().SERVER_ID);
-			$('#F_SERVER_IP').val(dataGrid.getSelectedItem().SERVER_IP);
-			$('#F_SERVER_NM').val(dataGrid.getSelectedItem().SERVER_NM);
-			$('#F_SERVER_DESC').val(dataGrid.getSelectedItem().SERVER_DESC);
-			$('#F_SERVER_CLASS_CD').val(dataGrid.getSelectedItem().SERVER_CLASS_CD);
-			$('#F_SERVER_CLASS_NM').val(dataGrid.getSelectedItem().SERVER_CLASS_NM);
-			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
+			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
+			$('#F_SECTOR_NAME').val(dataGrid.getSelectedItem().SECTOR_NAME);
+			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
+			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
+			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
+			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
+			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
 			$('#CRUD').val("U");
 		}
 	}
@@ -75,13 +72,12 @@
 		jsonObj = {};
 
 		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
-//		console.log('use_yn:'+ jsonObj.__use_yn);
-		jsonObj.__server_id = '*';
+		jsonObj.__sector_id = '*';
 		jsonObj.__rows      = '20';
 		jsonObj.__page      = '1';
 
 		$.ajax({
-		   	url:"GetServerList",
+		   	url:"GetAnchorSectorList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -106,43 +102,38 @@
 	});
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_SERVER_ID'  ).val("");
-		$('#F_SERVER_NM'    ).val("");
-		$('#F_SERVER_IP'    ).val("");
-		$('#F_SERVER_DESC' ).val("");
-		$('#F_SERVER_CLASS_CD').val("");
-		$('input[name="F_USE_YN"]').val(["Y"]);
-        //getAllSelectOptions("F_SERVER_CLASS_CD","SERVER_CLASS_CD","");
-        //$('#F_SERVER_CLASS_CD' ).val("");
-		$('#F_SERVER_CLASS_CD option:eq(0)').prop("selected", true);
+		$('#F_SECTOR_ID'   ).val("");
+		$('#F_SECTOR_NAME' ).val("");
+		$('#F_GPSX1'       ).val("");
+		$('#F_GPSX2'       ).val("");
+		$('#F_GPSY1'       ).val("");
+		$('#F_GPSY2'       ).val("");
+		$('#F_SECTOR_DESC' ).val("");
 		$('#CRUD'         ).val("C");
-		$('#F_SERVER_ID'  ).attr("readonly", true); //설정
-		$("input#F_SERVER_NM").focus();
+		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
+		$("input#F_SECTOR_NAME").focus();
 	});
 
 	$('#btnSave').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.server_id   = $("input#F_SERVER_ID").val();
-		obj.server_nm   = $("input#F_SERVER_NM").val();
-		obj.server_ip   = $("input#F_SERVER_IP").val();
-		obj.server_desc = $("textarea#F_SERVER_DESC").val();
-		obj.server_class_cd = $("select#F_SERVER_CLASS_CD").val();
-		obj.server_class_nm = $('select#F_SERVER_CLASS_CD option:selected').text();
-		obj.use_yn = $('input[name="F_USE_YN"]:checked').val();	
-		if(obj.use_yn !== 'Y' && obj.use_yn !== 'N')
-			obj.use_yn = 'N';
-		obj.crud        = $("input#CRUD").val();
+		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.sector_name = $("input#F_SECTOR_NAME").val();
+		obj.gpsx1       = $("input#F_GPSX1").val();
+		obj.gpsx2       = $("input#F_GPSX2").val();
+		obj.gpsy1       = $("input#F_GPSY1").val();
+		obj.gpsy2       = $("input#F_GPSY2").val();
+		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
 
-		if(obj.server_nm == ''){
-			alert("[알림] 서버명을 입력하세요.");
-			$("input#F_SERVER_NM").focus();
+		if(obj.sector_nm == ''){
+			alert("[알림] 구역명을 입력하세요.");
+			$("input#F_SECTOR_NM").focus();
 		    return;
 		}
 
-		$("#SetServerForm").ajaxForm({
-			url : 'SetServer',
+		$("#SetSectorForm").ajaxForm({
+			url : 'SetAnchorSector',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -153,7 +144,7 @@
 			},
 			error : function(data, status){
 		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 서버에서 전달
+		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
 		    			alert("이미 등록되어 있는 아이디 입니다.");
 		    		} else {
 		    			alert("Error");
@@ -161,30 +152,30 @@
 		    	}
 			}
 		});	
-		$("#SetServerForm").submit() ;
+		$("#SetSectorForm").submit() ;
 	});
 
 	$('#btnDelete').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.server_id   = $("input#F_SERVER_ID").val();
+		obj.sector_id   = $("input#F_SECTOR_ID").val();
 		obj.crud        = "D";
 		
 		var input = confirm('삭제하시겠습니까?'); 
 		if(!input) return;
 
-		if(obj.server_id == ''){
-			alert("[알림] 서버를 선택하세요.");
-			$("input#F_SERVER_NM").focus();
+		if(obj.sector_id == ''){
+			alert("[알림] 구역를 선택하세요.");
+			$("input#F_SECTOR_NAME").focus();
 		    return;
 		}
 		
-		console.log('F_SERVER_ID:'+ obj.server_id);
+		console.log('F_SECTOR_ID:'+ obj.sector_id);
 		console.log('sCrud:'+ obj.crud);
 
-		$("#SetServerForm").ajaxForm({
-			url : 'SetServer',
+		$("#SetSectorForm").ajaxForm({
+			url : 'SetAnchorSector',
 			dataType:'json',
 			type: 'post',
 			data : {param:JSON.stringify(obj)},
@@ -195,7 +186,7 @@
 			},
 			error : function(data, status){
 		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 서버에서 전달
+		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
 		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
 		    			alert("이미 등록되어 있는 아이디 입니다.");
 		    		} else {
@@ -204,13 +195,13 @@
 		    	}
 			}
 		});	
-		$("#SetServerForm").submit() ;
+		$("#SetSectorForm").submit() ;
 	});
 	
 	
 	// 엑셀 export
 	// excelExportSave(url:String, async:Boolean);
-//	    url : 업로드할 서버의 url, 기본값 null
+//	    url : 업로드할 구역의 url, 기본값 null
 //	    async : 비동기 모드로 수행여부, 기본값 false
 	function excelExport() {
 		// PagingCollection의 rowsPerPage를 0으로 세팅하여 전체 데이터를 보여주도록 하며 현재 페이지 번호를 저장합니다.
@@ -252,13 +243,13 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<columns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="SERVER_ID" id="colServerId" width="80"/>\
-				<DataGridColumn dataField="SERVER_IP" id="colServerIp" width="160"/>\
-				<DataGridColumn dataField="SERVER_NM" id="colServerNm" width="200"/>\
-				<DataGridColumn dataField="SERVER_DESC" id="colServerDesc" width="200" />\
-				<DataGridColumn dataField="SERVER_CLASS_CD" id="colServerClassCd" visible="false" width="80"/>\
-				<DataGridColumn dataField="SERVER_CLASS_NM" id="colServerClassNm" width="200"/>\
-				<DataGridColumn dataField="USE_YN" id="colUseYn" width="80"/>\
+				<DataGridColumn dataField="SECTOR_ID"   id="colScetorId" width="80"/>\
+				<DataGridColumn dataField="SECTOR_NAME" id="colSectorName" headerText="이름" width="200"/>\
+				<DataGridColumn dataField="GPSX1"       id="colGpsx1" width="100"/>\
+				<DataGridColumn dataField="GPSX2"       id="colGpsx2" width="100" />\
+				<DataGridColumn dataField="GPSY1"       id="colGpsy1" width="100"/>\
+				<DataGridColumn dataField="GPSY2"       id="colGpsy2" width="100"/>\
+				<DataGridColumn dataField="SECTOR_DESC" id="colSectorDesc" width="500"/>\
 			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
@@ -267,7 +258,7 @@
 	</rMateGrid>';
 
 	// 페이징 관련 자바스크립트
-	var gridTotalRowCount;	// 전체 데이터 건수 - html이 서버에서 작성될때 반드시 넣어줘야 하는 변수입니다.
+	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
 
 	var gridRowsPerPage;	// 1페이지에서 보여줄 행 수
 	var gridViewPageCount = 10;		// 페이지 네비게이션에서 보여줄 페이지의 수

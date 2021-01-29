@@ -459,6 +459,25 @@
 	  <listener-class>com.a1ck.quarts.CronQuartzScheduler</listener-class>
 	 </listener> -->
 	   
+
+	<servlet>
+		<servlet-name>GetAnchorSectorList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAnchorSectorList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorSectorList</servlet-name>
+		<url-pattern>/GetAnchorSectorList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAnchorSector</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAnchorSector</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAnchorSector</servlet-name>
+		<url-pattern>/SetAnchorSector</url-pattern>
+	</servlet-mapping>			
+		
+			   
 	 <filter>
 		<filter-name>cors</filter-name>
 		<filter-class>com.a1ck.SimpleCORSFilter</filter-class>
