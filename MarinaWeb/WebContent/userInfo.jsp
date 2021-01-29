@@ -169,9 +169,9 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 
 							
 									<div class="form-group">
-										<label for="f_sabun" class="col-sm-3 control-label">사용자번호</label>
+										<label for="f_sabun" class="col-sm-3 control-label">ID</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_USER_CD" name="F_USER_CD"  >
+											<input type="text" class="form-control"   id="F_USER_CD" name="F_USER_CD"  >
 											<input type="hidden" class="form-control" id="F_USER_ID" name="F_USER_ID" >
 										</div>
 									</div>
@@ -182,18 +182,6 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 											<input type="text" class="form-control" id="F_USER_NM" name="F_USER_NM"  >
 										</div>
 									</div>
-																	
-<!-- 									<div class="form-group">
-										<label for="f_status" class="col-sm-3 control-label">재직여부</label>
-										<div class="col-sm-8" >
-											<select class="form-control" id="f_status" readonly>
-												<option>상태를 선택하세요.</option>
-												<option value="C" > 재직</option>
-												<option value="H" > 휴직</option>
-												<option value="T" > 퇴직</option>
-											</select>
-										</div>
-									</div> -->
 	
 									<div class="form-group">
 										<label for="F_TELEPHONE" class="col-sm-3 control-label">연락처</label>											

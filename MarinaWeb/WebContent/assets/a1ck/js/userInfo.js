@@ -57,11 +57,12 @@
 		if(dataGrid.getSelectedIndex() >= 0 ) {
 			$('#F_USER_CD').val(dataGrid.getSelectedItem().USER_CD);
 			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
-			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
-			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
-			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
-			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
-			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
+			$('#F_TELEPHONE').val(dataGrid.getSelectedItem().TELEPHONE);
+			$('#F_EMAIL').val(dataGrid.getSelectedItem().EMAIL);
+			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
+			$('#F_APPROWAITCNT').val(dataGrid.getSelectedItem().APPROWAITCNT);
+			$('#F_PASSWORD').val(dataGrid.getSelectedItem().PASSWORD);
+			$('#F_PASSWORDORG').val(dataGrid.getSelectedItem().PASSWORDORG);
 			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
 			$('#CRUD').val("U");
 		}
@@ -102,39 +103,44 @@
 	});
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_SECTOR_ID'   ).val("");
-		$('#F_SECTOR_NM'   ).val("");
-		$('#F_GPSX1'       ).val("");
-		$('#F_GPSX2'       ).val("");
-		$('#F_GPSY1'       ).val("");
-		$('#F_GPSY2'       ).val("");
-		$('#F_SECTOR_DESC' ).val("");
+		$('#F_USER_CD		').val("");
+		$('#F_USER_NM		').val("");
+		$('#F_TELEPHONE		').val("");
+		$('#F_EMAIL			').val("");
+		$('#F_USER_ID		').val("");
+		$('#F_APPROWAITCNT	').val("");
+		$('#F_PASSWORD		').val("");
+		$('#F_PASSWORDORG	').val("");
+		$('input[name="F_USE_YN"]').val(["Y"]);
 		$('#CRUD'          ).val("C");
 		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_SECTOR_NM").focus();
+		$("input#F_USER_NM").focus();
 	});
 
 	$('#btnSave').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.sector_nm   = $("input#F_SECTOR_NM").val();
-		obj.gpsx1       = $("input#F_GPSX1").val();
-		obj.gpsx2       = $("input#F_GPSX2").val();
-		obj.gpsy1       = $("input#F_GPSY1").val();
-		obj.gpsy2       = $("input#F_GPSY2").val();
-		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
-		obj.crud        = $("#CRUD").val();
+        obj.user_id     = $("input#F_USER_ID").val();
+        obj.user_nm     = $("input#F_USER_NM").val();
+        obj.user_cd     = $("input#F_TELEPHONE").val();
+        obj.telephone   = $("input#F_EMAIL").val();
+        obj.password    = $("input#F_USER_ID").val();
+        obj.passwordorg = $("input#F_APPROWAITCNT").val();
+        obj.email       = $("input#F_PASSWORD").val();
+        obj.approwaitcnt= $("input#F_PASSWORDORG").val();
+        obj.pic         = $("input#F_PICTURE").val();
+		obj.use_yn 		= $('input[name="F_USE_YN"]:checked').val();	
+        obj.crud        = $("#CRUD").val();
 
 		if(obj.sector_nm == ''){
-			alert("[알림] 구역명을 입력하세요.");
-			$("input#F_SECTOR_NM").focus();
+			alert("[알림] 사용자명을 입력하세요.");
+			$("input#F_USER_NM").focus();
 		    return;
 		}
 
 		$("#SetSectorForm").ajaxForm({
-			url : 'SetAnchorSector',
+			url : 'SetUser',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -244,14 +250,14 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     headerText="ID"  width="100"     />\
-				<DataGridColumn dataField="USER_NM" 	 id="colSectorNm"   headerText="이름" width="200"/>\
-				<DataGridColumn dataField="TELEPHONE"    id="colGpsx1" 		headerText="시작" width="100"/>\
-				<DataGridColumn dataField="EMAIL"        id="colGpsy2" 		headerText="끝" width="100"/>\
-				<DataGridColumn dataField="USER_ID"      id="colGpsy2" 		headerText="끝" width="100"  visible="false"  />\
-				<DataGridColumn dataField="APPROWAITCNT" id="colGpsy2" 		headerText="끝" width="100"  visible="false"  />\
-				<DataGridColumn dataField="PASSWORD"     id="colGpsx2" 		headerText="끝" width="100"   visible="false"  />\
-				<DataGridColumn dataField="PASSWORDORG"  id="colGpsy1" 		headerText="시작" width="100"  visible="false"  />\
+				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     	headerText="ID"  width="100"     />\
+				<DataGridColumn dataField="USER_NM" 	 id="colUserNm"   		headerText="이름" width="200"/>\
+				<DataGridColumn dataField="TELEPHONE"    id="colTelephone" 		headerText="연락처" width="100"/>\
+				<DataGridColumn dataField="EMAIL"        id="colEmail" 			headerText="메일" width="100"/>\
+				<DataGridColumn dataField="USER_ID"      id="colUserId" 		width="100"  visible="false"  />\
+				<DataGridColumn dataField="APPROWAITCNT" id="colApprowaitcnt" 	width="100"  visible="false"  />\
+				<DataGridColumn dataField="PASSWORD"     id="colPassword" 		width="100"   visible="false"  />\
+				<DataGridColumn dataField="PASSWORDORG"  id="colPasswordOrg" 	width="100"  visible="false"  />\
 				<DataGridColumn dataField="USE_YN" 		 id="colUseYn" width="80"/>\
 			</groupedColumns>\
 			<dataProvider>\
