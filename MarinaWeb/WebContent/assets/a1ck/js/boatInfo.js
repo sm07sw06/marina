@@ -55,44 +55,29 @@
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_USER_CD').val(dataGrid.getSelectedItem().USER_CD);
-			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
-			$('#F_TELEPHONE').val(dataGrid.getSelectedItem().TELEPHONE);
-			$('#F_EMAIL').val(dataGrid.getSelectedItem().EMAIL);
-			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
-			$('#F_APPROWAITCNT').val(dataGrid.getSelectedItem().APPROWAITCNT);
-			$('#F_PASSWORD').val(dataGrid.getSelectedItem().PASSWORD);
-			$('#F_PASSWORDORG').val(dataGrid.getSelectedItem().PASSWORDORG);
-			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
+			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
+			$('#F_SECTOR_NM').val(dataGrid.getSelectedItem().SECTOR_NM);
+			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
+			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
+			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
+			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
+			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
 			$('#CRUD').val("U");
-			$('#F_USER_CD').attr('readonly', true);
-			
-	        if ( dataGrid.getSelectedItem().PICTURE.trim() == "" || dataGrid.getSelectedItem().PICTURE == 'null' ) { 
-	        	//console.log('111111');
-	        	$('#F_PICTURE').attr('src', "assets/images/" + "200x150.png");
-	        	$('.fileinput .fileinput-preview img').attr('src', "assets/images/" + "200x150.png");
-	        } else {
-	        	//console.log('222222');
-	        	$('#F_PICTURE').attr('src', "userImages/" + dataGrid.getSelectedItem().PICTURE);
-	        	$('.fileinput .fileinput-preview img').attr('src', "userImages/" + dataGrid.getSelectedItem().PICTURE);
-	        }
-			
 		}
 	}
 
 	function refreshData()  
 	{
 		var gridData = [];
+		jsonObj = {};
 
-		jsonObj.__user_cd = $('#C_USER_NM').val();
-		jsonObj.__user_nm = $('#C_USER_NM').val();
-		jsonObj.__from    = $('#C_FROM').val();
-		jsonObj.__to      = $('#C_TO').val();
-		jsonObj.__rows    = "20";
-		jsonObj.__page    = "1" ;
+		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
+		jsonObj.__sector_id = '*';
+		jsonObj.__rows      = '20';
+		jsonObj.__page      = '1';
 
 		$.ajax({
-		   	url:"GetUserEntryList",
+		   	url:"GetBoatList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -112,74 +97,116 @@
 	}
 	
 
-	$('#f_picture_preview').change(function(){
- 
-		var filesize = this.files[0].size/1024/1024;
-		if(filesize >= 5) {
-			alert("[알림] 첨부파일 사이즈는 5MB 이내로 등록하세요.");
-			$("input#F_USER_CD").focus();
-		    return;			
-		}
- 
-	});
-	
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
+	
+	$('#btnAdd').click(function (e) {
+		$('#F_SECTOR_ID'   ).val("");
+		$('#F_SECTOR_NM'   ).val("");
+		$('#F_GPSX1'       ).val("");
+		$('#F_GPSX2'       ).val("");
+		$('#F_GPSY1'       ).val("");
+		$('#F_GPSY2'       ).val("");
+		$('#F_SECTOR_DESC' ).val("");
+		$('#CRUD'          ).val("C");
+		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
+		$("input#F_SECTOR_NM").focus();
+	});
+
+	$('#btnSave').click(function (e) {
+		var formData = new FormData();
+		
+		var obj = new Object();
+		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.sector_nm   = $("input#F_SECTOR_NM").val();
+		obj.gpsx1       = $("input#F_GPSX1").val();
+		obj.gpsx2       = $("input#F_GPSX2").val();
+		obj.gpsy1       = $("input#F_GPSY1").val();
+		obj.gpsy2       = $("input#F_GPSY2").val();
+		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
+		obj.crud        = $("#CRUD").val();
+
+		console.log('sector_nm:'+ obj.sector_nm);
+		
+		if(obj.sector_nm == ''){
+			alert("[알림] 구역명을 입력하세요.");
+			$("input#F_SECTOR_NM").focus();
+		    return;
+		}
+
+		$("#SetBoatForm").ajaxForm({
+			url : 'SetBoat',
+			dataType:'json',
+			type: 'post',
+			data:{param:JSON.stringify(obj)},
+			success: function(json_data) {
+				$('#btnQuery').click();
+				$('#btnAdd').click();
+				alert("정상적으로 처리 되었습니다.");
+			},
+			error : function(data, status){
+		    	if (data != null){
+		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
+		    			alert("이미 등록되어 있는 아이디 입니다.");
+		    		} else {
+		    			alert("Error");
+		    		}
+		    	}
+			}
+		});	
+		$("#SetSectorForm").submit() ;
+	});
+
+	$('#btnDelete').click(function (e) {
+		var formData = new FormData();
+		
+		var obj = new Object();
+		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.crud        = "D";
+		
+		var input = confirm('삭제하시겠습니까?'); 
+		if(!input) return;
+
+		if(obj.sector_id == ''){
+			alert("[알림] 구역를 선택하세요.");
+			$("input#F_SECTOR_NM").focus();
+		    return;
+		}
+		
+		console.log('F_SECTOR_ID:'+ obj.sector_id);
+		console.log('sCrud:'+ obj.crud);
+
+		$("#SetSectorForm").ajaxForm({
+			url : 'SetBoat',
+			dataType:'json',
+			type: 'post',
+			data : {param:JSON.stringify(obj)},
+			success: function(json_data) {
+				$('#btnQuery').click();
+				$('#btnAdd').click();
+				alert("정상적으로 처리 되었습니다.");
+			},
+			error : function(data, status){
+		    	if (data != null){
+		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
+		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
+		    			alert("이미 등록되어 있는 아이디 입니다.");
+		    		} else {
+		    			alert("Error");
+		    		}
+		    	}
+			}
+		});	
+		$("#SetSectorForm").submit() ;
+	});
+	
 	
 	// 엑셀 export
 	// excelExportSave(url:String, async:Boolean);
 //	    url : 업로드할 구역의 url, 기본값 null
 //	    async : 비동기 모드로 수행여부, 기본값 false
 	function excelExport() {
-		
-		// 엑셀문서의 제목 행들을 지정합니다.
-		dataGrid.exportTitles = [
-			"년간 매출 보고서",	// 문자열 하나를 기본 제목 스타일로 넣을 경우
-			null,							// 빈라인 - 행 높이는 DataGrid의 exportTitleHeight를 따릅니다.
-			{height:25, fontSize:12, color:"#444444", borderColor:"#999999",	// cells 에 개별 셀에 대한 내용을 정의하는 경우
-				cells: [
-					{text:"", colSpan:7},
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					{text:"담당", border:true},
-					{text:"과장", border:true},
-					{text:"부장", border:true},
-					{text:"대표이사", border:true}
-				]
-			},
-			{height:70, borderColor:"#999999",
-				cells: [
-					{text:"", colSpan:7},
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					{text:"", border:true},
-					{text:"", border:true},
-					{text:"", border:true},
-					{text:"", border:true}
-				]
-			},
-			{height:20, text:""},
-			{height:30, fontSize:14, color:"#333333", text:"아래와 같이 년간 매출을 보고합니다."},		// ojbect로 한 행의 속성을 정의한 경우
-			{height:20, text:""}
-		];
-		// 엑셀문서의 꼬릿말라인들을 지정합니다.
-		dataGrid.exportFooters = [
-			{height:14, text:""},
-			{height:18, fontSize:10, color:"#888888", textAlign:"left", backgroundColor:"#EEEEEE", text:"이 문서는 대외비입니다. 외부에 유출이 안되도록 유의해 주시기 바랍니다."},		// 행의 속성을 정의하여 넣습니다.
-			null,									// 빈라인 - 라인 높이는 DataGrid의 exportFooterHeight를 따릅니다.
-			//inputForm.exportFooter.value,			// 화면에서 넣은 값을 넣어주는 경우.
-			"1111111111111111",			// 화면에서 넣은 값을 넣어주는 경우.
-		];
-		
 		// PagingCollection의 rowsPerPage를 0으로 세팅하여 전체 데이터를 보여주도록 하며 현재 페이지 번호를 저장합니다.
 		var rowsPerPage = collection.getRowsPerPage();
 		var currentPage = collection.getCurrentPage();
@@ -189,6 +216,15 @@
 		if (colNo)
 			colNo.indexStartNo = 1;
 
+		dataGrid.exportOnlyData = inputForm.dataOnly.checked;
+
+		// excel 파일 종류 지정
+		for (var i = 0; i < inputForm.export_type.length; i++) {
+			if (inputForm.export_type[i].checked) {
+				dataGrid.exportType = inputForm.export_type[i].value;
+				break;
+			}
+		}
 		dataGrid.exportFileName = "export." + dataGrid.exportType;
 
 		gridRoot.addEventListener("exportSaveComplete", function() {
@@ -208,13 +244,14 @@
 	'<rMateGrid>\
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
-			<groupedColumns>\
-				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="REG_DATE" id="colRegDate" headerText="일자"  width="100"     />\
-				<DataGridColumn dataField="DVC_NM" 	 id="colDvcNm"   headerText="장치"  width="100"/>\
-				<DataGridColumn dataField="USER_NM"  id="colUserNm"  headerText="이름"  width="100"/>\
-				<DataGridColumn dataField="STATUS"   id="colStatus"  headerText="상태"  width="100"/>\
-			</groupedColumns>\
+			<columns>\
+				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="BOAT_ID"   	id="colBoatId"   	headerText="ID"    width="100"    />\
+				<DataGridColumn dataField="BOAT_NM" 	id="colBoatNm" 		headerText="보트명"  width="200" />\
+				<DataGridColumn dataField="USER_ID"     id="colUserId" 		headerText="회원"   width="100" visible="false" />\
+				<DataGridColumn dataField="USER_NM"     id="colUserNm" 		headerText="회원명"  width="100" />\
+				<DataGridColumn dataField="BOAT_STATUS" id="colBoatStatus" 	headerText="상태"   width="100" />\
+			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
 			</dataProvider>\
@@ -316,22 +353,6 @@
 			colNo.indexStartNo = (gridCurrentPage - 1) * gridRowsPerPage + 1;
 	}
 	
-	function getToday(){
-	    var now = new Date();
-	    var year = now.getFullYear();
-	    var month = now.getMonth() + 1;    //1월이 0으로 되기때문에 +1을 함.
-	    var date = now.getDate();
 
-	    month = month >=10 ? month : "0" + month;
-	    date  = date  >= 10 ? date : "0" + date;
-	     // ""을 빼면 year + month (숫자+숫자) 됨.. ex) 2018 + 12 = 2030이 리턴됨.
-
-	    //console.log(""+year + month + date);
-	    return today = "" + year + "-" + month + "-" + date; 
-	}
-	
-
-	$("input#F_USER_CD").focus();
-	$("#C_FROM").val(getToday());
-	$("#C_TO").val(getToday());
+	$("input#F_SECTOR_NM").focus();
 	

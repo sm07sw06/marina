@@ -115,11 +115,12 @@ if(el){
 						
 			<ol class="breadcrumb bc-3" >
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
-				<li><a href="#">사용자관리</a></li>
-				<li class="active"><strong>사용자등록</strong></li>
+				<li><a href="#">기초정보관리</a></li>
+				<li><a href="#">회원관리</a></li>
+				<li class="active"><strong>회원기초정보관리</strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>사용자등록</div>
+			<div class='myTitleBox'>회원기초정보관리</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 

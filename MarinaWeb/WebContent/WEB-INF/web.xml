@@ -461,6 +461,16 @@
 	   
 
 	<servlet>
+		<servlet-name>GetUserEntryList</servlet-name>
+		<servlet-class>com.a1ck.user.GetUserEntryList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUserEntryList</servlet-name>
+		<url-pattern>/GetUserEntryList</url-pattern>
+	</servlet-mapping>			
+
+
+	<servlet>
 		<servlet-name>GetAnchorSectorList</servlet-name>
 		<servlet-class>com.a1ck.asset.GetAnchorSectorList</servlet-class>
 	</servlet>

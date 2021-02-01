@@ -53,7 +53,6 @@
 <script type="text/javascript" src="./LicenseKey/rMateGridH5License.js"></script>
 <!-- rMateGridH5 라이브러리 -->
 <script type="text/javascript" src="./rMateGridH5/JS/rMateGridH5.js"></script>
-<script type="text/javascript" src="./rMateGridH5/JS/jszip.min.js"></script>
 
 <!-- 페이징 관련 스타일 -->
 <link rel="stylesheet" type="text/css" href="./assets/a1ck/css/a1ckRef.css">	
@@ -90,12 +89,7 @@ function geoFindMe() {
 
 }
 
-var el = document.querySelector('#find-me');
-if(el){
-  el.addEventListener('click', geoFindMe);
-}
-
-//document.querySelector('#find-me').addEventListener('click', geoFindMe);
+document.querySelector('#find-me').addEventListener('click', geoFindMe);
 
 </script>
 </head>
@@ -117,60 +111,39 @@ if(el){
 			<ol class="breadcrumb bc-3" >
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
 				<li><a href="#">기초정보관리</a></li>
-				<li><a href="#">회원관리</a></li>
-				<li class="active"><strong>출입내역조회</strong></li>
+				<li><a href="#">보트정보 관리</a></li>
+				<li class="active"><strong>보트기초정보관리</strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>출입내역조회</div>
+			<div class='myTitleBox'>보트기초정보관리</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
-						<div >
-							<div class="form-group">
-								<div class="col-sm-2">
-									<div class="input-group">
-										<input type="text" class="form-control datepicker" id="C_FROM"  name="C_FROM" data-format="yyyy-mm-dd">
-										<div class="input-group-addon">
-											<a href="#"><i class="entypo-calendar"></i></a>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-2">
-									<div class="input-group">
-										<input type="text" class="form-control datepicker" id="C_TO"  name="C_TO" data-format="yyyy-mm-dd">
-										<div class="input-group-addon">
-											<a href="#"><i class="entypo-calendar"></i></a>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="input-group ">
-										<input type="text" class="form-control" id="C_USER_NM"  name="C_USER_NM"  placeholder="이름또는 ID를 입력하세요." >
-										<div class="input-group-addon">
-											<a href="#"><i class="entypo-user-add"></i></a>
-										</div>										
-										<input type="hidden" id="C_USER_CD"  name="C_USER_CD"   >
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="input-group ">
-										<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
-										<button onclick="excelExport()" id="btnExcel"   class="btn btn-sm btn-blue">엑셀</button>
-									</div>
-								</div>
-										
+						<div class="col-lg-12">
+							<div class="col-sm-8" >
+						        <input class="icheck-13" type="radio" id="C_USE_Y" name="C_USE_YN" value="Y" checked>
+						        <label for="C_USE_YN">사용</label>&nbsp;&nbsp;
+						        <input class="icheck-13" type="radio" id="C_USE_N" name="C_USE_YN" value="N" >
+						        <label for="C_USE_YN">미사용</label>&nbsp;&nbsp;
+						        <input class="icheck-13" type="radio" id="C_USE_A" name="C_USE_YN" value="A" >
+						        <label for="C_USE_YN">전체</label>
+						        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
+								<button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp;
+								<button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red">삭제</button>&nbsp;&nbsp;
+								<button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue">저장</button>
 							</div>
+							<!-- <button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red" >삭제</button> -->
 						</div>
 					</form>
 				</div>
 				<!--  search form end --> 
 
-		
 				<!-- main-sub-content start-->
 				<div class="main-sub-content" >
-				 
+				
 					<!--  left list start -->
-					<div class="col-lg-12">										
+					<div class="col-lg-8">										
 						<div class="panel panel-primary" data-collapsed="0">
 							<!-- panel body -->
 						<div class="content">
@@ -182,7 +155,77 @@ if(el){
 						</div>
 					</div>
 					<!--  left list end -->
-					
+									
+					<!--  right info start -->
+					<div id="detail-area" class="col-lg-4 container-fluid" style="height:600px;">	  
+					 
+						<div class="panel panel-primary" data-collapsed="0">
+							<!-- panel head -->
+							<div class="panel-heading">
+								<div class="panel-title">구역정보 상세</div>
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+								</div>
+							</div>
+							
+							<!-- panel body -->
+							<div class="panel-body">
+								<form role="form" method="post" name="SetBoatForm" id="SetBoatForm"  class="form-horizontal validate" action="" >
+							
+									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
+									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
+							
+									<div class="form-group">
+										<label for="f_name" class="col-sm-3 control-label">구역ID</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_SECTOR_ID" readonly>
+										</div>
+									</div>
+																	
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">구역명</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_SECTOR_NM"   >
+										</div>
+									</div>
+	
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도시작</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSX1"  >
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도끝</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSX2"  >
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도시작</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSY1"  >
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도끝</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_GPSY2"  >
+										</div>
+									</div>
+	
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">설명</label>
+										<div class="col-sm-8">
+											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SECTOR_DESC" id="F_SECTOR_DESC" ></textarea>
+										</div>
+									</div>
+
+								</form>
+							</div> <!-- panel-body  -->
+						</div> <!--  id="pannel"  -->
+					</div> <!--  id="detail-area"  -->
+					<!--  right info start -->
 					
 				</div>
 				<!-- main-sub-content end-->
@@ -194,6 +237,7 @@ if(el){
 			<!-- Footer end-->
 		</div> <!--main-content -->
 	</div>
+
 
 	<!-- Bottom scripts (common) -->
 	<script src="assets/js/gsap/TweenMax.min.js"></script>
@@ -207,6 +251,9 @@ if(el){
 	<script src="assets/a1ck/js/a1ck_fileinput.js"></script>
 	<script src="assets/js/dropzone/dropzone.js"></script>
 	<script src="assets/js/neon-chat.js"></script>
+	<!-- 
+	<script src="assets/js/datatables/datatables.js"></script>
+	 -->
 	
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/neon-custom.js"></script>
@@ -216,12 +263,7 @@ if(el){
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
 	<script src="assets/a1ck/js/a1ck-js.js"></script>		
-	<script src="assets/a1ck/js/userEntryList.js"></script>		
-
-	<!-- Imported scripts on this page -->
-	<script src="assets/a1ck/js/bootstrap-datepicker_a1ck.js"></script>
-	
-
+	<script src="assets/a1ck/js/boatInfo.js"></script>		
 
 </body>
 </html>
