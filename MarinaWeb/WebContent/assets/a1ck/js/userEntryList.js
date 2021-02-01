@@ -45,45 +45,17 @@
 		
 		gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
 		gridRoot.addEventListener("dataComplete", dataCompleteHandler);
-		gridRoot.addEvent("dblclick", dblclickHandler);
-		
 	}
 
 	var gridApp, gridRoot;	// 데이터와 그리드를 포함하는 객체
 	var dataGrid;	// 그리드
 
-	//레이아웃 로드 완료 이벤트 핸들러 함수
-	function dblclickHandler(event) {
-		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_USER_CD').val(dataGrid.getSelectedItem().USER_CD);
-			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
-			$('#F_TELEPHONE').val(dataGrid.getSelectedItem().TELEPHONE);
-			$('#F_EMAIL').val(dataGrid.getSelectedItem().EMAIL);
-			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
-			$('#F_APPROWAITCNT').val(dataGrid.getSelectedItem().APPROWAITCNT);
-			$('#F_PASSWORD').val(dataGrid.getSelectedItem().PASSWORD);
-			$('#F_PASSWORDORG').val(dataGrid.getSelectedItem().PASSWORDORG);
-			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
-			$('#CRUD').val("U");
-			$('#F_USER_CD').attr('readonly', true);
-			
-	        if ( dataGrid.getSelectedItem().PICTURE.trim() == "" || dataGrid.getSelectedItem().PICTURE == 'null' ) { 
-	        	//console.log('111111');
-	        	$('#F_PICTURE').attr('src', "assets/images/" + "200x150.png");
-	        	$('.fileinput .fileinput-preview img').attr('src', "assets/images/" + "200x150.png");
-	        } else {
-	        	//console.log('222222');
-	        	$('#F_PICTURE').attr('src', "userImages/" + dataGrid.getSelectedItem().PICTURE);
-	        	$('.fileinput .fileinput-preview img').attr('src', "userImages/" + dataGrid.getSelectedItem().PICTURE);
-	        }
-			
-		}
-	}
-
 	function refreshData()  
 	{
 		var gridData = [];
 
+		console.log($('#C_FROM').val());
+		
 		jsonObj.__user_cd = '*';
 		jsonObj.__user_nm =  $('#C_USER_NM').val();
 		jsonObj.__rows     = "20";
@@ -109,147 +81,12 @@
 		gridApp.setData(gridData);
 	}
 	
-
-	$('#f_picture_preview').change(function(){
- 
-		var filesize = this.files[0].size/1024/1024;
-		if(filesize >= 5) {
-			alert("[알림] 첨부파일 사이즈는 5MB 이내로 등록하세요.");
-			$("input#F_USER_CD").focus();
-		    return;			
-		}
- 
-	});
 	
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
 	
-	$('#btnAdd').click(function (e) {
-		$('#F_USER_CD		').val("");
-		$('#F_USER_NM		').val("");
-		$('#F_TELEPHONE		').val("");
-		$('#F_EMAIL			').val("");
-		$('#F_USER_ID		').val("");
-		$('#F_APPROWAITCNT	').val("");
-		$('#F_PASSWORD		').val("");
-		$('#F_PASSWORDORG	').val("");
-		$('input[name="F_USE_YN"]').val(["Y"]);
-		$('#CRUD'          ).val("C");
-		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_USER_NM").focus();
-		
-    	$('#F_PICTURE').attr('src', "assets/images/" + "200x150.png");
-    	$('.fileinput .fileinput-preview img').attr('src', "assets/images/" + "200x150.png");
-    	
-	});
 
-	$('#btnSave').click(function (e) {
-		var formData = new FormData();
-		
-		try {
-			
-			var obj = new Object();
-	        obj.user_id     = $("input#F_USER_ID").val();
-	        obj.user_nm     = $("input#F_USER_NM").val();
-	        obj.user_cd     = $("input#F_USER_CD").val();
-	        obj.telephone   = $("input#F_TELEPHONE").val();
-	        obj.password    = $("input#F_PASSWORD").val();
-	        obj.passwordorg = $("input#F_PASSWORDORG").val();
-	        obj.email       = $("input#F_EMAIL").val();
-	        obj.approwaitcnt= $("input#F_APPROWAITCNT").val();
-	        obj.pic         = $("input#F_PICTURE").val();
-			obj.use_yn 		= $('input[name="F_USE_YN"]:checked').val();	
-	        obj.crud        = $("#CRUD").val();
-			$('#F_USER_CD').attr('readonly', false);
-	
-			if(obj.user_cd == ''){
-				alert("[알림] ID를 입력하세요.");
-				$("input#F_USER_CD").focus();
-			    return;
-			}
-			if(obj.user_nm == ''){
-				alert("[알림] 이름을 입력하세요.");
-				$("input#F_USER_NM").focus();
-			    return;
-			}
-	
-			/**
-			var filesize = $('#f_picture_preview').files[0].size/1024/1024;
-			if(filesize >= 5) {
-				alert("[알림] 첨부파일 사이즈는 5MB 이내로 등록하세요.");
-				$("input#F_USER_CD").focus();
-			    return;			
-			}
-			**/
-			
-			$("#SetUserForm").ajaxForm({
-				url : 'SetUser',
-				dataType:'json',
-				type: 'post',
-				data:{param:JSON.stringify(obj)},
-				success: function(json_data) {
-					$('#btnQuery').click();
-					$('#btnAdd').click();
-					alert("정상적으로 처리 되었습니다.");
-				},
-				error : function(data, status){
-			    	if (data != null){
-			    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
-			    			alert("이미 등록되어 있는 아이디 입니다.");
-			    		} else {
-			    			alert("Error");
-			    		}
-			    	}
-				}
-			});	
-			$("#SetUserForm").submit() ;
-			$('#F_USER_CD').attr('readonly', false);
-		} catch (error){
-			alert("[알림] 처리시 오류가 발생하였습니다.\n" + error.message);
-		}
-		
-	});
-
-	$('#btnDelete').click(function (e) {
-		var formData = new FormData();
-		
-		var obj = new Object();
-		$('#CRUD'          ).val("D");		
-		
-		var input = confirm('삭제하시겠습니까?'); 
-		if(!input) return;
-
-	
-		//console.log('F_USER_ID:'+ obj.user_id);
-		//console.log('sCrud:'+ obj.crud);
-
-		$("#SetUserForm").ajaxForm({
-			url : 'SetUser',
-			dataType:'json',
-			type: 'post',
-			data : {param:JSON.stringify(obj)},
-			success: function(json_data) {
-				$('#btnQuery').click();
-				$('#btnAdd').click();
-				alert("정상적으로 처리 되었습니다.");
-			},
-			error : function(data, status){
-		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
-		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
-		    			alert("이미 등록되어 있는 아이디 입니다.");
-		    		} else {
-		    			alert("Error");
-		    		}
-		    	}
-			}
-		});	
-		$("#SetUserForm").submit() ;
-		$('#F_USER_CD').attr('readonly', false);
-
-	});
-	
 	
 	// 엑셀 export
 	// excelExportSave(url:String, async:Boolean);
@@ -299,11 +136,6 @@
 				<DataGridColumn dataField="USER_NM" 	 id="colUserNm"   		headerText="이름" width="200"/>\
 				<DataGridColumn dataField="TELEPHONE"    id="colTelephone" 		headerText="연락처" width="100"/>\
 				<DataGridColumn dataField="EMAIL"        id="colEmail" 			headerText="메일" width="100"/>\
-				<DataGridColumn dataField="USER_ID"      id="colUserId" 		width="100"  visible="false"  />\
-				<DataGridColumn dataField="APPROWAITCNT" id="colApprowaitcnt" 	width="100"  visible="false"  />\
-				<DataGridColumn dataField="PASSWORD"     id="colPassword" 		width="100"   visible="false"  />\
-				<DataGridColumn dataField="PASSWORDORG"  id="colPasswordOrg" 	width="100"  visible="false"  />\
-				<DataGridColumn dataField="USE_YN" 		 id="colUseYn" width="80"/>\
 			</groupedColumns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
@@ -407,5 +239,25 @@
 	}
 	
 
+	function getToday(){
+	    var now = new Date();
+	    var year = now.getFullYear();
+	    var month = now.getMonth() + 1;    //1월이 0으로 되기때문에 +1을 함.
+	    var date = now.getDate();
+
+	    month = month >=10 ? month : "0" + month;
+	    date  = date  >= 10 ? date : "0" + date;
+	     // ""을 빼면 year + month (숫자+숫자) 됨.. ex) 2018 + 12 = 2030이 리턴됨.
+
+	    //console.log(""+year + month + date);
+	    return today = ""+year + "-"+ month + "-" + date; 
+	}
+
+
+	
 	$("input#F_USER_CD").focus();
+	$("#C_FROM").val(getToday());
+	$("#C_TO").val(getToday());
+	
+	
 	

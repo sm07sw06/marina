@@ -156,6 +156,8 @@ public class SetUser extends HttpServlet {
 					
 					logger.debug("SetUser sql:" + insertSql);
 					
+					stmt.execute(insertSql);
+					/**
 					stmt.execute(insertSql, Statement.RETURN_GENERATED_KEYS);
 					keySet = stmt.getGeneratedKeys();
 					genKey = 0;
@@ -163,7 +165,7 @@ public class SetUser extends HttpServlet {
 					if(keySet.next()){
 						genKey=(int) keySet.getLong(1);
 					}
-					
+					**/
 					stmt.close();
 					
 			   } else if(sCrud.equals("D")) {

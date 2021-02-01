@@ -84,7 +84,7 @@ public class SetMenuList extends HttpServlet {
 //				    String insertSql = "INSERT INTO TB_MENU (MENU_NM, MENU_CD, MENU_URL, MENU_DESC, MENU_ORDER, UP_MENU_ID) \n";
 //					insertSql = insertSql + "VALUES ( '" + sMenuNm + "', '" + sMenuCd + "', '" + sMenuUrl + "', '" + sMenuDesc + "', 0 , null )";
 				    String insertSql = "INSERT INTO TB_MENU (MENU_NM, MENU_URL, MENU_DESC, MENU_ORDER, UP_MENU_ID) \n";
-					insertSql = insertSql + "VALUES ( '" + sMenuNm + "', '" + sMenuUrl + "', '" + sMenuDesc + "', 0 , null )";
+					insertSql = insertSql + "VALUES ( '" + sMenuNm + "', '" + sMenuUrl + "', '" + sMenuDesc + "', " + sMenuOrder + " , null )";
 					stmt = connectionDest.createStatement();
 					logger.debug("SetMenu sql:" + insertSql);
 					stmt.execute(insertSql);
