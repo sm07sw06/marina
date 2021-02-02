@@ -83,7 +83,7 @@ public class GetAnchorSectorList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT S.SECTOR_ID, S.SECTOR_NM, S.GPSX1,  S.GPSX2,  S.GPSY1,  S.GPSY2, S.SECTOR_DESC \n ";
-			sQuery += "   FROM ANCHOR_SECTOR S\n ";
+			sQuery += "   FROM TB_ANCHOR_SECTOR S\n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			
 			if( !StringUtils.equals(sAnchorSectorId, "*")) {

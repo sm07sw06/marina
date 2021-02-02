@@ -81,7 +81,7 @@ public class SetAnchorSector extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO ANCHOR_SECTOR (SECTOR_NM, GPSX1, GPSX2, GPSY1, GPSY2, SECTOR_DESC) \n";
+				    String insertSql = "INSERT INTO TB_ANCHOR_SECTOR (SECTOR_NM, GPSX1, GPSX2, GPSY1, GPSY2, SECTOR_DESC) \n";
 					insertSql = insertSql + "VALUES ( '" + sSectorNm + "', " + sGPSx1 + ", " + sGPSx2 + ", " + sGPSy1 + ", " + sGPSy2 + ", '" + sSectorDesc + "' )";
 		
 					stmt = connectionDest.createStatement();
@@ -93,7 +93,7 @@ public class SetAnchorSector extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "DELETE FROM ANCHOR_SECTOR \n";
+				    String updateSql      = "DELETE FROM TB_ANCHOR_SECTOR \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND SECTOR_ID =   " + sSectorId  + "   \n ";
 
@@ -105,7 +105,7 @@ public class SetAnchorSector extends HttpServlet {
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE ANCHOR_SECTOR \n";
+				    String updateSql      = "UPDATE TB_ANCHOR_SECTOR \n";
 				    updateSql = updateSql + "   SET SECTOR_NM   = '" + sSectorNm  + "'   \n ";
 					updateSql = updateSql + "      ,GPSX1 		= " + sGPSx1    + "    \n ";
 					updateSql = updateSql + "      ,GPSX2 		= " + sGPSx2    + "    \n ";

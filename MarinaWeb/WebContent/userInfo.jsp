@@ -128,8 +128,8 @@ if(el){
 							<input type="text" style="width:200px;" id="C_USER_NM"  name="C_USER_NM"  class="control" placeholder="이름또는 ID를 입력하세요." >
 							<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>
 							<button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>
-							<button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue">저장</button>
 							<button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red" >삭제</button>
+							<button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue">저장</button>
 						</div>
 					</form>
 				</div>

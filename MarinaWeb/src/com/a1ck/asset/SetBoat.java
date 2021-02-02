@@ -56,10 +56,10 @@ public class SetBoat extends HttpServlet {
 		            logger.debug("SetBoat json:" + json); 
 		              
 		            sBoatId     = (String)json.get("boat_id");
-		            sBoatNm     = ""+(String)json.get("boat_nm");
-		            sBoatDesc   = ""+(String)json.get("boat_desc");
-		            sBoatStatus = ""+(String)json.get("boat_status");
-		            sUserId     = ""+(String)json.get("user_id");
+		            sBoatNm     = (String)json.get("boat_nm");
+		            sBoatDesc   = (String)json.get("boat_desc");
+		            sBoatStatus = (String)json.get("boat_status");
+		            sUserId     = (String)json.get("user_id");
 		            sCrud       = (String)json.get("crud");
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
@@ -77,7 +77,7 @@ public class SetBoat extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO BOAT ( USER_ID, BOAT_NM, BOAT_STATUS, BOAT_DESC) \n";
+				    String insertSql = "INSERT INTO TB_BOAT ( USER_ID, BOAT_NM, BOAT_STATUS, BOAT_DESC) \n";
 					insertSql = insertSql + "VALUES ( " + sUserId + ", '" + sBoatNm + "', '" + sBoatStatus + "', '" + sBoatDesc + "' )";
 		
 					stmt = connectionDest.createStatement();
@@ -89,7 +89,7 @@ public class SetBoat extends HttpServlet {
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "DELETE FROM BOAT \n";
+				    String updateSql      = "DELETE FROM TB_BOAT \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND BOAT_ID =   " + sBoatId  + "   \n ";
 
@@ -101,7 +101,7 @@ public class SetBoat extends HttpServlet {
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE BOAT \n";
+				    String updateSql      = "UPDATE TB_BOAT \n";
 				    updateSql = updateSql + "   SET BOAT_NM   	= '" + sBoatNm  	+ "' \n ";
 					updateSql = updateSql + "      ,BOAT_STATUS = '" + sBoatStatus  + "' \n ";
 					updateSql = updateSql + "      ,BOAT_DESC 	= '" + sBoatDesc    + "' \n ";

@@ -90,7 +90,7 @@ public class GetUserEntryList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT a.REG_DATE, b.DVC_NM, a.USER_NM, a.STATUS \n ";
-			sQuery += "   FROM ate_hist a, face_device b \n ";
+			sQuery += "   FROM TB_ate_hist a, TB_face_device b \n ";
 			sQuery += "  WHERE a.dvc_id = b.dvc_id   \n ";
 			
 			if( !StringUtils.equals(sUserCd, "") && !StringUtils.equals(sUserCd, null) )  {

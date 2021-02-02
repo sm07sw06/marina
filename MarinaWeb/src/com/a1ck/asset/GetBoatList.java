@@ -86,7 +86,7 @@ public class GetBoatList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT A.BOAT_ID, A.BOAT_NM, A.USER_ID, B.USER_NM, A.BOAT_STATUS,C.DETAIL_NM,A.BOAT_DESC \n ";
-			sQuery += "   FROM BOAT A,TB_USER_INFO B,TB_CODE_DETAIL C \n ";
+			sQuery += "   FROM TB_BOAT A,TB_USER_INFO B,TB_CODE_DETAIL C \n ";
 			sQuery += "  WHERE A.USER_ID     = B.USER_ID \n ";
 			sQuery += "    AND A.BOAT_STATUS = C.DETAIL_CD  \n ";
 			sQuery += "    AND C.GROUP_CD    = 'BOAT_STATUS' \n ";

@@ -84,8 +84,8 @@ public class GetAnchorList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT A.ANCHOR_ID, A.ANCHOR_NM, B.SECTOR_ID, B.SECTOR_NM, C.BOAT_ID, C.BOAT_NM, A.ANCHOR_STATUS, D.DETAIL_NM AS ANCHOR_STATUS_NM \n ";
-			sQuery += "   FROM ANCHOR A LEFT OUTER JOIN ANCHOR_SECTOR B ON A.SECTOR_ID = B.SECTOR_ID \n ";
-			sQuery += "                 LEFT OUTER JOIN BOAT C ON A.BOAT_ID = C.BOAT_ID, \n ";
+			sQuery += "   FROM TB_ANCHOR A LEFT OUTER JOIN TB_ANCHOR_SECTOR B ON A.SECTOR_ID = B.SECTOR_ID \n ";
+			sQuery += "                    LEFT OUTER JOIN TB_BOAT C ON A.BOAT_ID = C.BOAT_ID, \n ";
 			sQuery += "        TB_CODE_DETAIL D \n ";
 			sQuery += "  WHERE A.ANCHOR_STATUS = D.DETAIL_CD  \n ";
 			sQuery += "    AND D.GROUP_CD = 'ANCHOR_STATUS'  \n ";
