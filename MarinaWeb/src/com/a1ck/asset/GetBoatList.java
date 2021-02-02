@@ -51,8 +51,9 @@ public class GetBoatList extends HttpServlet {
 			int    nCount = 0;
 			
 			String sBoatId = "";
-			String sRows     = "";
-			String sPage     = "";
+			String sBoatNm = "";
+			String sRows   = "";
+			String sPage   = "";
 
 				
   			String Obj = request.getParameter("param");
@@ -67,12 +68,14 @@ public class GetBoatList extends HttpServlet {
 
 	            logger.debug("getBoatList json:" + json); 
 
-	            sBoatId = (String)json.get("__sector_id");
-	            sRows     = (String)json.get("__rows");
-	            sPage     = (String)json.get("__page");
+	            sBoatId = (String)json.get("__boat_id");
+	            sBoatNm = (String)json.get("__boat_nm");
+	            sRows   = (String)json.get("__rows");
+	            sPage   = (String)json.get("__page");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
 				logger.debug("getBoatList sBoatId:" + sBoatId);
+				logger.debug("getBoatList sBoatNm:" + sBoatNm);
 				logger.debug("getBoatList nRows:" + sRows);
 				logger.debug("getBoatList nPage:" + sPage);
 			} 
@@ -82,17 +85,18 @@ public class GetBoatList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.BOAT_ID, A.BOAT_NM, A.USER_ID, B.USER_NM, A.BOAT_STATUS,C.DETAIL_NM \n ";
+			sQuery  = " SELECT A.BOAT_ID, A.BOAT_NM, A.USER_ID, B.USER_NM, A.BOAT_STATUS,C.DETAIL_NM,A.BOAT_DESC \n ";
 			sQuery += "   FROM BOAT A,TB_USER_INFO B,TB_CODE_DETAIL C \n ";
 			sQuery += "  WHERE A.USER_ID     = B.USER_ID \n ";
 			sQuery += "    AND A.BOAT_STATUS = C.DETAIL_CD  \n ";
-			sQuery += "    AND C.GROUP_CD    = 'BOAT_STATUS';  \n ";
-			/*
-			if( !StringUtils.equals(sBoatId, "*")) {
-				sQuery += "    AND S.SECTOR_ID = " + sBoatId + " \n";
-			}
-			*/
-			sQuery += "  ORDER BY S.SECTOR_NM \n ";
+			sQuery += "    AND C.GROUP_CD    = 'BOAT_STATUS' \n ";
+
+			if( !StringUtils.equals(sBoatId, "") && !StringUtils.equals(sBoatId, null) )  {
+				sQuery += "    AND A.BOAT_ID = '" + sBoatId + "' \n";
+			} else if( !StringUtils.equals(sBoatNm, "") && !StringUtils.equals(sBoatNm, null) ) {
+					sQuery += "    AND A.BOAT_NM like '%" + sBoatNm + "%' \n";
+			}			
+			sQuery += "  ORDER BY A.BOAT_NM \n ";
 			
 			logger.debug("getBoatList sQuery1:" + sQuery); 
 			
@@ -106,30 +110,25 @@ public class GetBoatList extends HttpServlet {
 	        while(rs.next()){
 				JSONObject datas = new JSONObject();
 				
-				datas.put("SECTOR_ID"   	, rs.getString("SECTOR_ID"));	
-				datas.put("SECTOR_NM"   	, rs.getString("SECTOR_NM"));	
-				datas.put("SECTOR_DESC"   	, rs.getString("SECTOR_DESC"));	
+				datas.put("BOAT_ID"   	, rs.getString("BOAT_ID"));	
+				datas.put("BOAT_NM"   	, rs.getString("BOAT_NM"));	
+				datas.put("USER_ID"   	, rs.getString("USER_ID"));	 
+				datas.put("USER_NM"   	, rs.getString("USER_NM"));	
 
-				if (!StringUtils.isEmpty(rs.getString("GPSX1"))) 
-					datas.put("GPSX1" , rs.getString("GPSX1"));	
+				if (!StringUtils.isEmpty(rs.getString("BOAT_STATUS"))) 
+					datas.put("BOAT_STATUS" , rs.getString("BOAT_STATUS"));	
 				else
-					datas.put("GPSX1" , "0" );
+					datas.put("BOAT_STATUS" , " " );
 				
-				if (!StringUtils.isEmpty(rs.getString("GPSX2"))) 
-					datas.put("GPSX2" , rs.getString("GPSX2"));	
+				if (!StringUtils.isEmpty(rs.getString("DETAIL_NM"))) 
+					datas.put("DETAIL_NM" , rs.getString("DETAIL_NM"));	
 				else
-					datas.put("GPSX2" , "0" );
+					datas.put("DETAIL_NM" , " " );
 				
-				if (!StringUtils.isEmpty(rs.getString("GPSY1"))) 
-					datas.put("GPSY1" , rs.getString("GPSY1"));	
+				if (!StringUtils.isEmpty(rs.getString("BOAT_DESC"))) 
+					datas.put("BOAT_DESC" , rs.getString("BOAT_DESC"));	
 				else
-					datas.put("GPSY1" , "0" );
-				
-				if (!StringUtils.isEmpty(rs.getString("GPSY2"))) 
-					datas.put("GPSY2" , rs.getString("GPSY2"));	
-				else
-					datas.put("GPSY2" , "0" );
-				
+					datas.put("BOAT_DESC" , " " );
 				
 				seriesArray.add(datas);
 				jsonobj.put("rows"  ,seriesArray);   

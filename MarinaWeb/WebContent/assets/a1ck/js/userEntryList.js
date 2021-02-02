@@ -84,7 +84,7 @@
 	{
 		var gridData = [];
 
-		jsonObj.__user_cd = $('#C_USER_NM').val();
+		jsonObj.__user_cd = $('#C_USER_CD').val();
 		jsonObj.__user_nm = $('#C_USER_NM').val();
 		jsonObj.__from    = $('#C_FROM').val();
 		jsonObj.__to      = $('#C_TO').val();

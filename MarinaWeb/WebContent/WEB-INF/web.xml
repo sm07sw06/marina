@@ -469,6 +469,22 @@
 		<url-pattern>/GetUserEntryList</url-pattern>
 	</servlet-mapping>			
 
+	<servlet>
+		<servlet-name>GetBoatList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetBoatList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatList</servlet-name>
+		<url-pattern>/GetBoatList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetBoat</servlet-name>
+		<servlet-class>com.a1ck.asset.SetBoat</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetBoat</servlet-name>
+		<url-pattern>/SetBoat</url-pattern>
+	</servlet-mapping>	
 
 	<servlet>
 		<servlet-name>GetAnchorSectorList</servlet-name>

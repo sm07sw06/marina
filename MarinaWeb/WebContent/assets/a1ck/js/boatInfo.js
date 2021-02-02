@@ -55,13 +55,12 @@
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
-			$('#F_SECTOR_NM').val(dataGrid.getSelectedItem().SECTOR_NM);
-			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
-			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
-			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
-			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
-			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
+			$('#F_BOAT_ID').val(dataGrid.getSelectedItem().BOAT_ID);
+			$('#F_BOAT_NM').val(dataGrid.getSelectedItem().BOAT_NM);
+			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
+			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
+			$('#F_BOAT_STATUS').val(dataGrid.getSelectedItem().BOAT_STATUS);
+			$('#F_BOAT_DESC').val(dataGrid.getSelectedItem().BOAT_DESC);
 			$('#CRUD').val("U");
 		}
 	}
@@ -71,10 +70,11 @@
 		var gridData = [];
 		jsonObj = {};
 
+		jsonObj.__boat_id = $('#C_BOAT_ID').val();
+		jsonObj.__boat_nm = $('#C_BOAT_NM').val();
 		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
-		jsonObj.__sector_id = '*';
-		jsonObj.__rows      = '20';
-		jsonObj.__page      = '1';
+		jsonObj.__rows    = '20';
+		jsonObj.__page    = '1';
 
 		$.ajax({
 		   	url:"GetBoatList",
@@ -102,39 +102,48 @@
 	});
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_SECTOR_ID'   ).val("");
-		$('#F_SECTOR_NM'   ).val("");
-		$('#F_GPSX1'       ).val("");
-		$('#F_GPSX2'       ).val("");
-		$('#F_GPSY1'       ).val("");
-		$('#F_GPSY2'       ).val("");
-		$('#F_SECTOR_DESC' ).val("");
-		$('#CRUD'          ).val("C");
-		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_SECTOR_NM").focus();
+		$('#F_BOAT_ID'   ).val("");
+		$('#F_BOAT_NM'   ).val("");
+		$('#F_USER_ID'   ).val("");
+		$('#F_USER_ID'   ).val('1');		
+		$('#F_USER_NM'   ).val("");
+		$('#F_BOAT_DESC' ).val("");
+		$('#CRUD'        ).val("C");
+		$('#F_BOAT_ID' ).attr("readonly", true); //설정
+		$("input#F_BOAT_NM").focus();
+
+		$('#F_BOAT_STATUS'	 ).val("");
+		$('#F_BOAT_STATUS option:eq(0)').prop("selected", true);
+		
 	});
 
 	$('#btnSave').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.sector_nm   = $("input#F_SECTOR_NM").val();
-		obj.gpsx1       = $("input#F_GPSX1").val();
-		obj.gpsx2       = $("input#F_GPSX2").val();
-		obj.gpsy1       = $("input#F_GPSY1").val();
-		obj.gpsy2       = $("input#F_GPSY2").val();
-		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
+		obj.boat_id     = $("input#F_BOAT_ID").val();
+		obj.boat_nm     = $("input#F_BOAT_NM").val();
+		obj.boat_desc   = $("textarea#F_BOAT_DESC").val();
+		obj.user_id     = $("input#F_USER_ID").val();
+		obj.boat_status = $('select#F_BOAT_STATUS option:selected').val();		
 		obj.crud        = $("#CRUD").val();
 
-		console.log('sector_nm:'+ obj.sector_nm);
+		console.log('boat_nm:'+ obj.boat_nm);
+		console.log('boat_desc:'+ obj.boat_desc);
+		console.log('boat_status:'+ obj.boat_status);
 		
-		if(obj.sector_nm == ''){
-			alert("[알림] 구역명을 입력하세요.");
-			$("input#F_SECTOR_NM").focus();
+		if(obj.boat_nm == ''){
+			alert("[알림] 구보트명을 입력하세요.");
+			$("input#F_BOAT_NM").focus();
+		    return;
+		}
+		if(obj.user_id == ''){
+			alert("[알림] 회원을 선택하세요.");
+			$("input#F_USER_ID").focus();
 		    return;
 		}
 
+		
 		$("#SetBoatForm").ajaxForm({
 			url : 'SetBoat',
 			dataType:'json',
@@ -155,29 +164,29 @@
 		    	}
 			}
 		});	
-		$("#SetSectorForm").submit() ;
+		$("#SetBoatForm").submit() ;
 	});
 
 	$('#btnDelete').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.boat_id   = $("input#F_BOAT_ID").val();
 		obj.crud        = "D";
 		
 		var input = confirm('삭제하시겠습니까?'); 
 		if(!input) return;
 
-		if(obj.sector_id == ''){
-			alert("[알림] 구역를 선택하세요.");
-			$("input#F_SECTOR_NM").focus();
+		if(obj.boat_id == ''){
+			alert("[알림] 보트를 선택하세요.");
+			$("input#F_BOAT_NM").focus();
 		    return;
 		}
 		
-		console.log('F_SECTOR_ID:'+ obj.sector_id);
+		console.log('F_BOAT_ID:'+ obj.boat_id);
 		console.log('sCrud:'+ obj.crud);
 
-		$("#SetSectorForm").ajaxForm({
+		$("#SetBoatForm").ajaxForm({
 			url : 'SetBoat',
 			dataType:'json',
 			type: 'post',
@@ -198,7 +207,7 @@
 		    	}
 			}
 		});	
-		$("#SetSectorForm").submit() ;
+		$("#SetBoatForm").submit() ;
 	});
 	
 	
@@ -246,11 +255,13 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<columns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="BOAT_ID"   	id="colBoatId"   	headerText="ID"    width="100"    />\
-				<DataGridColumn dataField="BOAT_NM" 	id="colBoatNm" 		headerText="보트명"  width="200" />\
-				<DataGridColumn dataField="USER_ID"     id="colUserId" 		headerText="회원"   width="100" visible="false" />\
-				<DataGridColumn dataField="USER_NM"     id="colUserNm" 		headerText="회원명"  width="100" />\
-				<DataGridColumn dataField="BOAT_STATUS" id="colBoatStatus" 	headerText="상태"   width="100" />\
+				<DataGridColumn dataField="BOAT_ID"   	id="colBoatId"   	 headerText="ID"    width="100" visible="false" />\
+				<DataGridColumn dataField="BOAT_NM" 	id="colBoatNm" 		 headerText="보트명"  width="200" />\
+				<DataGridColumn dataField="USER_ID"     id="colUserId" 		 headerText="회원"   width="100" visible="false" />\
+				<DataGridColumn dataField="USER_NM"     id="colUserNm" 		 headerText="회원명"  width="100" />\
+				<DataGridColumn dataField="BOAT_STATUS" id="colBoatStatus" 	 headerText="상태"   width="100" visible="false" />\
+				<DataGridColumn dataField="DETAIL_NM"   id="colBoatStatusNm" headerText="상태"   width="100" />\
+				<DataGridColumn dataField="BOAT_DESC"   id="colBoatDesc" 	 headerText="설명"   width="100" visible="false" />\
 			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
@@ -354,5 +365,5 @@
 	}
 	
 
-	$("input#F_SECTOR_NM").focus();
-	
+	$("input#F_BOAT_NM").focus();
+	$('#F_USER_ID').val('1');
