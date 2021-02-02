@@ -503,7 +503,23 @@
 		<url-pattern>/SetAnchorSector</url-pattern>
 	</servlet-mapping>			
 		
-			   
+	<servlet>
+		<servlet-name>GetAnchorList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAnchorList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorList</servlet-name>
+		<url-pattern>/GetAnchorList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAnchor</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAnchor</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAnchor</servlet-name>
+		<url-pattern>/SetAnchor</url-pattern>
+	</servlet-mapping>	
+				   
 	 <filter>
 		<filter-name>cors</filter-name>
 		<filter-class>com.a1ck.SimpleCORSFilter</filter-class>

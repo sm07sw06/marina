@@ -55,13 +55,13 @@
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
-			$('#F_SECTOR_NM').val(dataGrid.getSelectedItem().SECTOR_NM);
+			$('#F_ANCHOR_ID').val(dataGrid.getSelectedItem().ANCHOR_ID);
+			$('#F_ANCHOR_NM').val(dataGrid.getSelectedItem().ANCHOR_NM);
 			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
 			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
 			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
 			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
-			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
+			$('#F_ANCHOR_DESC').val(dataGrid.getSelectedItem().ANCHOR_DESC);
 			$('#CRUD').val("U");
 		}
 	}
@@ -77,7 +77,7 @@
 		jsonObj.__page      = '1';
 
 		$.ajax({
-		   	url:"GetAnchorSectorList",
+		   	url:"GetAnchorInfoList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -102,41 +102,41 @@
 	});
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_SECTOR_ID'   ).val("");
-		$('#F_SECTOR_NM'   ).val("");
+		$('#F_ANCHOR_ID'   ).val("");
+		$('#F_ANCHOR_NM'   ).val("");
 		$('#F_GPSX1'       ).val("");
 		$('#F_GPSX2'       ).val("");
 		$('#F_GPSY1'       ).val("");
 		$('#F_GPSY2'       ).val("");
-		$('#F_SECTOR_DESC' ).val("");
+		$('#F_ANCHOR_DESC' ).val("");
 		$('#CRUD'          ).val("C");
-		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_SECTOR_NM").focus();
+		$('#F_ANCHOR_ID'  ).attr("readonly", true); //설정
+		$("input#F_ANCHOR_NM").focus();
 	});
 
 	$('#btnSave').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.sector_nm   = $("input#F_SECTOR_NM").val();
+		obj.sector_id   = $("input#F_ANCHOR_ID").val();
+		obj.sector_nm   = $("input#F_ANCHOR_NM").val();
 		obj.gpsx1       = $("input#F_GPSX1").val();
 		obj.gpsx2       = $("input#F_GPSX2").val();
 		obj.gpsy1       = $("input#F_GPSY1").val();
 		obj.gpsy2       = $("input#F_GPSY2").val();
-		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
+		obj.sector_desc = $("textarea#F_ANCHOR_DESC").val();
 		obj.crud        = $("#CRUD").val();
 
 		console.log('sector_nm:'+ obj.sector_nm);
 		
 		if(obj.sector_nm == ''){
 			alert("[알림] 구역명을 입력하세요.");
-			$("input#F_SECTOR_NM").focus();
+			$("input#F_ANCHOR_NM").focus();
 		    return;
 		}
 
-		$("#SetSectorForm").ajaxForm({
-			url : 'SetAnchorSector',
+		$("#SetInfoForm").ajaxForm({
+			url : 'SetAnchorInfo',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -155,14 +155,14 @@
 		    	}
 			}
 		});	
-		$("#SetSectorForm").submit() ;
+		$("#SetInfoForm").submit() ;
 	});
 
 	$('#btnDelete').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
+		obj.sector_id   = $("input#F_ANCHOR_ID").val();
 		obj.crud        = "D";
 		
 		var input = confirm('삭제하시겠습니까?'); 
@@ -170,15 +170,15 @@
 
 		if(obj.sector_id == ''){
 			alert("[알림] 구역를 선택하세요.");
-			$("input#F_SECTOR_NM").focus();
+			$("input#F_ANCHOR_NM").focus();
 		    return;
 		}
 		
-		console.log('F_SECTOR_ID:'+ obj.sector_id);
+		console.log('F_ANCHOR_ID:'+ obj.sector_id);
 		console.log('sCrud:'+ obj.crud);
 
-		$("#SetSectorForm").ajaxForm({
-			url : 'SetAnchorSector',
+		$("#SetInfoForm").ajaxForm({
+			url : 'SetAnchorInfo',
 			dataType:'json',
 			type: 'post',
 			data : {param:JSON.stringify(obj)},
@@ -198,7 +198,7 @@
 		    	}
 			}
 		});	
-		$("#SetSectorForm").submit() ;
+		$("#SetInfoForm").submit() ;
 	});
 	
 	
@@ -244,20 +244,17 @@
 	'<rMateGrid>\
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
-			<groupedColumns>\
+			<columns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="SECTOR_ID"   id="colScetorId"   	headerText="ID"  width="100"  visible="false"   />\
-				<DataGridColumn dataField="SECTOR_NM" 	id="colSectorNm" 	headerText="구역명" width="200"/>\
-				<DataGridColumnGroup headerText="위도">\
-					<DataGridColumn dataField="GPSX1"   id="colGpsx1" 		headerText="시작" width="100"/>\
-					<DataGridColumn dataField="GPSX2"   id="colGpsx2" 		headerText="끝" width="100" />\
-				</DataGridColumnGroup>\
-				<DataGridColumnGroup headerText="경도">\
-					<DataGridColumn dataField="GPSY1"   id="colGpsy1" 		headerText="시작" width="100"/>\
-					<DataGridColumn dataField="GPSY2"   id="colGpsy2" 		headerText="끝" width="100"/>\
-				</DataGridColumnGroup>\
-				<DataGridColumn dataField="SECTOR_DESC" id="colSectorDesc" 	headerText="설명" width="500"/>\
-			</groupedColumns>\
+				<DataGridColumn dataField="ANCHOR_ID"   	id="colAnchorId"   		headerText="계류지ID" width="100"  visible="false"   />\
+				<DataGridColumn dataField="ANCHOR_NM" 		id="colAnchorNm" 		headerText="계류지" 	width="100"/>\
+				<DataGridColumn dataField="SECTOR_ID"   	id="colScetorId"   		headerText="구역ID"  width="100"  visible="false"   />\
+				<DataGridColumn dataField="SECTOR_NM" 		id="colScetorNm" 		headerText="구역명" 	width="100"/>\
+				<DataGridColumn dataField="ANCHOR_STATUS"   id="colAnchorStatus" 	headerText="정박상태" width="100" visible="false"   />\
+				<DataGridColumn dataField="DETAIL_NM"   	id="colDetailNm" 		headerText="정박상태" width="100"/>\
+				<DataGridColumn dataField="BOAT_ID"   		id="colBoatId" 			headerText="보트ID" 	width="100" visible="false"   />\
+				<DataGridColumn dataField="BOAT_NM"   		id="colBoatNm" 			headerText="보트명" 	width="100"/>\
+			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
 			</dataProvider>\
@@ -360,5 +357,5 @@
 	}
 	
 
-	$("input#F_SECTOR_NM").focus();
+	$("input#F_ANCHOR_NM").focus();
 	

@@ -131,7 +131,7 @@
                                 <li >
                                     <a href="noAuth.jsp" id="menu00010" >
                                         <i class="entypo-user"></i>
-                                        <span class="title">계류지 좌표관리</span>
+                                        <span class="title">계류지 정보관리</span>
                                     </a>
                                 </li>
                             </ul>

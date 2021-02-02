@@ -83,10 +83,10 @@ function boatdata(sData) {
 	if(nGpsage      === "") { nGpsage = 0; }
 	if(sSenttype    === "") { sSenttype = 'R'; }
 // 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) ";
+	var sQueryString  = "INSERT INTO tb_boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime) ";
 	sQueryString += " values('" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
 	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "',"  + moment().format('YYYYMMDDHHmmss') + " );";
-	logger.info("INSERT INTO boatdata:"+sQueryString);
+	logger.info("INSERT INTO tb_boatdata:"+sQueryString);
  
 	pool.query(
 		sQueryString,(err, res) => {
@@ -114,7 +114,7 @@ function larva(sData) {
 	if(sIp === "") { sIp = '0'; }
 	if(nAmmonia === "") nAmmonia = 0;
 
-	var sQueryString = "INSERT INTO public.larva(id, ip, ammonia) values('" + sId + "','"  + sIp + "',"  + nAmmonia + " );";
+	var sQueryString = "INSERT INTO public.tb_larva(id, ip, ammonia) values('" + sId + "','"  + sIp + "',"  + nAmmonia + " );";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,(err, res) => {
@@ -143,7 +143,7 @@ function anchordata(sData) {
 	logger.info("  nDistance:" + nDistance);
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.anchordata(machine_id, sendtime, temperature, humidity, distance) ";
+	var sQueryString  = "INSERT INTO public.tb_anchordata(machine_id, sendtime, temperature, humidity, distance) ";
 	    sQueryString += "values('" + sId + "','"  + sSendtime + "',"  + nTemperature + ","  + nHumidity + ","  + nDistance + "  );";
 	logger.info(sQueryString);
 	pool.query(
@@ -200,7 +200,7 @@ function lidardata(sData) {
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString = "INSERT INTO public.lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
+	var sQueryString = "INSERT INTO public.tb_lidardata(machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,tempo,huminity,sendtime, ";
 	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata) ";
 	sQueryString += " values('" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
 	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + sSendtime ;
@@ -259,15 +259,15 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 	logger.info( '  GPS Y : ' + mObject.gpsY);
  
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "SELECT sector_name FROM anchor_sector  ";
+	var sQueryString  = "SELECT sector_nm FROM tb_anchor_sector  ";
 	 sQueryString  += " WHERE gpsx1 <= " + mObject.gpsX + " AND gpsx2 >= " + mObject.gpsX ;
 	 sQueryString  += "   AND gpsy1 <= " + mObject.gpsY + " AND gpsy2 >= " + mObject.gpsY ;
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString , (err, res) => {
+			logger.error("268:"+err);
 			if(err !== undefined) {
-				logger.error("SelectGateBound Count######:");
-				logger.error("SelectGateBound Count######:"   + res.rowCount);
+				logger.error("SelectAnchorYN Count@@@@@@:"   + res.rowCount);
 				logger.error(err);
 				logger.error(res);
 //				pool.end();
@@ -294,11 +294,12 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	logger.info('  Device: ' + mObject.iD);
  
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-//	var sQueryString  = "SELECT anchor.anchor_status FROM anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
-	var sQueryString  = "SELECT 1 FROM anchor_lidar  WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
+//	var sQueryString  = "SELECT anchor.anchor_status FROM tb_anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
+	var sQueryString  = "SELECT 1 FROM tb_anchor_lidar  WHERE machine_id = '" + mObject.iD + "'";
 	logger.info(sQueryString);
 	pool.query(
 		sQueryString,  (err, res) => {
+			logger.error("302:"+err);
 			if(err !== undefined) {
 				logger.error("SelectAnchorYN Count@@@@@@:"   + res.rowCount);
 				logger.error(err);
@@ -331,9 +332,9 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
  
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "select a.machine_id, x.boat_id, AA.anchor_id";
-    sQueryString += "  from boatdata a,boat_device x,(";
+    sQueryString += "  from tb_boatdata a,tb_boat_device x,(";
     sQueryString += "select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2";
-    sQueryString += "  from anchor_lidar b, anchor c, anchor_sector d";
+    sQueryString += "  from tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d";
     sQueryString += " where 1 = 1 ";
     sQueryString += "   and b.machine_id = '" + mObject.iD + "'";
     sQueryString += "   and b.left_right = '" + mObject.leftRight + "'";
@@ -391,7 +392,7 @@ DB.prototype.SetBoatAnchor = function(mObject, callback) {
 
  
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where anchor_id = " + mObject.anchorId;
+	var sQueryString  = "UPDATE tb_ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where anchor_id = " + mObject.anchorId;
 
     logger.info(sQueryString);
 
@@ -420,7 +421,7 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from ANCHOR_lidar b where  b.machine_id = '" + mObject.machineId + "') " ;
+	var sQueryString  = "UPDATE tb_ANCHOR a SET boat_id = 0, anchor_status = '0'  WHERE a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.machine_id = '" + mObject.machineId + "') " ;
 
     logger.info(sQueryString);
 

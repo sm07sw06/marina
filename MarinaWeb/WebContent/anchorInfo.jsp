@@ -112,14 +112,23 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
 				<li><a href="#">계류지관리</a></li>
 				<li><a href="#">계류지관리</a></li>
-				<li class="active"><strong>계류지 구역관리</strong></li>
+				<li class="active"><strong>계류지 정보관리</strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>계류지 구역관리</div>
+			<div class='myTitleBox'>계류지 정보관리</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
 						<div class="col-lg-12">
+                            <div class="col-sm-3">
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" id="C_BOAT_NM"  name="C_BOAT_NM"  placeholder="이름또는 ID를 입력하세요." >
+                                    <div class="input-group-addon">
+                                        <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-list"></i></a>
+                                    </div>                                      
+                                    <input type="hidden" id="C_BOAT_ID"  name="C_BOAT_ID"   >
+                                </div>
+                            </div>                              
 							<div class="col-sm-8" >
 								<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
 								<button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp;
@@ -155,7 +164,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 						<div class="panel panel-primary" data-collapsed="0">
 							<!-- panel head -->
 							<div class="panel-heading">
-								<div class="panel-title">구역정보 상세</div>
+								<div class="panel-title">계류지정보 상세</div>
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 								</div>
@@ -163,11 +172,25 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 							
 							<!-- panel body -->
 							<div class="panel-body">
-								<form role="form" method="post" name="SetSectorForm" id="SetSectorForm"  class="form-horizontal validate" action="" >
+								<form role="form" method="post" name="SetInfoForm" id="SetInfoForm"  class="form-horizontal validate" action="" >
 							
 									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
 							
+									<div class="form-group">
+										<label for="f_name" class="col-sm-3 control-label">계류지ID</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_ANCHOR_ID" readonly>
+										</div>
+									</div>
+																	
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">계류지명</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_ANCHOR_NM"   >
+										</div>
+									</div>
+									
 									<div class="form-group">
 										<label for="f_name" class="col-sm-3 control-label">구역ID</label>
 										<div class="col-sm-8">
@@ -181,39 +204,32 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 											<input type="text" class="form-control" id="F_SECTOR_NM"   >
 										</div>
 									</div>
+									
+                                    <div class="form-group">
+                                        <label for="f_orgNm" class="col-sm-3  control-label">정박상태</label>
+                                        <div class="col-sm-8">                              
+                                            <div >
+                                                <select class="form-control" id="F_BOAT_STATUS" name="F_BOAT_STATUS" >
+                                                <%=codeClass.getComboBoxByCodeList("BOAT_STATUS", "", true) %>
+                                                </select>                                                       
+                                            </div>                                                  
+                                        </div>
+                                    </div>
 	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도시작</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSX1"  >
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도끝</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSX2"  >
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도시작</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSY1"  >
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도끝</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSY2"  >
-										</div>
-									</div>
-	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">설명</label>
-										<div class="col-sm-8">
-											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SECTOR_DESC" id="F_SECTOR_DESC" ></textarea>
-										</div>
-									</div>
+                                    <div class="form-group">
+                                        <label for="f_name" class="col-sm-3 control-label">보트명</label>
+                                        <div class="col-sm-8">
+                                            <input type="hidden" class="form-control" id="F_BOAT_ID" readonly>
+                                            <div class="input-group ">
+	                                            <input type="text" class="form-control" id="F_BOAT_NM"  readonly >
+		                                        <div class="input-group-addon">
+		                                            <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-archive"></i></a>
+		                                        </div>                                      
+		                                    </div>
+                                        </div>
+                                    </div>
 
+	
 								</form>
 							</div> <!-- panel-body  -->
 						</div> <!--  id="pannel"  -->
@@ -230,6 +246,77 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 			<!-- Footer end-->
 		</div> <!--main-content -->
 	</div>
+
+
+
+    
+    <div class="modal fade" id="modal-6"> <!-- Modal start-->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">계류지찾기</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Name</label>
+                                <input type="text" class="form-control" id="field-1" placeholder="John">
+                            </div>  
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-2" class="control-label">Surname</label>
+                                <input type="text" class="form-control" id="field-2" placeholder="Doe">
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-3" class="control-label">Address</label>
+                                <input type="text" class="form-control" id="field-3" placeholder="Address">
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="field-4" class="control-label">City</label>
+                                <input type="text" class="form-control" id="field-4" placeholder="Boston">
+                            </div>  
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="field-5" class="control-label">Country</label>
+                                <input type="text" class="form-control" id="field-5" placeholder="United States">
+                            </div>  
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="field-6" class="control-label">Zip</label>
+                                <input type="text" class="form-control" id="field-6" placeholder="123456">
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group no-margin">
+                                <label for="field-7" class="control-label">Personal Info</label>
+                                <textarea class="form-control autogrow" id="field-7" placeholder="Write something about yourself"></textarea>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Modal end-->
+    
 
 
 	<!-- Bottom scripts (common) -->
@@ -256,7 +343,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
 	<script src="assets/a1ck/js/a1ck-js.js"></script>		
-	<script src="assets/a1ck/js/anchorSector.js"></script>		
+	<script src="assets/a1ck/js/anchorInfo.js"></script>		
 
 </body>
 </html>

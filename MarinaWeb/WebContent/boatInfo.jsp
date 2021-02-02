@@ -102,7 +102,7 @@
                                     <div class="input-group ">
                                         <input type="text" class="form-control" id="C_BOAT_NM"  name="C_BOAT_NM"  placeholder="이름또는 ID를 입력하세요." >
                                         <div class="input-group-addon">
-                                            <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-user-add"></i></a>
+                                            <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-archive"></i></a>
                                         </div>                                      
                                         <input type="hidden" id="C_BOAT_ID"  name="C_BOAT_ID"   >
                                     </div>
@@ -181,7 +181,7 @@
                                     </div>
     
                                     <div class="form-group">
-                                        <label for="f_orgNm" class="col-sm-3  control-label">보관주기</label>
+                                        <label for="f_orgNm" class="col-sm-3  control-label">정박상태</label>
                                         <div class="col-sm-8">                              
                                             <div >
                                                 <select class="form-control" id="F_BOAT_STATUS" name="F_BOAT_STATUS" >
