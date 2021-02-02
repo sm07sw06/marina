@@ -88,16 +88,30 @@ function boatdata(sData) {
 	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "',"  + moment().format('YYYYMMDDHHmmss') + " );";
 	logger.info("INSERT INTO tb_boatdata:"+sQueryString);
  
-	pool.query(
-		sQueryString,(err, res) => {
-			if(err !== undefined) {
-				logger.error(err, res);
-//				pool.end();
-			} else {
-				logger.info("Boatdata Insert OK:");
-			}
-		}
-	);
+	  try {
+
+			pool.connect(function (err, client, done) {
+				if (err) throw new Error(err);
+				client.query(sQueryString, function (err, res) {
+					if (err) {
+						logger.error("ERROR!!" + err);
+				        return;
+				    } else {
+				    	logger.info("Boatdata Insert OK:");
+				    }
+					client.end();
+				}); 
+			}); 
+			pool.on('error', function(error) { 
+					console.log("328 ERROR!!" + error);
+			});
+			
+	    } catch (e) {
+			logger.error("ERROR:"+err);
+			callback('ERROR');
+		}	
+
+
 }
 
 
@@ -146,16 +160,29 @@ function anchordata(sData) {
 	var sQueryString  = "INSERT INTO public.tb_anchordata(machine_id, sendtime, temperature, humidity, distance) ";
 	    sQueryString += "values('" + sId + "','"  + sSendtime + "',"  + nTemperature + ","  + nHumidity + ","  + nDistance + "  );";
 	logger.info(sQueryString);
-	pool.query(
-		sQueryString,(err, res) => {
-			if(err !== undefined) {
-				logger.error(err, res);
-				//pool.end();
-			} else {
-				logger.info("Anchordata Insert OK:");
-			}
-		}
-	);
+
+   try {
+
+		pool.connect(function (err, client, done) {
+			if (err) throw new Error(err);
+			client.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+			        return;
+			    } else {
+			    	logger.info("Anchordata Insert OK:");
+			    }
+				client.end();
+			}); 
+		}); 
+		pool.on('error', function(error) { 
+				console.log("328 ERROR!!" + error);
+		});
+		
+    } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}	
 	 
 }
 
@@ -207,18 +234,31 @@ function lidardata(sData) {
 	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )" ;
 	logger.info(sQueryString);
 	logger.info(sLongData);
-	pool.query(
-		sQueryString,(err, res) => {
-			if(err !== undefined) {
-				logger.error(err, res);
-				//pool.end();
-			} else {
-				logger.info("Lidardata Insert OK:");
-			}
-		}
-	);
-	
- 
+
+    try {
+
+		pool.connect(function (err, client, done) {
+			if (err) throw new Error(err);
+			client.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+			        return;
+			    } else {
+			    	logger.info("Lidardata Insert OK:");
+			    }
+				client.end();
+			}); 
+		}); 
+		pool.on('error', function(error) { 
+				console.log("328 ERROR!!" + error);
+		});
+		
+    } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}	
+    
+		
 }
 
 
@@ -258,31 +298,40 @@ DB.prototype.SelectGateBound = function(mObject, callback) {
 	logger.info( '  GPS X : ' + mObject.gpsX);
 	logger.info( '  GPS Y : ' + mObject.gpsY);
  
+	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "SELECT sector_nm FROM tb_anchor_sector  ";
 	 sQueryString  += " WHERE gpsx1 <= " + mObject.gpsX + " AND gpsx2 >= " + mObject.gpsX ;
 	 sQueryString  += "   AND gpsy1 <= " + mObject.gpsY + " AND gpsy2 >= " + mObject.gpsY ;
 	logger.info(sQueryString);
-	pool.query(
-		sQueryString , (err, res) => {
-			logger.error("268:"+err);
-			if(err !== undefined) {
-				logger.error("SelectAnchorYN Count@@@@@@:"   + res.rowCount);
-				logger.error(err);
-				logger.error(res);
-//				pool.end();
-				return -1;
-			} else {
-				if( res.rowCount > 0 ) {
-					logger.info("정박상태 확인..........!!");
-					callback('OK');
-				} else {
-					callback('ERROR');
-				}
-			}
-		}
-	);
- 
+
+	try {	
+		pool.connect(function (err, client, done) {
+			if (err) throw new Error(err);
+			client.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+			        return;
+			    } else {
+					if( res.rowCount > 0 ) {
+						logger.info("정박상태 확인..........!!");
+						callback('OK');
+					} else {
+						callback('ERROR');
+					}
+			    }
+				client.end();
+			});
+		}); 
+		pool.on('error', function(error) { 
+			console.log("328 ERROR!!" + error);
+		});
+
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+	 
  
 };
 
@@ -293,30 +342,35 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	logger.info('Start SelectAnchorYN........');
 	logger.info('  Device: ' + mObject.iD);
  
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-//	var sQueryString  = "SELECT anchor.anchor_status FROM tb_anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
-	var sQueryString  = "SELECT 1 FROM tb_anchor_lidar  WHERE machine_id = '" + mObject.iD + "'";
-	logger.info(sQueryString);
-	pool.query(
-		sQueryString,  (err, res) => {
-			logger.error("302:"+err);
-			if(err !== undefined) {
-				logger.error("SelectAnchorYN Count@@@@@@:"   + res.rowCount);
-				logger.error(err);
-				logger.error(res);
+	try {
+		//	var sQueryString  = "SELECT anchor.anchor_status FROM tb_anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.iD + "'";
+		var sQueryString  = "SELECT 1 FROM tb_anchor_lidar WHERE machine_id = '" + mObject.iD + "'";
+		logger.info(sQueryString);
 
-//				pool.end();
-				return -1;
-			} else {
-				if( res.rowCount > 0 ) {
-					callback('OK');
-				} else {
-					callback('ERROR');
-				}
-			}
-		}
-	);
- 
+		pool.connect(function (err, client, done) {
+			if (err) throw new Error(err);
+			client.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+			        return;
+			    } else {
+					if( res.rowCount > 0 ) {
+						callback('OK');
+					} else {
+						callback('ERROR');
+					}
+			    }
+				client.end();
+			});
+		}); 
+		pool.on('error', function(error) { 
+			console.log("328 ERROR!!" + error);
+		});
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+	 
 };
 
 
@@ -329,52 +383,60 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 	logger.info('  GetBoatDataSearch time  : ' + mObject.time);
 	logger.info('  GetBoatDataSearch leftRight  : ' + mObject.leftRight);
 
- 
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "select a.machine_id, x.boat_id, AA.anchor_id";
-    sQueryString += "  from tb_boatdata a,tb_boat_device x,(";
-    sQueryString += "select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2";
-    sQueryString += "  from tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d";
-    sQueryString += " where 1 = 1 ";
-    sQueryString += "   and b.machine_id = '" + mObject.iD + "'";
-    sQueryString += "   and b.left_right = '" + mObject.leftRight + "'";
-    sQueryString += "   and b.anchor_id = c.anchor_id ";
-    sQueryString += "   and c.sector_id = d.sector_id ";
-    sQueryString += " ) AA    ";
-    sQueryString += " where a.machine_id = x.machine_id";
-    sQueryString += "   and a.latitude  between AA.gpsx1 and AA.gpsx2";
-    sQueryString += "   and a.longitude between AA.gpsy1 and AA.gpsy2";
-    sQueryString += "   and a.sendtime  between to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')";
-    sQueryString += "   and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
-//    sQueryString += "   and a.sendtime  between substring('" + mObject.time + "',0,13)||'00' and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
-    logger.info("보트 찾기:" + sQueryString);
-	//const values = [mObject.iD, mObject.time ];
-	pool.query(
-//			sQueryString, values, (err, res) => {
-			sQueryString,  (err, res) => {
-			if(err !== undefined) {
-				logger.error(err, res);
-//				pool.end();
-				return -1;
-			} else {
-				logger.info("GetBoatDataSearch Command:" + res.command);
-				logger.info("GetBoatDataSearch Count:"   + res.rowCount);
-				for(var i = 0; i < res.rowCount ; i ++) {
-					mObject.machineId = res.rows[i].machine_id;
-					mObject.boatId    = res.rows[i].boat_id;
-					mObject.anchorId  = res.rows[i].anchor_id;
-					logger.info("GetBoatDataSearch machine_id:" +res.rows[i].machine_id);   
-					logger.info("GetBoatDataSearch boat_id   :" +res.rows[i].boat_id);   
-					logger.info("GetBoatDataSearch anchor_id :" +res.rows[i].anchor_id);   
-				}
-				if( res.rowCount > 0 ) {
-					callback(mObject);
-				} else {
-					callback('ERROR');
-				}
-			}
-		}
-	);
+	try {		 
+			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+			var sQueryString  = "select a.machine_id, x.boat_id, AA.anchor_id";
+		    sQueryString += "  from tb_boatdata a,tb_boat_device x,(";
+		    sQueryString += "select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2";
+		    sQueryString += "  from tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d";
+		    sQueryString += " where 1 = 1 ";
+		    sQueryString += "   and b.machine_id = '" + mObject.iD + "'";
+		    sQueryString += "   and b.left_right = '" + mObject.leftRight + "'";
+		    sQueryString += "   and b.anchor_id = c.anchor_id ";
+		    sQueryString += "   and c.sector_id = d.sector_id ";
+		    sQueryString += " ) AA    ";
+		    sQueryString += " where a.machine_id = x.machine_id";
+		    sQueryString += "   and a.latitude  between AA.gpsx1 and AA.gpsx2";
+		    sQueryString += "   and a.longitude between AA.gpsy1 and AA.gpsy2";
+		    sQueryString += "   and a.sendtime  between to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')";
+		    sQueryString += "   and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
+		//    sQueryString += "   and a.sendtime  between substring('" + mObject.time + "',0,13)||'00' and to_char((to_timestamp(substring('" + mObject.time + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
+		    logger.info("보트 찾기:" + sQueryString);
+
+			pool.connect(function (err, client, done) {
+				if (err) throw new Error(err);
+				client.query(sQueryString, function (err, res) {
+					if (err) {
+						logger.error("ERROR!!" + err);
+				        return;
+				    } else {
+						logger.info("GetBoatDataSearch Command:" + res.command);
+						logger.info("GetBoatDataSearch Count:"   + res.rowCount);
+						for(var i = 0; i < res.rowCount ; i ++) {
+							mObject.machineId = res.rows[i].machine_id;
+							mObject.boatId    = res.rows[i].boat_id;
+							mObject.anchorId  = res.rows[i].anchor_id;
+							logger.info("GetBoatDataSearch machine_id:" +res.rows[i].machine_id);   
+							logger.info("GetBoatDataSearch boat_id   :" +res.rows[i].boat_id);   
+							logger.info("GetBoatDataSearch anchor_id :" +res.rows[i].anchor_id);   
+						}
+						if( res.rowCount > 0 ) {
+							callback(mObject);
+						} else {
+							callback('ERROR');
+						}
+				    }
+					client.end();
+				});
+			}); 
+			pool.on('error', function(error) { 
+				console.log("328 ERROR!!" + error);
+			});
+			
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}			
  
 };
 
@@ -395,19 +457,30 @@ DB.prototype.SetBoatAnchor = function(mObject, callback) {
 	var sQueryString  = "UPDATE tb_ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where anchor_id = " + mObject.anchorId;
 
     logger.info(sQueryString);
+    
+    try {
 
-	pool.query(
-		sQueryString,(err, res) => {
-			if(err !== undefined) {
-				logger.error(err, res);
-				//pool.end();
-			} else {
-				logger.info("Anchor Update OK:");
-				callback('OK');
-			}
-		}
-	);
- 
+		pool.connect(function (err, client, done) {
+			if (err) throw new Error(err);
+			client.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+			        return;
+			    } else {
+					logger.info("Anchor Update OK:");
+					callback('OK');			    	
+			    }
+				client.end();
+			}); 
+		}); 
+		pool.on('error', function(error) { 
+				console.log("328 ERROR!!" + error);
+		});
+		
+    } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}	
 };
 
 
@@ -425,18 +498,29 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 
     logger.info(sQueryString);
 
-	pool.query(
-		sQueryString,(err, res) => {
-			if(err !== undefined) {
-				logger.error(err, res);
-				//pool.end();
-			} else {
-				logger.info("Anchor Update OK:");
-				callback('OK');
-			}
-		}
-	);
+    try {
 
+		pool.connect(function (err, client, done) {
+			if (err) throw new Error(err);
+			client.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+			        return;
+			    } else {
+					logger.info("Anchor Update OK:");
+					callback('OK');			    	
+			    }
+				client.end();
+			}); 
+		}); 
+		pool.on('error', function(error) { 
+				console.log("328 ERROR!!" + error);
+		});
+		
+    } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}	
 };
 
 
