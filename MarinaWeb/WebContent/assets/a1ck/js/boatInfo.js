@@ -112,7 +112,7 @@
 		$('#F_BOAT_ID' ).attr("readonly", true); //설정
 		$("input#F_BOAT_NM").focus();
 
-		$('#F_BOAT_STATUS'	 ).val("");
+		$('#F_BOAT_STATUS').val("");
 		$('#F_BOAT_STATUS option:eq(0)').prop("selected", true);
 		
 	});

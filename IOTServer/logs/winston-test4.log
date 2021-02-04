@@ -31628,3 +31628,40 @@ ReferenceError: res is not defined
 2021-02-02T10:33:36.630Z [winston-test] info:   Device: 0013A20041BB95F7
 2021-02-02T10:33:36.630Z [winston-test] info: SELECT 1 FROM tb_anchor_lidar WHERE machine_id = '0013A20041BB95F7'
 2021-02-02T10:33:36.673Z [winston-test] info: 보트출항중2-1
+2021-02-02T10:34:01.066Z [winston-test] info: Start anchordata........
+2021-02-02T10:34:01.066Z [winston-test] info:   nDistance:63.28
+2021-02-02T10:34:01.066Z [winston-test] info: INSERT INTO public.tb_anchordata(machine_id, sendtime, temperature, humidity, distance) values('10812E286F24','20210202193400',20,10,63.28  );
+2021-02-02T10:34:01.067Z [winston-test] info: Start getAnchorCheck........
+2021-02-02T10:34:01.067Z [winston-test] info:   sId:10812E286F24
+2021-02-02T10:34:01.067Z [winston-test] info:   sStime:20210202193400
+2021-02-02T10:34:01.067Z [winston-test] info:   nDistance:63.28
+2021-02-02T10:34:01.067Z [winston-test] info: boat is anchored !!
+2021-02-02T10:34:01.067Z [winston-test] info: Start GetBoatDataSearch........
+2021-02-02T10:34:01.067Z [winston-test] info:   GetBoatDataSearch Device: 10812E286F24
+2021-02-02T10:34:01.067Z [winston-test] info:   GetBoatDataSearch time  : 20210202193400
+2021-02-02T10:34:01.067Z [winston-test] info:   GetBoatDataSearch leftRight  : 0
+2021-02-02T10:34:01.067Z [winston-test] info: 보트 찾기:select a.machine_id, x.boat_id, AA.anchor_id  from tb_boatdata a,tb_boat_device x,(select b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  from tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d where 1 = 1    and b.machine_id = '10812E286F24'   and b.left_right = '0'   and b.anchor_id = c.anchor_id    and c.sector_id = d.sector_id  ) AA     where a.machine_id = x.machine_id   and a.latitude  between AA.gpsx1 and AA.gpsx2   and a.longitude between AA.gpsy1 and AA.gpsy2   and a.sendtime  between to_char((to_timestamp(substring('20210202193400',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS')   and to_char((to_timestamp(substring('20210202193400',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')
+2021-02-02T10:34:01.134Z [winston-test] info: Anchordata Insert OK:
+2021-02-02T10:34:01.142Z [winston-test] info: GetBoatDataSearch Command:SELECT
+2021-02-02T10:34:01.142Z [winston-test] info: GetBoatDataSearch Count:0
+2021-02-02T10:34:16.593Z [winston-test] info: Start boatdata........
+2021-02-02T10:34:16.593Z [winston-test] info: 20210106164615,Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R,20000101110546,23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,
+2021-02-02T10:34:16.593Z [winston-test] info:   nGradex:04
+2021-02-02T10:34:16.593Z [winston-test] info:   nGradey:04
+2021-02-02T10:34:16.593Z [winston-test] info: INSERT INTO tb_boatdata:INSERT INTO tb_boatdata(machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, senttype, sendtime)  values('0013A20041BB95F7',23,13,04,04,0,101,51,00,0,'R',20210202193416 );
+2021-02-02T10:34:16.593Z [winston-test] info: Start getBoatCheck........
+2021-02-02T10:34:16.594Z [winston-test] info: 04
+2021-02-02T10:34:16.594Z [winston-test] info: 04
+2021-02-02T10:34:16.594Z [winston-test] info: Start getGPSAreaAnalysis........
+2021-02-02T10:34:16.594Z [winston-test] info: Start SelectGateBound........
+2021-02-02T10:34:16.594Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-02-02T10:34:16.594Z [winston-test] info:   GPS X : 100
+2021-02-02T10:34:16.594Z [winston-test] info:   GPS Y : 55
+2021-02-02T10:34:16.594Z [winston-test] info: SELECT sector_nm FROM tb_anchor_sector   WHERE gpsx1 <= 100 AND gpsx2 >= 100   AND gpsy1 <= 55 AND gpsy2 >= 55
+2021-02-02T10:34:16.661Z [winston-test] info: Boatdata Insert OK:
+2021-02-02T10:34:16.665Z [winston-test] info: 정박상태 확인..........!!
+2021-02-02T10:34:16.665Z [winston-test] info: 정박상태 확인2
+2021-02-02T10:34:16.665Z [winston-test] info: Start SelectAnchorYN........
+2021-02-02T10:34:16.665Z [winston-test] info:   Device: 0013A20041BB95F7
+2021-02-02T10:34:16.665Z [winston-test] info: SELECT 1 FROM tb_anchor_lidar WHERE machine_id = '0013A20041BB95F7'
+2021-02-02T10:34:16.708Z [winston-test] info: 보트출항중2-1

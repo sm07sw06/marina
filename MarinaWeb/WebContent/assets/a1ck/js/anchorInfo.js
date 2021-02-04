@@ -55,13 +55,13 @@
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_ANCHOR_ID').val(dataGrid.getSelectedItem().ANCHOR_ID);
-			$('#F_ANCHOR_NM').val(dataGrid.getSelectedItem().ANCHOR_NM);
-			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
-			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
-			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
-			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
-			$('#F_ANCHOR_DESC').val(dataGrid.getSelectedItem().ANCHOR_DESC);
+			$('#F_ANCHOR_ID'    ).val(dataGrid.getSelectedItem().ANCHOR_ID);
+			$('#F_ANCHOR_NM'    ).val(dataGrid.getSelectedItem().ANCHOR_NM);
+			$('#F_SECTOR_ID'    ).val(dataGrid.getSelectedItem().SECTOR_ID);
+			$('#F_SECTOR_NM'    ).val(dataGrid.getSelectedItem().SECTOR_NM);
+			$('#F_ANCHOR_STATUS').val(dataGrid.getSelectedItem().ANCHOR_STATUS);
+			$('#F_BOAT_ID'      ).val(dataGrid.getSelectedItem().BOAT_ID);
+			$('#F_BOAT_NM'      ).val(dataGrid.getSelectedItem().BOAT_NM);
 			$('#CRUD').val("U");
 		}
 	}
@@ -77,7 +77,7 @@
 		jsonObj.__page      = '1';
 
 		$.ajax({
-		   	url:"GetAnchorInfoList",
+		   	url:"GetAnchorList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -104,13 +104,16 @@
 	$('#btnAdd').click(function (e) {
 		$('#F_ANCHOR_ID'   ).val("");
 		$('#F_ANCHOR_NM'   ).val("");
-		$('#F_GPSX1'       ).val("");
-		$('#F_GPSX2'       ).val("");
-		$('#F_GPSY1'       ).val("");
-		$('#F_GPSY2'       ).val("");
-		$('#F_ANCHOR_DESC' ).val("");
+		$('#F_SECTOR_ID'   ).val("");
+		$('#F_SECTOR_NM'   ).val("");
+		$('#F_BOAT_ID'     ).val("");
+		$('#F_BOAT_NM'     ).val("");
+		$('#F_ANCHOR_STATUS'	 ).val("");
+		$('#F_ANCHOR_STATUS option:eq(0)').prop("selected", true);		
 		$('#CRUD'          ).val("C");
 		$('#F_ANCHOR_ID'  ).attr("readonly", true); //설정
+		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
+		$('#F_BOAT_ID'    ).attr("readonly", true); //설정
 		$("input#F_ANCHOR_NM").focus();
 	});
 
@@ -118,25 +121,23 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.sector_id   = $("input#F_ANCHOR_ID").val();
-		obj.sector_nm   = $("input#F_ANCHOR_NM").val();
-		obj.gpsx1       = $("input#F_GPSX1").val();
-		obj.gpsx2       = $("input#F_GPSX2").val();
-		obj.gpsy1       = $("input#F_GPSY1").val();
-		obj.gpsy2       = $("input#F_GPSY2").val();
-		obj.sector_desc = $("textarea#F_ANCHOR_DESC").val();
-		obj.crud        = $("#CRUD").val();
+		obj.anchor_id     = $("input#F_ANCHOR_ID").val();
+		obj.anchor_nm     = $("input#F_ANCHOR_NM").val();
+		obj.sector_id     = $("input#F_SECTOR_ID").val();
+		obj.boat_id       = $("input#F_BOAT_ID").val();
+		obj.anchor_status = $('select#F_ANCHOR_STATUS option:selected').val();				
+		obj.crud          = $("#CRUD").val();
 
-		console.log('sector_nm:'+ obj.sector_nm);
+		console.log('anchor_nm:'+ obj.anchor_nm);
 		
-		if(obj.sector_nm == ''){
-			alert("[알림] 구역명을 입력하세요.");
+		if(obj.anchor_nm == ''){
+			alert("[알림] 계류지명을 입력하세요.");
 			$("input#F_ANCHOR_NM").focus();
 		    return;
 		}
 
-		$("#SetInfoForm").ajaxForm({
-			url : 'SetAnchorInfo',
+		$("#SetAnchorForm").ajaxForm({
+			url : 'SetAnchor',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -155,7 +156,7 @@
 		    	}
 			}
 		});	
-		$("#SetInfoForm").submit() ;
+		$("#SetAnchorForm").submit() ;
 	});
 
 	$('#btnDelete').click(function (e) {
@@ -169,7 +170,7 @@
 		if(!input) return;
 
 		if(obj.sector_id == ''){
-			alert("[알림] 구역를 선택하세요.");
+			alert("[알림] 계류지명을 선택하세요.");
 			$("input#F_ANCHOR_NM").focus();
 		    return;
 		}
@@ -177,8 +178,8 @@
 		console.log('F_ANCHOR_ID:'+ obj.sector_id);
 		console.log('sCrud:'+ obj.crud);
 
-		$("#SetInfoForm").ajaxForm({
-			url : 'SetAnchorInfo',
+		$("#SetAnchorForm").ajaxForm({
+			url : 'SetAnchor',
 			dataType:'json',
 			type: 'post',
 			data : {param:JSON.stringify(obj)},
@@ -198,7 +199,7 @@
 		    	}
 			}
 		});	
-		$("#SetInfoForm").submit() ;
+		$("#SetAnchorForm").submit() ;
 	});
 	
 	
@@ -246,14 +247,14 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<columns>\
 				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="ANCHOR_ID"   	id="colAnchorId"   		headerText="계류지ID" width="100"  visible="false"   />\
-				<DataGridColumn dataField="ANCHOR_NM" 		id="colAnchorNm" 		headerText="계류지" 	width="100"/>\
-				<DataGridColumn dataField="SECTOR_ID"   	id="colScetorId"   		headerText="구역ID"  width="100"  visible="false"   />\
-				<DataGridColumn dataField="SECTOR_NM" 		id="colScetorNm" 		headerText="구역명" 	width="100"/>\
-				<DataGridColumn dataField="ANCHOR_STATUS"   id="colAnchorStatus" 	headerText="정박상태" width="100" visible="false"   />\
-				<DataGridColumn dataField="DETAIL_NM"   	id="colDetailNm" 		headerText="정박상태" width="100"/>\
-				<DataGridColumn dataField="BOAT_ID"   		id="colBoatId" 			headerText="보트ID" 	width="100" visible="false"   />\
-				<DataGridColumn dataField="BOAT_NM"   		id="colBoatNm" 			headerText="보트명" 	width="100"/>\
+				<DataGridColumn dataField="ANCHOR_ID"   		id="colAnchorId"   		headerText="계류지ID" width="100"  visible="false"   />\
+				<DataGridColumn dataField="ANCHOR_NM" 			id="colAnchorNm" 		headerText="계류지" 	width="100"/>\
+				<DataGridColumn dataField="SECTOR_ID"   		id="colScetorId"   		headerText="구역ID"  width="100"  visible="false"   />\
+				<DataGridColumn dataField="SECTOR_NM" 			id="colScetorNm" 		headerText="구역명" 	width="100"/>\
+				<DataGridColumn dataField="ANCHOR_STATUS"   	id="colAnchorStatus" 	headerText="정박상태" width="100" visible="false"   />\
+				<DataGridColumn dataField="ANCHOR_STATUS_NM"   	id="colAnchorStatusNm" 	headerText="정박상태" width="100"/>\
+				<DataGridColumn dataField="BOAT_ID"   			id="colBoatId" 			headerText="보트ID" 	width="100" visible="false"   />\
+				<DataGridColumn dataField="BOAT_NM"   			id="colBoatNm" 			headerText="보트명" 	width="100"/>\
 			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\

@@ -91,6 +91,11 @@ function geoFindMe() {
 
 document.querySelector('#find-me').addEventListener('click', geoFindMe);
 
+/*모달*/
+function fnModuleInfo2(){
+   $('#MoaModal .modal-content').load("modalBoat.jsp");
+   $('#MoaModal').modal();
+}
 </script>
 </head>
 
@@ -172,7 +177,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 							
 							<!-- panel body -->
 							<div class="panel-body">
-								<form role="form" method="post" name="SetInfoForm" id="SetInfoForm"  class="form-horizontal validate" action="" >
+								<form role="form" method="post" name="SetAnchorForm" id="SetAnchorForm"  class="form-horizontal validate" action="" >
 							
 									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
 									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
@@ -190,20 +195,19 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 											<input type="text" class="form-control" id="F_ANCHOR_NM"   >
 										</div>
 									</div>
-									
-									<div class="form-group">
-										<label for="f_name" class="col-sm-3 control-label">구역ID</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SECTOR_ID" readonly>
-										</div>
-									</div>
-																	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">구역명</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SECTOR_NM"   >
-										</div>
-									</div>
+
+                                    <div class="form-group">
+                                        <label for="f_name" class="col-sm-3 control-label">구역명</label>
+                                        <div class="col-sm-8">
+                                            <input type="hidden" class="form-control" id="F_SECTOR_ID" readonly>
+                                            <div class="input-group ">
+	                                            <input type="text" class="form-control" id="F_SECTOR_NM"  readonly >
+		                                        <div class="input-group-addon">
+		                                            <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-archive"></i></a>
+		                                        </div>                                      
+		                                    </div>
+                                        </div>
+                                    </div>
 									
                                     <div class="form-group">
                                         <label for="f_orgNm" class="col-sm-3  control-label">정박상태</label>
@@ -223,7 +227,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
                                             <div class="input-group ">
 	                                            <input type="text" class="form-control" id="F_BOAT_NM"  readonly >
 		                                        <div class="input-group-addon">
-		                                            <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-archive"></i></a>
+		                                            <a onclick="fnModuleInfo2()"><i class="entypo-archive"></i></a>
 		                                        </div>                                      
 		                                    </div>
                                         </div>
@@ -248,6 +252,15 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 	</div>
 
 
+
+
+	<!-- Moa Modal-->
+	<div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="userSearch" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>
 
     
     <div class="modal fade" id="modal-6"> <!-- Modal start-->
@@ -315,8 +328,55 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
                 </div>
             </div>
         </div>
-    </div> <!-- Modal end-->
+    </div> 
+
+
     
+    <div class="modal fade" id="modal-8">  
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">보트찾기</h4>
+                </div>
+                <div class="modal-body">
+		                    <div class="row">
+		                        <div class="col-md-7">
+		                            <div class="form-group">
+		                                <input type="text" class="form-control" id="C_BOAT_NM2"  name="C_BOAT_NM2"  placeholder="이름또는 ID를 입력하세요." >
+		                            </div>  
+		                        </div>
+		                        <div class="col-md-5">
+		                            <div class="form-group">
+		                                <button onclick="return false;" id="btnQuery2"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
+	                                	<button onclick="return false;" id="btnSave2"    class="btn btn-sm btn-blue"   >적용</button>
+		                            </div>  
+		                        </div>
+		                    </div>                
+			              
+			                <!-- main-sub-content start-->
+			                <div class="main-sub-content" >
+			                
+			                    <!--  left list start -->
+			                    <div class="col-lg-8">                                      
+			                        <div class="panel panel-primary" data-collapsed="0">
+			                            <!-- panel body -->
+			                            <div class="content">
+			                                <!-- 그리드가 삽입될 DIV -->
+			                                <div id="gridHolderSub2" style="width:100%; height:600px;"></div>
+			                                <div class="gridPagingSub2" id="gridPageNavigationDivSub2"></div>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>		
+								                	                                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Modal end-->    
 
 
 	<!-- Bottom scripts (common) -->
