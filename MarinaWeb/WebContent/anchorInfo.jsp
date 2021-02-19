@@ -89,13 +89,17 @@ function geoFindMe() {
 
 }
 
-document.querySelector('#find-me').addEventListener('click', geoFindMe);
 
 /*모달*/
 function fnModuleInfo2(){
-   $('#MoaModal .modal-content').load("modalBoat.jsp");
-   $('#MoaModal').modal();
+	$('#MoaModal .modal-content').load("modalSector.jsp");
+	$('#MoaModal').modal();
 }
+function fnModuleInfo3(){
+	$('#MoaModal .modal-content').load("modalBoat.jsp");
+	$('#MoaModal').modal();
+}
+
 </script>
 </head>
 
@@ -164,7 +168,7 @@ function fnModuleInfo2(){
 					<!--  left list end -->
 									
 					<!--  right info start -->
-					<div id="detail-area" class="col-lg-4 container-fluid" style="height:600px;">	  
+					<div id="detail-area" class="col-lg-4 container-fluid" >	  
 					 
 						<div class="panel panel-primary" data-collapsed="0">
 							<!-- panel head -->
@@ -202,9 +206,15 @@ function fnModuleInfo2(){
                                             <input type="hidden" class="form-control" id="F_SECTOR_ID" readonly>
                                             <div class="input-group ">
 	                                            <input type="text" class="form-control" id="F_SECTOR_NM"  readonly >
+		                                        <!-- 
 		                                        <div class="input-group-addon">
 		                                            <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});"><i class="entypo-archive"></i></a>
+		                                        </div>
+		                                        -->  
+												<div class="input-group-addon">
+		                                            <a onclick="fnModuleInfo2()"><i class="entypo-archive"></i></a>
 		                                        </div>                                      
+		                                                                            
 		                                    </div>
                                         </div>
                                     </div>
@@ -227,7 +237,7 @@ function fnModuleInfo2(){
                                             <div class="input-group ">
 	                                            <input type="text" class="form-control" id="F_BOAT_NM"  readonly >
 		                                        <div class="input-group-addon">
-		                                            <a onclick="fnModuleInfo2()"><i class="entypo-archive"></i></a>
+		                                            <a onclick="fnModuleInfo3()"><i class="entypo-archive"></i></a>
 		                                        </div>                                      
 		                                    </div>
                                         </div>
@@ -238,8 +248,45 @@ function fnModuleInfo2(){
 							</div> <!-- panel-body  -->
 						</div> <!--  id="pannel"  -->
 					</div> <!--  id="detail-area"  -->
-					<!--  right info start -->
-					
+					<!--  right info end -->
+
+
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Recipient:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+																
 				</div>
 				<!-- main-sub-content end-->
 			</div> <!-- myTitleBox -->
@@ -250,6 +297,9 @@ function fnModuleInfo2(){
 			<!-- Footer end-->
 		</div> <!--main-content -->
 	</div>
+
+
+
 
 
 

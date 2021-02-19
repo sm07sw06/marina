@@ -4,9 +4,9 @@
 	var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
 	//rMateGrid 관련 객체
 	var collection;	// 그리드의 데이터 객체
+	var jsonObj = new Object();
 	var cnt=0;
 	//var gridData = [];
-	var jsonObj = new Object();
 
 
 	// rMateDataGrid 를 생성합니다.
@@ -16,7 +16,7 @@
 	//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
 	//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
 	//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
-	rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+	rMateGridH5.create("grid1", "gridHolder" , jsVars , "100%", "100%");
 
 
 	// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
@@ -25,6 +25,7 @@
 	// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
 	function gridReadyHandler(id) {
 		var gridData = [];
+		
 		// rMateGrid 관련 객체
 		gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
 		gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
@@ -48,7 +49,8 @@
 		gridRoot.addEvent("dblclick", dblclickHandler);
 		
 	}
-
+	
+	
 	var gridApp, gridRoot;	// 데이터와 그리드를 포함하는 객체
 	var dataGrid;	// 그리드
 
@@ -65,6 +67,7 @@
 			$('#CRUD').val("U");
 		}
 	}
+
 
 	function refreshData()  
 	{
@@ -96,7 +99,7 @@
 		gridApp.setData(gridData);
 	}
 	
-
+	
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
@@ -242,25 +245,26 @@
 	//----------------------- 그리드 설정 끝 -----------------------
 
 	var layoutStr =
-	'<rMateGrid>\
-		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
-		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
-			<columns>\
-				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="ANCHOR_ID"   		id="colAnchorId"   		headerText="계류지ID" width="100"  visible="false"   />\
-				<DataGridColumn dataField="ANCHOR_NM" 			id="colAnchorNm" 		headerText="계류지" 	width="100"/>\
-				<DataGridColumn dataField="SECTOR_ID"   		id="colScetorId"   		headerText="구역ID"  width="100"  visible="false"   />\
-				<DataGridColumn dataField="SECTOR_NM" 			id="colScetorNm" 		headerText="구역명" 	width="100"/>\
-				<DataGridColumn dataField="ANCHOR_STATUS"   	id="colAnchorStatus" 	headerText="정박상태" width="100" visible="false"   />\
-				<DataGridColumn dataField="ANCHOR_STATUS_NM"   	id="colAnchorStatusNm" 	headerText="정박상태" width="100"/>\
-				<DataGridColumn dataField="BOAT_ID"   			id="colBoatId" 			headerText="보트ID" 	width="100" visible="false"   />\
-				<DataGridColumn dataField="BOAT_NM"   			id="colBoatNm" 			headerText="보트명" 	width="100"/>\
-			</columns>\
-			<dataProvider>\
-				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
-			</dataProvider>\
-		</DataGrid>\
-	</rMateGrid>';
+		'<rMateGrid>\
+			<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+			<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
+				<columns>\
+					<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+					<DataGridColumn dataField="ANCHOR_ID"   		id="colAnchorId"   		headerText="계류지ID" width="100"  visible="false"   />\
+					<DataGridColumn dataField="ANCHOR_NM" 			id="colAnchorNm" 		headerText="계류지" 	width="100"/>\
+					<DataGridColumn dataField="SECTOR_ID"   		id="colScetorId"   		headerText="구역ID"  width="100"  visible="false"   />\
+					<DataGridColumn dataField="SECTOR_NM" 			id="colScetorNm" 		headerText="구역명" 	width="100"/>\
+					<DataGridColumn dataField="ANCHOR_STATUS"   	id="colAnchorStatus" 	headerText="정박상태" width="100" visible="false"   />\
+					<DataGridColumn dataField="ANCHOR_STATUS_NM"   	id="colAnchorStatusNm" 	headerText="정박상태" width="100"/>\
+					<DataGridColumn dataField="BOAT_ID"   			id="colBoatId" 			headerText="보트ID" 	width="100" visible="false"   />\
+					<DataGridColumn dataField="BOAT_NM"   			id="colBoatNm" 			headerText="보트명" 	width="100"/>\
+				</columns>\
+				<dataProvider>\
+					<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
+				</dataProvider>\
+			</DataGrid>\
+		</rMateGrid>';
+
 
 	// 페이징 관련 자바스크립트  visible="false"  
 	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
