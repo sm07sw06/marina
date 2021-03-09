@@ -9,6 +9,36 @@ var http = require('http');
 
 const logger = require('../config/winston') 
 
+
+const Sequelize = require('sequelize');
+
+const env = process.env.NODE_ENV || 'development';
+const config = require('../database/config/config')[env];
+const db = {};
+
+console.log("database:"+config.database);
+console.log("username:"+config.username);
+console.log("password:"+config.password);
+
+process.on('warning', e => console.warn(e.stack));
+
+/***
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
+
+db.sequelize = sequelize;
+
+sequelize.sync({ force: false })
+.then(() => {
+    console.log('데이터베이스 연결됨.');
+}).catch((err) => {
+    console.log('데이터베이스 연결안됨.');
+    console.error(err);
+});
+***/
+
+module.exports = db;
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +50,7 @@ app.set('port', port);
  */
 var server = http.createServer(app);
 
+/**
 const { Pool, clientpg } = require("pg");
 
 const pool = new Pool({
@@ -29,58 +60,77 @@ const pool = new Pool({
   password: "topadmin",
   port: "5432"
 });
+**/
 
-
-// MQTT Server 접속, DHT11 센서 데이터를 읽기
+// MQTT Server 접속
 var mqtt=require("mqtt");
 var client=mqtt.connect("mqtt://192.168.123.105");
+
+//client.setMaxListeners(0);  //  이벤트를 무한대로 등록
+
 client.on("connect" , function(){
+	logger.info('MQTT conneted........');
 	client.subscribe("common");	  //client.subscribe("dht11");
 });
 
-client.on("message", function(topic, message){
+client.on("error", function(topic, message){
+	logger.error('MQTT ' + topic + ':' + error);
+});
 	
-//	logger.info('MQTT receive........');
-	
-	var DB = require('../public/myModules/db');
-	// message를 DB에 반영하도록 modules 호출
-	var db = new DB(); // 모듈에 전달인자 할당 
-	//db.SetDB(message);
-	
-	var obj=JSON.parse(message);  // MQTT에서 보내온 메세지
-	
-	for (var sKey in obj) {
-		
-//		logger.info('sKey:' + sKey);
-		
-		if (obj.hasOwnProperty(sKey)) {
-			
-			var sData = obj[sKey].split(",");
-			
-			if(sKey === "boatData") {
-				db.InsertDBBoatData(sData);  
-				// 보트 단말기에서 보내온 신호 분석
-				var BoatCheck = require('../public/myModules/boatCheck');
-				var boatCheck = new BoatCheck(sData); 
-				boatCheck.getBoatCheck();
-			} else if(sKey === "anchorData") {
-				db.InsertDBAnchorData(sData);  
-				// 정박지 단말기에서 보내온 신호 분석
-				var AnchorCheck = require('../public/myModules/anchorCheck');
-				var anchorCheck = new AnchorCheck(sData); 
-				anchorCheck.getAnchorCheck();				
-			} else if(sKey === "lidarData") {
-				db.InsertDBLidarData(sData);  
-				// 정박지 단말기에서 보내온 신호 분석
-				var LidarCheck = require('../public/myModules/lidarCheck');
-				var lidarCheck = new LidarCheck(sData); 
-				lidarCheck.getLidarCheck();				
-			} // 보트 데이터가 아닌면 Skip
-		}    
-	}
+var DB = require('../public/myModules/db');
+// message를 DB에 반영하도록 modules 호출
+var dbJob = new DB(); // 모듈에 전달인자 할당 
+//dbJob.SetDB(message);
 
+client.on("message", function(topic, message) {
+	
+	logger.info('MQTT [On Message]');
+		
+	try {
+		/***
+		var DB = require('../public/myModules/db');
+		// message를 DB에 반영하도록 modules 호출
+		var dbJob = new DB(); // 모듈에 전달인자 할당 
+		//dbJob.SetDB(message);
+		***/
+		
+		var obj=JSON.parse(message);  // MQTT에서 보내온 메세지
+		
+		for (var sKey in obj) {
+			
+	//		logger.info('sKey:' + sKey);
+			
+			if (obj.hasOwnProperty(sKey)) {
+				
+				var sData = obj[sKey].split(",");
+				
+				if(sKey === "boatData") {
+					//dbJob.InsertDBBoatData(sData);    // LDH
+					// 보트 단말기에서 보내온 신호 분석
+					var BoatCheck = require('../public/myModules/boatCheck');
+					var boatCheck = new BoatCheck(sData); 
+					boatCheck.getBoatCheck();
+				} else if(sKey === "anchorData") {
+					dbJob.InsertDBAnchorData(sData);  
+					// 정박지 단말기에서 보내온 신호 분석 ( // LDH 미사용 )
+					var AnchorCheck = require('../public/myModules/anchorCheck');
+					var anchorCheck = new AnchorCheck(sData); 
+					anchorCheck.getAnchorCheck();				
+				} else if(sKey === "lidarData") {
+					dbJob.InsertDBLidarData(sData);  
+					// 정박지 단말기에서 보내온 신호 분석
+					var LidarCheck = require('../public/myModules/lidarCheck');
+					var lidarCheck = new LidarCheck(sData); 
+					lidarCheck.getLidarCheck();				
+				} // 보트 데이터가 아닌면 Skip
+			}    
+		}
+	} catch (err) {
+		logger.error("ERROR111:" + err);
+	}
 	
 });
+
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -16,7 +16,7 @@ var gpsY2;   // GPS 좌표 Y2
 
 function MessageObject()
 { 
-	var iD;    // MQTT에서 전달 받은 단말기 ID 
+	var id;    // MQTT에서 전달 받은 단말기 ID 
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
 	var time;  // MQTT에서 전달 받은 시각	
@@ -69,7 +69,7 @@ AnchorCheck.prototype.getAnchorCheck = function() {
 	
 	if (nDistance  < 100 ) { //거리가 100mm 이하이면 정박 상태
 		logger.info("boat is anchored !!");
-	    mObject.iD   = sId;
+	    mObject.id   = sId;
 	    mObject.time = sStime;		
 	    mObject.leftRight = 0;		
 

@@ -16,7 +16,7 @@ var gpsY2;   // GPS 좌표 Y2
 
 function MessageObject()
 { 
-	var iD;    // MQTT에서 전달 받은 단말기 ID 
+	var id;    // MQTT에서 전달 받은 단말기 ID 
 	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
 	var gpsY;  // MQTT에서 전달 받은 GPS 경도
 	var time;  // MQTT에서 전달 받은 시각	
@@ -24,7 +24,10 @@ function MessageObject()
 	var boatId;  //보트 ID     
 	var lidarId;   // 정박지단말기 ID  
 	var leftRight;  // 좌우구분  
+	var sendtime;   // 전송일시  	
+	var boatinout;  // 입출항구분  
 }
+
 var mObject  = new MessageObject(); //메세지 구조체
 var mObject2 = new MessageObject(); //메세지 구조체
 
@@ -40,7 +43,7 @@ function analysisBoatLidar(sId, nGradex, nGradey) {
 
     logger.info('Start getArea........');
     
-    mObject.iD   = sId;
+    mObject.id   = sId;
     mObject.gpsX = nGradex;
     mObject.gpsY = nGradey;
     
@@ -93,7 +96,7 @@ function getGPSAreaAnalysis(sId, nGradex, nGradey) {
 
     logger.info('Start getArea........');
     
-    mObject.iD   = sId;
+    mObject.id   = sId;
     mObject.gpsX = nGradex;
     mObject.gpsY = nGradey;
     
@@ -177,7 +180,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 		
 		if (sShipLeftYn === "1") { //lidar 왼쪽에 정박한 경우
 			logger.info("boat is left lidared !!");
-		    mObject.iD        = sId;
+		    mObject.id        = sId;
 		    mObject.time      = sSendtime;	
 		    mObject.leftRight = '0';	
 	
@@ -200,7 +203,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 		}
 		if (sShipRightYn === "1") { //lidar 왼쪽에 정박한 경우
 			logger.info("boat is right lidared !!");
-		    mObject.iD        = sId;
+		    mObject.id        = sId;
 		    mObject.time      = sSendtime;	
 		    mObject.leftRight = '0';	
 
