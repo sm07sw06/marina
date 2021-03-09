@@ -22,7 +22,7 @@ const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 32400;
 const int   daylightOffset_sec = 32400;
 
-#define PERIOD 30000   //30초
+#define PERIOD 110 * 1000   //110초
 unsigned long prev_millis;
 
 // HC-SR04 핀 정의

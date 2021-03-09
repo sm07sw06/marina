@@ -19,7 +19,7 @@ char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-#define PERIOD 40000   //40초
+#define PERIOD 120 * 1000   //120초
 unsigned long prev_millis;
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
@@ -27,15 +27,6 @@ WiFiClient client;
 
 /* Create an rtc object */
 RTCZero rtc;
-/* Change these values to set the current initial time */
-const byte seconds = 01;
-const byte minutes = 05;
-const byte hours = 10;
-
-/* Change these values to set the current initial date */
-const byte day = 22;
-const byte month = 01;
-const byte year = 21;
 
 void msgReceived(char *topic, byte *payload, unsigned int uLen){
     char sMsg[uLen+1];
@@ -198,12 +189,10 @@ void setup() {
     delay(10);
 
     rtc.begin(); // initialize RTC
-
-    /***
-    rtc.setTime(hours, minutes, seconds);
-    rtc.setDate(day, month, year);
-    ***/
-
+/**
+    rtc.setDate(9, 3, 21);  //2021.03.09
+    rtc.setTime(9, 35, 00); //09:35:00
+**/
     lcd.begin(); //We are using a 16*2 LCD display
     lcd.backlight();
     lcd.print("MQTT for Marina"); //Display a intro message
