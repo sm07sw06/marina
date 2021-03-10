@@ -35,7 +35,40 @@ sequelize.sync({ force: false })
     console.error(err);
 });
 ***/
+const { Pool } = require("pg");
 
+const pool = new Pool({
+	user: "postgres",
+	host: "192.168.123.105",
+	database: "postgres",
+	password: "topadmin",
+	port: "5432"
+});
+
+	
+	//the pool with emit an error on behalf of any idle clients
+	//it contains if a backend error or network partition happens
+	pool.on('error', (err, client) => {
+		console.error('Unexpected error on idle client', err) // your callback here
+		process.exit(-1)
+	})
+	
+	//promise - checkout a client
+	pool.connect()
+	.then(client => {
+	 return client.query('SELECT 1 ') // your query string here
+	   .then(res => {
+	     client.release()
+	     console.log('데이터베이스 연결됨.');
+	   })
+	   .catch(e => {
+	     client.release()
+	     console.log(err.stack) // your callback here
+	   })
+	})
+	
+	pool.end();
+  
 module.exports = db;
 
 

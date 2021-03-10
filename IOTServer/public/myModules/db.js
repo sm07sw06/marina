@@ -7,9 +7,10 @@ var path   = require('path');
 var async  = require('async');
 var moment = require('moment');
 
+ 
 const { Pool } = require("pg");
 //const { Pool, clientdb } = require("pg");
-const { sequelize } = require('../../database/models'); // db.sequelize
+//const { sequelize } = require('../../database/models'); // db.sequelize
 
  
 const pool = new Pool({
@@ -24,6 +25,7 @@ pool.on('error', function(error) {
 	console.log("328 ERROR!!" + error);
 });
 
+ 
 //const pgp= require("pg-promise")({});
 //const db= pgp(databaseConfig);
 
