@@ -6,7 +6,7 @@ const logger = require('../../config/winston');
 var path   = require('path');
 var async  = require('async');
 var moment = require('moment');
-
+const config = require('config');
  
 const { Pool } = require("pg");
 //const { Pool, clientdb } = require("pg");
@@ -14,11 +14,11 @@ const { Pool } = require("pg");
 
  
 const pool = new Pool({
-	user: "postgres",
-	host: "192.168.123.105",
-	database: "postgres",
-	password: "topadmin",
-	port: "5432"
+	user: config.get('development.username'),
+	host: config.get('development.host'),
+	database: config.get('development.database'),
+	password: config.get('development.password'),
+	port: config.get('development.port')
 });
  
 pool.on('error', function(error) { 

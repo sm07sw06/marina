@@ -194,8 +194,8 @@ BoatCheck.prototype.getBoatCheck = function() {
 	logger.info('Start getBoatCheck........');
 
 	var sData = this.message;  // MQTT에서 보내온 메세지
+	var sSendTime    = sData[0];
 	var sId          = sData[9];
-	var sSendTime    = sData[15];
 	var nTemperature = sData[16];
 	var nHumidity    = sData[17];
 	var nGradex      = sData[18];

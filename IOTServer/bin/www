@@ -7,18 +7,14 @@ var app = require('../app');
 var debug = require('debug')('iotserver:server');
 var http = require('http');
 
-const logger = require('../config/winston') 
+const logger = require('../config/winston')  //LDH 
+const config = require('config');
+const callingModule = require('caller-module');
 
-
-const Sequelize = require('sequelize');
-
-const env = process.env.NODE_ENV || 'development';
-const config = require('../database/config/config')[env];
+//const Sequelize = require('sequelize');
+//const env = process.env.NODE_ENV || 'development';
+//const config = require('../database/config/config')[env];
 const db = {};
-
-console.log("database:"+config.database);
-console.log("username:"+config.username);
-console.log("password:"+config.password);
 
 process.on('warning', e => console.warn(e.stack));
 
@@ -38,14 +34,22 @@ sequelize.sync({ force: false })
 const { Pool } = require("pg");
 
 const pool = new Pool({
+	user: config.get('development.username'),
+	host: config.get('development.host'),
+	database: config.get('development.database'),
+	password: config.get('development.password'),
+	port: config.get('development.port')
+});
+
+/**
+const pool = new Pool({
 	user: "postgres",
 	host: "192.168.123.105",
 	database: "postgres",
 	password: "topadmin",
 	port: "5432"
 });
-
-	
+**/	
 	//the pool with emit an error on behalf of any idle clients
 	//it contains if a backend error or network partition happens
 	pool.on('error', (err, client) => {
@@ -59,7 +63,8 @@ const pool = new Pool({
 	 return client.query('SELECT 1 ') // your query string here
 	   .then(res => {
 	     client.release()
-	     console.log('데이터베이스 연결됨.');
+	     logger.info('데이터베이스 연결됨.');
+	     logger.info(callingModule.GetCallerModule().name); // Logs the name of your module
 	   })
 	   .catch(e => {
 	     client.release()
@@ -76,7 +81,8 @@ module.exports = db;
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3100');
+//var port = normalizePort(process.env.PORT || '3100');
+var port = config.get('development.port');
 app.set('port', port);
 /**
  * Create HTTP server.

@@ -1,0 +1,24 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "..\\logs\\.bcf3d3935cc44bcc193106c5fc7f9ce870806e7b-audit.json",
+    "files": [
+        {
+            "date": 1615419524216,
+            "name": "..\\logs\\marina-2021-03-11-08.log",
+            "hash": "0d46e22f92cc46ec4351f6d17a530872"
+        },
+        {
+            "date": 1615420902670,
+            "name": "..\\logs\\marina-2021-03-11-09.log",
+            "hash": "be9ca3c3172afc705e33952c8d12f304"
+        },
+        {
+            "date": 1615424424089,
+            "name": "..\\logs\\marina-2021-03-11-10.log",
+            "hash": "c4bca29cf0d173770fb84322a1549422"
+        }
+    ]
+}
