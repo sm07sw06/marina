@@ -266,7 +266,7 @@ void loop() {
 
     char message[1024]="", pDistBuf[1024];
     //    sprintf(message, "{\"larva\":\"%s,%s,%d\"}", gMac, gIp, totalCount);
-    sprintf(message, "{\"boatData\":\"%s,%s,%s\"}","20210106164615,Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
+    sprintf(message, "{\"boatData\":\"%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
     if( ( millis() - prev_millis ) > PERIOD ) {
         mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
