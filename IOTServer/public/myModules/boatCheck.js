@@ -203,6 +203,7 @@ BoatCheck.prototype.getBoatCheck = function() {
 	var nLatitude    = sData[22];
 	var nLongitude   = sData[24];
 
+    logger.info('-----------------------------');
     logger.info('   sId:' + sId);
     logger.info('   nTemperature:' + nTemperature);
     logger.info('   nHumidity:' + nHumidity);
@@ -211,6 +212,7 @@ BoatCheck.prototype.getBoatCheck = function() {
     logger.info('   nLatitude:' + nLatitude);
     logger.info('   nLongitude:' + nLongitude);
     logger.info('   sSendTime:' + sSendTime);
+    logger.info('-----------------------------');
 
 
 	if(nTemperature === "") { nTemperature = 0; }

@@ -163,10 +163,12 @@ LidarCheck.prototype.getLidarCheck = function() {
 	var sShipLeftYn 	= sData[15];
 	var sShipRightYn 	= sData[17];
 	
+    logger.info('-----------------------------');
 	logger.info("  sId:"+sId);
 	logger.info("  sSendtime:"+sSendtime);   
 	logger.info("  sShipLeftYn:"+sShipLeftYn);   
 	logger.info("  sShipRightYn:"+sShipRightYn);   
+    logger.info('-----------------------------');
 
 	
 	mObject.boatId   = "";
