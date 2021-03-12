@@ -1,8 +1,8 @@
+#include <DS3231.h>
 #include <SPI.h>
+#include <Wire.h>
 #include <WiFiNINA.h>
 #include <LiquidCrystal_I2C.h>
-#include <WiFiUdp.h>
-#include <RTCZero.h>
 #include "PubSubClient.h"
 
 char ssid[]="A1CommAP";
@@ -22,11 +22,12 @@ String stIp = "000.000.000.000";
 #define PERIOD 120 * 1000   //120초
 unsigned long prev_millis;
 
+char  sCurrentTime[18] = {0} ;
+
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 WiFiClient client;
 
-/* Create an rtc object */
-RTCZero rtc;
+RTClib myRTC;
 
 void msgReceived(char *topic, byte *payload, unsigned int uLen){
     char sMsg[uLen+1];
@@ -187,18 +188,14 @@ void setup() {
     pinMode(LEDPin5, OUTPUT);
     Serial.begin(115200);
     delay(10);
-
-    rtc.begin(); // initialize RTC
-/**
-    rtc.setDate(9, 3, 21);  //2021.03.09
-    rtc.setTime(9, 35, 00); //09:35:00
-**/
+    Wire.begin();
+    
     lcd.begin(); //We are using a 16*2 LCD display
     lcd.backlight();
     lcd.print("MQTT for Marina"); //Display a intro message
     lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
     lcd.print("starting....."); //Display a intro message
-    delay(100);
+    delay(3000);
     lcd.clear(); //Then clean it
 
     Serial.println();
@@ -216,22 +213,28 @@ void setup() {
 
     prev_millis = millis();
 
+    getRtcTime3231().toCharArray(sCurrentTime, getRtcTime3231().length()+1);
+    Serial.print("DS3231 time:");
+    Serial.println(sCurrentTime);
+
 }
 
-String getRtcTime() {
+String getRtcTime3231() {
 
-    int h = rtc.getHours() + 8 ;
-    int m = rtc.getMinutes();
-    int s = rtc.getSeconds();
-    int d = rtc.getDay();
-    int mo = rtc.getMonth();
-    int yr = rtc.getYear();
-    long epoch = rtc.getEpoch();
-
+ // Serial.println("getRtcTime3231 starting ~ ");
+    int h = myRTC.now().hour();
+    int m = myRTC.now().minute();
+    int s = myRTC.now().second();
+    int d = myRTC.now().day();
+    int mo = myRTC.now().month();
+    int yr = myRTC.now().year();
+    
     // make a String for printing:
-    String dateTime = "20";
+    String dateTime = "";
+    
     if (yr < 10) dateTime += "0";
     dateTime += yr;
+    
     if (mo < 10) dateTime += "0";
     dateTime += mo;
     if (d < 10) dateTime += "0";
@@ -243,15 +246,12 @@ String getRtcTime() {
     dateTime += m;
     if (s < 10) dateTime += "0";
     dateTime += s;
-
+   
     return dateTime;
 }
 
+
 void loop() {
-
-    char  sCurrentTime[18] = {0} ;
-
-    //Serial.println(getTime());
 
     // In each loop, make sure there is an Internet connection.
     if (WiFi.status() != WL_CONNECTED) {
@@ -261,12 +261,11 @@ void loop() {
 
     mqttClient.loop();
 
-    //sCurrentTime = getRtcTime();
-    getRtcTime().toCharArray(sCurrentTime, getRtcTime().length()+1);
-
     char message[1024]="", pDistBuf[1024];
-    //    sprintf(message, "{\"larva\":\"%s,%s,%d\"}", gMac, gIp, totalCount);
-    sprintf(message, "{\"boatData\":\"%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
+    getRtcTime3231().toCharArray(sCurrentTime, getRtcTime3231().length()+1);
+    sprintf(message, "{\"lidarData\":\"0013A20041BB95F7,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", sCurrentTime);
+    //sprintf(message, "{\"anchorData\":\"%s,%d,%d,%s,%s\"}", gMac, 20, 10, 22, sCurrentTime);
+
     if( ( millis() - prev_millis ) > PERIOD ) {
         mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
@@ -278,6 +277,8 @@ void loop() {
     lcd.print("                "); //Display a ammonia in ppm
     lcd.setCursor(0, 0);   // set the cursor to column 0, line 1
     lcd.print(gMac); //Display a ammonia in ppm
-    lcd.print(","); //Display a ammonia in ppm
+    lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
+    lcd.print("                "); //Display a ammonia in ppm
+    lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
     lcd.print(sCurrentTime); //Display a ammonia in ppm
 }

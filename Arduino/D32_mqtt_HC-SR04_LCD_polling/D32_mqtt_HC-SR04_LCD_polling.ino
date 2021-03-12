@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include "PubSubClient.h"
 #include <LiquidCrystal_I2C.h>
-#include <NTPClient.h>
 #include <WiFiUdp.h>
+#include <DS3231.h>
 
 char ssid[]="A1CommAP";
 char pass[]="topwifi7000";
@@ -18,10 +18,6 @@ char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-const char* ntpServer = "pool.ntp.org";
-const long  gmtOffset_sec = 32400;
-const int   daylightOffset_sec = 32400;
-
 #define PERIOD 110 * 1000   //110초
 unsigned long prev_millis;
 
@@ -35,7 +31,7 @@ unsigned long prev_millis;
 #define lcdRows 2
 
 LiquidCrystal_I2C lcd(lcdAddress, lcdColumns, lcdRows);
-
+RTClib myRTC;
 
 // 거리 데이터 저장 mm, inch 단위
 double distanceMm;
@@ -45,9 +41,10 @@ double distanceInch;
 String mm;
 String inch;
 
+char sCurrentTime[18]; 
+
 WiFiClient client;
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP);
 
 void msgReceived(char *topic, byte *payload, unsigned int uLen){
     char sMsg[uLen+1];
@@ -200,7 +197,7 @@ void setup() {
     lcd.print("MQTT for Marina"); //Display a intro message
     lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
     lcd.print("starting....."); //Display a intro message
-    delay(100);
+    delay(3000);
     lcd.clear(); //Then clean it
 
     Serial.println();
@@ -218,14 +215,42 @@ void setup() {
         mqttClient.subscribe(gTopicSub); //led 구독자를 등록(데이터를 읽어갈 구독자 등록)
     }
 
-    timeClient.begin();
-    timeClient.setTimeOffset(3600 * 9);
-
     prev_millis = millis();
+}
+
+String getRtcTime() {
+
+    int h = myRTC.now().hour();
+    int m = myRTC.now().minute();
+    int s = myRTC.now().second();
+    int d = myRTC.now().day();
+    int mo = myRTC.now().month();
+    int yr = myRTC.now().year();
+    
+    // make a String for printing:
+    String dateTime = "";
+    if (yr < 10) dateTime += "0";
+    dateTime += yr;
+    if (mo < 10) dateTime += "0";
+    dateTime += mo;
+    if (d < 10) dateTime += "0";
+    dateTime += d;
+
+    if (h < 10) dateTime += "0";
+    dateTime += h;
+    if (m < 10) dateTime += "0";
+    dateTime += m;
+    if (s < 10) dateTime += "0";
+    dateTime += s;
+
+    return dateTime;
 }
 
 void loop() {
 
+    getRtcTime().toCharArray(sCurrentTime, getRtcTime().length()+1);
+//    Serial.println(sCurrentTime);
+    
     // In each loop, make sure there is an Internet connection.
     if (WiFi.status() != WL_CONNECTED) {
         connectWiFi();
@@ -233,33 +258,21 @@ void loop() {
 
     mqttReconnect();
 
-   // Serial.println("timeClient");
-   // while(!timeClient.update()) {
-   //     timeClient.forceUpdate();
-   // }
-
-    struct tm timeinfo;
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-    if(!getLocalTime(&timeinfo)){
-        Serial.println("Failed to obtain time");
-        return;
-    }
-   
     mqttClient.loop();
 
     // HC-SR04 거리 측정
     getDistance();
     // 측정한 거리 CLCD 출력
-    printDistanceLCD();
+   // printDistanceLCD();
 
   //  Serial.println("dtostrf");
     char message[1024]="", pDistBuf[16];
     dtostrf(distanceMm , 5,2, pDistBuf);
 
-    char timeStringBuff[50]; //50 chars should be enough
-    strftime(timeStringBuff, sizeof(timeStringBuff), "%Y%m%d%H%M%S", &timeinfo);
-//    sprintf(message, "{\"lidarData3\":\"000102030405,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", timeStringBuff);
-    sprintf(message, "{\"anchorData\":\"%s,%d,%d,%s,%s\"}", gMac, 20, 10, pDistBuf, timeStringBuff);
+    
+    //strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);
+    //strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);  
+    sprintf(message, "{\"boatData\":\"%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
     if( ( millis() - prev_millis ) > PERIOD ) {
         mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
@@ -267,13 +280,15 @@ void loop() {
         prev_millis = millis();
     }
 
-    /**
     lcd.setCursor(0, 0);   // set the cursor to column 0, line 1
     lcd.print("                "); //Display a ammonia in ppm
     lcd.setCursor(0, 0);   // set the cursor to column 0, line 1
     lcd.print(gMac); //Display a ammonia in ppm
-    lcd.print(","); //Display a ammonia in ppm
-    **/
+    lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
+    lcd.print("                "); //Display a ammonia in ppm
+    lcd.setCursor(0, 1);   // set the cursor to column 0, line 1
+    lcd.print(sCurrentTime); //Display a ammonia in ppm
+    
 }
 
 void getDistance(){
