@@ -23,7 +23,7 @@ function MessageObject()
 	var machineId;  //보트단말기 ID     
 	var boatId;  //보트 ID     
 	var anchorId;   // 정박지단말기 ID  
-	var leftRight;  // 좌우구분  
+	var leftRight;  // 좌우구분  좌우구분 (0:좌, 1:우)
 	var sendtime;   // 전송일시  
 	var boatinout;  // 입출항구분  
 }
@@ -122,17 +122,17 @@ function getGPSAreaAnalysis(sId, nLatitude, nLongitude, sSendTime) {
     
     async.waterfall([
         function(callback) {
-        	logger.info('async....001'); 
+        	logger.info('!! 최근 정박 이력 확인중...'); 
             db.SelectGateBound(mObject, function(rtn){
                 if (rtn === 'OK') {
-                	logger.info('정박상태 확인2'); 
                 	//최근 정박 이력 확인
+                	logger.info('정박상태 확인2'); 
                     db.SelectLastAnchor(mObject, function(rtn){
                         if (rtn === 'OK') {
-                        	logger.info('보트 출항중2-1'); //보트출항중
+                        	logger.info('보트 출항중'); //보트출항중
                         	mObject.boatinout = '0' 
                         } else {
-                            logger.info('보트 입항중2-2'); //보트 입항중
+                            logger.info('보트 입항중'); //보트 입항중
                             mObject.boatinout = '1' 
                         }   
                         callback(null, mObject);  
@@ -148,7 +148,7 @@ function getGPSAreaAnalysis(sId, nLatitude, nLongitude, sSendTime) {
             });   
         },
         function(mObject, callback) {
-        	logger.info('async....002'); 
+        	logger.info('!! 보트 일출항 이력 갱신중...'); 
         	logger.info('   id    : ' + mObject.id);
         	logger.info('   sendtime  : ' + mObject.sendtime);
         	logger.info('   boatinout : ' + mObject.boatinout);
@@ -165,8 +165,9 @@ function getGPSAreaAnalysis(sId, nLatitude, nLongitude, sSendTime) {
             });          
 		},
 		function(callback) {
-			logger.info('async....003'); 
+			logger.info('!! 대쉬보드에 현재 운항 상태 적용중...'); 
 			// 대쉬보드에 현재 운항 상태 적용
+			logger.info('!! 대쉬보드에 현재 운항 상태 적용중...'); 
 			setDashBoard(mObject, function(rtn){ 
 		    	;;
 		    });         
@@ -174,7 +175,6 @@ function getGPSAreaAnalysis(sId, nLatitude, nLongitude, sSendTime) {
         
     ],
     function (err, result) {
-    	logger.info('async....004'); 
         if(err){
             console.log('Error ');
             throw( err );

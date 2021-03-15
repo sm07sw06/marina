@@ -23,7 +23,7 @@ function MessageObject()
 	var machineId;  //보트단말기 ID     
 	var boatId;  //보트 ID     
 	var lidarId;   // 정박지단말기 ID  
-	var leftRight;  // 좌우구분  
+	var leftRight;  // 좌우구분   좌우구분 (0:좌, 1:우)
 	var sendtime;   // 전송일시  	
 	var boatinout;  // 입출항구분  
 }
@@ -178,67 +178,104 @@ LidarCheck.prototype.getLidarCheck = function() {
 	mObject2.boatId = "";
 	mObject2.lidarId = "";
 	
-	if ((sShipLeftYn === "1")||(sShipRightYn === "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
-		
-		if (sShipLeftYn === "1") { //lidar 왼쪽에 정박한 경우
-			logger.info("boat is left lidared !!");
-		    mObject.id        = sId;
-		    mObject.time      = sSendtime;	
-		    mObject.leftRight = '0';	
-	
-		    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
-		    db.GetBoatDataSearch(mObject, function(mObject2){ 
-				
-				if(mObject.boatId) {
-					logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
-					logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
-					logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
-					// 보트 정박 처리
-					db.SetBoatAnchor(mObject2, function(rtn){ 
-						logger.info("SetBoatAnchor result:" + rtn);
-				    	// 대쉬보드에 현재 운항 상태 적용
-				        setDashBoard(mObject2, function(rtn){ 
-				        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-			        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-				}
-	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
-		}
-		if (sShipRightYn === "1") { //lidar 왼쪽에 정박한 경우
-			logger.info("boat is right lidared !!");
-		    mObject.id        = sId;
-		    mObject.time      = sSendtime;	
-		    mObject.leftRight = '0';	
+	async.waterfall([
+	    function(callback) {
+	    	
+	    	if ((sShipLeftYn === "1")||(sShipRightYn === "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
+	    		
+	    		if (sShipLeftYn === "1") { //lidar 왼쪽에 정박한 경우
+	    			logger.info('!! 왼쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
+	    			logger.info("boat is left lidared !!");
+	    		    mObject.id        = sId;
+	    		    mObject.time      = sSendtime;	
+	    		    mObject.leftRight = '0';	// 좌
+	    	
+	    		    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+	    		    db.GetBoatDataSearch(mObject, function(mObject2){ 
+	    				if(mObject2 == "ERROR") {
+	    		    		logger.info("boat is not anchored1 !!");
+	    		    		// 미등록 보트 정박 처리 // LDH
+	    		    		callback(null, mObject2);  
+	    				} else {
+	    				//if(mObject.boatId) {
+	    					logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
+	    					logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
+	    					logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
+	    					// 보트 정박 처리
+	    	    			logger.info('!! 보트 정박 처리중...'); 
+	    					db.SetBoatAnchor(mObject2, function(rtn){ 
+	    						logger.info("SetBoatAnchor result:" + rtn);
+	    				    	// 대쉬보드에 현재 운항 상태 적용
+			    				callback(null, mObject2);  
+	    			        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
+	    				}
+	    	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
+	    		}
+	    		if (sShipRightYn === "1") { //lidar 왼쪽에 정박한 경우
+	    			logger.info('!! 오른쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
+	    			logger.info("boat is right lidared !!");
+	    		    mObject.id        = sId;
+	    		    mObject.time      = sSendtime;	
+	    		    mObject.leftRight = '1';	// 우
 
-		    db.GetBoatDataSearch(mObject, function(mObject2){ 
-				
-				if(mObject.boatId) {
-					logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
-					logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
-					logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
-					// 보트 정박 처리
-					db.SetBoatAnchor(mObject2, function(rtn){ 
-						logger.info("SetBoatAnchor result:" + rtn);
-				    	// 대쉬보드에 현재 운항 상태 적용
-				        setDashBoard(mObject2, function(rtn){ 
-				        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-			        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-				}
-	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
+	    		    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+	    		    db.GetBoatDataSearch(mObject, function(mObject2){ 
+	    				if(mObject2 == "ERROR") {
+	    		    		logger.info("boat is not anchored2 !!");
+	    		    		callback(null, mObject2);  
+	    		    		// 미등록 보트 정박 처리 // LDH
+	    				} else {
+	    				//if(mObject.boatId) {
+	    					logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
+	    					logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
+	    					logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
+	    					// 보트 정박 처리
+	    	    			logger.info('!! 보트 정박 처리중...'); 
+	    					db.SetBoatAnchor(mObject2, function(rtn){ 
+	    						logger.info("SetBoatAnchor result:" + rtn);
+	    				    	// 대쉬보드에 현재 운항 상태 적용
+			    				callback(null, mObject2);  
+	    			        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
+	    				}
+	    	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
+	    		}
+	    	} else {
+	    		mObject2.machineId = sId;
+	    		logger.info("boat is not anchored3 !!");
+    			logger.info('!! 보트 정박 처리중...'); 
+	    		// 보트 정박 처리
+	    		db.SetBoatNotAnchor(mObject2, function(rtn){ 
+	    			logger.info("SetBoatAnchor result3:" + rtn);
+    	        	// 보트 일출항 이력 갱신
+	    			logger.info('!! 보트 일출항 이력 갱신중...'); 
+    	            db.UpdateBoatHist(mObject, function(rtn){
+    	                if (rtn === 'OK') {
+    	                	logger.info('정박상태 확인3'); 
+    	                	//최근 정박 이력 확인
+    	                } else {
+    	                    logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
+    	                    callback(null, rtn); 
+    	                }   
+    	            });          
+	            });     
+	    	}
+	    },
+		function(callback) {
+			// 대쉬보드에 현재 운항 상태 적용
+			logger.info('!! 대쉬보드에 현재 운항 상태 적용중...'); 
+			setDashBoard(mObject, function(rtn){ 
+		    	;;
+		    });         
 		}
-	} else {
-		mObject2.machineId = sId;
-		
-		logger.info("boat is not anchored !!");
-		// 보트 정박 처리
-		db.SetBoatNotAnchor(mObject2, function(rtn){ 
-			logger.info("SetBoatAnchor result:" + rtn);
-	    	// 대쉬보드에 현재 운항 상태 적용
-	        setDashBoard(mObject, function(rtn){ 
-	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-        });     
-	}
+    ],
+    function (err, result) {
+    	logger.info('async....004'); 
+        if(err){
+            console.log('Error ');
+            throw( err );
+        }  
+    });	    
 
-    return {message: this.message};
 };
 
 

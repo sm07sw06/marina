@@ -144,7 +144,7 @@ client.on("message", function(topic, message) {
 				var sData = obj[sKey].split(",");
 				
 				if(sKey === "boatData") {
-					//dbJob.InsertDBBoatData(sData);    // LDH
+					dbJob.InsertDBBoatData(sData);    // LDH
 					// 보트 단말기에서 보내온 신호 분석
 					var BoatCheck = require('../public/myModules/boatCheck');
 					var boatCheck = new BoatCheck(sData); 

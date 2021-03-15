@@ -3,11 +3,17 @@ const winston = require('winston');            // winston lib
 const winstonDaily = require('winston-daily-rotate-file')
 const process = require('process');
 
+const timezoned = () => {
+    return new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Seoul'
+    });
+}
+
 const DailyRotateFile = require('winston-daily-rotate-file');
 const config = require('config');
 const logFormat = winston.format.combine(
 	winston.format.colorize(),
-	winston.format.timestamp(),
+	winston.format.timestamp({ format: timezoned }),
 	winston.format.align(),
 	winston.format.printf(
 			info => `${info.timestamp} ${info.level}: ${info.message}`
