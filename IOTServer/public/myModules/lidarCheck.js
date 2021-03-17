@@ -90,19 +90,21 @@ LidarCheck.prototype.getLidarCheck = function() {
                             // 보트 정박 처리
                             logger.info('!! 보트 정박 처리중...'); 
                             db.SetBoatAnchor("1", mObject2, function(rtn){  //status = 1 정박
-                                logger.info("SetBoatAnchor result1:" + rtn);
-                                // 대쉬보드에 현재 운항 상태 적용
-                                //callback(null, "OK", mObject2);  //LDH  
-                                callback(null, "OK");  
+                                if (rtn === 'OK') {
+                                    logger.info('보트 정박 처리 성공1'); 
+                                } else {
+                                    logger.info('보트 정박 처리 실패1'); 
+                                }        
                             });                  //기준 시간 범위내 단말기 수신 정보 찾기           
                         } else {
                             logger.info("범위내에 등록된 보트가 존재하지 않습니다.!!");
                             // 미등록 보트 정박 처리 // LDH
                             db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
-                                logger.info("SetBoatAnchor result2:" + rtn);
-                                // 대쉬보드에 현재 운항 상태 적용
-                                //callback(null, "OK", mObject2);  //LDH
-                                callback(null, "OK");  
+                                if (rtn === 'OK') {
+                                    logger.info('보트 정박 처리 성공2'); 
+                                } else {
+                                    logger.info('보트 정박 처리 실패2'); 
+                                }     
                             });                              
                         }
                     });                  //기준 시간 범위내 단말기 수신 정보 찾기
@@ -124,18 +126,21 @@ LidarCheck.prototype.getLidarCheck = function() {
                             logger.info('!! 보트 정박 처리중...'); 
                             db.SetBoatAnchor("1", mObject2, function(rtn){  //status = 1 정박
                                 logger.info("SetBoatAnchor result3:" + rtn);
-                                // 대쉬보드에 현재 운항 상태 적용
-                                //callback(null, "OK", mObject2);  //LDH  
-                                callback(null, "OK");  
+                                if (rtn === 'OK') {
+                                    logger.info('보트 정박 처리 성공3'); 
+                                } else {
+                                    logger.info('보트 정박 처리 실패3'); 
+                                }                                  
                             });                  //기준 시간 범위내 단말기 수신 정보 찾기           
                         } else {
                             logger.info("범위내에 등록된 보트가 존재하지 않습니다.!!");
                             // 미등록 보트 정박 처리 // LDH
                             db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
-                                logger.info("SetBoatAnchor result4:" + rtn);
-                                // 대쉬보드에 현재 운항 상태 적용
-                                //callback(null, "OK", mObject2);  //LDH
-                                callback(null, "OK");  
+                                if (rtn === 'OK') {
+                                    logger.info('보트 정박 처리 성공4'); 
+                                } else {
+                                    logger.info('보트 정박 처리 실패4'); 
+                                }     
                             });                              
                         }
                     });                  //기준 시간 범위내 단말기 수신 정보 찾기
@@ -150,33 +155,14 @@ LidarCheck.prototype.getLidarCheck = function() {
                     logger.info('!! 보트 일출항 이력 갱신중...'); 
                     db.UpdateBoatHist(mObject, function(rtn){
                         if (rtn === 'OK') {
-                            logger.info('정박상태 확인3'); 
-                             //callback(null, "OK", mObject); 
-                             callback(null, "OK");  
-                            //최근 정박 이력 확인
+                            logger.info('보트 일출항 이력 갱신 성공'); 
                         } else {
-                            logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
-                            //callback(null, "ERROR", mObject);
-                            callback(null, "ERROR");  
+                            logger.info('보트 일출항 이력 갱신 실패'); 
                         }   
                     });          
                 });     
             }
-        }/***,
-        function(result, mObject, callback) {
-            // 대쉬보드에 현재 운항 상태 적용
-            logger.info('!! 대쉬보드에 현재 운항 상태 적용중...'); 
-            db.SetDashBoard(mObject, function(rtn){
-                if (rtn === 'OK') {
-                    //최근 정박 이력 확인
-                    logger.info('데쉬보드 적용 완료'); 
-                    callback(null, "OK");  
-                } else {
-                    logger.info('데쉬보드 적용 오류'); //보트단말기 정박상태 분석2
-                    callback(null, "ERROR");  // LDH
-                }   
-            }); 
-        }***/
+        }
     ],
     function (err, result) {
         if(err){
@@ -184,9 +170,7 @@ LidarCheck.prototype.getLidarCheck = function() {
             throw( err );
         }  
     });     
-
 };
-
 
 
 //객체를 바로 module.exports에 할당
