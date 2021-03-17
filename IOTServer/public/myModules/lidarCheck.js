@@ -16,7 +16,7 @@ var gpsY2;   // GPS 좌표 Y2
 
 function MessageObject()
 { 
-    var marinaId;   //마리나 ID     
+    var marinaId;   //마리나 ID      
     var machineId;  //보트단말기 ID     
     var sendTime;   // 전송일시     
     var boatId;  //보트 ID     
