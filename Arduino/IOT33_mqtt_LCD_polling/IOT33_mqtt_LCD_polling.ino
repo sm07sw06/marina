@@ -263,7 +263,8 @@ void loop() {
 
     char message[1024]="", pDistBuf[1024];
     getRtcTime3231().toCharArray(sCurrentTime, getRtcTime3231().length()+1);
-    sprintf(message, "{\"lidarData\":\"0013A20041BB95F7,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", sCurrentTime);
+    sprintf(message, "{\"lidarData\":\"%s,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", gMac, sCurrentTime);
+    //sprintf(message, "{\"lidarData\":\"0013A20041BB95F7,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", sCurrentTime);
     //sprintf(message, "{\"anchorData\":\"%s,%d,%d,%s,%s\"}", gMac, 20, 10, 22, sCurrentTime);
 
     if( ( millis() - prev_millis ) > PERIOD ) {

@@ -16,265 +16,170 @@ var gpsY2;   // GPS 좌표 Y2
 
 function MessageObject()
 { 
-	var id;    // MQTT에서 전달 받은 단말기 ID 
-	var gpsX;  // MQTT에서 전달 받은 GPS 위도 
-	var gpsY;  // MQTT에서 전달 받은 GPS 경도
-	var time;  // MQTT에서 전달 받은 시각	
-	var machineId;  //보트단말기 ID     
-	var boatId;  //보트 ID     
-	var lidarId;   // 정박지단말기 ID  
-	var leftRight;  // 좌우구분   좌우구분 (0:좌, 1:우)
-	var sendtime;   // 전송일시  	
-	var boatinout;  // 입출항구분  
+    var marinaId;   //마리나 ID     
+    var machineId;  //보트단말기 ID     
+    var sendTime;   // 전송일시     
+    var boatId;  //보트 ID     
+    var lidarId;   // 정박지단말기 ID  
+    var leftRight;  // 좌우구분   좌우구분 (0:좌, 1:우)
+    var boatInout;  // 입출항구분  
+    var gradex;  // MQTT에서 전달 받은 GPS 위도 
+    var gradey;  // MQTT에서 전달 받은 GPS 경도
+    var latitude;   // 위도
+    var longitude;  // 경도
+    var cctv_cd  ;  // cctv
+    var photo_base64; //전송이미지 텍스트
+    var last_upd_tm;  //최종수정시각
+    var temperature;
+    var humidity   ;
 }
-
-var mObject  = new MessageObject(); //메세지 구조체
-var mObject2 = new MessageObject(); //메세지 구조체
-
 
 function LidarCheck(message) {
-	this.message = message;
+    this.message = message;
 }
 
-/**
-
-//보트 단말기 정박 상태 분석
-function analysisBoatLidar(sId, nGradex, nGradey) { 
-
-    logger.info('Start getArea........');
-    
-    mObject.id   = sId;
-    mObject.gpsX = nGradex;
-    mObject.gpsY = nGradey;
-    
-    mObject.gpsX = 100;
-    mObject.gpsY = 55;
-
-    var db = new DB(); 
-    
-    async.waterfall([
-        function(callback) {
-            db.SelectGateBound(mObject, function(rtn){
-                if (rtn === 'OK') {
-                	logger.info('정박상태 확인');
-                    db.SelectLidarYN(mObject, function(rtn){
-                        if (rtn === 'OK') {
-                        	logger.info('보트출항중');
-                        } else {
-                            logger.info('보트입항중');
-                        }   
-                    });         
-                } else {
-                    logger.info('보트단말기 정박상태 분석');
-                    callback(null, rtn);
-                	// 보트단말기 정박상태 분석
-                	analysisBoatLidar(mObject, function(rtn){ 
-                    	;;
-                    });                        
-                }   
-            });         
-        },
-        function(callback) {
-        	// 대쉬보드에 현재 운항 상태 적용
-        	setDashBoard(mObject, function(rtn){ 
-            	;;
-            });         
-        }
-        
-    ],
-    function (err, result) {
-        if(err){
-            console.log('Error 발생');
-            throw( err );
-        }  
-    });
-}
-
-
-// 보트 GPS의 위치가 출입구 구역에 있는지 판단 
-function getGPSAreaAnalysis(sId, nGradex, nGradey) { 
-
-    logger.info('Start getArea........');
-    
-    mObject.id   = sId;
-    mObject.gpsX = nGradex;
-    mObject.gpsY = nGradey;
-    
-    mObject.gpsX = 100;
-    mObject.gpsY = 55;
-
-    var db = new DB(); 
-    
-    async.waterfall([
-        function(callback) {
-            db.SelectGateBound(mObject, function(rtn){
-                if (rtn === 'OK') {
-                	logger.info('정박상태 확인');
-                    db.SelectLidarYN(mObject, function(rtn){
-                        if (rtn === 'OK') {
-                        	logger.info('보트출항중');
-                        } else {
-                            logger.info('보트입항중');
-                        }   
-                    });         
-                } else {
-                    logger.info('보트단말기 정박상태 분석');
-                    callback(null, rtn);
-                	// 보트단말기 정박상태 분석
-                	analysisBoatLidar(mObject, function(rtn){ 
-                    	;;
-                    });                        
-                }   
-            });         
-        },
-        function(callback) {
-        	// 대쉬보드에 현재 운항 상태 적용
-        	setDashBoard(mObject, function(rtn){ 
-            	;;
-            });         
-        }
-        
-    ],
-    function (err, result) {
-        if(err){
-            console.log('Error 발생');
-            throw( err );
-        }  
-    });
-}
-
-**/
-
-function  setDashBoard() {
-    
-	logger.info('Start setDashBoard........');
-
-};
 
 LidarCheck.prototype.getLidarCheck = function() {
     
-	logger.info('Start getLidarCheck........');
+    logger.info('Start getLidarCheck........');
+    
+    var mObject  = new MessageObject(); //메세지 구조체
+    var mObject2 = new MessageObject(); //메세지 구조체
 
     var db = new DB(); 
     
-	var sData = this.message;  // MQTT에서 보내온 메세지
-	var sId       		= sData[00];
-	var sSendtime 		= sData[09];
-	var sShipLeftYn 	= sData[15];
-	var sShipRightYn 	= sData[17];
-	
-    logger.info('-----------------------------');
-	logger.info("  sId:"+sId);
-	logger.info("  sSendtime:"+sSendtime);   
-	logger.info("  sShipLeftYn:"+sShipLeftYn);   
-	logger.info("  sShipRightYn:"+sShipRightYn);   
-    logger.info('-----------------------------');
+    var sData = this.message;  // MQTT에서 보내온 메세지
+    mObject.marinaId   = 1;
+    mObject.machineId  = sData[00];
+    mObject.sendTime   = sData[09];
+    var sShipLeftYn    = sData[15];
+    var sShipRightYn   = sData[17];
+    
+    logger.info("==================================");
+    logger.info("  marinaId    :"+mObject.marinaId);
+    logger.info("  machineId   :"+mObject.machineId);
+    logger.info("  sendTime    :"+mObject.sendTime);   
+    logger.info("  sShipLeftYn :"+sShipLeftYn);   
+    logger.info("  sShipRightYn:"+sShipRightYn);   
+    logger.info("==================================");
 
-	
-	mObject.boatId   = "";
-	mObject.lidarId = "";
-	
-	mObject2.machineId = "";
-	mObject2.boatId = "";
-	mObject2.lidarId = "";
-	
-	async.waterfall([
-	    function(callback) {
-	    	
-	    	if ((sShipLeftYn === "1")||(sShipRightYn === "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
-	    		
-	    		if (sShipLeftYn === "1") { //lidar 왼쪽에 정박한 경우
-	    			logger.info('!! 왼쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
-	    			logger.info("boat is left lidared !!");
-	    		    mObject.id        = sId;
-	    		    mObject.time      = sSendtime;	
-	    		    mObject.leftRight = '0';	// 좌
-	    	
-	    		    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
-	    		    db.GetBoatDataSearch(mObject, function(mObject2){ 
-	    				if(mObject2 == "ERROR") {
-	    		    		logger.info("boat is not anchored1 !!");
-	    		    		// 미등록 보트 정박 처리 // LDH
-	    		    		callback(null, mObject2);  
-	    				} else {
-	    				//if(mObject.boatId) {
-	    					logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
-	    					logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
-	    					logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
-	    					// 보트 정박 처리
-	    	    			logger.info('!! 보트 정박 처리중...'); 
-	    					db.SetBoatAnchor(mObject2, function(rtn){ 
-	    						logger.info("SetBoatAnchor result:" + rtn);
-	    				    	// 대쉬보드에 현재 운항 상태 적용
-			    				callback(null, mObject2);  
-	    			        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-	    				}
-	    	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
-	    		}
-	    		if (sShipRightYn === "1") { //lidar 왼쪽에 정박한 경우
-	    			logger.info('!! 오른쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
-	    			logger.info("boat is right lidared !!");
-	    		    mObject.id        = sId;
-	    		    mObject.time      = sSendtime;	
-	    		    mObject.leftRight = '1';	// 우
+    mObject.lidarId     = "";
+    
+    mObject2.marinaId   = 1 ;
+    mObject2.machineId  = "";
+    mObject2.boatId     = "";
+    mObject2.lidarId    = "";
+    
+    async.waterfall([
+        function(callback) {
+            
+            if ((sShipLeftYn === "1")||(sShipRightYn === "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
+                
+                if (sShipLeftYn === "1") { //lidar 왼쪽에 정박한 경우
+                    logger.info('!! 왼쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
+                    mObject.leftRight = '0';    // 좌
+            
+                    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+                    db.GetBoatDataSearch(mObject, function(result,mObject2){ 
+                        if(result == "OK") {
+                        //if(mObject.boatId) {
+                            logger.info("범위내에 등록된 보트가 존재합니다.!!");
+                            logger.info("  machineId:" + mObject2.machineId);
+                            logger.info("  boatId   :" + mObject2.boatId);
+                            logger.info("  anchorId :" + mObject2.anchorId);
+                            // 보트 정박 처리
+                            logger.info('!! 보트 정박 처리중...'); 
+                            db.SetBoatAnchor("1", mObject2, function(rtn){  //status = 1 정박
+                                logger.info("SetBoatAnchor result:" + rtn);
+                                // 대쉬보드에 현재 운항 상태 적용
+                                callback(null, "OK", mObject2);  //LDH  
+                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
+                        } else {
+                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.!!");
+                            // 미등록 보트 정박 처리 // LDH
+                            db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
+                                logger.info("SetBoatAnchor result:" + rtn);
+                                // 대쉬보드에 현재 운항 상태 적용
+                                callback(null, "OK", mObject2);  //LDH  
+                            });                              
+                        }
+                    });                  //기준 시간 범위내 단말기 수신 정보 찾기
+                }
+                if (sShipRightYn === "1") { //lidar 왼쪽에 정박한 경우
+                    logger.info('!! 오른쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
+                    logger.info("boat is right lidared !!");
+                    mObject.leftRight = '1';    // 우
 
-	    		    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
-	    		    db.GetBoatDataSearch(mObject, function(mObject2){ 
-	    				if(mObject2 == "ERROR") {
-	    		    		logger.info("boat is not anchored2 !!");
-	    		    		callback(null, mObject2);  
-	    		    		// 미등록 보트 정박 처리 // LDH
-	    				} else {
-	    				//if(mObject.boatId) {
-	    					logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
-	    					logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
-	    					logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
-	    					// 보트 정박 처리
-	    	    			logger.info('!! 보트 정박 처리중...'); 
-	    					db.SetBoatAnchor(mObject2, function(rtn){ 
-	    						logger.info("SetBoatAnchor result:" + rtn);
-	    				    	// 대쉬보드에 현재 운항 상태 적용
-			    				callback(null, mObject2);  
-	    			        });     			 //기준 시간 범위내 단말기 수신 정보 찾기			
-	    				}
-	    	        });     			 //기준 시간 범위내 단말기 수신 정보 찾기
-	    		}
-	    	} else {
-	    		mObject2.machineId = sId;
-	    		logger.info("boat is not anchored3 !!");
-    			logger.info('!! 보트 정박 처리중...'); 
-	    		// 보트 정박 처리
-	    		db.SetBoatNotAnchor(mObject2, function(rtn){ 
-	    			logger.info("SetBoatAnchor result3:" + rtn);
-    	        	// 보트 일출항 이력 갱신
-	    			logger.info('!! 보트 일출항 이력 갱신중...'); 
-    	            db.UpdateBoatHist(mObject, function(rtn){
-    	                if (rtn === 'OK') {
-    	                	logger.info('정박상태 확인3'); 
-    	                	//최근 정박 이력 확인
-    	                } else {
-    	                    logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
-    	                    callback(null, rtn); 
-    	                }   
-    	            });          
-	            });     
-	    	}
-	    },
-		function(callback) {
-			// 대쉬보드에 현재 운항 상태 적용
-			logger.info('!! 대쉬보드에 현재 운항 상태 적용중...'); 
-			setDashBoard(mObject, function(rtn){ 
-		    	;;
-		    });         
-		}
+                    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+                    db.GetBoatDataSearch(mObject, function(result,mObject2){ 
+                        if(result == "OK") {
+                        //if(mObject.boatId) {
+                            logger.info("범위내에 등록된 보트가 존재합니다.!!");
+                            logger.info("  machineId:" + mObject2.machineId);
+                            logger.info("  boatId   :" + mObject2.boatId);
+                            logger.info("  anchorId :" + mObject2.anchorId);
+                            // 보트 정박 처리
+                            logger.info('!! 보트 정박 처리중...'); 
+                            db.SetBoatAnchor("1", mObject2, function(rtn){  //status = 1 정박
+                                logger.info("SetBoatAnchor result:" + rtn);
+                                // 대쉬보드에 현재 운항 상태 적용
+                                callback(null, "OK", mObject2);  //LDH  
+                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
+                        } else {
+                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.!!");
+                            // 미등록 보트 정박 처리 // LDH
+                            db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
+                                logger.info("SetBoatAnchor result:" + rtn);
+                                // 대쉬보드에 현재 운항 상태 적용
+                                callback(null, "OK", mObject2);  //LDH  
+                            });                              
+                        }
+                    });                  //기준 시간 범위내 단말기 수신 정보 찾기
+                }
+            } else {
+                logger.info("boat is not anchored3 !!");
+                logger.info('!! 보트 정박 처리중...'); 
+                // 보트 정박 처리
+                db.SetBoatNotAnchor(mObject, function(rtn){ 
+                    logger.info("SetBoatAnchor result3:" + rtn);
+                    // 보트 일출항 이력 갱신
+                    logger.info('!! 보트 일출항 이력 갱신중...'); 
+                    db.UpdateBoatHist(mObject, function(rtn){
+                        if (rtn === 'OK') {
+                            logger.info('정박상태 확인3'); 
+                             callback(null, "OK", mObject); 
+                            //최근 정박 이력 확인
+                        } else {
+                            logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
+                            callback(null, "ERROR", mObject); 
+                        }   
+                    });          
+                });     
+            }
+        },
+        function(result, mObject, callback) {
+            // 대쉬보드에 현재 운항 상태 적용
+            logger.info('!! 대쉬보드에 현재 운항 상태 적용중...'); 
+            /***
+            db.SetDashBoard(mObject, function(rtn){
+                if (rtn === 'OK') {
+                    //최근 정박 이력 확인
+                    logger.info('데쉬보드 적용 완료'); 
+                    callback(null, "OK");  
+                } else {
+                    logger.info('데쉬보드 적용 오류'); //보트단말기 정박상태 분석2
+                    callback(null, "ERROR");  // LDH
+                }   
+            }); 
+            ***/                
+        }
     ],
     function (err, result) {
-    	logger.info('async....004'); 
         if(err){
             console.log('Error ');
             throw( err );
         }  
-    });	    
+    });     
 
 };
 

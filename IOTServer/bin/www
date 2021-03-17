@@ -108,7 +108,7 @@ var client=mqtt.connect("mqtt://192.168.123.105");
 //client.setMaxListeners(0);  //  이벤트를 무한대로 등록
 
 client.on("connect" , function(){
-	logger.info('MQTT conneted........');
+	logger.info('MQTT connected........');
 	client.subscribe("common");	  //client.subscribe("dht11");
 });
 

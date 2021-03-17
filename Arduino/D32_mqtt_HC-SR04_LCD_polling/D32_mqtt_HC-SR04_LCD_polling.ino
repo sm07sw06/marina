@@ -272,7 +272,8 @@ void loop() {
     
     //strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);
     //strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);  
-    sprintf(message, "{\"boatData\":\"%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
+    sprintf(message, "{\"boatData\":\"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior",gMac,"0000,100B,XBEE3,Highest",gMac,"aduino_0",gMac,"4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
+    //sprintf(message, "{\"boatData\":\"%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior,0013A20041B1B5E7,0000,100B,XBEE3,Highest,0013A20041BB95F7,aduino_0,0013A20041BB95F7,4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
     if( ( millis() - prev_millis ) > PERIOD ) {
         mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
