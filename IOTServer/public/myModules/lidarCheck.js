@@ -155,7 +155,7 @@ LidarCheck.prototype.getLidarCheck = function() {
                     logger.info('!! 보트 일출항 이력 갱신중...'); 
                     db.UpdateBoatHist(mObject, function(rtn){
                         if (rtn === 'OK') {
-                            logger.info('보트 일출항 이력 갱신 성공'); 
+                            logger.info('보트 일출항 이력 갱신 성공');  
                         } else {
                             logger.info('보트 일출항 이력 갱신 실패'); 
                         }   

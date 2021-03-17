@@ -595,7 +595,7 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 DB.prototype.SetBoatAnchor = function(status, mObject, callback) {
 	
 	var machine_id ;
-	
+	 
 	logger.info("----------------------------------");
 	logger.info('Start SetBoatAnchor........');
 	logger.info('   status  : ' + status          );

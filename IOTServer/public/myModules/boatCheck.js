@@ -206,7 +206,7 @@ function getAreaAnalysis(mObject) {
 	                        //최근 정박 이력 확인
 	                        logger.info('데쉬보드 적용 완료'); 
 	                        callback(null, "OK");  
-	                    } else {
+	                    } else { 
 	                        logger.info('데쉬보드 적용 오류1-1'); //보트단말기 정박상태 분석2
 	                        callback(null, "ERROR");  //
 	                    }   
