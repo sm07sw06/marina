@@ -66,6 +66,9 @@ public class SetMenuList extends HttpServlet {
 		            sUpMenuId  = (String)json.get("up_menu_id");
 		            sCrud   = (String)json.get("crud");
 		            
+		            if(sMenuOrder.equals("")) sMenuOrder = "0"; 
+		            logger.debug("SetMenu sMenuOrder:" + sMenuOrder); 
+		            
 		            resp.setContentType("application/x-json charset=UTF-8");
 				}
 			} catch (ParseException e) {

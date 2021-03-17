@@ -78,12 +78,12 @@ public class SetUserGroup extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO TB_USER_GROUP (USER_GRP_NM) \n";
+				    String insertSql = "INSERT INTO TB_EMP_GROUP (EMP_GRP_NM) \n";
 					insertSql = insertSql + "VALUES ( '" + sUserGrpNm + " )";
 		
 					stmt = connectionDest.createStatement();
 					
-					logger.debug("SetUserGroup sql:" + insertSql);
+					logger.debug("SetUserGroup sql:" + insertSql); 
 					
 					stmt.execute(insertSql);
 					stmt.close();

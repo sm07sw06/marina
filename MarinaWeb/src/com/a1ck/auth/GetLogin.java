@@ -82,8 +82,8 @@ public class GetLogin extends HttpServlet implements HttpSessionListener {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = "\nSELECT U.USER_CD, U.USER_NM, E.DEPT_CD, E.DEPT_NM, E.RETIRE_DT, E.STATE_CD, U.PASSWORD, U.APPROWAITCNT, U.PICTURE  \n ";
-			sQuery += "   FROM TB_USER_INFO U LEFT OUTER JOIN TB_EMP E ON E.USER_CD = E.USER_CD AND E.STATE_CD = '1' \n ";
-//			sQuery += "                    LEFT OUTER JOIN AE_INBOX B ON E.USER_ID = B.USER_ID \n ";
+			sQuery += "   FROM TB_USER_INFO U LEFT OUTER JOIN TB_EMP E ON U.USER_CD = E.EMP_CD AND E.STATE_CD = '1' \n ";
+//			sQuery += "                    LEFT OUTER JOIN AE_INBOX B ON E.USER_ID = B.USER_ID \n "; 
 			sQuery += "  WHERE 1 = 1 \n ";
 			sQuery += "    AND U.USER_CD = '" + sUserid + "' \n ";
 			
