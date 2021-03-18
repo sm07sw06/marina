@@ -1,0 +1,223 @@
+#!/usr/bin/env node
+/*jshint esversion: 6 */
+/**
+ * Module dependencies.
+ */
+var app = require('../app');
+var debug = require('debug')('iotserver:server');
+var http = require('http');
+
+const logger = require('../config/winston')  //LDH 
+const config = require('config');
+const callingModule = require('caller-module');
+
+//const Sequelize = require('sequelize');
+//const env = process.env.NODE_ENV || 'development';
+//const config = require('../database/config/config')[env];
+const db = {};
+
+/* 공통 환경 변수 설정 */
+global.grade = 0;  //기울기 
+
+process.on('warning', e => console.warn(e.stack));
+
+/***
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
+
+db.sequelize = sequelize;
+
+sequelize.sync({ force: false })
+.then(() => {
+    console.log('데이터베이스 연결됨.');
+}).catch((err) => {
+    console.log('데이터베이스 연결안됨.');
+    console.error(err);
+});
+***/
+const { Pool } = require("pg");
+
+const pool = new Pool({
+	user: config.get('development.username'),
+	host: config.get('development.host'),
+	database: config.get('development.database'),
+	password: config.get('development.password'),
+	port: config.get('development.port')
+});
+
+//the pool with emit an error on behalf of any idle clients
+//it contains if a backend error or network partition happens
+pool.on('error', (err, client) => {
+	console.error('Unexpected error on idle client', err) // your callback here
+	process.exit(-1)
+})
+
+//promise - checkout a client
+pool.connect()
+.then(client => {
+ return client.query('SELECT grade FROM tb_config') // 보트 기울기
+   .then(res => {
+	   if (res.rowCount > 0) {
+		   global.grade = res.rows[0].grade;
+		   logger.info('데이터베이스 연결됨');
+		   logger.info('  모듈명 : '+ callingModule.GetCallerModule().name);
+		   logger.info('  기울기 : '+ global.grade);
+	   } else {
+		   global.grade = 60;  // 기울기 초기값
+	   }
+	   client.release()
+   })
+   .catch(e => {
+     console.log(e.stack) // your callback here
+     client.release()
+   })
+})
+
+pool.end();
+  
+module.exports = db;
+
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+//var port = normalizePort(process.env.PORT || '3100');
+var port = config.get('development.port');
+app.set('port', port);
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+
+// MQTT Server 접속
+var mqtt=require("mqtt");
+var client=mqtt.connect("mqtt://192.168.123.105");
+
+//client.setMaxListeners(0);  //  이벤트를 무한대로 등록
+
+client.on("connect" , function(){
+	logger.info('MQTT connected........');
+	client.subscribe("common");	  //client.subscribe("dht11");
+});
+
+client.on("error", function(topic, message){
+	logger.error('MQTT ' + topic + ':' + error);
+});
+	
+var DB = require('../public/myModules/db');
+// message를 DB에 반영하도록 modules 호출
+var dbJob = new DB(); // 모듈에 전달인자 할당 
+//dbJob.SetDB(message);
+
+client.on("message", function(topic, message) {
+	
+	logger.info('MQTT [On Message]');
+		
+	try {
+	
+		var obj=JSON.parse(message);  // MQTT에서 보내온 메세지
+		
+		for (var sKey in obj) {
+		
+			if (obj.hasOwnProperty(sKey)) {
+				
+				var sData = obj[sKey].split(",");
+				
+				if(sKey === "boatData") {
+					dbJob.InsertDBBoatData(sData);    // LDH
+					// 보트 단말기에서 보내온 신호 분석
+					var BoatCheck = require('../public/myModules/boatCheck');
+					var boatCheck = new BoatCheck(sData); 
+					boatCheck.getBoatCheck();
+				} else if(sKey === "anchorData") {
+					dbJob.InsertDBAnchorData(sData);  
+					// 정박지 단말기에서 보내온 신호 분석 ( // LDH 미사용 )
+					var AnchorCheck = require('../public/myModules/anchorCheck');
+					var anchorCheck = new AnchorCheck(sData); 
+					anchorCheck.getAnchorCheck();				
+				} else if(sKey === "lidarData") {
+					dbJob.InsertDBLidarData(sData);  
+					// 정박지 단말기에서 보내온 신호 분석
+					var LidarCheck = require('../public/myModules/lidarCheck');
+					var lidarCheck = new LidarCheck(sData); 
+					lidarCheck.getLidarCheck();				
+				} // 보트 데이터가 아닌면 Skip
+			}    
+		}
+	} catch (err) {
+		logger.error("ERROR111:" + err);
+	}
+	
+});
+
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+
+	

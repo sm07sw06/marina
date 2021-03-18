@@ -1,0 +1,1177 @@
+.gridPaging { 
+	text-align:center; 
+	font-family:verdana; 
+	font-size:12px; 
+	padding-top:15px; 
+}
+.gridPaging a { color:#797674; text-decoration:none; border:1px solid #e0e0e0; background-color:#f6f4f4; padding:3px 5px 3px 5px;}
+.gridPaging a:link { color:#797674; text-decoration:none; }
+.gridPaging a:visited { color:#797674; text-decoration:none; }
+.gridPaging a:hover { text-decoration:none; border:1px solid #7a8ba2; text-decoration:none; }
+.gridPaging a:active { text-decoration:none; }
+.gridPagingMove { font-weight:bold; }
+.gridPagingDisable { font-weight:bold; color:#cccccc; border:1px solid #e0e0e0; background-color:#f6f4f4; padding:3px 5px 3px 5px;}
+.gridPagingCurrent { font-weight:bold; color:#ffffff; border:1px solid #2f3d64; background-color:#2f3d64; padding:3px 5px 3px 5px;}
+
+h_1, h_2, h_3, h_4, h_5 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: #FFFFFF;
+}
+
+
+h_1 {
+    font-size: 31px;
+}
+
+h_2 {
+    font-size: 25px;
+}
+
+h_1,  h_2,  h_3 {
+    margin-top: 17px;
+    margin-bottom: 8.5px;
+}
+
+
+
+#wrapper0 {
+    position:absolute;
+    top:1;
+    left:1;  
+	width:1920px;
+    height:980px;
+    background-color: #ffffff;
+}
+
+#wrapper1 {
+    position:absolute;
+    top:0;
+    left:0;    
+	width:1920px;
+    height:980px;
+    background-color: #fff;
+    background:url("/MarinaWeb/images/map1.jpg") no-repeat;
+    background-position: center;    
+}
+
+#wrapper2 {
+    position:absolute;
+    top:0; 
+    left:0;
+	width:1920px;
+    height:980px;
+    background-color: #fff;
+    background:url("/MarinaWeb/images/monitor2.jpg") no-repeat;
+    background-position: center;    
+}
+
+#wrapper3 { 
+    width:1920px;
+    height:989px;
+    background-color: #fff;
+    position:absolute;
+    background:url("/MarinaWeb/images/monitor3.png") no-repeat;
+    background-position: center;    
+}
+
+#jspcontents {
+    width:1600px;
+    height:900px;
+    background-color: #fff;
+    position:absolute;
+    top:0;
+    left:0;    
+}
+
+#container {
+	margin-top:50px;
+}
+
+.myTitleBox {
+    margin-bottom:10px;
+    border-top: 2px solid deepskyblue;
+    padding:10px 0 10px 10px;
+    vertical-align:middle;
+    color:#000000;
+    font-weight:bold;
+    font-size:20px;    
+}
+
+.search_cond {
+    #margin-bottom:15px;
+    margin:15px 0;
+}
+
+
+
+#titleBox99  {
+    position: absolute;
+    top:30px;
+    left:30px;
+    width:700px;
+    height:400px;    
+    background:url("/MarinaWeb/images/titlebox.jpg") no-repeat;
+    background-position: center;     
+}
+#titleBox99 #dateText99 {
+    position: relative;
+    text-align: center;
+    margin:60px 0 0 480px;;
+}
+#titleBox99 #titleBoxList99 { 
+    position: relative;
+    margin:6px 50px 0 100px;
+    width:70%;
+    height:200px;
+}
+#titleBox99 #titleButton99 {
+    position: relative;
+    text-align: center;
+    margin-top:25px;
+}
+
+
+.clear {
+    clear:both;
+}
+.closed {
+    display:none;
+}
+
+
+#titleBox2  {
+    position: absolute;
+    top:30px;
+    left:30px;
+    width:500px;
+    height:410px;    
+    background-position: center;     
+    background-color:#003300;
+}
+#titleBox2 #dateText2 {
+    position: relative;
+    text-align: center;
+    margin:60px 0 0 480px;;
+}
+#titleBox2 #titleBoxList2 {
+    position: relative;
+    margin:5px 5px 5px 5px;
+}
+#titleBox2 #titleButton2 {
+    position: relative;
+    text-align: center;
+    margin-top:25px;
+}
+
+
+
+.box_top_l {
+    margin-left: 10px;
+    padding:1px 1px 1px 1px;
+    text-align: center;
+    color:#FFFFFF;
+    background-color:#000000;
+}
+.box_top_l .p1{
+    font-size:40px;
+}
+.box_top_l .p2{
+    font-size:10px;
+}
+.box_top_m {
+    margin: 10px;
+    padding:1px 1px 1px 1px;
+    text-align: center;
+    color:#FFFFFF;
+    background-color:#000000;
+}
+
+.box-line {
+    margin-left:  10px;
+    margin-right:  10px;
+    padding:2px 2px 2px 2px;
+    text-align: center;
+    border: 1px solid #4374D9;
+    background-color:#FFFFFF;
+}
+.box-line-1 {
+    margin-top:  20px;
+    margin-bottom:  20px;
+    padding:2px 2px 2px 2px;
+    text-align: center;
+    background-color:#FFFFFF;
+}
+.box-line-2 {
+    margin-top:  20px;
+    margin-bottom:  20px;
+    padding:2px 2px 2px 2px;
+    text-align: center;
+    background-color:#FFFFFF;
+}
+.box-line-3 {
+    margin-top: 10px;
+    padding:2px 2px 2px 2px;
+    text-align: center;
+    background-color:#FFFFFF;
+}
+
+
+.color-box-base-right {
+    padding:2px 2px 2px 0px;
+    text-align: center;
+    background-color:#BDBDBD;
+    float:right;
+}
+
+.color-box-red {
+    width:90%;
+    height:90%;
+    background-color:#CC3D3D;
+}
+
+.text-right-float {
+  text-align: right;
+  float:right;
+}
+.text-right {
+ margin-top: 10px;
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+
+// 揶쏉옙占쎌뒲占쎈쑓 占쎌젟占쎌졊
+.centered { display:table; margin-left:auto; margin-right:auto; }
+
+
+#img000_img {
+    position: absolute;
+    top:100px;
+    left:820px;
+    font-size:20px;
+    font-weight:bold;
+    color:#AB0AA0;
+}
+
+
+#level_img1 {
+  position: absolute;
+  top:50px;
+  left:150px;
+  width:50px;
+  margin-left:20px
+}
+
+#level_img2 {
+  position: absolute;
+  top:200px;
+  left:150px;
+  width:50px;
+  margin-left:20px
+}
+
+#level_img3 {
+  position: absolute;
+  top:300px;
+  left:150px;
+  width:50px;
+  margin-left:20px
+}
+
+#level_img4 {
+  position: absolute;
+  top:400px;
+  left:150px;
+  width:50px;
+  margin-left:20px
+}
+
+#level_img5 {
+  position: absolute;
+  top:500px;
+  left:150px;
+  width:50px;
+  margin-left:20px
+}
+
+
+#level00 {
+  position: absolute;
+  top:180px;
+  left:1260px;
+}
+
+/* 鈺곌퀣彛낁퉪占� 癰귣똻釉욑옙踰묉묾占� */
+#level01 {  /* 癰귨옙 占쎄텢 */
+  position: absolute;
+  top:370px;
+  left:840px;
+}
+
+#level02 { /* 占쎄퐣占쎌뵥筌ｏ옙 */
+  position: absolute;
+  top:200px;
+  left:600px;
+}
+#level03 { /* 占쎈즸占쎄문 */
+  position: absolute;
+  top:310px;
+  left:600px;
+}
+#level04 { /* 占쎄묶占쎈툧 */
+  position: absolute;
+  top:430px;
+  left:600px;
+}
+#level05 { /* 占쎄묶占쎈툧椰꾨똻苑� */
+  position: absolute;
+  top:540px;
+  left:600px;
+}
+#level06 { /* �뤃怨쀪텦 */
+  position: absolute;
+  top:660px;
+  left:600px;
+}
+
+#level11 {
+  position: absolute;
+  top:445px;
+  left:860px;
+}
+#level12 {
+  position: absolute;
+  top:200px;
+  left:480px;
+}
+#level13 {
+  position: absolute;
+  top:310px;
+  left:480px;
+}
+#level14 {
+  position: absolute;
+  top:430px;
+  left:480px;
+}
+#level15 {
+  position: absolute;
+  top:540px;
+  left:480px;
+}
+#level16 {
+  position: absolute;
+  top:660px;
+  left:480px;
+}
+
+/* 占쎌읈占쎌뜎 */
+#imgprev_img {
+  position: absolute;
+  top:10px;
+  left:10px;
+  width:50px;
+}
+#imgnext_img {
+  position: absolute;
+  top:10px;
+  left:1220px;
+  width:50px;
+}
+
+/* 占쎄맒占쎈뼊占쎈퉮筌륅옙 */
+#img201a_img {
+  position: absolute;
+  top:210px;;
+  left:725px;
+}
+#img202a_img {
+  position: absolute;
+  top:210px;
+  left:895px;
+}
+#img203a_img {
+  position: absolute;
+  top:210px;
+  left:1065px;
+}
+#img204a_img {
+  position: absolute;
+  top:210px;
+  left:1235px;
+}
+#img205a_img {
+  position: absolute;
+  top:210px;
+  left:1395px;
+}
+
+
+/* 占쎄맒占쎈뼊癰귣똻釉욑옙踰묉묾占� */
+#img281 {position: absolute;top:210px;left:610px;width:90px;height:80px;}
+#img281 #img282_img {position: relative;float:left;font-size:50px;font-weight:bold;text-align:right;height:30px;color:#DB0000 ;}
+#img281 #img282 {position: relative;float:right;width:58px;}
+#img281 #img282 #img281_img {position: relative;width:30px;margin-top:14px;}
+#img281 #img282 #img283_img {position: relative;text-align:left;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:2px;}
+
+#img284 {position: absolute;top:230px;left:725px;width:90px;height:80px;}
+#img284 #img285 {position: relative;float:left;width:58px;}
+#img284 #img285 #img285_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img284 #img285 #img286_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img284 #img284_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img287 {position: absolute;top:230px;left:895px;width:90px;height:80px;}
+#img287 #img288 {position: relative;float:left;width:58px;}
+#img287 #img288 #img288_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img287 #img288 #img289_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img287 #img287_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img291 {position: absolute;top:230px;left:1065px;width:90px;height:80px;}
+#img291 #img292 {position: relative;float:left;width:58px;}
+#img291 #img292 #img292_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img291 #img292 #img293_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img291 #img291_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img294 {position: absolute;top:230px;left:1235px;width:90px;height:80px;}
+#img294 #img295 {position: relative;float:left;width:58px;}
+#img294 #img295 #img295_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img294 #img295 #img296_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img294 #img294_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img297 {position: absolute;top:230px;left:1395px;width:90px;height:80px;}
+#img297 #img298 {position: relative;float:left;width:58px;}
+#img297 #img298 #img298_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img297 #img298 #img299_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img297 #img297_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+
+
+/* 餓λ쵎�뼊癰귣챶占썸뤃�됲뀋 */
+#img211a_img {
+    position: absolute;
+    top:350px;
+    left:560px;
+}
+#img212a_img {
+    position: absolute;
+    top:350px;
+    left:725px;
+}
+#img213a_img {
+    position: absolute;
+    top:350px;
+    left:895px;
+}
+#img214a_img {
+    position: absolute;
+    top:350px;
+    left:1065px;
+}
+#img215a_img {
+    position: absolute;
+    top:350px;
+    left:1235px;
+}
+#img216a_img {
+    position: absolute;
+    top:350px;
+    left:1395px;
+}
+
+
+/* 餓λ쵎�뼊占쎌맄占쎈퓮筌욑옙占쎈땾 */
+#img261 {position: absolute;top:375px;left:555px;width:90px;height:80px;}
+#img261 #img262 {position: relative;float:left;width:58px;}
+#img261 #img262 #img262_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img261 #img262 #img263_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img261 #img261_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img264 {position: absolute;top:375px;left:725px;width:90px;height:80px;}
+#img264 #img265 {position: relative;float:left;width:58px;}
+#img264 #img265 #img265_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img264 #img265 #img266_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img264 #img264_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img267 {position: absolute;top:375px;left:895px;width:90px;height:80px;}
+#img267 #img268 {position: relative;float:left;width:58px;}
+#img267 #img268 #img268_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img267 #img268 #img269_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img267 #img267_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img271 {position: absolute;top:375px;left:1065px;width:90px;height:80px;}
+#img271 #img272 {position: relative;float:left;width:58px;}
+#img271 #img272 #img272_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img271 #img272 #img273_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img271 #img271_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img274 {position: absolute;top:375px;left:1235px;width:90px;height:80px;}
+#img274 #img275 {position: relative;float:left;width:58px;}
+#img274 #img275 #img275_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img274 #img275 #img276_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img274 #img274_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+#img277 {position: absolute;top:375px;left:1395px;width:90px;height:80px;}
+#img277 #img278 {position: relative;float:left;width:58px;}
+#img277 #img278 #img278_img {position: relative;font-size:30px;font-weight:bold;text-align: right;height:30px;color:#DB0000 ;}
+#img277 #img278 #img279_img {position: relative;text-align: right;font-size:13px;font-weight:bold;color:#DB0000  ;height:10px;top:-5px;}
+#img277 #img277_img {position: relative;width:30px;float:right;margin-top:10px;}
+
+
+/* 占쎈퉮筌륅옙 */
+#img201_img {
+  position: absolute;
+  top:440px;
+  left:440px;
+}
+#img202_img {
+  position: absolute;
+  top:490px;
+  left:453px;
+}
+#img203_img {
+  position: absolute;
+  top:540px;
+  left:453px;
+}
+#img204_img {
+  position: absolute;
+  top:590px;
+  left:440px;
+}
+#img205_img {
+  position: absolute;
+  top:640px;
+  left:453px;
+}
+
+
+/* 獄쏄퀬苑ｇ뵳占� */
+#img210_img {
+  position: absolute;
+  top:440px;
+  left:570px;
+}
+#img211_img {
+  position: absolute;
+  top:490px;
+  left:570px;
+}
+#img212_img {
+  position: absolute;
+  top:540px;
+  left:570px;
+}
+#img213_img {
+  position: absolute;
+  top:590px;
+  left:570px;
+}
+#img214_img {
+  position: absolute;
+  top:640px;
+  left:570px;
+}
+
+#img215_img {
+  position: absolute;
+  top:440px;
+  left:740px;
+}
+#img216_img {
+  position: absolute;
+  top:490px;
+  left:740px;
+}
+#img217_img {
+  position: absolute;
+  top:540px;
+  left:740px;
+}
+#img218_img {
+  position: absolute;
+  top:590px;
+  left:740px;
+}
+#img219_img {
+  position: absolute;
+  top:640px;
+  left:740px;
+}
+
+#img220_img {
+  position: absolute;
+  top:440px;
+  left:910px;
+}
+#img221_img {
+  position: absolute;
+  top:490px;
+  left:910px;
+}
+#img222_img {
+  position: absolute;
+  top:540px;
+  left:910px;
+}
+#img223_img {
+  position: absolute;
+  top:590px;
+  left:910px;
+}
+#img224_img {
+  position: absolute;
+  top:640px;
+  left:910px;
+}
+
+#img225_img {
+  position: absolute;
+  top:440px;
+  left:1070px;
+}
+#img226_img {
+  position: absolute;
+  top:490px;
+  left:1070px;
+}
+#img227_img {
+  position: absolute;
+  top:540px;
+  left:1070px;
+}
+#img228_img {
+  position: absolute;
+  top:590px;
+  left:1070px;
+}
+#img229_img {
+  position: absolute;
+  top:640px;
+  left:1070px;
+}
+
+#img230_img {
+  position: absolute;
+  top:440px;
+  left:1240px;
+}
+#img231_img {
+  position: absolute;
+  top:490px;
+  left:1240px;
+}
+#img232_img {
+  position: absolute;
+  top:540px;
+  left:1240px;
+}
+#img233_img {
+  position: absolute;
+  top:590px;
+  left:1240px;
+}
+#img234_img {
+  position: absolute;
+  top:640px;
+  left:1240px;
+}
+
+#img235_img {
+  position: absolute;
+  top:440px;
+  left:1420px;
+}
+#img236_img {
+  position: absolute;
+  top:490px;
+  left:1420px;
+}
+#img237_img {
+  position: absolute;
+  top:540px;
+  left:1420px;
+}
+#img238_img {
+  position: absolute;
+  top:590px;
+  left:1420px;
+}
+#img239_img {
+  position: absolute;
+  top:640px;
+  left:1420px;
+}
+
+
+
+
+/* 占쎈릭占쎈뼊占쎌쟿甕곤옙 */
+#img241_img {
+  position: absolute;
+  top:690px;
+  left:545px;
+}
+#img242_img {
+  position: absolute;
+  top:765px;
+  left:552px;
+}
+#img243_img {
+    position: absolute;
+    top:750px;
+    left:645px;
+    font-size:30px;
+    font-weight:bold;
+    color:#DB0000;
+}
+#img244_img {
+  position: absolute;
+  top:690px;
+  left:715px;
+}
+#img245_img {
+  position: absolute;
+  top:765px;
+  left:722px;
+}
+#img246_img {
+    position: absolute;
+    top:750px;
+    left:815px;
+    font-size:30px;
+    font-weight:bold;
+    color:#DB0000;
+}
+#img247_img {
+  position: absolute;
+  top:690px;
+  left:885px;
+}
+#img248_img {
+  position: absolute;
+  top:765px;
+  left:892px;
+}
+#img249_img {
+    position: absolute;
+    top:750px;
+    left:985px;
+    font-size:30px;
+    font-weight:bold;
+    color:#DB0000;
+}
+
+#img251_img {
+  position: absolute;
+  top:690px;
+  left:1055px;
+}
+
+#img252_img {
+  position: absolute;
+  top:765px;
+  left:1062px;
+}
+#img253_img {
+    position: absolute;
+    top:750px;
+    left:1155px;
+    font-size:30px;
+    font-weight:bold;
+    color:#DB0000;
+}
+
+#img254_img {
+  position: absolute;
+  top:690px;
+  left:1225px;
+}
+#img255_img {
+  position: absolute;
+  top:765px;
+  left:1232px;
+}
+#img256_img {
+    position: absolute;
+    top:750px;
+    left:1325px;
+    font-size:30px;
+    font-weight:bold;
+    color:#DB0000;
+}
+#img257_img {
+  position: absolute;
+  top:690px;
+  left:1395px;
+}
+#img258_img {
+  position: absolute;
+  top:765px;
+  left:1402px;
+}
+#img259_img {
+    position: absolute;
+    top:760px;
+    left:1495px;
+    font-size:30px;
+    font-weight:bold;
+    color:#DB0000;
+}
+
+#dashBox  {
+    position: absolute;
+    left:0px;
+    top:0px;
+    width:94%
+}
+#dashBox #dashBox1 {
+    position: relative;
+    width:49%;
+    height:40%;
+    float:left;
+    -moz-box-shadow: 0px 3px 8px rgb(100,100,100);
+    -webkit-box-shadow: 0px 3px 8px rgb(100,100,100);
+    box-shadow: 0px 3px 8px rgb(100,100,100);
+    border-radius: 2px;
+    margin:1px;
+}
+#dashBox #dashBox1 #dashBox1Chart{
+  #  width:100%;
+  #  height:100%;
+}
+#dashBox #dashBox2 {
+    position: relative;
+    width:49%;
+    height:40%;
+    float:right;
+    -moz-box-shadow: 0px 3px 8px rgb(100,100,100);
+    -webkit-box-shadow: 0px 3px 8px rgb(100,100,100);
+    box-shadow: 0px 3px 8px rgb(100,100,100);
+    border-radius: 2px;        
+    margin:1px;
+}
+#dashBox #dashBox2 #dashBox2-1Chart{
+     width:60%;
+     float:right;
+}
+#dashBox #dashBox2 #dashBox2-2Chart{
+    width:40%;
+     float:right;
+}
+#dashBox #dashBox3 {
+    position: relative;
+    width:49%;
+    height:40%;
+    float:left;
+    -moz-box-shadow: 0px 3px 8px rgb(100,100,100);
+    -webkit-box-shadow: 0px 3px 8px rgb(100,100,100);
+    box-shadow: 0px 3px 8px rgb(100,100,100);
+    border-radius: 2px;    
+    margin:1px;
+}
+#dashBox #dashBox3 #dashBox3Chart{
+   # width:100%;
+   # height:100%;
+}
+#dashBox #dashBox4 {
+    position: relative;
+    width:49%;
+    height:40%;
+    float:right;
+    -moz-box-shadow: 0px 3px 8px rgb(100,100,100);
+    -webkit-box-shadow: 0px 3px 8px rgb(100,100,100);
+    box-shadow: 0px 3px 8px rgb(100,100,100);
+    border-radius: 2px;
+    margin:1px;
+}
+#dashBox #dashBox4 #dashBox4Chart{
+  #  width:100%;
+  #  height:100%;
+}
+
+#alertBox  {
+    position: absolute;
+    left:20px;
+    top:930px;
+    width:1920px;
+    height:40px;
+}
+
+#alertBox #alertBox1 {
+    position: absolute;
+  	width: 100%;
+  	height:100%;    
+    #margin-left:20px;
+    #margin-top:850px;
+    #float:right; 
+    #-moz-box-shadow: 0px 3px 8px rgb(100,100,100);
+    #-webkit-box-shadow: 0px 3px 8px rgb(100,100,100);
+    #box-shadow: 0px 3px 8px rgb(100,100,100); 
+    #border-radius: 3px; 
+}
+
+#alertBox #alertBox1 .myclass {
+  width: 100%;
+  height:100%;
+  font-size:70px;
+  margin-top:15px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  text-align:center;
+  background: #efefef;
+  color:#FF0000;
+}
+
+#alertBox #alertBox1 .myclass ul{
+  text-align:justify;
+  width: 100%;  
+}   
+   
+#alertBox #alertBox1 .myclass ul li {
+  text-align:justify;
+  width: 100%;  
+}
+ 
+
+
+            	            	
+.pt-perspective {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	perspective: 1200px;
+	transform-style: preserve-3d;
+}
+
+.pt-page {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	visibility: hidden;
+	overflow: hidden;
+	backface-visibility: hidden;
+	transform: translate3d(0, 0, 0);
+}
+
+.pt-page-current,
+.no-js .pt-page {
+	visibility: visible;
+}
+
+.no-js body {
+	overflow: auto;
+}
+
+.pt-page-ontop {
+	z-index: 999;
+}
+
+.panel-heading {
+	width:100%
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;	
+	
+    margin: 5px;
+    padding: 2px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;	
+    height:35px;
+}
+
+.panel-heading .heading-title {
+	float:left;
+	font-size:20px;
+	font-weight:bold;	 
+}
+.panel-heading .heading-title #heading-title1 {
+	#border:1px solid #4374D9;
+}
+
+.panel-heading #datapickerBox {
+    float:right;
+    color:#AB0AA0;
+    width:550px;
+    #top:-28px;
+    #border:1px solid #4374D9;
+}
+.panel-heading #datapickerBox #datapickerBox2{
+	#border:1px solid #4374D9;
+	float:right;
+	margin-left:10px;
+}
+.panel-heading #datapickerBox #datapickerBox1{
+	#border:1px solid #4374D9;
+	float:right;
+	margin-left:10px;
+}
+.form11-range {
+	width:100%;
+}
+.form-range .form-range-tr {
+	min-width:900px;
+	width:100%;
+}
+
+
+/* manage */
+.container1 {
+	#margin: 0 auto;
+    min-height: 100%;	
+    height: 100%;
+}
+
+.container1 #itemRange {
+	min-height:100%;
+	height: 100%;
+}
+
+.container1 #itemRange #iframItemRange {
+	min-height:100%;
+	height: 100%;	
+}
+
+.container2 {
+	margin: 10px 50px;
+    width:90%;
+}
+
+
+#table_column {
+	display:table; margin-left:auto; margin-right:auto;
+}
+
+#main_frame {
+	margin-top:50px;
+}
+
+
+.ui-jqgrid {
+  max-width: 100% !important;
+  width: auto !important;
+}
+
+.ui-jqgrid-view,
+.ui-jqgrid-hdiv,
+.ui-jqgrid-bdiv {
+   width: auto !important;
+}
+
+/* body */ 
+.ui-jqgrid .ui-jqgrid-bdiv {position: relative; margin: 0; padding:0; overflow: auto; text-align:left;z-index: 101;}
+.ui-jqgrid .ui-jqgrid-btable {table-layout:fixed; margin:0; outline-style: none; border-collapse: separate;}
+.ui-jqgrid tr.jqgrow,
+.ui-jqgrid tr.jqgroup 
+	{ outline-style: none; }
+.ui-jqgrid tr.jqgrow td,
+.ui-jqgrid tr.jqgroup td
+	{font-weight: normal; overflow: hidden; white-space: pre; height: 33px;padding: 1px 2px 1px 2px;border-bottom-width: 1px; border-bottom-color: inherit; border-bottom-style: solid;}
+.ui-jqgrid tr.jqgfirstrow td {padding: 0 2px 0 2px;border-right-width: 1px; border-right-style: solid; height:auto;}
+.ui-jqgrid tr.jqfoot td {font-weight: bold; overflow: hidden; white-space: pre; height: 22px;padding: 0 2px 0 2px;border-bottom-width: 1px; border-bottom-color: inherit; border-bottom-style: solid;}
+.ui-jqgrid tr.ui-row-ltr td {text-align:left;border-right-width: 1px; border-right-color: inherit; border-right-style: solid;}
+.ui-jqgrid tr.ui-row-rtl td {text-align:right;border-left-width: 1px; border-left-color: inherit; border-left-style: solid;}
+.ui-jqgrid td.jqgrid-rownum { padding: 0 2px 0 2px; margin: 0; border: 0 none;}
+.ui-jqgrid .ui-jqgrid-resize-mark { width:2px; left:0; background-color:#777; cursor: e-resize; cursor: col-resize; position:absolute; top:0; height:100px; overflow:hidden; display:none; border:0 none; z-index: 99999;}
+.ui-jqgrid-table-striped > tbody > tr:nth-of-type(odd) {
+	opacity: .7;
+	font-weight: normal;
+}
+
+.searchBox {
+	min-height:100%;
+	height: 30px;
+	margin-top:5px;	
+    overflow: hidden;	
+}
+.searchBox .searchBox_left {
+	width:25%;
+    float:left;
+}
+.searchBox .searchBox_mid {
+	width:30px;
+    float:left;
+}
+.searchBox .searchBox_right {
+    width:auto;
+    min-width:300px;
+    float:left;
+}
+
+.searchDate {
+	min-height:100%;
+	height: 30px;
+	margin-top:5px;	
+    overflow: hidden;	
+}
+.searchDate .searchDate_left {
+	width:50%;
+    float:left;
+}
+.searchDate .searchDate_right {
+    width:50%;
+    float:right;
+}
+
+.dualPosition {
+	margin:10px 0;	
+	height: 100%;
+    overflow: hidden;	
+}
+.dualPosition .dualPosition_left {
+	width:49%;
+    float:left;
+}
+.dualPosition .dualPosition_right {
+    width:49%;
+    float:right;
+}
+.dualPosition .dualPosition_right .dualPosition_right1 {
+    width:50%;
+    float:left;
+}
+.dualPosition .dualPosition_right .dualPosition_right2 {
+    width:50%;
+    float:left;
+}
+
+.position3 {
+	margin:10px 0;	
+	height: 100%;
+    overflow: hidden;	
+}
+.position3 .position3_left {
+    float:left;
+}
+.position3 .position3_right {
+    float:right;
+}
+.position3 .position3_right .position3_right1 {
+    float:left;
+}
+.position3 .position3_right .position3_right {
+    float:left;
+}
+
+.modal-dialog.modal-fullsize {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.modal-content.modal-fullsize {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0; 
+}
+
+inp1ut {
+	height:31px;
+}
+
+

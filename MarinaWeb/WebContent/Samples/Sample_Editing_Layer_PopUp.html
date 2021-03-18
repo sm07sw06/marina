@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript" src="./Web/jQuery/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="./Web/jQuery/jquery.blockUI.js"></script>
+
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	if (id == "grid1") {
+		// rMateGrid 관련 객체
+		gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+		gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+		gridApp.setLayout(layoutStr);
+		gridApp.setData(gridData);
+
+		var itemDoubleClickHandler = function(event) {
+			var rowIndex = event.rowIndex;
+			var columnIndex = event.columnIndex;
+			var dataRow = gridRoot.getItemAt(rowIndex);
+			// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
+			var column = dataGrid.getDisplayableColumns()[columnIndex];
+			var dataField = column.getDataField();
+			if (dataField == "Actual") {
+				editRowIndex = rowIndex;
+				editDataRow = dataRow;
+				editDataField = dataField;
+				// pop up edit window
+				popupEditCell();
+			}
+		}
+
+		var selectionChangeHandler = function(event) {
+			var rowIndex = event.rowIndex;
+			if (rowIndex < 0)	// column header
+				return;
+			var columnIndex = event.columnIndex;
+			var dataRow = gridRoot.getItemAt(rowIndex);
+			inputForm.Region.value = dataRow["Region"];
+			inputForm.Territory.value = dataRow["Territory"];
+			inputForm.Territory_Rep.value = dataRow["Territory_Rep"];
+			inputForm.Actual.value = dataRow["Actual"];
+			inputForm.Estimate.value = dataRow["Estimate"];
+			inputForm.Real.value = dataRow["Real"];
+			inputForm.Price.value = dataRow["Price"];
+			inputForm.rowIndex.value = rowIndex;
+			// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
+			var column = dataGrid.getDisplayableColumns()[columnIndex];
+			var dataField = column.getDataField();
+		}
+
+		var layoutCompleteHandler = function(event) {
+			dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+			dataGrid.addEventListener("itemDoubleClick", itemDoubleClickHandler);
+			dataGrid.addEventListener("change", selectionChangeHandler);
+		}
+
+		gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+	} else {
+		gridApp2 = document.getElementById(id);	// 그리드를 포함하는 div 객체
+		gridRoot2 = gridApp2.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+		gridApp2.setLayout(layoutStr);
+		gridApp2.setData(gridData);
+	}
+}
+var gridApp, gridRoot, dataGrid;
+var gridApp2, gridRoot2, dataGrid2;
+
+var editRowIndex;
+var editDataRow;
+var editDataField;
+
+function popupEditCell() {
+
+			$.blockUI({
+					//HTML 태그를 문자열로 적용해도 무관함
+					message: $('#question')
+					//css 설정
+					 ,css: {
+						padding:        0,
+						margin:         0,
+						width:          '500px',
+						height:         '330px',
+						top:            '10%',
+						left:           '20%',
+						textAlign:      'center',
+						color:          '#000',
+						border:         '3px none #aaa',
+						backgroundColor:'#f7f7f7',
+						cursor:         'default',
+						fontFamily:     '맑은 고딕',
+						borderRadius:   '3px'
+					}
+					,focusInput: false
+					//모달창 외부 클릭시 닫기
+					,onOverlayClick: $.unblockUI
+			});
+
+}
+
+$(function(){
+
+		$("#savebtn").click(function(){
+			 //모달창 닫기
+			var item = {
+				"Region": inputForm.Region.value,
+				"Territory": inputForm.Territory.value,
+				"Territory_Rep": inputForm.Territory_Rep.value,
+				"Actual": inputForm.Actual.value,
+				"Estimate": inputForm.Estimate.value,
+				"Real": inputForm.Real.value,
+				"Price": inputForm.Price.value
+			};
+			gridRoot.setItemAt(item, inputForm.rowIndex.value);
+			 $.unblockUI();
+		})
+
+		$("#closebtn").click(function(){
+			 //모달창 닫기
+			 $.unblockUI();
+		})
+})
+
+
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+<!--\n\
+컨텍스트 메뉴를 만들어 그리드에서 오른쪽 마우스를 눌렀을때 사용가능한 기능을 표시할 수 있습니다.\n\
+사용자가 선택한 메뉴는 자바스크립트에서 함수의 파라메터로 전달받아 필요한 작업을 수행할 수 있습니다\n\
+editable 수정모드 지정 (true,false중 택일, 기본 false)\n\
+doubleClickEnabled 더블클릭 가능 여부 (true,false중 택일, 기본 false, true의 경우 더블클릭하면 해당 셀을 수정할수 있게 됩니다)\n\
+-->\n\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" editable="true" doubleClickEnabled="true" selectionMode="singleCell">\
+		<columns>\
+			<DataGridColumn dataField="Region" editable="false"/>\
+			<DataGridColumn dataField="Territory" width="150"/>\
+			<DataGridColumn dataField="Territory_Rep" headerText="Territory Rep" width="150"/>\
+			<DataGridColumn dataField="Actual" itemRenderer="IconItem" icon="Magnifier" textAlign="right" formatter="{numfmt}" editable="false"/>\
+			<DataGridColumn dataField="Estimate" textAlign="right"/>\
+			<DataGridColumn dataField="Real" textAlign="right"/>\
+			<DataGridColumn dataField="Price" textAlign="right"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+var gridData = [
+{
+	"Region": "Southwest",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 38865,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3001
+},
+{
+	"Region": "Southwest",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 29885,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3002
+},
+{
+	"Region": "Southwest",
+	"Territory": "Central California",
+	"Territory_Rep": "Central California",
+	"Actual": 29134,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3003
+},
+{
+	"Region": "Southwest",
+	"Territory": "Nevada",
+	"Territory_Rep": "Nevada",
+	"Actual": 52888,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3004
+},
+{
+	"Region": "Southwest",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 38805,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3005
+},
+{
+	"Region": "Southwest",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 55498,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3006
+},
+{
+	"Region": "Southwest",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44985,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3007
+},
+{
+	"Region": "Southwest",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44913,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3008
+},
+{
+	"Region": "Nor",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 38865,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3009
+},
+{
+	"Region": "Nor",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 29885,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3000
+},
+{
+	"Region": "Nor",
+	"Territory": "Central California",
+	"Territory_Rep": "Central California",
+	"Actual": 29134,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3001
+},
+{
+	"Region": "Nor",
+	"Territory": "Nevada",
+	"Territory_Rep": "Nevada",
+	"Actual": 52888,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3002
+},
+{
+	"Region": "Nor",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 38805,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3003
+},
+{
+	"Region": "Nor",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 55498,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3004
+},
+{
+	"Region": "Nor",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44985,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3005
+},
+{
+	"Region": "Nor",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44913,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3006
+},
+{
+	"Region": "Southeast",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 38865,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3007
+},
+{
+	"Region": "Southeast",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 29885,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3008
+},
+{
+	"Region": "Southeast",
+	"Territory": "Central California",
+	"Territory_Rep": "Central California",
+	"Actual": 29134,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3009
+},
+{
+	"Region": "Southeast",
+	"Territory": "Nevada",
+	"Territory_Rep": "Nevada",
+	"Actual": 52888,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3000
+},
+{
+	"Region": "Southeast",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 38805,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3001
+},
+{
+	"Region": "Southeast",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 55498,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3002
+},
+{
+	"Region": "Southeast",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44985,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3003
+},
+{
+	"Region": "Southeast",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44913,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3004
+},
+{
+	"Region": "Southwest",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 38865,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3005
+},
+{
+	"Region": "Southwest",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 29885,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3006
+},
+{
+	"Region": "Southwest",
+	"Territory": "Central California",
+	"Territory_Rep": "Central California",
+	"Actual": 29134,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3007
+},
+{
+	"Region": "Southwest",
+	"Territory": "Nevada",
+	"Territory_Rep": "Nevada",
+	"Actual": 52888,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3008
+},
+{
+	"Region": "Southwest",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 38805,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3009
+},
+{
+	"Region": "Southwest",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 55498,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3000
+},
+{
+	"Region": "Southwest",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44985,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3001
+},
+{
+	"Region": "Southwest",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44913,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3002
+},
+{
+	"Region": "Northwest",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 38865,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3003
+},
+{
+	"Region": "Northwest",
+	"Territory": "Arizona",
+	"Territory_Rep": "Arizona",
+	"Actual": 29885,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3004
+},
+{
+	"Region": "Northwest",
+	"Territory": "Central California",
+	"Territory_Rep": "Central California",
+	"Actual": 29134,
+	"Estimate": 30000,
+	"Real": 30000,
+	"Price": 3005
+},
+{
+	"Region": "Northwest",
+	"Territory": "Nevada",
+	"Territory_Rep": "Nevada",
+	"Actual": 52888,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3006
+},
+{
+	"Region": "Northwest",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 38805,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3007
+},
+{
+	"Region": "Northwest",
+	"Territory": "Northern California",
+	"Territory_Rep": "Northern California",
+	"Actual": 55498,
+	"Estimate": 40000,
+	"Real": 30000,
+	"Price": 3008
+},
+{
+	"Region": "Northwest",
+	"Territory": "Southern California",
+	"Territory_Rep": "Southern California",
+	"Actual": 44985,
+	"Estimate": 45000,
+	"Real": 30000,
+	"Price": 3009
+}
+];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			<a href="http://malsup.com/jquery/block/" target="_blank">jQuery BlockUI Plugin</a>를 이용하여 레이어팝업에  편집용 그리드를 표시하는 예제입니다.
+		</div>
+		<div class="headerDesc">
+			<span class="classProp">Actual컬럼</span>의 셀들에서 돋보기를 더블 클릭하시면 레이어 팝업이 생성됩니다.<br>
+			생성된 레이어 팝업의 데이터를 수정 후 저장을 클릭하시면 데이터가 적용됩니다.
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+	<div id="question" style="display:none; background-color:#f7f7f7; font-size:16px; color:#353535; letter-spacing:-0.2px; border-radius:3px;">
+		<div style="background-color:#213d64; font-size:22px; color:#ffffff; padding:8px; border-top-left-radius:3px; border-top-right-radius:3px;">Grid Layer Popup</div>
+		<form id="inputForm" name="inputForm">
+			<div>
+				<table border="0" cellpadding="5" cellspacing="0" width="500" style="padding:5px 3px 5px 3px; background-color:#f7f7f7;">
+					<tr style="height:50px;">
+						<td style="font-size:20px; color:#213d64; text-align:right">row index</td>
+						<td style="text-align:left"><input type="text" tabIndex="-1" size="10" name="rowIndex" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" value="0" readonly /></td>
+					</tr>
+					</tr>
+						<td colspan="4" style="height:1px; border-top:1px solid #e0e0e0;">
+						</td>
+					<tr>
+					<tr>
+						<td style="text-align:right">Region</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Region"></td>
+						<td style="text-align:right">Territory</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Territory"></td>
+					</tr><tr>
+						<td style="text-align:right">Territory Rep</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Territory_Rep"></td>
+						<td style="text-align:right">Actual</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Actual"></td>
+					</tr><tr>
+						<td style="text-align:right">Estimate</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Estimate"></td>
+						<td style="text-align:right">Real</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Real"></td>
+					</tr><tr>
+						<td style="text-align:right">Price</td>
+						<td style="text-align:left"><input type="text" size="10" style="width:119px; height:20px; font-size:13px; color:#555555; border:1px solid #e0e0e0; padding-left:5px;" name="Price"></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		<div style="margin-top:20px">
+			<input type="button" style="width:200px; border-style:none; padding:10px; color:#ffffff; font-size:16px; background-color:#7bacd6;" id="savebtn" value="저장" />
+			<input type="button" style="width:200px; border-style:none; padding:10px; color:#ffffff; font-size:16px; background-color:#9ba4b0; margin-left:10px;" id="closebtn" value="닫기" />
+		</div>
+	</div>
+</body>
+</html>

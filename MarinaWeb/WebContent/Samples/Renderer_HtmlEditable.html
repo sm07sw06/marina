@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+}
+
+var gridApp, gridRoot;
+
+// 수정 작업 결과 가져오기 (그리드에서 작업된 입력,수정,삭제 내용을 가져옵니다)
+// 데이터는 배열 형태로
+// 	idx: 행번호
+//	job: 수행 작업 (I:입력, U:수정, D:삭제)
+//	data: 행의 자료
+// 를 가지고 있으며 삭제가 먼저 오도록 정렬되어 있습니다.
+function getChangedData() {
+	var changedData = gridRoot.getChangedData();
+	if (changedData.length == 0)
+		alert("변경된 자료가 없습니다");
+	else {
+		for (var i = 0; i < changedData.length; i++)
+			alert("index:"+changedData[i].idx+"\n"+"job:"+changedData[i].job+"\n"+"data:"+changedData[i].data);
+	}
+}
+
+// 수정 작업 결과 XML로 가져오기 (그리드에서 작업된 입력,수정,삭제 내용을 XML로 가져옵니다)
+// 데이터는 XML 형태로
+// 	idx: 행번호
+//	job: 수행 작업 (I:입력, U:수정, D:삭제)
+//	data: 행의 자료
+// node를 가지고 있으며 삭제가 먼저 오도록 정렬되어 있습니다.
+function getChangedDataXML() {
+	var changedDataXML = gridRoot.getChangedDataXML();
+	if (changedDataXML == null)
+		alert("변경된 자료가 없습니다");
+	else
+		alert(changedDataXML);
+}
+
+// 라디오 버튼이 변경되었을 때 불려져서 변경된 값을 DataGrid에 반영하는 이벤트 처리 함수
+function radioChangeHandler(radio) {
+	// labelJsFunction을 통해 넣은 html의 selfElement를 통해 HtmlEditableItem 렌더러를 가져와 setValue로 선택된 값을 넣어줍니다.
+	radio.selfElement.setValue(radio.value);
+}
+
+// 생성되는 라디오 버튼의 name을 개별로 지정해주기 위한 변수
+var labelNo = 0;
+function sexLabelJsFunction(item, value, column) {
+	var lNo = labelNo++;
+	return '<div style="width:100%; height:18px; text-align:left;">' +
+		'<label><input type="radio" name="gender'+lNo+'" onchange="radioChangeHandler(this)" value="M" '+(value == "M" ? "checked" : "")+'>Male</label> ' +
+		'<label><input type="radio" name="gender'+lNo+'" onchange="radioChangeHandler(this)" value="F" '+(value == "F" ? "checked" : "")+'>Female</label></div>';
+}
+
+//----------------------- 그리드 설정 끝 -----------------------
+var layoutStr =
+'<rMateGrid>\
+	<DataGrid id="dg1" editable="true" doubleClickEnabled="false" horizontalScrollPolicy="auto" verticalAlign="middle">\
+		<columns>\
+			<DataGridColumn dataField="Prefix" width="60" headerText="Title" editable="false"/>\
+			<DataGridColumn dataField="FirstName" width="100" headerText="First Name" editable="false"/>\
+			<DataGridColumn dataField="LastName" width="100" headerText="Last Name" editable="false"/>\
+<!--\n\
+itemRenderer속성에 HtmlEditableItem 렌더러를 설정합니다.\n\
+rendererIsEditor속성을 true로 설정하여 별도의 에디터가 없음을 지정합니다.\n\
+labelJsFucntion 자바스크립트를 이용한 라벨 변경기능 (자바스크립트에서 선언한 함수명을 넣어줍니다)\n\
+-->\n\
+			<DataGridColumn dataField="Sex" width="150" itemRenderer="HtmlEditableItem" rendererIsEditor="true" labelJsFunction="sexLabelJsFunction"/>\
+			<DataGridColumn dataField="Position" editable="false"/>\
+			<DataGridColumn dataField="BirthDate" width="90" headerText="Birth Date" textAlign="center" editable="false"/>\
+			<DataGridColumn dataField="HireDate" width="90" headerText="Hire Date" textAlign="center" editable="false"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+var gridData = [
+{
+	"ID": 1,
+	"FirstName": "John",
+	"LastName": "Heart",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "CEO",
+	"BirthDate": "1964/03/16",
+	"HireDate": "1995/01/15"
+}, {
+	"ID": 2,
+	"FirstName": "Olivia",
+	"LastName": "Peyton",
+	"Prefix": "Mrs.",
+	"Sex": "F",
+	"Position": "Sales Assistant",
+	"BirthDate": "1981/06/03",
+	"HireDate": "2012/05/14"
+}, {
+	"ID": 3,
+	"FirstName": "Robert",
+	"LastName": "Reagan",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "CMO",
+	"BirthDate": "1974/09/07",
+	"HireDate": "2002/11/08"
+}, {
+	"ID": 4,
+	"FirstName": "Greta",
+	"LastName": "Sims",
+	"Prefix": "Ms.",
+	"Sex": "F",
+	"Position": "HR Manager",
+	"BirthDate": "1977/11/22",
+	"HireDate": "1998/04/23"
+}, {
+	"ID": 5,
+	"FirstName": "Brett",
+	"LastName": "Wade",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "IT Manager",
+	"BirthDate": "1968/12/01",
+	"HireDate": "2009/03/06"
+}, {
+	"ID": 6,
+	"FirstName": "Sandra",
+	"LastName": "Johnson",
+	"Prefix": "Mrs.",
+	"Sex": "F",
+	"Position": "Controller",
+	"BirthDate": "1974/11/15",
+	"HireDate": "2005/05/11"
+}, {
+	"ID": 7,
+	"FirstName": "Kevin",
+	"LastName": "Carter",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "Shipping Manager",
+	"BirthDate": "1978/01/09",
+	"HireDate": "2009/08/11"
+}, {
+	"ID": 8,
+	"FirstName": "Cynthia",
+	"LastName": "Stanwick",
+	"Prefix": "Ms.",
+	"Sex": "F",
+	"Position": "HR Assistant",
+	"BirthDate": "1985/06/05",
+	"HireDate": "2008/03/24"
+}, {
+	"ID": 9,
+	"FirstName": "Kent",
+	"LastName": "Samuelson",
+	"Prefix": "Dr.",
+	"Sex": "M",
+	"Position": "Ombudsman",
+	"BirthDate": "1972/09/11",
+	"HireDate": "2009/04/22"
+}, {
+	"ID": 10,
+	"FirstName": "Taylor",
+	"LastName": "Riley",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "Network Admin",
+	"BirthDate": "1982/08/14",
+	"HireDate": "2012/04/14"
+}, {
+	"ID": 11,
+	"FirstName": "Sam",
+	"LastName": "Hill",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "Sales Assistant",
+	"BirthDate": "1984/02/17",
+	"HireDate": "2012/02/01"
+}, {
+	"ID": 12,
+	"FirstName": "Kelly",
+	"LastName": "Rodriguez",
+	"Prefix": "Ms.",
+	"Sex": "F",
+	"Position": "Support Assistant",
+	"BirthDate": "1988/05/11",
+	"HireDate": "2012/10/13"
+}, {
+	"ID": 13,
+	"FirstName": "Natalie",
+	"LastName": "Maguirre",
+	"Prefix": "Mrs.",
+	"Sex": "F",
+	"Position": "Trainer",
+	"BirthDate": "1977/10/07",
+	"HireDate": "2008/06/19"
+}, {
+	"ID": 14,
+	"FirstName": "Walter",
+	"LastName": "Hobbs",
+	"Prefix": "Mr.",
+	"Sex": "M",
+	"Position": "Programmer",
+	"BirthDate": "1984/12/24",
+	"HireDate": "2011/02/17"
+}];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			HtmlEditableItem 렌더러와 labelJsFunction 기능을 이용하여 셀 안에 편집기능이 있는 html을 표현한 예제입니다.
+		</div>
+		<div class="headerDesc">
+			<span class="classProp">Sex</span> 열에 대해 <span class="greenProp">labelJsFunction</span>을 사용하여 라디오 버튼이 포함된 HTML로 적용하였고, 라디오 버튼 변경시 외부의 자바스크립트 함수를 연동하여 변경값을 반영하도록 하였습니다.<br>
+			적용된 외부 자바스크립트 함수(radioChangeHandler)에서는 변경된 라디오 버튼의 value를 setValue함수를 통해 DataGrid에 전달하도록 하였습니다.<br>
+			열에 편집가능 HTML 렌더러를 적용하시려면 <span class="greenProp">itemRenderer</span>를 <span class="greenProp">HtmlEditableItem</span>으로 설정해 하며, <span class="classProp">&lt;DataGrid&gt;</span>의 <span class="greenProp">doubleClickEnabled</span>를 <span class="greenProp">false</span>로 지정해야 합니다.
+		</div>
+		<div class="headerButtons">
+			<span class="button button_top" onclick="getChangedData();">수정내역 보기<img src="Web/Images/btnRight.png"></span>
+			<span class="button button_top" onclick="getChangedDataXML();">수정내역 XML로 보기<img src="Web/Images/btnRight.png"></span>
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

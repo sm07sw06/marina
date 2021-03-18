@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "topadmin",
+    "database": "postgres",
+    "host": "192.168.123.105",
+    "port": "5432",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "topadmin",
+    "database": "postgres",
+    "host": "192.168.123.105",
+    "port": "5432",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "topadmin",
+    "database": "postgres",
+    "host": "192.168.123.105",
+    "port": "5432",
+    "dialect": "mysql"
+  },
+  "logConfig": {
+    "logFolder": "..//logs//",
+    "logFile": "marina-%DATE%.log",
+    "logLevel": "info"
+  }
+}
+

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+<script type="text/javascript" src="../rMateGridH5/JS/jszip.min.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// 데이터 방식이 XML 방식일 경우 dataType을 설정합니다.
+jsVars += "&dataType=xml";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+var gridApp, gridRoot, dataGrid, progressBar;
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setDataURLEx(gridDataURL);
+
+	// export가 완료되면 불려져 로딩바를 지웁니다.
+	var exportSaveCompleteHandler = function(event) {
+		gridRoot.removeProgressBar();
+		dataGrid.setEnabled(true);
+	}
+	// export시 작업진행 상태를 progressBar에 반영합니다.
+	var exportProgressHandler = function(event) {
+		var percent = Math.floor(event.bytesLoaded / event.bytesTotal * 100);
+		progressBar.setProgress(percent, 100);
+		progressBar.setLabel("Processing "+ percent + "%");
+		if (percent == 100) {
+			gridRoot.removeProgressBar();
+			dataGrid.setEnabled(true);
+		}
+	}
+
+	var layoutCompleteHandler = function(event) {
+		dataGrid = gridRoot.getDataGrid();
+
+		dataGrid.addEventListener("progress", exportProgressHandler);
+	}
+	gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+	gridRoot.addEventListener("exportSaveComplete", exportSaveCompleteHandler);
+	gridRoot.addEventListener("exportSaveError", exportSaveCompleteHandler);
+}
+
+// 엑셀 export
+function excelExportAync() {
+	dataGrid.exportOnlyData = inputForm.dataOnly.checked;
+	for (var i = 0; i < inputForm.export_type.length; i++) {
+		if (inputForm.export_type[i].checked) {
+			dataGrid.exportType = inputForm.export_type[i].value;
+			break;
+		}
+	}
+	dataGrid.exportFileName = "export." + dataGrid.exportType;
+
+	dataGrid.setEnabled(false);
+	gridRoot.addProgressBar();
+	progressBar = gridRoot.getProgressBar();
+	progressBar.setProgress(0, 100);
+	progressBar.setLabel("Processing 0%");
+
+	// 엑셀 exportSave
+	// excelExportSave(url:String, async:Boolean);
+	//    url : 업로드할 서버의 url, 기본값 null
+	//    async : 비동기 모드로 수행여부, 기본값 false
+	gridRoot.excelExportSave("http://demo.riamore.net/demo/grid/saveExcel.jsp", true);
+}
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<DataGrid id="dg1" liveScrolling="false" showScrollTips="true" selectionMode="singleRow" sortableColumns="false">\
+		<columns>\
+			<DataGridColumn dataField="index" editable="false" textAlign="center"/>\
+			<DataGridColumn dataField="Region" editable="false" textAlign="center"/>\
+			<DataGridColumn dataField="Territory" width="150" textAlign="center"/>\
+			<DataGridColumn dataField="Territory_Rep" headerText="Territory Rep" width="150" textAlign="center"/>\
+			<DataGridColumn dataField="Actual" textAlign="right"/>\
+			<DataGridColumn dataField="Estimate" textAlign="right"/>\
+			<DataGridColumn dataField="Real" textAlign="right"/>\
+			<DataGridColumn dataField="Price" textAlign="right"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+var gridDataURL = "./Data/DataOneDepthSalesHalf.xml";
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			비동기 모드로 export할 경우 <span class="orangeProp">progress</span> 이벤트를 통해 작업 진행 정보를 받아 표시하는 예제입니다.
+		</div>
+		<div class="headerDesc">
+			Export시 화면에 <span class="classProp">진행바를 표시</span>하고 DataGrid에서 <span class="orangeProp">progress</span> 이벤트를 받아 진행바에서 백분율로 표시하도록 하였습니다.<br>
+			<span class="orangeProp">(xlsx 포맷을 지원하기 위해서는 오픈소스인 <a href="https://github.com/Stuk/jszip" target="_blank">jszip.min.js</a>을 포함해야 하며, 브라우저별로 메모리 한계등에 의해 내보내기가 제한될 수 있습니다)</span>
+		</div>
+		<div class="headerButtons">
+			<form id="inputForm" name="inputForm">
+				<div style="float:left; height:16px; padding:5px 10px 11px 10px; border-radius:3px 0 0 3px; border:1px solid #cccccc; border-right-style:none; border-bottom-color:#ababab; background-color:#e9eff6">
+					<label for="export_type1"><input type="radio" id="export_type1" name="export_type" value="xlsx" checked="checked">xlsx</label>
+					<label for="export_type2"><input type="radio" id="export_type2" name="export_type" value="xls">xls</label>
+				</div>
+				<span class="button button_top" style="height:16px; border-radius:0 3px 3px 0;" onclick="excelExportAync()">Excel Export<img src="Web/Images/btnRight.png"></span>
+				<div style="float:left; margin-left:7px; margin-top:7px"><input type="checkbox" name="dataOnly"/>Data Only</div>
+			</form>
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

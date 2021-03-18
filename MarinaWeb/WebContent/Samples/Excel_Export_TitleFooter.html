@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+<script type="text/javascript" src="../rMateGridH5/JS/jszip.min.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// 데이터 방식이 XML 방식일 경우 dataType을 설정합니다.
+jsVars += "&dataType=xml";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setDataURLEx("./Data/DataSpanOneDepthRevenues.xml");
+
+	var layoutCompleteHandler = function(event) {
+		dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+	}
+
+	gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+}
+
+var gridApp, gridRoot, dataGrid;
+
+// 엑셀 export
+function excelExport() {
+	// 엑셀문서의 제목을 지정합니다.
+	dataGrid.exportTitle = inputForm.exportTitle.value;
+
+	// 엑셀문서의 꼬릿말을 지정합니다.
+	dataGrid.exportFooter = inputForm.exportFooter.value;
+
+	// excel 파일 종류 지정
+	for (var i = 0; i < inputForm.export_type.length; i++) {
+		if (inputForm.export_type[i].checked) {
+			dataGrid.exportType = inputForm.export_type[i].value;
+			break;
+		}
+	}
+	dataGrid.exportFileName = "export." + dataGrid.exportType;
+
+	// 엑셀 exportSave
+	// excelExportSave(url:String, async:Boolean);
+	//    url : 업로드할 서버의 url, 기본값 null
+	//    async : 비동기 모드로 수행여부, 기본값 false
+	gridRoot.excelExportSave("http://demo.riamore.net/demo/grid/saveExcel.jsp", false);
+}
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+<!--\n\
+Excel export 관련 DataGrid 속성 및 스타일\n\
+\n\
+속성\n\
+exportColumns export할 컬럼. 설정할 배열의 내용은 columns상의 숫자로 가령 [0,1,3]로 설정한 경우, columns에서 첫번째, 두번째, 네번째 컬럼을 export하게 됩니다.\n\
+exportFileName Export할 excel 파일명\n\
+exportFooter Excel 내용에 덧붙일 꼬릿말\n\
+exportFooterHeight Excel 내용에 덧붙일 꼬릿말의 행높이 (기본 20)\n\
+exportOnlyData 데이터만 Export할지 여부 (true,false중 택일, 기본 false)\n\
+exportOnlyVisibleColumns visible속성이 true인 컬럼만 Export할지 여부 - exportColumns이 설정될 경우에는 이 값은 무시됩니다. (true,false중 택일, 기본 false)\n\
+exportTitle Excel 내용에 덧붙일 제목\n\
+exportTitleHeight Excel 내용에 덧붙일 제목행의 행높이 (기본 50)\n\
+\n\
+스타일\n\
+exportFooterAlign Excel 내용에 덧붙일 꼬릿말의 수평정렬 (left,right,center중 택일, 기본 right)\n\
+exportFooterColor Excel 내용에 덧붙일 꼬릿말의 글씨 색깔 (기본 #000000)\n\
+exportFooterFontSize Excel 내용에 덧붙일 꼬릿말의 font 크기 (기본 10)\n\
+exportTitleAlign Excel 내용에 덧붙일 제목행의 수평정렬 (left,right,center중 택일, 기본 center)\n\
+exportTitleColor Excel 내용에 덧붙일 제목행의 글씨 색깔 (기본 #000000)\n\
+exportTitleFontSize Excel 내용에 덧붙일 제목행의 font 크기 (기본 18)\n\
+\n\
+DataGridColumnGroup 클래스를 사용하여 컬럼을 그룹핑할 수 있으며, headerText 속성에 컬럼명을 명시할 수 있습니다.\n\
+-->\n\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<PercentFormatter id="percfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" horizontalScrollPolicy="off" verticalAlign="middle" exportTitleHeight="50" exportFooterHeight="25" selectionMode="singleCell" sortableColumns="false">\
+		<groupedColumns>\
+			<DataGridColumn id="dg1col1" dataField="Year" textAlign="center"/>\
+			<DataGridColumn id="dg1col2" dataField="Quarter" textAlign="center"/>\
+			<DataGridColumn dataField="Month" textAlign="center"/>\
+			<DataGridColumnGroup headerText="Region">\
+				<DataGridColumnGroup headerText="Korea">\
+					<DataGridColumn id="dg1col4" dataField="Seoul" textAlign="right" formatter="{numfmt}"/>\
+					<DataGridColumn id="dg1col5" dataField="Busan" textAlign="right" formatter="{numfmt}"/>\
+					<DataGridColumn id="dg1col6" dataField="Incheon" textAlign="right" formatter="{numfmt}"/>\
+				</DataGridColumnGroup>\
+				<DataGridColumnGroup headerText="U.S.A.">\
+					<DataGridColumn id="dg1col7" dataField="NewYork" textAlign="right" headerText="New York" formatter="{numfmt}"/>\
+					<DataGridColumn id="dg1col8" dataField="LA" textAlign="right" headerText="L.A." formatter="{numfmt}"/>\
+					<DataGridColumn id="dg1col9" dataField="Washington" textAlign="right" formatter="{numfmt}"/>\
+				</DataGridColumnGroup>\
+			</DataGridColumnGroup>\
+			<DataGridColumnGroup headerText="Sum">\
+				<DataGridColumn id="dg1col10" dataField="Revenue" textAlign="right" formatter="{numfmt}"/>\
+				<DataGridColumn id="dg1col11" dataField="Percent" textAlign="right" formatter="{percfmt}"/>\
+			</DataGridColumnGroup>\
+		</groupedColumns>\
+		<dataProvider>\
+			<SpanXMLListCollection source="{$gridData}"/>\
+		</dataProvider>\
+	</DataGrid>\
+	<Style>\n\
+		.subTotalStyle {\n\
+			color: #669900;\n\
+			textAlign: center;\n\
+		}\n\
+		.allTotalHeaderStyle {\n\
+			color: #ffffff;\n\
+			fontWeight: bold;\n\
+			textAlign: center;\n\
+		}\n\
+		.allTotalStyle {\n\
+			color: #ffffff;\n\
+			fontWeight: bold;\n\
+			textAlign: right;\n\
+		}\n\
+	</Style>\
+</rMateGrid>\
+';
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			Excel export시에 제목, 꼬릿말을 지정하여 내보내는 예제입니다.
+		</div>
+		<div class="headerDesc">
+			제목과 꼬릿말의 텍스트 영역에 원하시는 내용을 입력후 <span class="blueProp">Excel Export</span> 를 실행하시면 제목과 꼬릿말이 추가된 Excel 파일을 다운로드할 수 있습니다.<br>
+			<span class="orangeProp">(xlsx 포맷을 지원하기 위해서는 오픈소스인 <a href="https://github.com/Stuk/jszip" target="_blank">jszip.min.js</a>을 포함해야 하며, 브라우저별로 메모리 한계등에 의해 내보내기가 제한될 수 있습니다)</span>
+		</div>
+		<div class="headerButtons">
+			<form id="inputForm" name="inputForm">
+				<div style="float:left; height:16px; padding:5px 10px 11px 10px; border-radius:3px 0 0 3px; border:1px solid #cccccc; border-right-style:none; border-bottom-color:#ababab; background-color:#e9eff6">
+					<label for="export_type1"><input type="radio" id="export_type1" name="export_type" value="xlsx" checked="checked">xlsx</label>
+					<label for="export_type2"><input type="radio" id="export_type2" name="export_type" value="xls">xls</label>
+				</div>
+				<span class="button button_top" style="height:16px; border-radius:0 3px 3px 0;" onclick="excelExport()">Excel Export<img src="Web/Images/btnRight.png"></span>
+				<div style="float:left; margin:2px 3px 0 3px; padding:3px 5px 3px 3px;">
+					Excel 제목&nbsp;<input style="width:130px;height:21px;text-align:center;margin: 0px 0px 0px 5px;padding: 0px;letter-spacing: 1px;" type="text" name="exportTitle" value="엑셀 Export"/>&nbsp;
+					Excel 꼬릿말&nbsp;<input style="width:130px;height:21px;text-align:center;margin: 0px 0px 0px 5px;padding: 0px;letter-spacing: 1px;" type="text" name="exportFooter" value="2016/09/01"/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

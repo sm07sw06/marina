@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<message>
+		<language>한국어</language>
+		<code>decimalPointCountError</code>
+		<text>소수 구분 기호는 한 번만 사용해야 합니다.</text>
+	</message>
+	<message>
+		<language>영어</language>
+		<code>decimalPointCountError</code>
+		<text>The decimal separator can occur only once.</text>
+	</message>
+	<message>
+		<language>중국어(간체)</language>
+		<code>decimalPointCountError</code>
+		<text>小数分隔符仅能出现一次。</text>
+	</message>
+	<message>
+		<language>중국어(번체)</language>
+		<code>decimalPointCountError</code>
+		<text>小數分隔符號只能出現一次。</text>
+	</message>
+	<message>
+		<language>일본어</language>
+		<code>decimalPointCountError</code>
+		<text>小数点は 1 回だけ使用できます。</text>
+	</message>
+	<message>
+		<language>러시아어</language>
+		<code>decimalPointCountError</code>
+		<text>Десятичный разделитель может быть только один.</text>
+	</message>
+
+	<message>
+		<language>한국어</language>
+		<code>invalidCharError</code>
+		<text>입력한 내용에 잘못된 문자가 들어 있습니다.</text>
+	</message>
+	<message>
+		<language>영어</language>
+		<code>invalidCharError</code>
+		<text>The input contains invalid characters.</text>
+	</message>
+	<message>
+		<language>중국어(간체)</language>
+		<code>invalidCharError</code>
+		<text>输入包含无效字符。</text>
+	</message>
+	<message>
+		<language>중국어(번체)</language>
+		<code>invalidCharError</code>
+		<text>輸入包含無效字元。</text>
+	</message>
+	<message>
+		<language>일본어</language>
+		<code>invalidCharError</code>
+		<text>入力値に無効な文字が含まれています。</text>
+	</message>
+	<message>
+		<language>러시아어</language>
+		<code>invalidCharError</code>
+		<text>Данные ввода содержат недопустимые символы.</text>
+	</message>
+
+	<message>
+		<language>한국어</language>
+		<code>invalidCharErrorEV</code>
+		<text>전자 메일 주소에 잘못된 문자가 들어 있습니다.</text>
+	</message>
+	<message>
+		<language>영어</language>
+		<code>invalidCharErrorEV</code>
+		<text>Your e-mail address contains invalid characters.</text>
+	</message>
+	<message>
+		<language>중국어(간체)</language>
+		<code>invalidCharErrorEV</code>
+		<text>电子邮件地址包含无效字符。</text>
+	</message>
+	<message>
+		<language>중국어(번체)</language>
+		<code>invalidCharErrorEV</code>
+		<text>電子郵件地址包含無效字元。</text>
+	</message>
+	<message>
+		<language>일본어</language>
+		<code>invalidCharErrorEV</code>
+		<text>電子メールアドレスに無効な文字が含まれています。</text>
+	</message>
+	<message>
+		<language>러시아어</language>
+		<code>invalidCharErrorEV</code>
+		<text>Адрес электронной почты содержит недопустимые символы.</text>
+	</message>
+
+	<message>
+		<language>한국어</language>
+		<code>invalidCharErrorPNV</code>
+		<text>전화번호에 잘못된 문자가 들어 있습니다.</text>
+	</message>
+	<message>
+		<language>영어</language>
+		<code>invalidCharErrorPNV</code>
+		<text>Your telephone number contains invalid characters.</text>
+	</message>
+	<message>
+		<language>중국어(간체)</language>
+		<code>invalidCharErrorPNV</code>
+		<text>电话号码包含无效字符。</text>
+	</message>
+	<message>
+		<language>중국어(번체)</language>
+		<code>invalidCharErrorPNV</code>
+		<text>電話號碼包含無效字元。</text>
+	</message>
+	<message>
+		<language>일본어</language>
+		<code>invalidCharErrorPNV</code>
+		<text>電話番号に無効な文字が含まれています。</text>
+	</message>
+	<message>
+		<language>러시아어</language>
+		<code>invalidCharErrorPNV</code>
+		<text>Телефонный номер содержит недопустимые символы.</text>
+	</message>
+
+	<message>
+		<language>한국어</language>
+		<code>wrongLengthErrorZCV</code>
+		<text>우편 번호는 5자리 또는 5+4자리여야 합니다.</text>
+	</message>
+	<message>
+		<language>영어</language>
+		<code>wrongLengthErrorZCV</code>
+		<text>The ZIP code must be 5 digits or 5+4 digits.</text>
+	</message>
+	<message>
+		<language>중국어(간체)</language>
+		<code>wrongLengthErrorZCV</code>
+		<text>邮政编码必须为 5 位数或 5+4 位数字。</text>
+	</message>
+	<message>
+		<language>중국어(번체)</language>
+		<code>wrongLengthErrorZCV</code>
+		<text>郵遞區號必須為 5 位數或 5+4 位數。</text>
+	</message>
+	<message>
+		<language>일본어</language>
+		<code>wrongLengthErrorZCV</code>
+		<text>ZIP コードは 5 桁または 5+4 桁である必要があります。</text>
+	</message>
+	<message>
+		<language>러시아어</language>
+		<code>wrongLengthErrorZCV</code>
+		<text>Почтовый индекс должен состоять из 5 цифр или 5+4 цифры.</text>
+	</message>
+
+	<message>
+		<language>한국어</language>
+		<code>tooLongError</code>
+		<text>이 문자열은 허용되는 최대 길이보다 깁니다.</text>
+	</message>
+	<message>
+		<language>영어</language>
+		<code>tooLongError</code>
+		<text>This string is longer than the maximum allowed length.</text>
+	</message>
+	<message>
+		<language>중국어(간체)</language>
+		<code>tooLongError</code>
+		<text>该字符串长度超出最大允许长度。</text>
+	</message>
+	<message>
+		<language>중국어(번체)</language>
+		<code>tooLongError</code>
+		<text>此字串的長度超過最大允許長度。</text>
+	</message>
+	<message>
+		<language>일본어</language>
+		<code>tooLongError</code>
+		<text>このストリングは最大値よりも長いストリングです。</text>
+	</message>
+	<message>
+		<language>러시아어</language>
+		<code>tooLongError</code>
+		<text>В этой строке превышена максимально допустимая длина.</text>
+	</message>
+</resources>
