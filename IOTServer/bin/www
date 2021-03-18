@@ -82,7 +82,7 @@ module.exports = db;
  */
 
 //var port = normalizePort(process.env.PORT || '3100');
-var port = config.get('development.port');
+var port = config.get('development.appport');
 app.set('port', port);
 /**
  * Create HTTP server.

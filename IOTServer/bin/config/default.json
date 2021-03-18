@@ -5,7 +5,8 @@
     "database": "postgres",
     "host": "192.168.123.105",
     "port": "5432",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "appport": "3100"
   },
   "test": {
     "username": "postgres",
@@ -13,7 +14,8 @@
     "database": "postgres",
     "host": "192.168.123.105",
     "port": "5432",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "appport": "3100"
   },
   "production": {
     "username": "postgres",
@@ -21,7 +23,8 @@
     "database": "postgres",
     "host": "192.168.123.105",
     "port": "5432",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "appport": "3100"
   },
   "logConfig": {
     "logFolder": "..//logs//",
