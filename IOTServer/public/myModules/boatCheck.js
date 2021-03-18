@@ -258,12 +258,10 @@ BoatCheck.prototype.getBoatCheck = function() {
     logger.info('   longitude  :' + mObject.longitude   );
     logger.info("==================================");
 
-
-
     if(mObject.temperature === "") { mObject.temperature = 0; }
     if(mObject.humidity    === "") { mObject.humidity = 0; }
 
-    if ((mObject.gradex > 60) || (mObject.gradey > 60)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
+    if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
         logger.info('!! SOS 신호 처리중...'); 
         db.SetSOS(mObject, function(rtn){
             if (rtn === 'OK') {

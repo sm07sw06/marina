@@ -16,6 +16,9 @@ const callingModule = require('caller-module');
 //const config = require('../database/config/config')[env];
 const db = {};
 
+/* 공통 환경 변수 설정 */
+global.grade = 0;  //기울기 
+
 process.on('warning', e => console.warn(e.stack));
 
 /***
@@ -41,38 +44,35 @@ const pool = new Pool({
 	port: config.get('development.port')
 });
 
-/**
-const pool = new Pool({
-	user: "postgres",
-	host: "192.168.123.105",
-	database: "postgres",
-	password: "topadmin",
-	port: "5432"
-});
-**/	
-	//the pool with emit an error on behalf of any idle clients
-	//it contains if a backend error or network partition happens
-	pool.on('error', (err, client) => {
-		console.error('Unexpected error on idle client', err) // your callback here
-		process.exit(-1)
-	})
-	
-	//promise - checkout a client
-	pool.connect()
-	.then(client => {
-	 return client.query('SELECT 1 ') // your query string here
-	   .then(res => {
-	     client.release()
-	     logger.info('데이터베이스 연결됨.');
-	     logger.info(callingModule.GetCallerModule().name); // Logs the name of your module
-	   })
-	   .catch(e => {
-	     client.release()
-	     console.log(err.stack) // your callback here
-	   })
-	})
-	
-	pool.end();
+//the pool with emit an error on behalf of any idle clients
+//it contains if a backend error or network partition happens
+pool.on('error', (err, client) => {
+	console.error('Unexpected error on idle client', err) // your callback here
+	process.exit(-1)
+})
+
+//promise - checkout a client
+pool.connect()
+.then(client => {
+ return client.query('SELECT grade FROM tb_config') // 보트 기울기
+   .then(res => {
+	   if (res.rowCount > 0) {
+		   global.grade = res.rows[0].grade;
+		   logger.info('데이터베이스 연결됨');
+		   logger.info('  모듈명 : '+ callingModule.GetCallerModule().name);
+		   logger.info('  기울기 : '+ global.grade);
+	   } else {
+		   global.grade = 60;  // 기울기 초기값
+	   }
+	   client.release()
+   })
+   .catch(e => {
+     console.log(e.stack) // your callback here
+     client.release()
+   })
+})
+
+pool.end();
   
 module.exports = db;
 
@@ -88,18 +88,6 @@ app.set('port', port);
  * Create HTTP server.
  */
 var server = http.createServer(app);
-
-/**
-const { Pool, clientpg } = require("pg");
-
-const pool = new Pool({
-  user: "postgres",
-  host: "192.168.123.105",
-  database: "postgres",
-  password: "topadmin",
-  port: "5432"
-});
-**/
 
 // MQTT Server 접속
 var mqtt=require("mqtt");
@@ -126,19 +114,11 @@ client.on("message", function(topic, message) {
 	logger.info('MQTT [On Message]');
 		
 	try {
-		/***
-		var DB = require('../public/myModules/db');
-		// message를 DB에 반영하도록 modules 호출
-		var dbJob = new DB(); // 모듈에 전달인자 할당 
-		//dbJob.SetDB(message);
-		***/
-		
+	
 		var obj=JSON.parse(message);  // MQTT에서 보내온 메세지
 		
 		for (var sKey in obj) {
-			
-	//		logger.info('sKey:' + sKey);
-			
+		
 			if (obj.hasOwnProperty(sKey)) {
 				
 				var sData = obj[sKey].split(",");

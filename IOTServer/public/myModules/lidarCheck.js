@@ -58,6 +58,7 @@ LidarCheck.prototype.getLidarCheck = function() {
     logger.info("==================================");
     logger.info("  marinaId    :"+mObject.marinaId);
     logger.info("  machineId   :"+mObject.machineId);
+    logger.info("  boatId      :"+mObject.boatId);
     logger.info("  sendTime    :"+mObject.sendTime);   
     logger.info("  sShipLeftYn :"+sShipLeftYn);   
     logger.info("  sShipRightYn:"+sShipRightYn);   
@@ -82,7 +83,6 @@ LidarCheck.prototype.getLidarCheck = function() {
                     //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
                     db.GetBoatDataSearch(mObject, function(result,mObject2){ 
                         if(result == "OK") {
-                        //if(mObject.boatId) {
                             logger.info("범위내에 등록된 보트가 존재합니다.!!");
                             logger.info("  machineId:" + mObject2.machineId);
                             logger.info("  boatId   :" + mObject2.boatId);
@@ -92,16 +92,38 @@ LidarCheck.prototype.getLidarCheck = function() {
                             db.SetBoatAnchor("1", mObject2, function(rtn){  //status = 1 정박
                                 if (rtn === 'OK') {
                                     logger.info('보트 정박 처리 성공1'); 
+                                    /***
+                                    // 보트 일출항 이력 갱신
+                                    logger.info('!! 보트 일출항 이력 갱신중...'); 
+                                    db.UpdateBoatHist(mObject2, function(rtn){
+                                        if (rtn === 'OK') {
+                                            logger.info('보트 일출항 이력 갱신 성공');  
+                                        } else {
+                                            logger.info('보트 일출항 이력 갱신 실패'); 
+                                        }   
+                                    });        
+                                    ***/  
                                 } else {
                                     logger.info('보트 정박 처리 실패1'); 
                                 }        
                             });                  //기준 시간 범위내 단말기 수신 정보 찾기           
                         } else {
-                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.!!");
+                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.(미등록된 보트 탐지)!!");
                             // 미등록 보트 정박 처리 // LDH
                             db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
                                 if (rtn === 'OK') {
                                     logger.info('보트 정박 처리 성공2'); 
+                                    /***
+                                    // 보트 일출항 이력 갱신
+                                    logger.info('!! 보트 일출항 이력 갱신중...'); 
+                                    db.UpdateBoatHist(mObject2, function(rtn){
+                                        if (rtn === 'OK') {
+                                            logger.info('보트 일출항 이력 갱신 성공');  
+                                        } else {
+                                            logger.info('보트 일출항 이력 갱신 실패'); 
+                                        }   
+                                    });         
+                                    ***/ 
                                 } else {
                                     logger.info('보트 정박 처리 실패2'); 
                                 }     
@@ -128,16 +150,38 @@ LidarCheck.prototype.getLidarCheck = function() {
                                 logger.info("SetBoatAnchor result3:" + rtn);
                                 if (rtn === 'OK') {
                                     logger.info('보트 정박 처리 성공3'); 
+                                    /***
+                                    // 보트 일출항 이력 갱신
+                                    logger.info('!! 보트 일출항 이력 갱신중3...'); 
+                                    db.UpdateBoatHist(mObject2, function(rtn){
+                                        if (rtn === 'OK') {
+                                            logger.info('보트 일출항 이력 갱신 성공3');  
+                                        } else {
+                                            logger.info('보트 일출항 이력 갱신 실패3'); 
+                                        }   
+                                    });       
+                                    ***/   
                                 } else {
                                     logger.info('보트 정박 처리 실패3'); 
                                 }                                  
                             });                  //기준 시간 범위내 단말기 수신 정보 찾기           
                         } else {
-                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.!!");
+                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.(미등록된 보트 탐지)!!");
                             // 미등록 보트 정박 처리 // LDH
                             db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
                                 if (rtn === 'OK') {
-                                    logger.info('보트 정박 처리 성공4'); 
+                                    logger.info('보트 정박 처리 성공4');
+                                    /***
+                                    // 보트 일출항 이력 갱신
+                                    logger.info('!! 보트 일출항 이력 갱신중4...'); 
+                                    db.UpdateBoatHist(mObject2, function(rtn){
+                                        if (rtn === 'OK') {
+                                            logger.info('보트 일출항 이력 갱신 성공4');  
+                                        } else {
+                                            logger.info('보트 일출항 이력 갱신 실패4'); 
+                                        }   
+                                    });     
+                                    ***/     
                                 } else {
                                     logger.info('보트 정박 처리 실패4'); 
                                 }     
@@ -147,19 +191,26 @@ LidarCheck.prototype.getLidarCheck = function() {
                 }
             } else {
                 logger.info("boat is not anchored3 !!");
-                logger.info('!! 보트 정박 처리중...'); 
+                logger.info('!! 보트 정박 처리중1...'); 
                 // 보트 정박 처리
+                mObject.leftRight = '0';    // 우
                 db.SetBoatNotAnchor(mObject, function(rtn){ 
-                    logger.info("SetBoatAnchor result3:" + rtn);
-                    // 보트 일출항 이력 갱신
-                    logger.info('!! 보트 일출항 이력 갱신중...'); 
-                    db.UpdateBoatHist(mObject, function(rtn){
-                        if (rtn === 'OK') {
-                            logger.info('보트 일출항 이력 갱신 성공');  
-                        } else {
-                            logger.info('보트 일출항 이력 갱신 실패'); 
-                        }   
-                    });          
+                    if (rtn === 'OK') {
+                        logger.info('보트 정박 처리 성공1');  
+                    } else {
+                        logger.info('보트 정박 처리 실패1'); 
+                    }   
+                });     
+                logger.info("boat is not anchored3 !!");
+                logger.info('!! 보트 정박 처리중2...'); 
+                // 보트 정박 처리
+                mObject.leftRight = '1';    // 우
+                db.SetBoatNotAnchor(mObject, function(rtn){  
+                    if (rtn === 'OK') {
+                        logger.info('보트 정박 처리 성공2');  
+                    } else {
+                        logger.info('보트 정박 처리 실패2'); 
+                    }   
                 });     
             }
         }

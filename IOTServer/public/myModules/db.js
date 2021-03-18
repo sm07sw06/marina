@@ -424,7 +424,7 @@ DB.prototype.SelectLastAnchor = function(mObject, callback) {
 		    sQueryString += "   AND to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS')),'YYYYMMDDHH24MISS')  \n";
 		    sQueryString += " union all    \n";
 		    ***/
-		var sQueryString  = "SELECT  /* SelectLastAnchor */a.boat_id  \n";
+		var sQueryString  = "SELECT  /* SelectLastAnchor */ a.boat_id  \n";
 		    sQueryString += "  FROM public.tb_anchor a, tb_boat_device b \n";
 		    sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " \n";
 		    sQueryString += "   AND a.anchor_status = '1' -- 정박상태 \n";  // 정박상태
@@ -546,7 +546,7 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 	logger.info("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString = "SELECT marina_id, boat_id FROM tb_boat_device WHERE machine_id = '" + mObject.machineId + "' limit 1 \n";
+	var sQueryString = "SELECT /* UpdateBoatHist */ marina_id, boat_id FROM tb_boat_device WHERE machine_id = '" + mObject.machineId + "' limit 1 \n";
 	logger.info(sQueryString);
 
     try {
@@ -564,7 +564,7 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 						logger.info(" boat_id   :" +res.rows[i].boat_id);   
 					}
 
-			    	sQueryString  = "INSERT INTO public.tb_boat_hist(marina_id, boat_id,send_time,boatinout)  \n";
+			    	sQueryString  = "INSERT INTO /* UpdateBoatHist */ public.tb_boat_hist(marina_id, boat_id,send_time,boatinout)  \n";
 				    sQueryString += "values ( " + mObject.marinaId + ", "  + mObject.boatId + ", '"  + mObject.sendTime + "', '"  + mObject.boatInout + "')  \n";
 				
 				    logger.info(sQueryString);
@@ -607,9 +607,9 @@ DB.prototype.SetBoatAnchor = function(status, mObject, callback) {
  
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	if(status == '1') {
-		var sQueryString  = "UPDATE tb_ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where marina_id = " + mObject.marinaId + " AND anchor_id = " + mObject.anchorId;
+		var sQueryString  = "UPDATE /* SetBoatAnchor */ tb_ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where marina_id = " + mObject.marinaId + " AND anchor_id = " + mObject.anchorId;
 	} else {
-		var sQueryString  = "UPDATE tb_ANCHOR SET boat_id = null ,anchor_status = '1'  where marina_id = " + mObject.marinaId + " AND anchor_id = " + mObject.anchorId;
+		var sQueryString  = "UPDATE /* SetBoatAnchor */ tb_ANCHOR SET boat_id = null ,anchor_status = '1'  where marina_id = " + mObject.marinaId + " AND anchor_id = " + mObject.anchorId;
 	}
 
     logger.info(sQueryString);
@@ -646,12 +646,13 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 	logger.info('Start SetBoatNotAnchor........');
 	logger.info('   marinaId : ' + mObject.marinaId);
 	logger.info('   machineId: ' + mObject.machineId);
+	logger.info('   leftRight: ' + mObject.leftRight);
 	logger.info("----------------------------------");
 
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE tb_ANCHOR a SET boat_id = 0, anchor_status = '0'   " ;
-        sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "') " ;
+	var sQueryString  = "UPDATE /* SetBoatNotAnchor */ tb_ANCHOR a SET boat_id = 0, anchor_status = '0'   " ;
+        sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "' AND b.left_right = '" + mObject.leftRight + "') " ;
 
     logger.info(sQueryString);
 
@@ -697,7 +698,7 @@ DB.prototype.SetDashBoard = function (mObject, callback) {
 	logger.info("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE tb_io_status " ;
+	var sQueryString  = "UPDATE /* SetDashBoard */ tb_io_status " ;
 		sQueryString += "   SET marina_id = " + mObject.marinaId  ;
 
 		if( isEmpty(mObject.boatId)) {
@@ -754,7 +755,7 @@ DB.prototype.SetSOS = function (mObject, callback) {
 	logger.info("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.tb_sos_list(marina_id, send_time, boat_id,gradex, gradey, latitude, longitude)  \n";
+	var sQueryString  = "INSERT INTO /* SetSOS */ public.tb_sos_list(marina_id, send_time, boat_id,gradex, gradey, latitude, longitude)  \n";
 		sQueryString += " values("  + mObject.marinaId + ",'" + mObject.sendTime + "','"  + mObject.boatId + "' \n" ;
 		sQueryString += "       ,"  + mObject.gradex + ","  + mObject.gradey + ","  + mObject.latitude + ","  + mObject.longitude + " )  \n" ;    
     logger.info(sQueryString);
