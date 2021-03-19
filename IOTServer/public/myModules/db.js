@@ -779,9 +779,48 @@ DB.prototype.SetSOS = function (mObject, callback) {
 		logger.error("ERROR:"+err);
 		callback('ERROR');
 	}
-
-
 };
+
+
+//MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
+DB.prototype.CCtvReceive = function (mObject, callback) {
+    
+	logger.info("----------------------------------");
+	logger.info('Start CCtvReceive........');
+	logger.info('  marinaId 	: ' + mObject.marinaId );
+	logger.info('  sendTime 	: ' + mObject.sendTime );
+	logger.info('  cctv_cd  	: ' + mObject.cctv_cd  );
+	logger.info('  boatinout	: ' + mObject.boatinout);
+	logger.info('  photo_base64	: ' + mObject.photo_base64);
+	logger.info("----------------------------------");
+	
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "INSERT INTO /* CCtvReceive */ public.tb_cctvdata(marina_id, send_time, cctv_cd,photo_base64, boatinout)  \n";
+		sQueryString += " values("  + mObject.marinaId + ",'" + mObject.sendTime + "','"  + mObject.cctv_cd + "' \n" ;
+		sQueryString += "       ,'"  + mObject.photo_base64 + "','"  + mObject.boatinout + "' )  \n" ;    
+    logger.info(sQueryString);
+
+  try {
+
+		pool.connect(function (err, clientdb, done) {
+			if (err) throw new Error(err);
+			clientdb.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+					callback('ERROR');
+			    } else {
+					logger.info("Anchor Update OK:");
+					callback('OK');			    	
+			    }
+				clientdb.release();
+			}); 
+		}); 
+  } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+};
+
 
 //객체를 바로 module.exports에 할당
 module.exports = DB;

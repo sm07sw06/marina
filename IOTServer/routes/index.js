@@ -27,8 +27,8 @@ var storage  = multer.diskStorage({
 var upload = multer({ storage: storage }); 
 	
 router.post('/uploadFile', upload.single('attachment'), function(req,res){
-	console.log(req.file.originalname)
-	console.log(req.cameraId)
+	console.log("index1:"+req.file.originalname)
+	console.log("index2:"+req.cameraId)
 	res.render('confirmation', { file:req.file.originalname, files:null });
 });
 

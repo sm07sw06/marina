@@ -27,7 +27,11 @@
     "sequelize": "^6.5.1",
     "sequelize-cli": "^6.2.0",
     "socket.io": "~2.0.4",
-    "winston": "~3.3.3",
+    "fetch": "~1.1.0",
+    "filereader": "~0.10.3",
+    "file-api": "~0.10.4",
+    "xmlhttprequest": "~1.8.0",
+    "winston": "~3.3.3",    
     "winston-daily-rotate-file": "~3.3.3"
   }
 }
