@@ -47,13 +47,13 @@
                             </a>
                             <ul>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00001" >
+                                    <a href="noAuth.jsp" id="menu00033" >
                                         <i class="entypo-user"></i>
                                         <span class="title">회원기초정보관리</span>
                                     </a>
                                 </li>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00003" >
+                                    <a href="noAuth.jsp" id="menu00034" >
                                         <i class="entypo-user"></i>
                                         <span class="title">출입내역 조회</span>
                                     </a>
@@ -67,7 +67,7 @@
                             </a>
                             <ul>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00004" >
+                                    <a href="noAuth.jsp" id="menu00035" >
                                         <i class="entypo-user"></i>
                                         <span class="title">보트기초정보관리</span>
                                     </a>
@@ -259,25 +259,25 @@
                     </a>
                     <ul>
                         <li >
-                            <a href="noAuth.jsp" id="menu00025" >
+                            <a href="noAuth.jsp" id="menu00030" >
                                 <i class="entypo-user"></i>
                                 <span class="title">사용자그룹 등록</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00026" >
+                            <a href="noAuth.jsp" id="menu00029" >
                                 <i class="entypo-user"></i>
                                 <span class="title">사용자 권한관리</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00027" >
+                            <a href="noAuth.jsp" id="menu00032" >
                                 <i class="entypo-user"></i>
                                 <span class="title">코드관리</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00028" >
+                            <a href="noAuth.jsp" id="menu00031" >
                                 <i class="entypo-user"></i>
                                 <span class="title">메뉴관리</span>
                             </a>

@@ -67,7 +67,7 @@ public class GetChartLinePage extends HttpServlet {
 	            response.setContentType("application/x-json charset=UTF-8");	
 
 			}
-			
+			 
 			System.out.println("getChartPage" ); 
 			
 			connectionDest = conMgr.getConnection(); 
