@@ -60,10 +60,10 @@ public class SetAuth extends HttpServlet {
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
 	    				
-				    String updateSql      = "DELETE FROM TB_USER_AUTH \n";
+				    String updateSql      = "DELETE FROM TB_EMP_AUTH \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND USER_GB = '" + sUserGb + "' \n ";
-					updateSql = updateSql + "   AND USER_ID =  " + sUserId + "  \n ";
+					updateSql = updateSql + "   AND EMP_GB_ID = " + sUserGb + " \n ";
+					updateSql = updateSql + "   AND EMP_ID =  " + sUserId + "  \n ";
 
 					stmt = connectionDest.createStatement();
 					logger.debug("SetUserGroup sql:" + updateSql);
@@ -75,7 +75,7 @@ public class SetAuth extends HttpServlet {
 						
 						logger.debug("getAuth json:" + json); 
 						
-						String insertSql = "INSERT INTO TB_USER_AUTH  \n";
+						String insertSql = "INSERT INTO TB_EMP_AUTH  \n";
 						insertSql = insertSql + "VALUES (  '" + sUserGb + "'," + sUserId + ", " +  json.get("menu_id") + " )";
 		
 						stmt = connectionDest.createStatement();
@@ -87,10 +87,10 @@ public class SetAuth extends HttpServlet {
 					connectionDest.commit();
 							            
 				} else {
-				    String updateSql      = "DELETE FROM TB_USER_MEMBER \n";
+				    String updateSql      = "DELETE FROM TB_EMP_MEMBER \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND USER_GB = '" + sUserGb + "' \n ";
-					updateSql = updateSql + "   AND USER_ID =  " + sUserId + "  \n ";
+					updateSql = updateSql + "   AND EMP_GB_ID = " + sUserGb + " \n ";
+					updateSql = updateSql + "   AND EMP_ID =  " + sUserId + "  \n ";
 
 					stmt = connectionDest.createStatement();
 					logger.debug("SetUserGroup sql:" + updateSql);

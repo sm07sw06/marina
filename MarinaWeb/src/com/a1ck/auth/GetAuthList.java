@@ -109,13 +109,13 @@ public class GetAuthList extends HttpServlet {
 		   			sQuery  = "\n";
 		   			sQuery += " SELECT MENU_ID,MENU_NM,MENU_URL \n";
 		   			sQuery += "   FROM TB_MENU M \n";
-		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM TB_EMP_AUTH A WHERE A.EMP_GB = '1' AND A.EMP_ID = " + sUserId + " )  \n";
+		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM TB_EMP_AUTH A WHERE A.EMP_GB_ID = '1' AND A.EMP_ID = " + sUserId + " )  \n";
 		   			sQuery += "  ORDER BY 2     							\n";
 				} else {
 		   			sQuery  = "\n";
 		   			sQuery += " SELECT MENU_ID,MENU_NM,MENU_URL \n";
 		   			sQuery += "   FROM TB_MENU M \n";
-		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM TB_EMP_AUTH A WHERE A.EMP_GB = '2' AND A.EMP_ID = " + sUserId + " )  \n";
+		   			sQuery += "  WHERE M.MENU_ID NOT IN ( SELECT MENU_ID FROM TB_EMP_AUTH A WHERE A.EMP_GB_ID = '2' AND A.EMP_ID = " + sUserId + " )  \n";
 		   			sQuery += "  ORDER BY 2     							\n";
 				}
 			}
@@ -127,14 +127,14 @@ public class GetAuthList extends HttpServlet {
 	   			sQuery += "           FROM TB_MENU M, TB_EMP_AUTH A, TB_USER_INFO I	   								    \n";
 	   			sQuery += "          WHERE A.EMP_ID = I.USER_ID AND I.USER_ID = " + sUserId + "	            \n";
 	   			sQuery += "            AND A.MENU_ID = M.MENU_ID												\n";
-	   			sQuery += "            AND '" + sUserGb + "' = A.EMP_GB										\n";
+	   			sQuery += "            AND '" + sUserGb + "' = A.EMP_GB_ID										\n";
 	   			sQuery += "          UNION ALL																	\n";
 	   			sQuery += "         SELECT M.MENU_ID, lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER	\n";
 	   			sQuery += "           FROM TB_MENU M, TB_EMP_AUTH A, TB_EMP_MEMBER U, TB_USER_INFO I							\n";
 	   			sQuery += "          WHERE U.EMP_ID = I.USER_ID AND U.EMP_GRP_ID = " + sUserId + "				\n";
 	   			sQuery += "            AND A.MENU_ID = M.MENU_ID												\n";
 	   			sQuery += "            AND U.EMP_GRP_ID = A.EMP_ID											\n";
-	   			sQuery += "            AND '" + sUserGb + "' = A.EMP_GB										\n";
+	   			sQuery += "            AND '" + sUserGb + "' = A.EMP_GB_ID										\n";
 	   			sQuery += "        ) T1																			\n";
 	   			sQuery += "  ORDER BY 4     														            \n";
 			}

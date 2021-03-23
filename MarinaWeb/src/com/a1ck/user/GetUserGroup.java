@@ -79,7 +79,7 @@ public class GetUserGroup extends HttpServlet {
 			
 			if( StringUtils.equals(sGb, "A") ) {
 				
-				sQuery  = " SELECT EMP_GRP_ID, EMP_GRP_NM, DESCRIPTION, '' AS USER_ID, '' AS USER_NM , USE_YN \n ";
+				sQuery  = " SELECT EMP_GRP_ID as USER_GRP_ID, EMP_GRP_NM AS USER_GRP_NM, DESCRIPTION, '' AS USER_ID, '' AS USER_NM , USE_YN \n ";
 				sQuery += "   FROM TB_EMP_GROUP\n ";
 				sQuery += "  WHERE 1 = 1    \n ";
 				

@@ -60,9 +60,9 @@ public class SetUserGroupMember extends HttpServlet {
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
 	    				
-				    String updateSql      = "DELETE FROM USERMEMBER \n";
+				    String updateSql      = "DELETE FROM TB_EMP_MEMBER \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND USER_GRP_ID =   " + sUserGrpId  + "   \n ";
+					updateSql = updateSql + "   AND EMP_GRP_ID =   " + sUserGrpId  + "   \n ";
 
 					stmt = connectionDest.createStatement();
 					logger.debug("SetUserGroup sql:" + updateSql);
@@ -74,7 +74,7 @@ public class SetUserGroupMember extends HttpServlet {
 						
 						//logger.debug("getUserGroupList json:" + json); 
 						
-						String insertSql = "INSERT INTO TB_USER_MEMBER  \n";
+						String insertSql = "INSERT INTO TB_EMP_MEMBER  \n";
 						insertSql = insertSql + "VALUES ( '" + (String)json.get("user_id") + "' , '" + sUserGrpId + "' )";
 		
 						stmt = connectionDest.createStatement();
@@ -86,9 +86,9 @@ public class SetUserGroupMember extends HttpServlet {
 					connectionDest.commit();
 							            
 				} else {
-				    String updateSql      = "DELETE FROM TB_USER_MEMBER \n";
+				    String updateSql      = "DELETE FROM TB_EMP_MEMBER \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND USER_GRP_ID =   " + sUserGrpId  + "   \n ";
+					updateSql = updateSql + "   AND EMP_GRP_ID =   " + sUserGrpId  + "   \n ";
 
 					stmt = connectionDest.createStatement();
 					logger.debug("SetUserGroup sql:" + updateSql);

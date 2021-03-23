@@ -82,7 +82,7 @@ public class GetMenuList extends HttpServlet {
 	   			sQuery += "          UNION ALL																	\n";
 	   			sQuery += "         SELECT lpad(M.MENU_CD,5,'0') MENU_CD ,M.MENU_NM, M.MENU_URL, M.MENU_ORDER, M.MENU_ID, M.MENU_DESC, M.UP_MENU_ID   \n";
 	   			sQuery += "           FROM TB_MENU M  \n";
-	   			sQuery += "          WHERE M.menu_id in (select menu_id from TB_EMP_AUTH a , TB_USER_INFO i, TB_EMP_MEMBER U where '2' = A.EMP_GB and A.EMP_ID = I.USER_ID  and U.USER_GRP_ID = A.EMP_ID and  I.USER_CD = '" + sUserCd + "')		\n";
+	   			sQuery += "          WHERE M.menu_id in (select menu_id from TB_EMP_AUTH a , TB_USER_INFO i, TB_EMP_MEMBER U where '2' = A.EMP_GB and A.EMP_ID = I.USER_ID  and U.EMP_GRP_ID = A.EMP_ID and  I.USER_CD = '" + sUserCd + "')		\n";
 	   			sQuery += "        ) T1																			\n";
 	   			sQuery += "  ORDER BY 4     														            \n";
 	   			

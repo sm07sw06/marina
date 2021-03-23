@@ -79,7 +79,7 @@ public class SetUserGroup extends HttpServlet {
 				
 			   if(sCrud.equals("C")) {
 				    String insertSql = "INSERT INTO TB_EMP_GROUP (EMP_GRP_NM) \n";
-					insertSql = insertSql + "VALUES ( '" + sUserGrpNm + " )";
+					insertSql = insertSql + "VALUES ( '" + sUserGrpNm + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
@@ -88,12 +88,12 @@ public class SetUserGroup extends HttpServlet {
 					stmt.execute(insertSql);
 					stmt.close();
 			   } else if(sCrud.equals("U")) {
-				    String updateSql      = "UPDATE TB_USER_GROUP \n";
-				    updateSql = updateSql + "   SET USER_GRP_NM     = '" + sUserGrpNm     + "'   \n ";
+				    String updateSql      = "UPDATE TB_EMP_GROUP \n";
+				    updateSql = updateSql + "   SET EMP_GRP_NM     = '" + sUserGrpNm     + "'   \n ";
 				    updateSql = updateSql + "      ,DESCRIPTION     = '" + sDescription     + "'   \n ";
 				    updateSql = updateSql + "      ,USE_YN          = '" + sUseYn    + "'   \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND USER_GRP_ID =   " + sUserGrpId  + "   \n ";
+					updateSql = updateSql + "   AND EMP_GRP_ID =   " + sUserGrpId  + "   \n ";
 
 					stmt = connectionDest.createStatement();
 					logger.debug("SetUserGroup sql:" + updateSql);

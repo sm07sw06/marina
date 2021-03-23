@@ -84,8 +84,8 @@ public class GetUserList extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT U.USER_ID, U.USER_NM, U.USER_CD, U.PASSWORD, U.PASSWORD as PASSWORDORG, U.TELEPHONE, U.EMAIL, U.APPROWAITCNT, E.DEPT_CD, E.DEPT_NM, E.RETIRE_DT, E.STATE_CD \n ";
-			sQuery += "       ,C.DETAIL_NM AS STATE_NM, E.PHOTO, U.USE_YN, U.PICTURE  \n ";
-			sQuery += "   FROM TB_USER_INFO U LEFT OUTER JOIN TB_EMP E ON U.USER_CD = E.USER_CD \n ";
+			sQuery += "       ,C.DETAIL_NM AS STATE_NM, U.USE_YN, U.PICTURE  \n ";
+			sQuery += "   FROM TB_USER_INFO U LEFT OUTER JOIN TB_EMP E ON U.USER_CD = E.EMP_CD \n ";
 			sQuery += "                   LEFT OUTER JOIN TB_CODE_DETAIL C ON E.STATE_CD = C.DETAIL_CD AND 'STATE_CD' = C.GROUP_CD \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			sQuery += "    AND U.USE_YN != 'D' \n";
