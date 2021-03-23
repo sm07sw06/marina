@@ -13,7 +13,7 @@ var File = fapi.File;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var xhr = new XMLHttpRequest();
 
-
+const imageToBase64 = require('image-to-base64');
 const logger = require('../config/winston');
 
 var app = express();
@@ -54,6 +54,7 @@ function MessageObject()
 }
 
 var mObject  = new MessageObject(); //메세지 구조체
+var mObject2 = new MessageObject(); //메세지 구조체
 
 function toDataURL(url, callback) {
 	var xhr = new XMLHttpRequest();
@@ -70,43 +71,26 @@ function toDataURL(url, callback) {
 	xhr.send();
 }
 
-function encodeImageFileAsURL(element) {
-	var file = element;
-	var reader = new FileReader();
-	reader.onloadend = function() {
-		console.log('RESULT', reader.result)
-	}
-	reader.readAsDataURL(file);
-}
 
 router.post('/uploadFile', upload.single('attachment'), function(req,res){
-//	console.log(req.body);
+ 
+	//console.log(req.body);
 
    if (req.file) {
 	      console.log("originalname   : " + req.file.originalname); //form files
-	      console.log("file path      : " + req.file.destination); //form files
-	      console.log("file full name : " + req.file.path); //form files
-	      console.log("file filename  : " + req.file.filename); //form files
-	      console.log("file size      : " + req.file.size); //form files
+//	      console.log("file path      : " + req.file.destination); //form files
+//	      console.log("file full name : " + req.file.path); //form files
+//	      console.log("file filename  : " + req.file.filename); //form files
+//	      console.log("file size      : " + req.file.size); //form files
 
-	      console.log("fileaaaaa : " + "../bin/"+req.file.path); //form files
-	      
-//			toDataURL("https://t1.daumcdn.net/b2/creative/261423/d22ae8fe17e60810bb30d7e6dda3bd9c.png", function(dataUrl) {
-//			  console.log('RESULT:', dataUrl);
-//			});
+	      console.log("file full name : " + "../bin/"+req.file.path); //form files
+  
+  	      mObject.marinaId 	    = 1;					// 마리나 ID      
+	      mObject.cctv_cd   	= req.body.cameraId;	// cctv
+	      mObject.sendTime  	= req.body.sendtime;	// 전송일시     
+	      mObject.boatInout 	= req.body.boatinout;	// 입출항구분 (1:입항 0:출항)  
+	      mObject.photo_base64 	= "../bin/"+req.file.path ; //전송이미지 텍스트
 
-			encodeImageFileAsURL(new File("../bin/uploadedFiles/1111111.png"));			
-	      
-			
-			//new File("../bin/uploadedFiles\1616144154786__20200324_111007.png")
-			
-	      mObject.marinaId 	    =  1;					// 마리나 ID      
-	      mObject.cctv_cd   	=  req.body.cameraId;	// cctv
-	      mObject.sendTime  	=  req.body.sendtime;	// 전송일시     
-	      mObject.boatinout 	=  req.body.boatinout;	// 입출항구분 (1:입항 0:출항)     
-	      mObject.boatinout 	= "1";
-	      mObject.photo_base64 	= "" ;
-	      /***
 	      var db = new DB(); 	  
 	      
           logger.info('!! CCTV 데이터 수집중...'); 
@@ -116,8 +100,29 @@ router.post('/uploadFile', upload.single('attachment'), function(req,res){
               } else {
                   logger.info('CCTV 데이터 수집 실패'); 
               }   
-          });         
-	      ***/
+          });     
+          
+          if(req.body.boatinout == '1') {
+                logger.info('!! 기준 시간 GPS범위내 단말기 수신 정보 찾기중...'); 
+        
+                //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+                db.GetGPSBoatDataSearch(mObject, function(result,mObject2){ 
+                    if(result == "OK") {
+                    } else {
+                        logger.info("GPS범위내에 등록된 보트가 존재하지 않습니다.(미등록된 보트 탐지)!!");
+                        // 미등록 보트  처리
+                        db.SetUnregBoatIn(mObject, function(rtn){ //status = 0 미정박
+//	                                if (rtn === 'OK') {
+//	                                    logger.info('미등록 보트 처리 성공2'); 
+//	                                } else {
+//	                                    logger.info('미등록 보트  처리 실패2'); 
+//	                                }     
+                        });                              
+                    }
+                });                  //기준 시간 범위내 단말기 수신 정보 찾기
+          }
+
+
 	 	 /*
 	      res.render('profile', {
 	         title: 'success',

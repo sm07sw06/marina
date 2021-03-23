@@ -15,7 +15,11 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "fetch": "~1.1.0",
+    "file-api": "~0.10.4",
+    "filereader": "~0.10.3",
     "http-errors": "~1.6.3",
+    "image-to-base64": "~2.1.1",
     "jade": "~1.11.0",
     "moment": "~2.29.1",
     "morgan": "~1.9.1",
@@ -24,14 +28,11 @@
     "node-schedule": "^1.3.3",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.5.1",
+    "sequelize": "^6.6.0",
     "sequelize-cli": "^6.2.0",
     "socket.io": "~2.0.4",
-    "fetch": "~1.1.0",
-    "filereader": "~0.10.3",
-    "file-api": "~0.10.4",
-    "xmlhttprequest": "~1.8.0",
-    "winston": "~3.3.3",    
-    "winston-daily-rotate-file": "~3.3.3"
+    "winston": "~3.3.3",
+    "winston-daily-rotate-file": "~3.3.3",
+    "xmlhttprequest": "~1.8.0"
   }
 }

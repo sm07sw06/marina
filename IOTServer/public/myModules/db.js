@@ -7,7 +7,9 @@ var path   = require('path');
 var async  = require('async');
 var moment = require('moment');
 const config = require('config');
- 
+const imageToBase64 = require('image-to-base64');
+
+
 const { Pool } = require("pg");
 //const { Pool, clientdb } = require("pg");
 //const { sequelize } = require('../../database/models'); // db.sequelize
@@ -109,21 +111,23 @@ function boatdata(sData) {
 	logger.info("  ssend_time   :" + ssend_time   );
 	logger.info("----------------------------------");
 
-	if(nTemperature === "") { nTemperature = 0; }
-	if(nHumidity    === "") { nHumidity = 0; }
-	if(nGradex      === "") { nGradex = 0; }
-	if(nGradey      === "") { nGradey = 0; }
-	if(nGpsquality  === "") { nGpsquality = 0; }
-	if(nLatitude    === "") { nLatitude = 0; }
-	if(nLongitude   === "") { nLongitude = 0; }
-	if(nSatellite   === "") { nSatellite = 0; }
-	if(nGpsage      === "") { nGpsage = 0; }
-	if(sSenttype    === "") { sSenttype = 'R'; }
+	if(nTemperature == "") { nTemperature = 0; }
+	if(nHumidity    == "") { nHumidity    = 0; }
+	if(nTemperature == "nan") { nTemperature = 0; }
+	if(nHumidity    == "nan") { nHumidity    = 0; }
+	if(nGradex      == "") { nGradex      = 0; }
+	if(nGradey      == "") { nGradey      = 0; }
+	if(nGpsquality  == "") { nGpsquality  = 0; }
+	if(nLatitude    == "") { nLatitude    = 0; }
+	if(nLongitude   == "") { nLongitude   = 0; }
+	if(nSatellite   == "") { nSatellite   = 0; }
+	if(nGpsage      == "") { nGpsage      = 0; }
+	if(sSenttype    == "") { sSenttype    = 'R'; }
 	
 // 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, sent_type, send_time) \n ";
 	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
-	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "',"  + moment().format('YYYYMMDDHHmmss') + " );  \n";
+	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + moment().format('YYYYMMDDHHmmss') + "' );  \n";
 	logger.info("[INSERT INTO tb_boatdata]:"+sQueryString);
  
 	  try {
@@ -157,9 +161,9 @@ function anchordata(sData) {
 	var ssend_time    = sData[4];
 	var sStatus   = "";
 
-	if(nTemperature === "")  { nTemperature = 0; }
-	if(nHumidity    === "")  { nHumidity = 0; }
-	if(nDistance    === "")  { nDistance = 0; }
+	if(nTemperature == "")  { nTemperature = 0; }
+	if(nHumidity    == "")  { nHumidity = 0; }
+	if(nDistance    == "")  { nDistance = 0; }
 
 	logger.info("----------------------------------");
 	logger.info('Start anchordata insert........');
@@ -221,18 +225,18 @@ function lidardata(sData) {
 	var sShipRightYn 	= sData[17];
 	var sLongData  		= sData[18];
 
-    if(nAngleMin       === "")  { nAngleMin       = 0; }
-    if(nAngleMax       === "")  { nAngleMax       = 0; }
-    if(nLoadMin        === "")  { nLoadMin        = 0; }
-    if(nShipMax        === "")  { nShipMax        = 0; }
-    if(nLoadThreshold  === "")  { nLoadThreshold  = 0; }
-    if(nShipThreshold  === "")  { nShipThreshold  = 0; }
-    if(nTempo          === "")  { nTempo          = 0; }
-    if(nHuminity       === "")  { nHuminity        = 0; }
-    if(nLoadLeftCount  === "")  { nLoadLeftCount  = 0; }
-    if(nShipLeftCount  === "")  { nShipLeftCount  = 0; }
-    if(nLoadRightCount === "")  { nLoadRightCount = 0; }
-    if(nShipRightCount === "")  { nShipRightCount = 0; }
+    if(nAngleMin       == "")  { nAngleMin       = 0; }
+    if(nAngleMax       == "")  { nAngleMax       = 0; }
+    if(nLoadMin        == "")  { nLoadMin        = 0; }
+    if(nShipMax        == "")  { nShipMax        = 0; }
+    if(nLoadThreshold  == "")  { nLoadThreshold  = 0; }
+    if(nShipThreshold  == "")  { nShipThreshold  = 0; }
+    if(nTempo          == "")  { nTempo          = 0; }
+    if(nHuminity       == "")  { nHuminity        = 0; }
+    if(nLoadLeftCount  == "")  { nLoadLeftCount  = 0; }
+    if(nShipLeftCount  == "")  { nShipLeftCount  = 0; }
+    if(nLoadRightCount == "")  { nLoadRightCount = 0; }
+    if(nShipRightCount == "")  { nShipRightCount = 0; }
 
 	logger.info("----------------------------------");
 	logger.info('Start lidardata insert........');
@@ -312,6 +316,94 @@ DB.prototype.InsertDBAnchorData = function(message) {
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.InsertDBLidarData = function(message) {
 	lidardata(message);
+};
+
+
+// 등록된 만말기 인지 확인 
+DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
+
+	logger.info("----------------------------------");
+	logger.info('Start GetRegBoatMachindId........');
+	logger.info('  marinaId  : ' + mObject.marinaId);
+	logger.info('  machineId : ' + mObject.machineId);
+	logger.info("----------------------------------");
+
+	
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "SELECT /* GetRegBoatMachindId */ machine_id  \n";
+	    sQueryString += "  FROM tb_boat_device   \n";
+	    sQueryString += " WHERE marina_id = " + mObject.marinaId +  " AND machine_id = '" + mObject.machineId + "' " ;
+	
+	logger.info(sQueryString);
+
+	try {	
+		pool.connect(function (err, clientdb, done) {
+			if (err) throw new Error(err);
+			clientdb.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+					callback('ERROR');
+			    } else {
+					if( res.rowCount > 0 ) {
+						logger.info("등록된 보트단말기 있음.........!!");
+						callback('OK');
+					} else {
+						logger.info("등록된 보트단말기 없음........!!");
+						callback('ERROR');
+					}
+			    }
+				clientdb.release();
+			});
+		}); 
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+
+};
+
+
+//등록된 만말기 인지 확인 
+DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
+
+	logger.info("----------------------------------");
+	logger.info('Start GetRegAnchorMachindId........');
+	logger.info('  marinaId  : ' + mObject.marinaId);
+	logger.info('  machineId : ' + mObject.machineId);
+	logger.info("----------------------------------");
+
+	
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "SELECT /* GetRegAnchorMachindId */ machine_id  \n";
+	    sQueryString += "  FROM tb_anchor_lidar   \n";
+	    sQueryString += " WHERE marina_id = " + mObject.marinaId +  " AND machine_id = '" + mObject.machineId + "' " ;
+	
+	logger.info(sQueryString);
+
+	try {	
+		pool.connect(function (err, clientdb, done) {
+			if (err) throw new Error(err);
+			clientdb.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+					callback('ERROR');
+			    } else {
+					if( res.rowCount > 0 ) {
+						logger.info("등록된 정박지단말기 있음.........!!");
+						callback('OK');
+					} else {
+						logger.info("등록된 정박지단말기 없음........!!");
+						callback('ERROR');
+					}
+			    }
+				clientdb.release();
+			});
+		}); 
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+
 };
 
 
@@ -457,12 +549,69 @@ DB.prototype.SelectLastAnchor = function(mObject, callback) {
 	 
 };
 
-//기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
-DB.prototype.GetBoatDataSearch = function(mObject, callback) {
+//기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 GPS 영역 )
+DB.prototype.GetGPSBoatDataSearch = function(mObject, callback) {
 	var machine_id ;
 	
 	logger.info("----------------------------------");
-	logger.info('Start GetBoatDataSearch........');
+	logger.info('Start GetGPSBoatDataSearch........');
+	logger.info('  marinaId : ' + mObject.marinaId);
+	logger.info('  sendTime : ' + mObject.sendTime);
+	logger.info("----------------------------------");
+
+	try {		 
+			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+		var sQueryString = " SELECT /* GetGPSBoatDataSearch */ f.boat_id \n";
+		sQueryString += "   FROM tb_boatdata e,tb_boat_device f, tb_anchor_sector s  \n";
+		sQueryString += "  WHERE e.marina_id  = " + mObject.marinaId + " \n";
+		sQueryString += "    AND e.marina_id  = f.marina_id  \n";
+		sQueryString += "    AND e.machine_id = f.machine_id \n";
+		sQueryString += "    AND e.marina_id  = s.marina_id \n";
+		sQueryString += "    AND e.send_time between to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS') \n";
+		sQueryString += "    AND to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS') \n";
+		sQueryString += "    AND e.latitude BETWEEN s.gpsx1 AND s.gpsx2 AND e.longitude between s.gpsy1 AND s.gpsy2 \n";
+		sQueryString += "    AND s.sectorarea_cd = 'Z' \n";
+		    
+		logger.info("보트 찾기:" + sQueryString);
+
+			pool.connect(function (err, clientdb, done) {
+				if (err) throw new Error(err);
+				clientdb.query(sQueryString, function (err, res) {
+					if (err) {
+						logger.error("ERROR!!" + err);
+						callback('ERROR');
+				    } else {
+						for(var i = 0; i < res.rowCount ; i ++) {
+							mObject.boatId    = res.rows[i].boat_id;
+							logger.info("  boat_id   :" +res.rows[i].boat_id);   
+						}
+						if( res.rowCount > 0 && !isEmpty(res.rows[0].boat_id)) {
+							logger.error("기준 시간 GPS 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_id);
+							callback("OK", mObject);
+						} else {
+							logger.error("기준 시간 GPS 범위내에 단말기 수신 정보가 없습니다.");
+							callback("ERROR", mObject);
+						}
+				    }
+					clientdb.release();
+				});
+			}); 
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+			
+ 
+};
+
+
+
+//기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+DB.prototype.GetAnchorBoatDataSearch = function(mObject, callback) {
+	var machine_id ;
+	
+	logger.info("----------------------------------");
+	logger.info('Start GetAnchorBoatDataSearch........');
 	logger.info('  marinaId : ' + mObject.marinaId);
 	logger.info('  machineId: ' + mObject.machineId);
 	logger.info('  sendTime : ' + mObject.sendTime);
@@ -471,7 +620,7 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-		var sQueryString  = "SELECT /* GetBoatDataSearch */ AA.machine_id, AA.anchor_id, BB.boat_id \n";
+		var sQueryString  = "SELECT /* GetAnchorBoatDataSearch */ AA.machine_id, AA.anchor_id, BB.boat_id \n";
 		sQueryString += "  FROM  (  \n";
 		sQueryString += "        SELECT b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  \n";
 		sQueryString += "          FROM tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d  \n";
@@ -527,7 +676,7 @@ DB.prototype.GetBoatDataSearch = function(mObject, callback) {
 		callback('ERROR');
 	}
 			
- 
+
 };
 
 
@@ -679,6 +828,63 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 };
 
 
+
+//기준 시간 범위내 단말기 수신 정보 찾기
+DB.prototype.SetUnregBoatIn = function(mObject, callback) {
+	
+	var machine_id ;
+	
+	logger.info("----------------------------------");
+	logger.info('Start SetUnregBoatIn........');
+	logger.info('   marinaId : ' + mObject.marinaId);
+	logger.info('   sendTime : ' + mObject.sendTime);
+	logger.info('   boatInout : ' + mObject.boatInout);
+	logger.info('   cctv_cd : ' + mObject.cctv_cd);
+ 	logger.info('   photo_base64 : ' + mObject.photo_base64);
+	logger.info("----------------------------------");
+
+	var sQueryString = "";
+
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+
+    try {
+
+    	imageToBase64(mObject.photo_base64) // Path to the image
+		    .then(
+		        (response) => {
+		        	sQueryString = "INSERT INTO tb_unreg_boatdata(marina_id, boatinout,send_time,photo_base64) \n";
+		        	sQueryString += " values(" + mObject.marinaId+ ",'" + mObject.boatInout + "','"  + mObject.sendTime + "','"  + response + "' )  \n" ;
+		        	logger.info(sQueryString);
+
+		    		pool.connect(function (err, clientdb, done) {
+		    			if (err) throw new Error(err);
+		    			clientdb.query(sQueryString, function (err, res) {
+		    				if (err) {
+		    					logger.error("ERROR!!" + err);
+		    					callback('ERROR');
+		    			    } else {
+		    			    	logger.info("tb_unreg_boatdata Insert OK:");
+		    			    }
+		    				clientdb.release();
+		    			});
+		    		}); 
+		        }
+		    )
+		    .catch(
+		        (error) => {
+		            console.log(error); // Logs an error if there was one
+		        }
+		    )	      
+
+    } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+
+	
+};
+
+
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.SetDashBoard = function (mObject, callback) {
 	
@@ -692,7 +898,7 @@ DB.prototype.SetDashBoard = function (mObject, callback) {
 	logger.info('  latitude : ' + mObject.latitude);
 	logger.info('  longitude: ' + mObject.longitude);
 	logger.info('  cctv_cd  :[' + mObject.cctv_cd + "]");
-	logger.info('  photo_base64: ' + mObject.photo_base64);
+	//logger.info('  photo_base64: ' + mObject.photo_base64);
 	logger.info('  sendTime  :' + mObject.sendTime);
 	logger.info('  boatInout :' + mObject.boatInout);
 	logger.info("----------------------------------");
@@ -790,14 +996,14 @@ DB.prototype.CCtvReceive = function (mObject, callback) {
 	logger.info('  marinaId 	: ' + mObject.marinaId );
 	logger.info('  sendTime 	: ' + mObject.sendTime );
 	logger.info('  cctv_cd  	: ' + mObject.cctv_cd  );
-	logger.info('  boatinout	: ' + mObject.boatinout);
-	logger.info('  photo_base64	: ' + mObject.photo_base64);
+	logger.info('  boatinout	: ' + mObject.boatInout);
+	//logger.info('  photo_base64	: ' + mObject.photo_base64);
 	logger.info("----------------------------------");
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "INSERT INTO /* CCtvReceive */ public.tb_cctvdata(marina_id, send_time, cctv_cd,photo_base64, boatinout)  \n";
 		sQueryString += " values("  + mObject.marinaId + ",'" + mObject.sendTime + "','"  + mObject.cctv_cd + "' \n" ;
-		sQueryString += "       ,'"  + mObject.photo_base64 + "','"  + mObject.boatinout + "' )  \n" ;    
+		sQueryString += "       ,'"  + mObject.photo_base64 + "','"  + mObject.boatInout + "' )  \n" ;    
     logger.info(sQueryString);
 
   try {

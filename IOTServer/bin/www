@@ -84,6 +84,7 @@ module.exports = db;
 //var port = normalizePort(process.env.PORT || '3100');
 var port = config.get('development.appport');
 app.set('port', port);
+logger.info('port : ' + port);
 /**
  * Create HTTP server.
  */
@@ -111,7 +112,9 @@ var dbJob = new DB(); // 모듈에 전달인자 할당
 
 client.on("message", function(topic, message) {
 	
+	logger.info("************************************************");
 	logger.info('MQTT [On Message]');
+	logger.info("************************************************");
 		
 	try {
 	
@@ -122,26 +125,27 @@ client.on("message", function(topic, message) {
 			if (obj.hasOwnProperty(sKey)) {
 				
 				var sData = obj[sKey].split(",");
-				
-				if(sKey === "boatData") {
-					dbJob.InsertDBBoatData(sData);    // LDH
-					// 보트 단말기에서 보내온 신호 분석
-					var BoatCheck = require('../public/myModules/boatCheck');
-					var boatCheck = new BoatCheck(sData); 
-					boatCheck.getBoatCheck();
-				} else if(sKey === "anchorData") {
-					dbJob.InsertDBAnchorData(sData);  
-					// 정박지 단말기에서 보내온 신호 분석 ( // LDH 미사용 )
-					var AnchorCheck = require('../public/myModules/anchorCheck');
-					var anchorCheck = new AnchorCheck(sData); 
-					anchorCheck.getAnchorCheck();				
-				} else if(sKey === "lidarData") {
-					dbJob.InsertDBLidarData(sData);  
-					// 정박지 단말기에서 보내온 신호 분석
-					var LidarCheck = require('../public/myModules/lidarCheck');
-					var lidarCheck = new LidarCheck(sData); 
-					lidarCheck.getLidarCheck();				
-				} // 보트 데이터가 아닌면 Skip
+
+				logger.info("Queue Message:" + sData);
+
+				if( 1 == 1) {  // LDH
+					if(sKey === "boatData" && 1 == 1) {
+						// 보트 단말기에서 보내온 신호 분석
+						var BoatCheck = require('../public/myModules/boatCheck');
+						var boatCheck = new BoatCheck(sData); 
+						boatCheck.getBoatCheck();
+					} else if(sKey === "anchorData" && 1 == 1) {
+						// 정박지 단말기에서 보내온 신호 분석 ( // LDH 미사용 )
+						var AnchorCheck = require('../public/myModules/anchorCheck');
+						var anchorCheck = new AnchorCheck(sData); 
+						anchorCheck.getAnchorCheck();				
+					} else if(sKey === "lidarData" && 1 == 1) {
+						// 정박지 단말기에서 보내온 신호 분석
+						var LidarCheck = require('../public/myModules/lidarCheck');
+						var lidarCheck = new LidarCheck(sData); 
+						lidarCheck.getLidarCheck();				
+					} // 보트 데이터가 아닌면 Skip
+				}
 			}    
 		}
 	} catch (err) {

@@ -67,18 +67,20 @@ AnchorCheck.prototype.getAnchorCheck = function() {
 	mObject2.boatId = "";
 	mObject2.anchorId = "";
 	
+	db.InsertDBAnchorData(sData);  
+	
 	if (nDistance  < 100 ) { //거리가 100mm 이하이면 정박 상태
 		logger.info("boat is anchored !!");
 	    mObject.id   = sId;
 	    mObject.time = sStime;		
 	    mObject.leftRight = 0;		
 
-	    db.GetBoatDataSearch(mObject, function(mObject2){ 
+	    db.GetAnchorBoatDataSearch(mObject, function(mObject2){ 
 			
 			if(mObject.boatId) {
-				logger.info("GetBoatDataSearch machineId:" + mObject2.machineId);
-				logger.info("GetBoatDataSearch boatId   :" + mObject2.boatId);
-				logger.info("GetBoatDataSearch anchorId :" + mObject2.anchorId);
+				logger.info("GetAnchorBoatDataSearch machineId:" + mObject2.machineId);
+				logger.info("GetAnchorBoatDataSearch boatId   :" + mObject2.boatId);
+				logger.info("GetAnchorBoatDataSearch anchorId :" + mObject2.anchorId);
 				// 보트 정박 처리
 				db.SetBoatAnchor(mObject2, function(rtn){ 
 					logger.info("SetBoatAnchor result:" + rtn);

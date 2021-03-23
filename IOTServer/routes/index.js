@@ -5,31 +5,9 @@ var multer  = require('multer');
 
 var app = express();
 
-var dir = './uploadedFiles';
-if (!fs.existsSync(dir)) {
-	fs.mkdirSync(dir); 
-}
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	res.render('index', { title: 'Express' });
-});
-
- 
-var storage  = multer.diskStorage({  
-	destination(req, file, cb) {
-		cb(null, 'uploadedFiles/');
-	},
-	filename(req, file, cb) {
-		cb(null, `${Date.now()}__${file.originalname}`);
-	},
-});
-var upload = multer({ storage: storage }); 
-	
-router.post('/uploadFile', upload.single('attachment'), function(req,res){
-	console.log("index1:"+req.file.originalname)
-	console.log("index2:"+req.cameraId)
-	res.render('confirmation', { file:req.file.originalname, files:null });
 });
 
 module.exports = router;
