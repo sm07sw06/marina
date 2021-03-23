@@ -1,2 +1,3 @@
 /.metadata/
 IOTServer/logs/*.*
+IOTServer/package.json
