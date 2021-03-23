@@ -14,7 +14,6 @@ const { Pool } = require("pg");
 //const { Pool, clientdb } = require("pg");
 //const { sequelize } = require('../../database/models'); // db.sequelize
 
- 
 const pool = new Pool({
 	user: config.get('development.username'),
 	host: config.get('development.host'),
@@ -319,7 +318,62 @@ DB.prototype.InsertDBLidarData = function(message) {
 };
 
 
-// 등록된 만말기 인지 확인 
+function ConfigObject()
+{ 
+	var weather_url; 
+	var weather_point; 
+}
+var configMy  = new ConfigObject(); //메세지 구조체
+
+
+// 환경변수값 추출
+DB.prototype.GetConfig = function (configMy, callback) {
+
+	logger.info("----------------------------------");
+	logger.info('Start GetConfig........');
+	logger.info("----------------------------------");
+
+	
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "SELECT /* GetConfig */ c.weather_url, m.weather_point\n";
+	    sQueryString += "  FROM tb_marina m, tb_config c   \n";
+	    sQueryString += " WHERE m.marina_id = c.curr_marina" ;
+	
+	logger.info(sQueryString);
+
+	try {	
+		pool.connect(function (err, clientdb, done) {
+			if (err) throw new Error(err);
+			clientdb.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+					callback('ERROR');
+			    } else {
+					if( res.rowCount > 0 ) {
+						for(var i = 0; i < res.rowCount ; i ++) {
+							configMy.weather_url   = res.rows[i].weather_url;
+							configMy.weather_point = res.rows[i].weather_point;
+							logger.info("data : " + res.rows[i].weather_url);
+							logger.info("data : " + res.rows[i].weather_point);
+						}						
+						callback("OK", configMy);
+					} else {
+						callback("ERROR", null);
+					}
+			    }
+				clientdb.release();
+			});
+		}); 
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+
+};
+
+
+
+//등록된 만말기 인지 확인 
 DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 
 	logger.info("----------------------------------");
@@ -361,6 +415,7 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 	}
 
 };
+
 
 
 //등록된 만말기 인지 확인 

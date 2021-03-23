@@ -10,30 +10,19 @@ var http = require('http');
 const logger = require('../config/winston')  //LDH 
 const config = require('config');
 const callingModule = require('caller-module');
+const schedule = require('node-schedule');
+const request = require('request');
 
 //const Sequelize = require('sequelize');
 //const env = process.env.NODE_ENV || 'development';
 //const config = require('../database/config/config')[env];
-const db = {};
+//const db = {}; //LDH
 
 /* 공통 환경 변수 설정 */
 global.grade = 0;  //기울기 
 
 process.on('warning', e => console.warn(e.stack));
 
-/***
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
-
-db.sequelize = sequelize;
-
-sequelize.sync({ force: false })
-.then(() => {
-    console.log('데이터베이스 연결됨.');
-}).catch((err) => {
-    console.log('데이터베이스 연결안됨.');
-    console.error(err);
-});
-***/
 const { Pool } = require("pg");
 
 const pool = new Pool({
@@ -107,8 +96,8 @@ client.on("error", function(topic, message){
 	
 var DB = require('../public/myModules/db');
 // message를 DB에 반영하도록 modules 호출
-var dbJob = new DB(); // 모듈에 전달인자 할당 
-//dbJob.SetDB(message);
+//var dbJob = new DB(); // 모듈에 전달인자 할당 
+var db = new DB();
 
 client.on("message", function(topic, message) {
 	
@@ -162,6 +151,45 @@ client.on("message", function(topic, message) {
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+
+
+//Recurrence Rule Scheduling
+//Sun ~ Sat 0 ~ 6
+//월 ~ 일 17시 45분 실행
+/**
+const rule = new schedule.RecurrenceRule();
+rule.dayOfWeek = [0, new schedule.Range(0, 6)];
+rule.hour = [11,12,13,14,1,16,17,18];
+rule.minute = [10,20,30,40,59];
+const k = schedule.scheduleJob(rule, () => {
+	console.log('Recurrence Rule Scheduling');
+})
+**/
+
+function ConfigObject()
+{ 
+	var weather_url; 
+	var weather_point; 
+}
+var configMy  = new ConfigObject(); //메세지 구조체
+
+const job = schedule.scheduleJob('0 */1 * * * *', function(){
+	
+	db.GetConfig(configMy, function(rtn, configMy){  // 1:제부마리나
+		if(rtn =="OK") {
+	    	// 지상  var url = "http://apis.data.go.kr/1360000/VilageFcstMsgService/getLandFcst?serviceKey=acreHrPLywz9jI5R2j00%2FwjvB21qdqFqgo%2Flq1TDn4urwyPBOEnepvoS8rcDtuI0UGGJ4ukQsC4hJn%2BHbQfXeQ%3D%3D&numOfRows=10&pageNo=1&dataType=JSON&regId=11B20604";
+	    	// 해양
+			var url = configMy.weather_url + configMy.weather_point;
+			request(url,function(error, response, body){
+				if(!error&&response.statusCode==200)
+					console.log(body);
+			});
+		}
+    }); 	
+	
+});
+
 
 /**
  * Normalize a port into a number, string, or false.
