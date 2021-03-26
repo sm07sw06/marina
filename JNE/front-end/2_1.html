@@ -1,0 +1,498 @@
+<!DOCTYPE HTML>
+<html lang='ko'>
+
+<head>
+	<title>Marina</title>
+	<meta charset='utf-8'>
+	<meta name='Viewport'
+		content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0'>
+	<meta name='Title' content=''>
+	<meta name='Subject' content=''>
+	<meta name='format-detection' content='telephone=no'>
+	<meta name='Publisher' content=''>
+	<meta name='Keywords' content=''>
+	<meta name='Description' content=''>
+	<meta name='Author' content=''>
+	<meta name='Author-Date' content=''>
+	<meta name='Copyright' content=''>
+	<meta name='Robots' content=''>
+
+	<!-- 파비콘 -->
+	<link rel='shortcut icon' href='./img/'>
+	<link rel='apple-touch-icon' href='./img/'>
+
+	<!-- 스타일 -->
+	<link rel='stylesheet' href='./css/reset.css' type='text/css'>
+	<link rel='stylesheet' href='./css/fonts.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style2_1.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style_header.css' type='text/css'>
+
+	<!-- js라이브러리 -->
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+	<script src='./js/lib/jquery.easing.1.3.js'></script>
+	<script src='./js/lib/jquery.touchSwipe.js'></script>
+
+	<!-- 아이콘 폰트어썸 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- <script src='https://kit.fontawesome.com/a076d05399.js'></script> -->
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+
+	<!-- 각 브라우저 CSS호환 -->
+	<!-- <script src='./js/lib/prefixfree.min.js'></script> -->
+
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<script src="../back-end/htmlJS/html2_1.js"></script>
+
+	<script language="JavaScript">
+
+		// 공통 header
+		$(document).ready(function () {
+			$("#header").load("header.html")
+		});
+
+		// selectBox
+		$(document).ready(function () {
+			var selectTarget = $('.selectbox select');
+
+			selectTarget.on('blur', function () {
+				$(this).parent().removeClass('focus');
+			});
+
+			selectTarget.change(function () {
+				var select_name = $(this).children('option:selected').text();
+
+				$(this).siblings('label').text(select_name);
+			});
+		});
+
+
+	</script>
+
+
+</head>
+
+<body>
+	<div id='wrap' class='clearfix'>
+
+		<header id='header'></header>
+
+		<main id='main'>
+			<div class='gap'>
+				<div class='container'>
+
+					<div class='title'>
+						<h2>계류지 관리</h2>
+					</div>
+
+					<input id="tab1" type="radio" name="tabs" checked>
+					<label class='tabs' for="tab1">계류지 구역관리</label>
+					<input id="tab2" type="radio" name="tabs">
+					<label class='tabs' for="tab2">계류지 정보관리</label>
+
+					<span class='sub2Menu_line'></span>
+
+					<section id='section1' class='clearfix'>
+						<div class='search_wrap'>
+							<input type='text' name='t_search1' id='t_search1' placeholder='구역ID나 구역명을 입력하세요.'>
+						</div>
+
+						<div class='button_wrap'>
+							<ul class='clearfix'>
+								<li>
+									<div>
+										<input type='submit' id='delete1' class='delete' onclick="delete_button1();"
+											value='삭제'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='save1' class='save' onclick="save_button1();"
+											value='저장'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='new1' class='new' onclick="new_button1();" value='신규'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='search1' class='search' onclick="search_button1();"
+											value='조회'>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						<div class='anchorSector_board board_wrap'>
+							<ul>
+								<li class='clearfix'>
+									<span>구역명</span>
+									<span>구역영역</span>
+									<span>좌표(좌/상)</span>
+									<span>좌표(좌/하)</span>
+									<span>좌표(우/상)</span>
+									<span>좌표(우/하)</span>
+								</li>
+								<li>
+									<ul id="anchorSector_log"></ul>
+								</li>
+							</ul>
+						</div>
+
+						<div class='anchorSectorInfor_wrap clearfix'>
+							<ul class='anchorSector_wrap clearfix'>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorSector_title'>
+											<h2>구역ID</h2>
+										</div>
+										<div class='anchorSector_input'>
+											<input type='text' name='sector_id' id='sector_id' readonly>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorSector_title'>
+											<h2>구역명</h2>
+										</div>
+										<div class='anchorSector_input'>
+											<input type='text' name='sector_nm' id='sector_nm'
+												placeholder='구역 이름을 입력하세요.'>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorSector_title'>
+											<h2>구역영역</h2>
+										</div>
+										<div class="selectbox" id='sectorarea_cd'>
+											<label for="sectorarea_cd">선택</label>
+											<select id="sectorarea_cd" value='sectorarea_cd'>
+												<option class='hidden' selected>선택</option>
+												<option>A구역</option>
+												<option>B구역</option>
+												<option>C구역</option>
+												<option>출입구</option>
+											</select>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorSector_title'>
+											<h2><br></h2>
+										</div>
+										<div class='anchorSector_input'>
+
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorSector_title'>
+											<h2>설명</h2>
+										</div>
+										<div class='anchorSector_input'>
+											<textarea name='sector_desc' id='sector_desc'></textarea>
+										</div>
+									</div>
+								</li>
+							</ul>
+
+							<ul class='location_wrap clearfix'>
+								<li>
+									<div class='clearfix'>
+										<div class='location_title'>
+											<h2>좌표(좌/상)</h2>
+										</div>
+										<div class='location_input'>
+											<input type='text' name='gpsx1' id='gpsx1' placeholder='좌표(좌/상)를 입력하세요.'>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='location_title'>
+											<h2>좌표(우/상)</h2>
+										</div>
+										<div class='location_input'>
+											<input type='text' name='gpsx2' id='gpsx2' placeholder='좌표(우/상)를 입력하세요.'>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='location_title'>
+											<h2>좌표(좌/하)</h2>
+										</div>
+										<div class='location_input'>
+											<input type='text' name='gpsy1' id='gpsy1' placeholder='좌표(좌/하)를 입력하세요.'>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='location_title'>
+											<h2>좌표(우/하)</h2>
+										</div>
+										<div class='location_input'>
+											<input type='text' name='gpsy2' id='gpsy2' placeholder='좌표(우/하)를 입력하세요.'>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section id='section2' class='clearfix'>
+						<div class='search_wrap'>
+							<input type='text' name='t_search2' id='t_search2' placeholder='계류지ID나 계류지명을 입력하세요.'>
+						</div>
+
+						<div class='button_wrap'>
+							<ul class='clearfix'>
+								<li>
+									<div>
+										<input type='submit' id='delete2' class='delete' onclick="delete_button2();"
+											value='삭제'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='save2' class='save' onclick="save_button2();"
+											value='저장'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='new2' class='new' onclick="new_button2();" value='신규'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='search2' class='search' onclick="search_button2();"
+											value='조회'>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						<div class='anchorInfo_board board_wrap'>
+							<ul>
+								<li class='clearfix'>
+									<span>계류지 ID</span>
+									<span>계류지명</span>
+									<span>구역영역</span>
+									<span>구역명</span>
+									<span>정박상태</span>
+									<span>보트명</span>
+								</li>
+								<li>
+									<ul id="anchorInfo_log"></ul>
+								</li>
+							</ul>
+						</div>
+
+						<div class='anchorInfoInfor_wrap'>
+							<ul class='anchorInfo_wrap clearfix'>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorInfo_title'>
+											<h2>계류지 ID</h2>
+										</div>
+										<div class='anchorInfo_input'>
+											<input type='text' name='anchor_id' id='anchor_id2' readonly>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorInfo_title'>
+											<h2>계류지명</h2>
+										</div>
+										<div class='anchorInfo_input'>
+											<input type='text' name='anchor_nm' id='anchor_nm2'
+												placeholder='계류지 이름을 입력하세요.'>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorInfo_title'>
+											<h2>구역명</h2>
+										</div>
+										<div class='anchorInfo_input modal_stand'>
+											<input type='text' name='sector_id' class='sector_nm2' id='sector_nm2'
+												placeholder='구역명을 선택하세요.' readonly>
+											<div class='modal_icon'><img class='sector_modalOpenBtn'
+													src='./img/modal_icon.png' alt=''></div>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorInfo_title'>
+											<h2><br></h2>
+										</div>
+										<div class='anchorInfo_input'>
+
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorInfo_title'>
+											<h2>보트명</h2>
+										</div>
+										<div class='anchorInfo_input modal_stand'>
+											<input type='text' name='boat_id' class='boat_id2' id='boat_nm2' placeholder='보트명을 선택하세요.'
+												readonly>
+											<div class='modal_icon'><img class='boat_modalOpenBtn'
+													src='./img/modal_icon.png' alt=''></div>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='anchorInfo_title'>
+											<h2>정박상태</h2>
+										</div>
+										<div class="selectbox" id='anchor_status_nm2'>
+											<label for="anchor_status_nm2">선택</label>
+											<select id="anchor_status_nm2" value='anchor_status_nm2'>
+												<option class='hidden' selected>선택</option>
+												<option>정박</option>
+												<option>비정박</option>
+											</select>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</section>
+
+				</div>
+			</div>
+		</main>
+
+		<div id='modal_sector' class='modal'>
+			<div class='modal_wrap'>
+				<div class='modal_gap'>
+					<div class='modal_container'>
+
+						<div class='modal_header'>
+							<h2>구역선택</h2>
+							<span class='modal-closeBtn-wrap'>
+								<a href='javascript:' class='modalCloseBtn'><i class='blind'>modalCloseBtn</i></a>
+							</span>
+						</div>
+
+						<div class='modal_main'>
+							<div class='modalSearch_wrap'>
+								<input type='text' name='' id='' class='modal_search' placeholder='구역명을 입력하세요.'>
+							</div>
+
+							<div class='modalSearchButton_wrap'>
+								<input type='submit' id='' class='' value='조회' onclick="area_search_button();">
+							</div>
+
+							<div class='modal_board'>
+								<ul>
+									<li class='clearfix'>
+										<span>선택</span>
+										<span>구역 ID</span>
+										<span>구역명</span>
+										<span>구역영역</span>
+									</li>
+									<li>
+										<ul id="sector_board"></ul>
+									</li>
+								</ul>
+							</div>
+
+							<div class='modalApplyButton_wrap'>
+								<input type='submit' id='' class='applyBtn' value='적용' onclick="area_OK_button();">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id='modal_boat' class='modal'>
+			<div class='modal_wrap'>
+				<div class='modal_gap'>
+					<div class='modal_container'>
+
+						<div class='modal_header'>
+							<h2>보트선택</h2>
+							<span class='modal-closeBtn-wrap'>
+								<a href='javascript:' class='modalCloseBtn'><i class='blind'>modalCloseBtn</i></a>
+							</span>
+						</div>
+
+						<div class='modal_main'>
+							<div class='modalSearch_wrap'>
+								<input type='text' name='' id='' class='modal_search' placeholder='보트명을 입력하세요.'>
+							</div>
+
+							<div class='modalSearchButton_wrap'>
+								<input type='submit' id='' class='' value='조회' onclick='boat_search_button()'>
+							</div>
+
+							<div class='modal_board'>
+								<ul>
+									<li class='clearfix'>
+										<span>선택</span>
+										<span>보트 ID</span>
+										<span>보트명</span>
+										<span>소유회원명</span>
+									</li>
+									<li>
+										<ul id="boat_board">
+											<!-- <li class='clearfix'>
+												<span><input type='checkbox' name='area_cbox' value='0'
+														onclick='NoMultiChk(this)' /></span>
+												<span>보트</span>
+												<span>보트명</span>
+												<span>소유회원</span>
+											</li>
+											<li class='clearfix'>
+												<span><input type='checkbox' name='area_cbox' value='1'
+														onclick='NoMultiChk(this)' /></span>
+												<span>보트</span>
+												<span>보트명</span>
+												<span>소유회원</span>
+											</li>
+											<li class='clearfix'>
+												<span><input type='checkbox' name='area_cbox' value='2'
+														onclick='NoMultiChk(this)' /></span>
+												<span>보트</span>
+												<span>보트명</span>
+												<span>소유회원</span>
+											</li> -->
+										</ul>
+									</li>
+								</ul>
+							</div>
+
+							<div class='modalApplyButton_wrap'>
+								<input type='submit' id='' class='applyBtn' value='적용' onclick='boat_OK_button()'>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src='./js/marina.js'></script>
+	</div>
+</body>
+
+</html>

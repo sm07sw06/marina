@@ -1,0 +1,1553 @@
+<!DOCTYPE HTML>
+<html lang='ko'>
+
+<head>
+	<title>Marina</title>
+	<meta charset='utf-8'>
+	<meta name='Viewport'
+		content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0'>
+	<meta name='Title' content=''>
+	<meta name='Subject' content=''>
+	<meta name='format-detection' content='telephone=no'>
+	<meta name='Publisher' content=''>
+	<meta name='Keywords' content=''>
+	<meta name='Description' content=''>
+	<meta name='Author' content=''>
+	<meta name='Author-Date' content=''>
+	<meta name='Copyright' content=''>
+	<meta name='Robots' content=''>
+
+	<!-- 파비콘 -->
+	<link rel='shortcut icon' href='./img/'>
+	<link rel='apple-touch-icon' href='./img/'>
+
+	<!-- 스타일 -->
+	<link rel='stylesheet' href='./css/reset.css' type='text/css'>
+	<link rel='stylesheet' href='./css/fonts.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style4_1.css' type='text/css'>
+
+	<!-- js라이브러리 -->
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+	<script src='./js/lib/jquery.easing.1.3.js'></script>
+	<script src='./js/lib/jquery.touchSwipe.js'></script>
+
+	<!-- 아이콘 폰트어썸 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+
+	<!-- 각 브라우저 CSS호환 -->
+	<!-- <script src='./js/lib/prefixfree.min.js'></script> -->
+
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<script src="../back-end/htmlJS/html4_1.js"></script>
+
+
+	<script language="JavaScript">
+
+const socket2 = io();
+
+socket2.emit('4_1_'+'updateData')
+
+//위험 보트
+socket2.on('4_1_' + 'inOut_boat', function (data) {
+
+	document.querySelector('.cctvSlide0').style.cssText  = 'background:url('+ data.photo_base64 +') no-repeat 50% 50%;';
+
+})
+
+		// const socket = io();
+		// const PAGE_NAME1 = '4_1_';
+
+		// $('#marina_log').empty();
+
+		// //관할마리나항만
+		// socket.on(PAGE_NAME1 + 'marina', function (data) {
+		// 	$('#marina_log').append($("<li>").append($("<a href='javascript:void(0)'>").text(data.marina_nm)));
+		// })
+
+		// //위험 보트
+		// socket.on(PAGE_NAME1 + 'warning_boat', function (data) {
+		// 	console.log(data)
+		// 	var latitude=Number(data.latitude).toFixed(2)
+		// 	var longitude=Number(data.longitude).toFixed(2)
+		// 	var lat_long='<br>'+latitude+' / '+longitude
+
+		// 	$('#warning_boat h3').append(lat_long);
+		// 	$('#warning_boat').append($("<span>").text(data.boat_nm));
+		// })
+
+
+		// //위험 보트
+		// socket.on(PAGE_NAME1 + 'inOut_boat', function (data) {
+		// 	// console.log(data)
+		// 	$('#inOut_boat').append($("<span>").text(data.boat_nm));
+		// })
+
+
+	</script>
+
+</head>
+
+<body>
+	<div id='wrap' class='clearfix'>
+
+		<header id='header'>
+			<div class='gap'>
+				<div class='container clearfix'>
+
+					<div class='logo_wrap'>
+						<a href='#' title='logo'><img src='./img/a1cklogo.png' alt='JNEsystech'></a>
+					</div>
+
+					<div class='title_wrap'>
+						<h1>스마트 마리나 항만 불법계류 통합안전관리 시스템</h1>
+					</div>
+
+					<div class='other_wrap clearfix'>
+						<div class='time_wrap'>
+							<div>
+								<h2 id="time" class='style'>00:00</h2>
+								<h3 id="date" class='style'>00:00</h3>
+							</div>
+						</div>
+						<div class='home'>
+							<a href='./1_1.html' title='home'><img src='./img/home.png' alt=''></a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</header>
+
+
+		<main id='main'>
+			<section id='section'>
+				<div class='gap'>
+					<div class='container'>
+
+						<div class='left_wrap'>
+							<div class='Harbor_wrap'>
+								<div>
+									<div class='title'>
+										<h2>관할마리나항만</h2>
+									</div>
+									<ul id="marina_log">
+										<!-- <li><a href='javascript:void(0)'>제부 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li>
+										<li><a href='javascript:void(0)'>전곡 마리나</a></li> -->
+									</ul>
+								</div>
+							</div>
+
+							<div class='weather_wrap'>
+								<div>
+									<div class='title'>
+										<h2>날씨</h2>
+									</div>
+									<ul>
+										<li>
+											<div>
+												<img src='./img/celsius.png' alt=''>
+												<h3>00</h3>
+											</div>
+										</li>
+										<li>
+											<div>
+												<img src='./img/humidity.png' alt=''>
+												<h3>00</h3>
+											</div>
+										</li>
+										<li>
+											<div>
+												<img src='./img/windy.png' alt=''>
+												<h3>00</h3>
+											</div>
+										</li>
+										<li>
+											<div>
+												<img src='./img/rain.png' alt=''>
+												<h3>00</h3>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<div class='danger_wrap'>
+								<span class='danger'></span>
+							</div>
+						</div>
+
+						<div class='center_wrap'>
+							<div class='gap'>
+								<div class='container'>
+									<div class='anchor_sector'>
+										<img src='./img/marina2.png' alt=''>
+										<ul class='clearfix sectorA_left'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+										
+										<ul class='clearfix sectorA_right'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorB_left'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorB_right'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorC_left'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorC_right'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorD_left'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorD_right'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 07</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 08</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 09</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 10</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+										<ul class='clearfix sectorE'>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 01</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state redstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 02</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state greenstate'>
+															<div class='boatSate'>
+																<span>보트 ID : 03</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 04</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div>
+													<div class='col col1'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 05</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+													<div class='col col2'>
+														<div class='state'>
+															<div class='boatSate'>
+																<span>보트 ID : 06</span>
+																<span>보트명 : ?????</span>
+																<span>선주명 : ?????</span>
+																<span>연락처 : ?????</span>
+																<span>정박구분 : ?????</span>
+																<span>정박기간 : ?????</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div>
+
+									<div class='boat_info clearfix'>
+										<div class='left_info' id="warning_boat">
+											<!-- <h2>재난요청</h2>
+											<h3>경도 / 위도</h3> -->
+											<!-- <span>A-1 금강산 요트</span> -->
+										</div>
+										<div class='right_info' >
+											<h2>입 / 출항 요트</h2>
+											<span id="inOut_boat"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class='right_wrap'>
+							<div class='boat_state'>
+								<div class='title'>
+									<h2>전체 현황</h2>
+								</div>
+								<ul>
+									<li>
+										<div>
+											<h3>전체 : </h3>
+											<h4>0</h4>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3>정박 : </h3>
+											<h4 id='total'>0</h4>
+										</div>
+									</li>
+								</ul>
+
+								<div class='title'>
+									<h2>구역별</h2>
+								</div>
+								<ul id='area'>
+									<li>
+										<div>
+											<h3>A 구역 : </h3>
+											<h4 id='areaA'>0</h4>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3>B 구역 : </h3>
+											<h4 id='areaB'>0</h4>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3>C 구역 : </h3>
+											<h4 id='areaC'>0</h4>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3>D 구역 : </h3>
+											<h4 id='areaD'>0</h4>
+										</div>
+									</li>
+
+
+									<li>
+										<div>
+											<h3>출입구 : </h3>
+											<h4 id='areaEND'>0</h4>
+										</div>
+									</li>
+								</ul>
+							</div>
+
+							<div class='boat_cctv'>
+								<div class='cctvSlide_container'>
+									<div class='cctvSlide_view'>
+										<ul class='cctvSlide_wrap clearfix'>
+											<li id='cctvImage' class='cctvSlide cctvSlide2'></li>
+											<li class='cctvSlide cctvSlide0'></li>
+											<li class='cctvSlide cctvSlide1'></li>
+											<li class='cctvSlide cctvSlide2'></li>
+											<li class='cctvSlide cctvSlide0'></li>
+										</ul>
+									</div>
+
+									<span class='preBtn_wrap'>
+										<a href='javascript:' class='preBtn' title='Preview Button'>
+											<img src='./img/prevBtn.png' alt=''>
+										</a>
+									</span>
+
+									<span class='nextBtn_wrap'>
+										<a href='javascript:' class='nextBtn' title='Next Button'>
+											<img src='./img/nextBtn.png' alt='' id='image'>
+										</a>
+									</span>
+
+									
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<script src="./js/marina.js"></script>
+
+	</div>
+</body>
+
+</html>

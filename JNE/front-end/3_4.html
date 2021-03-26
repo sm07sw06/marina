@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html lang='ko'>
+<head>
+	<title>Marina</title>
+	<meta charset='utf-8'>
+	<meta name='Viewport'    content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0'>
+	<meta name='Title'       content=''>
+	<meta name='Subject'     content=''>
+	<meta name='format-detection' content='telephone=no'>	
+	<meta name='Publisher'   content=''>
+	<meta name='Keywords'    content=''>
+	<meta name='Description' content=''>
+	<meta name='Author'      content=''>
+	<meta name='Author-Date' content=''>
+	<meta name='Copyright'   content=''>
+	<meta name='Robots'      content=''>
+
+	<!-- 파비콘 -->	
+	<link rel='shortcut icon' href='./img/'>
+	<link rel='apple-touch-icon' href='./img/'>	
+	
+	<!-- 스타일 -->
+	<link rel='stylesheet' href='./css/reset.css' type='text/css'>
+	<link rel='stylesheet' href='./css/fonts.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style3_4.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style_header.css' type='text/css'>
+
+	<!-- js라이브러리 -->
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+	<script src='./js/lib/jquery.easing.1.3.js'></script>
+	<script src='./js/lib/jquery.touchSwipe.js'></script>
+	
+	<!-- 아이콘 폰트어썸 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+
+	<!-- 각 브라우저 CSS호환 -->
+	<!-- <script src='./js/lib/prefixfree.min.js'></script> -->
+
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<script src="../back-end/htmlJS/html3_4.js"></script>
+
+	<script language="JavaScript">
+		
+		$(document).ready(function(){
+			// 공통 header
+        	$("#header").load("header.html");
+
+			//조회 기간 현재 날짜 설정
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1;
+			var yyyy = today.getFullYear();
+			if (dd < 10) {
+			dd = '0' + dd;
+			}
+			if (mm < 10) {
+			mm = '0' + mm;
+			}
+			var today = yyyy + '-' + mm + '-' + dd;
+			document.getElementById('startDay').value = today;
+			document.getElementById('endDay').value = today;
+
+      	});
+
+
+	</script>
+
+
+
+</head>
+<body>
+<div id='wrap' class='clearfix'>
+
+	<header id='header'></header>
+
+	<main id='main'>
+		<section id='section1'>
+			<div class='gap'>
+				<div class='container'>
+	
+					<div class='title'>
+						<h2>구조요청 내역 확인</h2>
+					</div>
+
+					<span class='sub2Menu_line'></span>
+
+					<div class='content'>
+						<div class='sosSearch_wrap'>
+							<ul class='clearfix'>
+								<li>
+									<h2 class='sosSearchText'>조회 기간</h2>
+									<h3 class='sosSearchText'>보트명</h3>
+								</li>
+								<li>
+									<input type='date' name='sosDay' id='startDay' value='yyyy-mm-dd'>
+									<span class="demi">~</span>
+									<input type='date' name='sosDay' id='endDay' value='yyyy-mm-dd'>
+									<input type='text' name='sosName' id='cctvName' class='inputText' value='' placeholder='보트 이름을 입력하세요.'>
+									<input type='submit' id='sosSearch' class='sosSearch' onclick="search();" value='조회'>
+									<input type='submit' id='sosPrint' class='sosPrint' onclick=";" value='인쇄'>
+								</li>
+							</ul>
+						</div>
+
+						<div class='sosBoard_wrap board_wrap'>
+							<ul>
+								<li class='clearfix'>
+									<span>일시</span>
+									<span>보트 ID</span>
+									<span>보트명</span>
+									<span>기울기</span>
+									<span>위도</span>
+									<span>경도</span>
+								</li>
+								<li>
+									<ul id="sos_log"></ul>
+								</li>
+							</ul>
+						</div>
+
+					</div>
+	
+				</div>
+			</div>
+		</section>
+	</main>
+	
+	<script src="./js/marina.js"></script>
+
+</div>
+</body>
+</html>

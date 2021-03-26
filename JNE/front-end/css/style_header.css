@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+#header { float:left; width:10%; height:937px; background-color:#292e31; }
+#header h1 { padding:15px 0; text-align:center; }
+#header h1 img { width:100%; max-width:130px; }
+
+#header nav { width:100%; margin-top:50px; }
+#header nav ul { width:100%; }
+#header nav ul > li { width:100%; }
+#header nav ul > li a { display:block; padding:15px 0 15px 15px; font-weight:600; color:#ddd; box-sizing:border-box; border:4px solid transparent; transition:all .3s; }
+#header nav ul > li a:hover { color:#48b7ea; border-left:4px solid #0e68b3; background-color:#202527; }
+#header nav ul > li a.focus { color:#48b7ea; box-sizing:border-box; border-left:4px solid #0e68b3; background-color:#202527; }
+#header nav ul > li a.active { color:#48b7ea; box-sizing:border-box; border-left:4px solid #0e68b3; background-color:#202527; }
+
+#header nav ul > li > .sub { display:none; width:100%; }
+#header nav ul > li > .sub ul { width:100%; }
+#header nav ul > li > .sub ul li { width:100%; }
+#header nav ul > li > .sub ul li a { display:block; padding:15px 0 15px 30px; line-height:150%; font-weight:500; color:#fff; }
+#header nav ul > li > .sub ul li a:hover { background-color:#0e68b3; }
+#header nav ul > li > .sub ul li a:focus { background-color:#0e68b3; }
+#header nav ul > li > .sub ul li a.subActive { background-color:#0e68b3; }

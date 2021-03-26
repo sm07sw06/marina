@@ -1,0 +1,131 @@
+@charset "utf-8";
+
+/* html { overflow:hidden; } */
+body { color:#fff; background-color:#292e31; }
+
+#wrap { width:100%; overflow:hidden; }
+
+/* 관할마리나항만 스크롤 스타일 /////////////////////////////////////////////////////////// */
+.left_wrap .Harbor_wrap > div > ul::-webkit-scrollbar { width:10px; }
+.left_wrap .Harbor_wrap > div > ul::-webkit-scrollbar-thumb { background-color: gray; border-radius: 10px; background-clip: padding-box; border: 2px solid transparent; }
+/* ////////////////////////////////////////////////////////////////////////////////// */
+
+/* 공용 스타일/////////////////////////////////////////////////////////////////////////// */
+
+.container { width:100%; }
+
+.gap { margin:0 15px; }
+.gap .container { width:100%; }
+
+.title { padding:20px 0; border-bottom:2px solid #3f4749; background-color:#1389f7; border-radius:10px; }
+.title h2 { font-size:20px; font-weight:600; }
+
+/* ////////////////////////////////////////////////////////////////////////////////// */
+
+#header { width:100%; height:100px; }
+#header .logo_wrap { float:left; width:15%; }
+#header .logo_wrap a { display:inline-block; margin:26px 0; }
+#header .logo_wrap a img { width:100%; max-width:130px; }
+
+#header .title_wrap { float:left; width:70%; text-align:center; }
+#header .title_wrap h1 { font-size:35px; font-weight:bold; margin:32.5px 0; }
+
+#header .other_wrap { float:left; width:15%; text-align:center; }
+#header .other_wrap .time_wrap { float:left; width:80%; }
+#header .other_wrap .time_wrap > div { margin:17.5px 0; }
+#header .other_wrap .time_wrap > div h2 { font-family:'lab_digital'; font-size:20px; }
+#header .other_wrap .time_wrap > div h3 { font-family:'lab_digital'; font-size:30px; line-height:150%; }
+#header .other_wrap .home { float:left; width:20%; }
+#header .other_wrap .home a { display:inline-block; margin:34px 0; }
+#header .other_wrap .home a img { width:100%; }
+
+
+
+#main { width:100%; margin-top:15px; }
+#main #section { width:100%; }
+
+.left_wrap { float:left; width:10%; text-align:center; }
+.left_wrap .Harbor_wrap { width:100%; border:2px solid #3f4749; box-sizing:border-box; border-radius:10px; box-shadow:5px 5px 5px rgba(0,0,0, .25); }
+.left_wrap .Harbor_wrap > div { /* padding:5px 5px 5px 0; */ }
+.left_wrap .Harbor_wrap > div > ul { width:100%; height:200px; overflow-y:scroll; }
+.left_wrap .Harbor_wrap > div > ul > li { width:100%; }
+.left_wrap .Harbor_wrap > div > ul > li > a { display:block; font-size:16px; color:#fff; padding:15px 0; }
+.left_wrap .Harbor_wrap > div > ul > li > a:hover { background-color:#202527; }
+
+.left_wrap .weather_wrap { width:100%; margin-top:15px; border:2px solid #3f4749; box-sizing:border-box; border-radius:10px; box-shadow:5px 5px 5px rgba(0,0,0, .25); }
+.left_wrap .weather_wrap > div { /* padding:5px; */ }
+.left_wrap .weather_wrap > div > ul { width:100%; }
+.left_wrap .weather_wrap > div > ul > li { width:100%; }
+.left_wrap .weather_wrap > div > ul > li > div { margin:25px; }
+.left_wrap .weather_wrap > div > ul > li > div img { width:100%; max-width:50px; display:inline-block; }
+.left_wrap .weather_wrap > div > ul > li > div h3 { display:inline-block; font-size:20px; line-height:50px; margin-left:20px; }
+
+.left_wrap .danger_wrap { width:100%; padding:22px 0; text-align:center; }
+.left_wrap .danger_wrap span { display:inline-block; width:90px; height:90px; border-radius:50%; background-color:transparent; box-shadow:inset -5px -3px 5px 5px rgba(0,0,0, .25); transition:all .3s; }
+.left_wrap .danger_wrap span.danger { background-color:red; box-shadow: 0 0 10px 5px red; }
+
+
+
+.center_wrap { float:left; width:75%; }
+.center_wrap .anchor_sector { position:relative; width:100%; }
+.center_wrap .anchor_sector > img { width:100%; }
+.center_wrap .anchor_sector > ul { position:absolute; top:240px; width:auto; }
+.center_wrap .anchor_sector > ul.sectorA_left { left:280px; }
+.center_wrap .anchor_sector > ul.sectorA_right { left:380px; }
+.center_wrap .anchor_sector > ul.sectorB_left { left:520px; }
+.center_wrap .anchor_sector > ul.sectorB_right { left:620px; }
+.center_wrap .anchor_sector > ul.sectorC_left { left:770px; }
+.center_wrap .anchor_sector > ul.sectorC_right { left:870px; }
+.center_wrap .anchor_sector > ul.sectorD_left { left:1010px; }
+.center_wrap .anchor_sector > ul.sectorD_right { left:1110px; }
+.center_wrap .anchor_sector > ul.sectorE { left:1290px; }
+
+.center_wrap .anchor_sector > ul > li { width:100%; }
+.center_wrap .anchor_sector > ul > li > div { margin-bottom:20px; }
+
+.center_wrap .anchor_sector > ul > li > div .col { width:100%; }
+.center_wrap .anchor_sector > ul > li > div .col2 { margin-top:15px; }
+
+.center_wrap .anchor_sector > ul > li > div .col div.state { position:relative; display:block; width:15px; height:15px; background-color:blue; box-shadow: 0 0 5px 5px blue; border-radius:50%; }
+.center_wrap .anchor_sector > ul > li > div .col div.greenstate { background-color:green; box-shadow: 0 0 5px 5px green; cursor:pointer; }
+.center_wrap .anchor_sector > ul > li > div .col div.redstate { background-color:red; box-shadow: 0 0 5px 5px red; cursor:pointer; }
+
+.center_wrap .anchor_sector > ul > li > div .col div.state .boatSate { display:none; z-index:2; position:absolute; top:-10px; left:30px; width:200px; height:190px; background-color:#292e31; border:3px solid #1389f7; }
+.center_wrap .anchor_sector > ul > li > div .col div.greenstate:hover .boatSate { display:block; }
+.center_wrap .anchor_sector > ul > li > div .col div.redstate:hover .boatSate { display:block; }
+
+.center_wrap .anchor_sector > ul > li > div .col .boatSate span { display:block; margin-left:20px; margin-top:15px; }
+
+
+.center_wrap .boat_info { margin-top:15px; width:100%; border:2px solid #3f4749; box-sizing:border-box; border-radius:10px; text-align:center; box-shadow:5px 5px 5px rgba(0,0,0, .25); }
+.center_wrap .boat_info .left_info { float:left; width:50%; padding:29px 0; }
+.center_wrap .boat_info .left_info h2 { background-color:red; display:inline-block; padding:20px; font-size:20px; color:yellow; font-weight:bold; }
+.center_wrap .boat_info .left_info h3 { background-color:yellow; display:inline-block; padding:10px; font-size:20px; color:#292e31; font-weight:bold; }
+.center_wrap .boat_info .left_info span { display:inline-block; font-size:18px; margin-left:15px; }
+
+.center_wrap .boat_info .right_info { float:left; width:50%; padding:29px 0; }
+.center_wrap .boat_info .right_info h2 { background-color:#1389f7; display:inline-block; padding:20px; font-size:20px; font-weight:bold; }
+.center_wrap .boat_info .right_info span { display:inline-block; font-size:18px; margin-left:15px; }
+
+
+
+.right_wrap { float:left; width:15%; text-align:center; }
+.right_wrap .boat_state { width:100%; border:2px solid #3f4749; box-sizing:border-box; border-radius:10px; box-shadow:5px 5px 5px rgba(0,0,0, .25); }
+.right_wrap .boat_state > ul { width:100%; }
+.right_wrap .boat_state > ul > li { width:100%; }
+.right_wrap .boat_state > ul > li > div { margin:23px 25px; }
+.right_wrap .boat_state > ul > li > div h3 { display:inline-block; font-size:18px; }
+.right_wrap .boat_state > ul > li > div h4 { display:inline-block; font-size:18px; margin-left:20px; }
+
+.right_wrap .boat_cctv { margin-top:15px; width:100%; border:2px solid #3f4749; border-radius:10px; box-shadow:5px 5px 5px rgba(0,0,0, .25); }
+.right_wrap .boat_cctv .cctvSlide_container { width:100%; margin:15px 0; }
+.right_wrap .boat_cctv .cctvSlide_container .cctvSlide_view { width:250px; margin:0 15px; overflow:hidden; }
+.right_wrap .boat_cctv .cctvSlide_container .cctvSlide_view .cctvSlide_wrap { position:relative; left:0; width:calc(250px*5); margin-left:-250px; }
+.right_wrap .boat_cctv .cctvSlide_container .cctvSlide_view .cctvSlide_wrap .cctvSlide { float:left; width:250px; height:250px; background-size:cover; }
+.right_wrap .boat_cctv .cctvSlide_container .cctvSlide_view .cctvSlide_wrap .cctvSlide0 { background:url(../img/1.jpg) no-repeat 50% 50%; }
+.right_wrap .boat_cctv .cctvSlide_container .cctvSlide_view .cctvSlide_wrap .cctvSlide1 { background:url(../img/2.jpg) no-repeat 50% 50%; }
+.right_wrap .boat_cctv .cctvSlide_container .cctvSlide_view .cctvSlide_wrap .cctvSlide2 { background:url(../img/3.jpg) no-repeat 50% 50%; }
+
+.right_wrap .boat_cctv .cctvSlide_container span { margin-top:15px; display:inline-block; }
+.right_wrap .boat_cctv .cctvSlide_container span a { display:block; }
+.right_wrap .boat_cctv .cctvSlide_container span a img { width:100%; max-width:40px; }

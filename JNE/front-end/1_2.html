@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html lang='ko'>
+
+<head>
+	<title>Marina</title>
+	<meta charset='utf-8'>
+	<meta name='Viewport'
+		content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0'>
+	<meta name='Title' content=''>
+	<meta name='Subject' content=''>
+	<meta name='format-detection' content='telephone=no'>
+	<meta name='Publisher' content=''>
+	<meta name='Keywords' content=''>
+	<meta name='Description' content=''>
+	<meta name='Author' content=''>
+	<meta name='Author-Date' content=''>
+	<meta name='Copyright' content=''>
+	<meta name='Robots' content=''>
+
+	<!-- 파비콘 -->
+	<link rel='shortcut icon' href='./img/'>
+	<link rel='apple-touch-icon' href='./img/'>
+
+	<!-- 스타일 -->
+	<link rel='stylesheet' href='./css/reset.css' type='text/css'>
+	<link rel='stylesheet' href='./css/fonts.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style1_2.css' type='text/css'>
+	<link rel='stylesheet' href='./css/style_header.css' type='text/css'>
+
+	<!-- js라이브러리 -->
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+	<script src='./js/lib/jquery.easing.1.3.js'></script>
+	<script src='./js/lib/jquery.touchSwipe.js'></script>
+
+	<!-- 아이콘 폰트어썸 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+	<script src='./js/lib/jquery-1.12.4.min.js'></script>
+
+	<!-- 각 브라우저 CSS호환 -->
+	<!-- <script src='./js/lib/prefixfree.min.js'></script> -->
+
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<script src="../back-end/htmlJS/html1_2.js"></script>
+
+	<script language="JavaScript">
+
+		// 공통 header
+		$(document).ready(function () {
+			$("#header").load("header.html")
+		});
+
+		// selectBox
+		$(document).ready(function () {
+			var selectTarget = $('.selectbox select');
+
+			selectTarget.on('blur', function () {
+				$(this).parent().removeClass('focus');
+			});
+
+
+			selectTarget.change(function () {
+				var select_name = $(this).children('option:selected').text();
+
+				$(this).siblings('label').text(select_name);
+			});
+		});
+
+	</script>
+
+
+</head>
+
+<body>
+	<div id='wrap' class='clearfix'>
+
+		<header id='header'></header>
+
+		<main id='main'>
+			<div class='gap'>
+				<div class='container'>
+
+					<div class='title'>
+						<h2>보트정보 관리</h2>
+					</div>
+
+					<input id="tab1" type="radio" name="tabs" checked>
+					<label class='tabs' for="tab1">보트기초정보 관리</label>
+
+					<span class='sub2Menu_line'></span>
+
+					<section id='section1' class='clearfix'>
+						<div class='search_wrap'>
+							<input type='text' name='t_search' id='t_search' class='inputText' value=''
+								placeholder='보트ID나 보트명을 입력하세요.'>
+						</div>
+
+						<div class='button_wrap'>
+							<ul class='clearfix'>
+								<li>
+									<div>
+										<input type='submit' id='delete' class='delete' onclick="delete_button();"
+											value='삭제'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='save' class='save' onclick="save_button();" value='저장'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='new' class='new' onclick="new_button();" value='신규'>
+									</div>
+								</li>
+								<li>
+									<div>
+										<input type='submit' id='search' class='search' onclick="search_button();"
+											value='조회'>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						<div class='boat_board board_wrap'>
+							<ul>
+								<li class='clearfix'>
+									<span>보트 ID</span>
+									<span>소유회원명</span>
+									<span>보트명</span>
+									<span>보트상태</span>
+								</li>
+								<li>
+									<ul id="boat_log"></ul>
+								</li>
+							</ul>
+						</div>
+
+						<div class='boatJoin_wrap'>
+							<ul class='clearfix' id='inputData'>
+								<li>
+									<div class='clearfix'>
+										<div class='boatJoin_title'>
+											<h2>보트ID</h2>
+										</div>
+										<div class='boatJoin_input'>
+											<input type='text' name='boatId' id='boat_id' readonly>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='boatJoin_title'>
+											<h2>보트명</h2>
+										</div>
+										<div class='boatJoin_input'>
+											<input type='text' name='boatName' id='boat_nm' class='inputText' value=''
+												placeholder='보트 이름을 입력하세요.'>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='boatJoin_title'>
+											<h2>회원</h2>
+										</div>
+										<div class='boatJoin_input modal_stand'>
+											<input type='text' name='user_nm' id='user_nm' placeholder='회원을 선택하세요.'
+												readonly>
+											<div class='modal_icon'><img class='user_modalOpenBtn'
+													src='./img/modal_icon.png' alt=''></div>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='boatJoin_title'>
+											<h2>보트상태</h2>
+										</div>
+										<div class='boatJoin_input'>
+											<div class="selectbox" id="boat_status">
+												<label for="boat_status">선택</label>
+												<select id="boat_status">
+													<option class='hidden' selected>선택</option>
+													<option>미가입</option>
+													<option>정박</option>
+													<option>출항</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class='clearfix'>
+										<div class='boatJoin_title'>
+											<h2>비고</h2>
+										</div>
+										<div class='boatJoin_input'>
+											<textarea name='message' id='boat_desc' class='message'></textarea>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</section>
+
+				</div>
+			</div>
+		</main>
+
+		<div id='modal_user' class='modal'>
+			<div class='modal_wrap'>
+				<div class='modal_gap'>
+					<div class='modal_container'>
+
+						<div class='modal_header'>
+							<h2>회원선택</h2>
+							<span class='modal-closeBtn-wrap'>
+								<a href='javascript:' class='modalCloseBtn'><i class='blind'>modalCloseBtn</i></a>
+							</span>
+						</div>
+
+						<div class='modal_main'>
+							<div class='modalSearch_wrap'>
+								<input type='text' name='' id='' class='modal_search' placeholder='회원명을 입력하세요.'>
+							</div>
+
+							<div class='modalSearchButton_wrap'>
+								<input type='submit' id='' class='' value='조회' onclick='user_search_button()'>
+							</div>
+
+							<div class='modal_board'>
+								<ul>
+									<li class='clearfix'>
+										<span>선택</span>
+										<span>회원코드</span>
+										<span>회원명</span>
+										<span>연락처</span>
+									</li>
+									<li>
+										<ul id="user_board">
+											<!-- <li class='clearfix'>
+												<span><input type='checkbox' name='area_cbox' value='0'
+														onclick='NoMultiChk(this)' /></span>
+												<span>회원코드</span>
+												<span>회원명</span>
+												<span>연락처</span>
+											</li>
+											<li class='clearfix'>
+												<span><input type='checkbox' name='area_cbox' value='1'
+														onclick='NoMultiChk(this)' /></span>
+												<span>회원코드</span>
+												<span>회원명</span>
+												<span>연락처</span>
+											</li>
+											<li class='clearfix'>
+												<span><input type='checkbox' name='area_cbox' value='2'
+														onclick='NoMultiChk(this)' /></span>
+												<span>회원코드</span>
+												<span>회원명</span>
+												<span>연락처</span>
+											</li> -->
+										</ul>
+									</li>
+								</ul>
+							</div>
+
+							<div class='modalApplyButton_wrap'>
+								<input type='submit' id='' class='applyBtn' value='적용' onclick='user_OK_button()'>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src='./js/marina.js'></script>
+	</div>
+</body>
+
+</html>

@@ -353,8 +353,6 @@ DB.prototype.GetConfig = function (configMy, callback) {
 						for(var i = 0; i < res.rowCount ; i ++) {
 							configMy.weather_url   = res.rows[i].weather_url;
 							configMy.weather_point = res.rows[i].weather_point;
-							logger.info("data : " + res.rows[i].weather_url);
-							logger.info("data : " + res.rows[i].weather_point);
 						}						
 						callback("OK", configMy);
 					} else {
