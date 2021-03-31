@@ -155,7 +155,10 @@ function getAreaAnalysis(mObject) {
                 if (rtn == 'OK') {
                 	mObject.x = mObject2.x;
                 	mObject.y = mObject2.y;
-                	logger.error('삼각측정에 의한 좌표 Update Error'); //보트 입항중
+                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject2.x); //보트 입항중
+                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject2.y); //보트 입항중
+                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject.x); //보트 입항중
+                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject.y); //보트 입항중
                     callback(null,'OK', mObject);  
                 } else {
                     callback(null, 'ERROR', mObject);   
@@ -214,8 +217,8 @@ function getAreaAnalysis(mObject) {
             logger.info('   machineId :' + mObject.machineId);
             logger.info('   sendTime  :' + mObject.sendTime);
             logger.info('   boatInout :' + mObject.boatInout);
-            logger.info('   gradex      :' + mObject.gradex  );
-            logger.info('   gradey      :' + mObject.gradey );
+            logger.info('   gradex    :' + mObject.gradex  );
+            logger.info('   gradey    :' + mObject.gradey );
             logger.info('   latitude  :' + mObject.latitude  );
             logger.info('   longitude :' + mObject.longitude );  
             logger.info("==================================");
@@ -278,7 +281,8 @@ function getAreaAnalysis(mObject) {
 
 BoatCheck.prototype.getBoatCheck = function() {
     
-    var mObject = new MessageObject(); //메세지 구조체
+    var mObject  = new MessageObject(); //메세지 구조체
+    var mObject2 = new MessageObject(); //메세지 구조체
 
     logger.info('Start getBoatCheck........');
 
