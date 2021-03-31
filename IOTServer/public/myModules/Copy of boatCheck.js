@@ -33,8 +33,6 @@ function MessageObject()
     var temperature;
     var humidity   ;
 	var machineNm;  //보트단말기명
-    var x;   // 삼각측정 좌표 X
-    var y;   // 삼각측정 좌표 Y
 }
 //var mObject = new MessageObject(); //메세지 구조체
 
@@ -136,76 +134,37 @@ function getAreaAnalysis(mObject) {
     logger.info('   sendTime :' + mObject.sendTime  );    
     logger.info("==================================");
     
-   // mObject.gradex = 100;         // LDH  GPS 구역내로 설정
-   // mObject.gradey = 55;
+    mObject.gradex = 100;         // LDH  GPS 구역내로 설정
+    mObject.gradey = 55;
 
     var db = new DB();
     var result;
     
-    
-    /*
-     * 좌표 계산 (삼각 측정)
-     */
-
-    
     async.waterfall([
         function(callback) {
-            logger.info('!! 삼각측정에 의한 좌표 계산...'); 
-            db.SetXY(mObject, function(rtn, mObject2){
+            logger.info('!! 출입구역영역안에 있는지 판단중...'); 
+            db.SelectGateBound(mObject, function(rtn){
                 if (rtn == 'OK') {
-                	mObject.x = mObject2.x;
-                	mObject.y = mObject2.y;
-                	logger.error('삼각측정에 의한 좌표 Update Error'); //보트 입항중
-                    callback(null,'OK', mObject);  
+                    logger.info('출입구역 영역안에 있슴'); //보트출항중
+                    //최근 정박 이력 확인
+                    logger.info('!! 최근 정박 이력 확인중...'); 
+                    db.SelectLastAnchor(mObject, function(rtn){
+                        if (rtn == 'OK') {
+                            logger.info('보트는 마지막으로 정박상태에 있었음...현재 출항중'); //보트출항중
+                            mObject.boatInout = '0' 
+                        } else {
+                            logger.info('보트는 마지막으로 외부에 있었음...현재 입항중'); //보트출항중
+                            mObject.boatInout = '1' 
+                        }   
+                        callback(null,'GPS', mObject);  
+                    });    
                 } else {
-                    callback(null, 'ERROR', mObject);   
+                    logger.info('출입구역 영역밖에 있슴'); //보트출항중
+                    logger.info('보트 이동중'); //보트 입항중
+                    mObject.boatInout = '9' 
+                    callback(null, 'OK', mObject);   
                 }   
             });     
-        },
-        function(result, mObject, callback) {
-        	if(result == "OK") {
-	            logger.info('!! 삼각측정에 의한 좌표 Update...'); 
-	            db.SetXYUpdate(mObject, function(rtn){
-	                if (rtn == 'OK') {
-	                    logger.info('삼각측정에 의한 좌표 Update OK'); //보트출항중
-                        callback(null,'OK', mObject);  
-	                } else {
-	                    logger.error('삼각측정에 의한 좌표 Update Error'); //보트 입항중
-	                    callback(null, 'ERROR', mObject);   
-	                }   
-	            });
-        	} else {
-        		callback(null, 'ERROR', mObject);   
-        	}
-        },        
-        function(result, mObject, callback) {
-        	if(result == "OK") {
-	            logger.info('!! 출입구역영역안에 있는지 판단중...'); 
-	            db.SelectGateBound(mObject, function(rtn){
-	                if (rtn == 'OK') {
-	                    logger.info('출입구역 영역안에 있슴'); //보트출항중
-	                    //최근 정박 이력 확인
-	                    logger.info('!! 최근 정박 이력 확인중...'); 
-	                    db.SelectLastAnchor(mObject, function(rtn){
-	                        if (rtn == 'OK') {
-	                            logger.info('보트는 마지막으로 정박상태에 있었음...현재 출항중'); //보트출항중
-	                            mObject.boatInout = '0' 
-	                        } else {
-	                            logger.info('보트는 마지막으로 외부에 있었음...현재 입항중'); //보트출항중
-	                            mObject.boatInout = '1' 
-	                        }   
-	                        callback(null,'GPS', mObject);  
-	                    });    
-	                } else {
-	                    logger.info('출입구역 영역밖에 있슴'); //보트출항중
-	                    logger.info('보트 이동중'); //보트 입항중
-	                    mObject.boatInout = '9' 
-	                    callback(null, 'OK', mObject);   
-	                }   
-	            });
-        	} else {
-        		callback(null, 'ERROR', mObject);   
-        	}
         },
         function(result, mObject, callback) {
             logger.info("==================================");
@@ -314,30 +273,48 @@ BoatCheck.prototype.getBoatCheck = function() {
     if(mObject.longitude   == "") { mObject.longitude   = 0; }
 
     var db = new DB();
-   
+
     db.GetRegBoatMachindId(mObject, function(rtn){
+    	
         if (rtn == 'OK') {
-			logger.info('등록된 보트 디바이스임'); 
+        	
 			db.InsertDBBoatData(sData);    // LDH
 
-			if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
-				logger.info('!! SOS 신호 처리중...'); 
-				db.SetSOS(mObject, function(rtn) {
-					if (rtn == 'OK') {
-						//최근 정박 이력 확인
-						logger.info('SOS 완료'); 
-					} else {
-						logger.info('SOS 오류'); //보트단말기 정박상태 분석2
-					}   
-				});  
-			} else {
-				getAreaAnalysis(mObject); //GPS위치가 출입구 구역인지 확인
-			}
-        } else {
-            logger.info('등록된 보트 디바이스 아님'); //보트단말기 정박상태 분석2
+    	   if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
+    	        logger.info('!! SOS 신호 처리중...'); 
+    	        db.SetSOS(mObject, function(rtn){
+    	            if (rtn == 'OK') {
+    	                //최근 정박 이력 확인
+    	                logger.info('SOS 완료'); 
+    	                callback(null, mObject);  
+    	            } else {
+    	                logger.info('SOS 오류'); //보트단말기 정박상태 분석2
+    	                callback(null, rtn);  //
+    	            }   
+    	        });  
+    	        // 대쉬보드에 현재 운항 상태 적용
+    	        // 대쉬보드에 현재 운항 상태 적용
+    	        /***
+    	        logger.info('!! 대쉬보드에 현재 운항 상태 적용중4...'); 
+    	        db.SetDashBoard(mObject, function(rtn){
+    	            if (rtn == 'OK') {
+    	                //최근 정박 이력 확인
+    	                logger.info('데쉬보드 적용 완료'); 
+    	                callback(null, mObject);  
+    	            } else {
+    	                logger.info('데쉬보드 적용 오류'); //보트단말기 정박상태 분석2
+    	                callback(null, rtn);  //
+    	            }   
+    	        }); 
+    	        ***/                
+    	    } else {
+    	        getAreaAnalysis(mObject); //GPS위치가 출입구 구역인지 확인
+    	    }
         }   
-    });          	
+    });  
     
+ 
+    return {message: this.message};
 };
 
 

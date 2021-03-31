@@ -12,6 +12,7 @@ const config = require('config');
 const callingModule = require('caller-module');
 const schedule = require('node-schedule');
 const request = require('request');
+var HashMap = require('hashmap');
 
 //const Sequelize = require('sequelize');
 //const env = process.env.NODE_ENV || 'development';
@@ -48,8 +49,8 @@ pool.connect()
 	   if (res.rowCount > 0) {
 		   global.grade = res.rows[0].grade;
 		   logger.info('데이터베이스 연결됨');
-		   logger.info('  모듈명 : '+ callingModule.GetCallerModule().name);
-		   logger.info('  기울기 : '+ global.grade);
+		   logger.info('모듈명 : '+ callingModule.GetCallerModule().name);
+		   logger.info('기울기 : '+ global.grade);
 	   } else {
 		   global.grade = 60;  // 기울기 초기값
 	   }
@@ -96,18 +97,19 @@ client.on("error", function(topic, message){
 	
 var DB = require('../public/myModules/db');
 // message를 DB에 반영하도록 modules 호출
-//var dbJob = new DB(); // 모듈에 전달인자 할당 
 var db = new DB();
 
 client.on("message", function(topic, message) {
 	
 	logger.info("************************************************");
-	logger.info('MQTT [On Message]');
-	logger.info("************************************************");
+	logger.info('MQTT On Message ............... ');
 		
 	try {
 	
 		var obj=JSON.parse(message);  // MQTT에서 보내온 메세지
+		
+		logger.info(JSON.stringify(obj));
+		logger.info("************************************************");
 		
 		for (var sKey in obj) {
 		
@@ -115,7 +117,7 @@ client.on("message", function(topic, message) {
 				
 				var sData = obj[sKey].split(",");
 
-				logger.info("Queue Message:" + sData);
+				//logger.info("Queue Message:" + sData);
 
 				if( 1 == 1) {  // LDH
 					if(sKey === "boatData" && 1 == 1) {
@@ -123,17 +125,15 @@ client.on("message", function(topic, message) {
 						var BoatCheck = require('../public/myModules/boatCheck');
 						var boatCheck = new BoatCheck(sData); 
 						boatCheck.getBoatCheck();
-					} else if(sKey === "anchorData" && 1 == 1) {
-						// 정박지 단말기에서 보내온 신호 분석 ( // LDH 미사용 )
-						var AnchorCheck = require('../public/myModules/anchorCheck');
-						var anchorCheck = new AnchorCheck(sData); 
-						anchorCheck.getAnchorCheck();				
 					} else if(sKey === "lidarData" && 1 == 1) {
 						// 정박지 단말기에서 보내온 신호 분석
 						var LidarCheck = require('../public/myModules/lidarCheck');
 						var lidarCheck = new LidarCheck(sData); 
 						lidarCheck.getLidarCheck();				
-					} // 보트 데이터가 아닌면 Skip
+					} else if(sKey === "rssiData" && 1 == 1) {
+						db.InsertDBRssiData(sData);    // LDH
+					}
+					
 				}
 			}    
 		}
@@ -174,16 +174,131 @@ function ConfigObject()
 }
 var configMy  = new ConfigObject(); //메세지 구조체
 
-const job = schedule.scheduleJob('0 */1 * * * *', function(){
+
+const job = schedule.scheduleJob('5 5,11,17,23 * * *', function(){
+	
+	Array.prototype.findByValueOfObject = function(key, value) {
+		console.log('key:' + key);
+		console.log('value:' + value);
+	  return this.filter(function(item) {
+	    return (item[key] === value);
+	  });
+	}
+
+	/**
+	 * 한글포함 문자열 길이를 구한다
+	 */
+	function getTextLength(str) {
+	    var len = 0;
+	    for (var i = 0; i < str.length; i++) {
+	        if (escape(str.charAt(i)).length == 6) {
+	            len++;
+	        }
+	        len++;
+	    }
+	    return len;
+	}
 	
 	db.GetConfig(configMy, function(rtn, configMy){  // 1:제부마리나
 		if(rtn =="OK") {
+			
+
+			var winddirectArray = [{ id: 'EW', name: '동서'},{ id: 'ES', name: '동남'},{ id: 'EN', name: '동북'},{ id: 'WE', name: '서동'},{ id: 'WS', name: '서남'},{ id: 'WN', name: '서북'},
+				 { id: 'SE', name: '남동'},{ id: 'SW', name: '남서'},{ id: 'SN', name: '남북'},{ id: 'NE', name: '북동'},{ id: 'NW', name: '북서'},{ id: 'NS', name: '북남'},
+				 { id: 'E', name: '동'},{ id: 'W', name: '서'},{ id: 'S', name: '남'},{ id: 'N', name: '북'}
+				 ];
+			var windplus = [{ id: 'EW', name: '동서'},{ id: 'ES', name: '동남'}];
+			var wfCdArray = [{ id: 'DB01', name: '맑음'},{ id: 'DB03', name: '구름많음'},{ id: 'DB04', name: '흐림'}];
+			var rnYnArray = [{ id: '0', name: '강수없음'},{ id: '1', name: '비'},{ id: '2', name: '비/눈'},{ id: '3', name: '눈'},{ id: '4', name: '소나기'}];
+			
 	    	// 지상  var url = "http://apis.data.go.kr/1360000/VilageFcstMsgService/getLandFcst?serviceKey=acreHrPLywz9jI5R2j00%2FwjvB21qdqFqgo%2Flq1TDn4urwyPBOEnepvoS8rcDtuI0UGGJ4ukQsC4hJn%2BHbQfXeQ%3D%3D&numOfRows=10&pageNo=1&dataType=JSON&regId=11B20604";
 	    	// 해양
 			var url = configMy.weather_url + configMy.weather_point;
-			request(url,function(error, response, body){
-				if(!error&&response.statusCode==200)
-					console.log(body);
+			request(url,{ json: true },function(error, response, body){
+				if(!error&&response.statusCode==200) {
+					
+					console.log("response:==>"+ JSON.stringify(body.response));
+					
+					if(JSON.stringify(body.response.body.totalCount) > 0 ) {
+//						logger.info("  item :" + JSON.stringify(body.response.body.items.item[0]));   
+
+//						 * 17시부터 ~ 익일 5시 이전
+//							0 : 오늘오후
+//							1 : 내일오전
+//							2 : 내일오후
+//							3 : 모레오전
+//							
+//							5시부터 ~11시 이전
+//							0 : 오늘오전
+//							1 : 오늘오후
+//							2 : 내일오전
+//							3 : 내일오후
+//							4 : 모래오전
+//							5 : 모레오후
+//							
+//							11시부터 ~ 17시 이전
+//							0 : 오늘오후
+//							1 : 내일오전
+//							2 : 내일오후
+//							3 : 모레오전
+//							4 : 모레오후
+
+					 
+						var getDate = JSON.stringify(body.response.body.items.item[0].tmFc);
+						logger.info("  시각 :" + getDate);   
+						
+						var wd1     = JSON.stringify(body.response.body.items.item[0].wd1);
+						//logger.info("  풍향1 :[" + wd1 + "]");   
+						//var res = JSON.stringify(winddirectArray.findByValueOfObject("id", wd1.substr(1,2)), 0, 4);
+						//logger.info("res:" + res);
+						//logger.info("  풍향1-1 :" + JSON.stringify(res)); 
+						//logger.info("  풍향1-1 :" + JSON.stringify(res.name)); 
+						//logger.info("  풍향1-1 :" + JSON.stringify(res.name.substr(1,res[0].name.length-2))); 
+
+						res = winddirectArray.filter(it => new RegExp(wd1.substr(1,(wd1.length)-2),"i").test(it.id));
+						logger.info("  풍향1 :" + JSON.stringify(res[0].name)); 
+						//logger.info("  풍향1-2 :" + JSON.stringify(res)); 
+						//logger.info("  풍향1-2 :" + getTextLength(res[0].name)); 
+						//logger.info("  풍향1-2 :" + JSON.stringify(res[0].name.substr(1,getTextLength(res[0].name)-2))); 
+/*						
+						var wdTnd   = JSON.stringify(body.response.body.items.item[0].wdTnd); // 1 : (-)  2 : 후
+						logger.info("  풍향연결코드 :" + wdTnd);
+						if(wdTnd == 2 ) {
+							logger.info("  이후  :");
+						}
+						var wd2     = JSON.stringify(body.response.body.items.item[0].wd2);
+						logger.info("  풍향2 :" + wd2);
+						logger.info("  풍향2 :" + wd2.substr(1,(wd2.length)-2));
+						res = windplus.filter(it => new RegExp(wd2.substr(1,(wd2.length)-2),"i").test(it.id));
+						logger.info("  풍향2 :" + JSON.stringify(res[0].name)); 
+*/						
+						var wf      = JSON.stringify(body.response.body.items.item[0].wf);
+						logger.info("  날씨 :" + wf);   
+						
+						//var wfCd    = JSON.stringify(body.response.body.items.item[0].wfCd); // DB01 : 맑음   DB03 : 구름많음   DB04 : 흐림
+						//logger.info("  날씨코드 :" + wfCd);  
+						//res = wfCdArray.filter(it => new RegExp(wfCd.substr(1,(wfCd.length)-2),"i").test(it.id));
+						//logger.info("  날씨코드 :" + JSON.stringify(res[0].name)); 
+						
+						var wh1     = JSON.stringify(body.response.body.items.item[0].wh1);
+						logger.info("  파고1(m) :" + wh1); 
+						
+						//var wh2     = JSON.stringify(body.response.body.items.item[0].wh2);
+						//logger.info("  파고2(m) :" + wh2);   
+						
+						var ws1     = JSON.stringify(body.response.body.items.item[0].ws1);
+						logger.info("  풍속1(m/s) :" + ws1);
+						
+						//var ws2     = JSON.stringify(body.response.body.items.item[0].ws2);
+						//logger.info("  풍속2(m/s) :" + ws2); 
+						
+						var rnYn    = JSON.stringify(body.response.body.items.item[0].rnYn); // 0 : 강수없음  1 : 비  2 : 비/눈  3: 눈  4: 소나기
+						logger.info("  강수형태 :" + rnYn); 
+						res = rnYnArray.filter(it => new RegExp(rnYn,"i").test(it.id));
+						logger.info("  강수형태 :" + JSON.stringify(res[0].name)); 
+						
+					}
+				}
 			});
 		}
     }); 	

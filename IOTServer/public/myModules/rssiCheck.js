@@ -37,14 +37,14 @@ function MessageObject()
     var y;   // 삼각측정 좌표 Y
 }
 
-function LidarCheck(message) {
+function RssiCheck(message) {
     this.message = message;
 }
 
 
-LidarCheck.prototype.getLidarCheck = function() {
+RssiCheck.prototype.getRssiCheck = function() {
     
-    logger.info('Start getLidarCheck........');
+    logger.info('Start getRssiCheck........');
     
     var mObject  = new MessageObject(); //메세지 구조체
     var mObject2 = new MessageObject(); //메세지 구조체
@@ -61,25 +61,25 @@ LidarCheck.prototype.getLidarCheck = function() {
     logger.info("==================================");
     logger.info("  marinaId    :"+mObject.marinaId);
     logger.info("  machineId   :"+mObject.machineId);
-    logger.info("  boatId      :"+mObject.boatId);
+    logger.info("  machineNm   :"+mObject.machineNm);
     logger.info("  sendTime    :"+mObject.sendTime);   
-    logger.info("  sShipLeftYn :"+sShipLeftYn);   
-    logger.info("  sShipRightYn:"+sShipRightYn);   
+    logger.info("  anchorId    :"+mObject.anchorId);
+    logger.info("  boatId      :"+mObject.boatId);
     logger.info("==================================");
 
-    mObject.lidarId     = "";
+    mObject.rssiId     = "";
     
     mObject2.marinaId   = 1 ;
     mObject2.machineId  = "";
     mObject2.boatId     = "";
-    mObject2.lidarId    = "";
+    mObject2.rssiId    = "";
     
     async.waterfall([
         function(callback) {
             db.GetRegAnchorMachindId(mObject, function(rtn){
 	            if (rtn == 'OK') {
 	                //최근 정박 이력 확인
-	            	db.InsertDBLidarData(sData);  
+	            	db.InsertDBRssiData(sData);  
 	                logger.info('등록된 단말기 있음'); 
 	                callback(null, "OK", mObject);  
 	            } else {
@@ -91,9 +91,9 @@ LidarCheck.prototype.getLidarCheck = function() {
         function(result, mObject, callback) {
             if (result == 'OK') {            
 	        	
-	            if ((sShipLeftYn == "1")||(sShipRightYn == "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
+	            if ((sShipLeftYn == "1")||(sShipRightYn == "1")) { //rssi 왼쪽 또는 오른쪽에 정박한 경우
 	                
-	                if (sShipLeftYn == "1") { //lidar 왼쪽에 정박한 경우
+	                if (sShipLeftYn == "1") { //rssi 왼쪽에 정박한 경우
 	                    logger.info('!! 왼쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
 	                    mObject.leftRight = '0';    // 좌
 	            
@@ -148,9 +148,9 @@ LidarCheck.prototype.getLidarCheck = function() {
 	                        }
 	                    });                  //기준 시간 범위내 단말기 수신 정보 찾기
 	                }
-	                if (sShipRightYn == "1") { //lidar 왼쪽에 정박한 경우
+	                if (sShipRightYn == "1") { //rssi 왼쪽에 정박한 경우
 	                    logger.info('!! 오른쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
-	                    logger.info("boat is right lidared !!");
+	                    logger.info("boat is right rssied !!");
 	                    mObject.leftRight = '1';    // 우
 	
 	                    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
@@ -243,13 +243,16 @@ LidarCheck.prototype.getLidarCheck = function() {
 
 
 //객체를 바로 module.exports에 할당
-module.exports = LidarCheck;
+module.exports = RssiCheck;
 
 /***
-var LidarCheck = require('./lidar');
-var lidarCheck = new LidarCheck(message); 
 
-lidarCheck.getLidarCheck();
+select *
+  from tb_boatdata b, tb_rssidata r
+ where b.machine_id = r.boat_recv_id
+   AND b.send_time between to_char((to_timestamp(r.send_time, 'YYYYMMDDHH24MISS') - interval '2 sec'),'YYYYMMDDHH24MISS')
+                       AND to_char((to_timestamp(r.send_time, 'YYYYMMDDHH24MISS') + interval '2 sec'),'YYYYMMDDHH24MISS')
+
 
 ***/
 
