@@ -3,8 +3,8 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.105",
-    "port": "5432",
+    "host": "a1ck.iptime.org",
+    "port": "54329",
     "dialect": "mysql",
     "appport": "3100"
   },
@@ -12,8 +12,8 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.105",
-    "port": "5432",
+    "host": "a1ck.iptime.org",
+    "port": "54329",
     "dialect": "mysql",
     "appport": "3100"
   },
@@ -21,8 +21,8 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.105",
-    "port": "5432",
+    "host": "a1ck.iptime.org",
+    "port": "54329",
     "dialect": "mysql",
     "appport": "3100"
   },

@@ -82,8 +82,8 @@ var server = http.createServer(app);
 
 // MQTT Server 접속
 const mqtt_options = {
-		  host: '192.168.123.105',
-		  port: 1883,
+		  host: 'a1ck.iptime.org',
+		  port: 18839,
 		  protocol: 'mqtt'
 		};
 
