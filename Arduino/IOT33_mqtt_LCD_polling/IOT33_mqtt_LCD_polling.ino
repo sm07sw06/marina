@@ -19,7 +19,7 @@ char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-#define PERIOD 120 * 1000   //120초
+#define PERIOD 60 * 1000   //60초
 unsigned long prev_millis;
 
 char  sCurrentTime[18] = {0} ;
@@ -214,7 +214,7 @@ void setup() {
     prev_millis = millis();
 
     getRtcTime3231().toCharArray(sCurrentTime, getRtcTime3231().length()+1);
-    Serial.print("DS3231 time:");
+    Serial.print("DS3231-time:");
     Serial.println(sCurrentTime);
 
 }
@@ -263,13 +263,19 @@ void loop() {
 
     char message[1024]="", pDistBuf[1024];
     getRtcTime3231().toCharArray(sCurrentTime, getRtcTime3231().length()+1);
-    sprintf(message, "{\"lidarData\":\"%s,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", gMac, sCurrentTime);
-    //sprintf(message, "{\"lidarData\":\"0013A20041BB95F7,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", sCurrentTime);
+    //sprintf(message, "{\"lidarData\":\"%s,1,20,100,200,10,10,0,0,%s,20,0,20,0,1,1,1,0\"}", gMac, sCurrentTime);
     //sprintf(message, "{\"anchorData\":\"%s,%d,%d,%s,%s\"}", gMac, 20, 10, 22, sCurrentTime);
 
     if( ( millis() - prev_millis ) > PERIOD ) {
-        mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
+        sprintf(message, "{\"rssiData\":\"%s,%s,device1,11111,10812E286F24,20\"}", gMac, sCurrentTime);
+        mqttClient.publish(gTopicPub, message);
+        Serial.println(message);
+        sprintf(message, "{\"rssiData\":\"%s1,%s,device2,11111,10812E286F24,30\"}", gMac, sCurrentTime);
+        mqttClient.publish(gTopicPub, message);
+        Serial.println(message);
+        sprintf(message, "{\"rssiData\":\"%s2,%s,device3,11111,10812E286F24,40\"}", gMac, sCurrentTime);
+        mqttClient.publish(gTopicPub, message);
         Serial.println(message);
         prev_millis = millis();
     }

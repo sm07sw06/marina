@@ -18,7 +18,7 @@ char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-#define PERIOD 110 * 1000   //110초
+#define PERIOD 60 * 1000   //60초
 unsigned long prev_millis;
 
 // HC-SR04 핀 정의

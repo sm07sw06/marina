@@ -322,21 +322,26 @@ BoatCheck.prototype.getBoatCheck = function() {
     db.GetRegBoatMachindId(mObject, function(rtn){
         if (rtn == 'OK') {
 			logger.info('등록된 보트 디바이스임'); 
-			db.InsertDBBoatData(sData);    // LDH
-
-			if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
-				logger.info('!! SOS 신호 처리중...'); 
-				db.SetSOS(mObject, function(rtn) {
-					if (rtn == 'OK') {
-						//최근 정박 이력 확인
-						logger.info('SOS 완료'); 
+//			db.InsertDBBoatData(sData, function(rtn){;    // LDH
+			db.SetBoatData(sData, function(rtn){;    // LDH
+				if (rtn == 'OK') {
+					if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
+						logger.info('!! SOS 신호 처리중...'); 
+						db.SetSOS(mObject, function(rtn) {
+							if (rtn == 'OK') {
+								//최근 정박 이력 확인
+								logger.info('SOS 완료'); 
+							} else {
+								logger.info('SOS 오류'); //보트단말기 정박상태 분석2
+							}   
+						});  
 					} else {
-						logger.info('SOS 오류'); //보트단말기 정박상태 분석2
-					}   
-				});  
-			} else {
-				getAreaAnalysis(mObject); //GPS위치가 출입구 구역인지 확인
-			}
+						getAreaAnalysis(mObject); //GPS위치가 출입구 구역인지 확인
+					}
+				} else {
+					;;
+				}
+			 });    				
         } else {
             logger.info('등록된 보트 디바이스 아님'); //보트단말기 정박상태 분석2
         }   

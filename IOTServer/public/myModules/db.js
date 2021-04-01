@@ -85,7 +85,8 @@ function DB() {
 }
 
 // 보트 데이터 분석 처리
-function boatdata(sData) {
+//function boatdata(sData) {
+DB.prototype.SetBoatData = function (sData, callback) {	
 
 	var sId          = sData[9];
 	var nTemperature = sData[16];
@@ -101,7 +102,7 @@ function boatdata(sData) {
 	var ssend_time    = sData[15];
 
 	logger.info("----------------------------------");
-	logger.info('Start boatdata insert........');
+	logger.info('Start SetBoatData insert........');
 	logger.info("  sId          :" + sId          );	
 	logger.info("  nTemperature :" + nTemperature );	
 	logger.info("  nHumidity    :" + nHumidity    );	
@@ -142,18 +143,18 @@ function boatdata(sData) {
 				clientdb.query(sQueryString, function (err, res) {
 					if (err) {
 						logger.error("ERROR!!" + err);
-						//callback('ERROR');
+						callback('ERROR');
 				    } else {
 				    	logger.info("Boatdata Insert OK:");
+				    	callback('OK');
 				    }
 					clientdb.release();
 				}); 
 			}); 
 	    } catch (err) {
 			logger.error("ERROR:"+err);
-			//callback('ERROR');
+			callback('ERROR');
 		} 
-
 }
 
 //정박지 데이터 분석 처리
@@ -363,9 +364,9 @@ DB.prototype.SetDB = function(message) {
 
 
 // MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
-DB.prototype.InsertDBBoatData = function(message) {
-	boatdata(message);
-};
+//DB.prototype.InsertDBBoatData = function(message) {
+//	boatdata(message);
+//};
 
 
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
@@ -902,8 +903,7 @@ DB.prototype.SetXY = function(mObject, callback) {
 	mObject.y = 100;
 	callback('OK',mObject);
 	
-	
-	/***
+/***
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "UPDATE public.tb_boatdata \n";
         sQueryString += "   SET positionx  = " + mObject.x + ", positiony = "  + mObject.y + " \n";
@@ -931,9 +931,8 @@ DB.prototype.SetXY = function(mObject, callback) {
 		logger.error("ERROR:"+err);
 		callback('ERROR',mObject);
 	}
+	
 	***/
-	
-	
     
 };
 
