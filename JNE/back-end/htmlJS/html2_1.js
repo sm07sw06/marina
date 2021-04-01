@@ -73,6 +73,10 @@ const socket = io();
 				selectBox.innerHTML = 'B구역'
 			} else if (clickMemberData['sectorarea_cd'] == 'C') {
 				selectBox.innerHTML = 'C구역'
+			} else if (clickMemberData['sectorarea_cd'] == 'D') {
+				selectBox.innerHTML = 'D구역'
+			} else if (clickMemberData['sectorarea_cd'] == 'E') {
+				selectBox.innerHTML = 'E구역'
 			} else {
 				selectBox.innerHTML = '출입구'
 			}
@@ -128,6 +132,10 @@ const socket = io();
 			sendData['sectorarea_cd'] = 'B'
 		} else if (sendData['sectorarea_cd'] == 'C구역') {
 			sendData['sectorarea_cd'] = 'C'
+		} else if (sendData['sectorarea_cd'] == 'D구역') {
+			sendData['sectorarea_cd'] = 'D'
+		} else if (sendData['sectorarea_cd'] == 'E구역') {
+			sendData['sectorarea_cd'] = 'E'
 		} else {
 			sendData['sectorarea_cd'] = 'Z'
 		}
@@ -174,6 +182,10 @@ const socket = io();
 			sendData['sectorarea_cd'] = 'B'
 		} else if (sendData['sectorarea_cd'] == 'C구역') {
 			sendData['sectorarea_cd'] = 'C'
+		} else if (sendData['sectorarea_cd'] == 'D구역') {
+			sendData['sectorarea_cd'] = 'D'
+		} else if (sendData['sectorarea_cd'] == 'E구역') {
+			sendData['sectorarea_cd'] = 'E'
 		} else {
 			sendData['sectorarea_cd'] = 'Z'
 		}
