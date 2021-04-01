@@ -88,6 +88,7 @@ function DB() {
 //function boatdata(sData) {
 DB.prototype.SetBoatData = function (sData, callback) {	
 
+	var ssend_time   = sData[0];
 	var sId          = sData[9];
 	var nTemperature = sData[16];
 	var nHumidity    = sData[17];
@@ -99,8 +100,8 @@ DB.prototype.SetBoatData = function (sData, callback) {
 	var nSatellite   = sData[27];
 	var nGpsage      = sData[33];
 	var sSenttype    = sData[14];
-	var ssend_time    = sData[15];
 
+    
 	logger.info("----------------------------------");
 	logger.info('Start SetBoatData insert........');
 	logger.info("  sId          :" + sId          );	
