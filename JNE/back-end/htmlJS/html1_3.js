@@ -147,9 +147,10 @@ function Default_InPut(data) {
 //장치 관리 tb_anchor_lidar
 {
     //key값 설정(html 입력 id = '' 값 )
-    const INPUT2 = ["marina_id", "anchor_nm", "machine_id", "left_right", "anchor_id"], PAGE_NAME2 = '1_3_2_';
+    const INPUT2 = ["anchor_id", "anchor_nm", "machine_id", "left_right", "marina_id"], PAGE_NAME2 = '1_3_2_';
     let clickAnchorData = new Object();
 
+     
     //회원관리 조회(조회)
     function search_button2() {
         const search = document.getElementById('t_search2').value;

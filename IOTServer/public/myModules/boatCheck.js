@@ -44,82 +44,6 @@ function BoatCheck(message) {
 }
 
 
-//보트 단말기 정박 상태 분석
-/*******
-function analysisBoatAnchor(mObject) { 
-
-    logger.info("==================================");
-    logger.info('Start analysisBoatAnchor........');
-    logger.info('   marinaId :' + mObject.marinaId);
-    logger.info('   machineId:' + mObject.machineId);
-    logger.info('   Gradex:' + mObject.gradex);
-    logger.info('   Gradey:' + mObject.gradey);
-    logger.info("==================================");
-    
-//    mObject.gradex = 55;  //LDH
-//    mObject.gradey = 99;
-
-    var db = new DB(); 
-    
-    async.waterfall([
-        function(callback) {
-             
-            try {
-               db.SelectSectorBound(mObject, function(rtn){ //게류지 영역 확인
-                    if (rtn == 'OK') {
-                        logger.info('정박상태 확인1');
-                        db.SelectAnchorYN(mObject, function(rtn){
-                            if (rtn == 'OK') {
-                                logger.info('보트출항중1-1');
-                            } else {
-                                logger.info('보트입항중1-2');
-                            }   
-                        });         
-                    } else {
-                        logger.info('보트단말기 정박상태 분석1');
-                        callback(null, rtn);
-                        // 보트단말기 정박상태 분석1
-                        //analysisBoatAnchor(mObject, function(rtn){ 
-                        //  ;;
-                        //});                        
-                    }   
-                });   
-            } catch (error) {
-                logger.info('eeeeeeeeeeeeeeeeeeeeeee1');
-                callback(error, null);
-            }
-        },
-        function(callback) {
-            try {           
-                // 대쉬보드에 현재 운항 상태 적용
-                logger.info('!! 대쉬보드에 현재 운항 상태 적용중1...'); 
-                db.SetDashBoard(mObject, function(rtn){
-                    if (rtn == 'OK') {
-                        //최근 정박 이력 확인
-                        logger.info('데쉬보드 적용 완료'); 
-                        callback(null, mObject);  
-                    } else {
-                        logger.info('데쉬보드 적용 오류'); //보트단말기 정박상태 분석2
-                        callback(null, rtn);  
-                    }   
-                });                 
-            
-            } catch (error) {
-                logger.info('eeeeeeeeeeeeeeeeeeeeeee2');
-                callback(error, null);
-            }               
-        }
-        
-    ],
-    function (err, result) {
-        if(err){
-            console.log('Error ');
-            throw( err );
-        }  
-    });
-}
-*****/
-
 //보트 GPS의 위치가 출입구 구역에 있는지 판단 
 function getAreaAnalysis(mObject) { 
 
@@ -141,12 +65,6 @@ function getAreaAnalysis(mObject) {
 
     var db = new DB();
     var result;
-    
-    
-    /*
-     * 좌표 계산 (삼각 측정)
-     */
-
     
     async.waterfall([
         function(callback) {
@@ -322,7 +240,6 @@ BoatCheck.prototype.getBoatCheck = function() {
     db.GetRegBoatMachindId(mObject, function(rtn){
         if (rtn == 'OK') {
 			logger.info('등록된 보트 디바이스임'); 
-//			db.InsertDBBoatData(sData, function(rtn){;    // LDH
 			db.SetBoatData(sData, function(rtn){;    // LDH
 				if (rtn == 'OK') {
 					if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주

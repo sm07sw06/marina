@@ -124,9 +124,12 @@ module.exports = function (app, io, SQL) {
             const COLUM2 = ['anchor_id', 'anchor_nm', 'sector_id', 'boat_id', 'anchor_status'];
             var newData = false;//, searchMemData;
 
+        	const INPUT2 = ['anchor_id', 'anchor_nm', 'sectorarea_nm', 'sector_nm', 'anchor_status_nm',
+        		'boat_nm',  'boat_id', 'anchor_status'];
+        	
             //찾기(조회)
             socket.on(PAGE_NAME2 + 'search_data', function (msg) {
-                var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm, a.sector_id, a.boat_id, c.boat_nm, a.anchor_status, b.sector_nm, b.sectorarea_cd,e.detail_nm as sectorarea_nm,d.detail_nm as anchor_status_nm "
+                var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,e.detail_nm as sectorarea_nm, b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm, a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status,  b.sectorarea_cd "
                 sqlQuery += "FROM  tb_anchor_sector b, tb_anchor a left outer join tb_boat c on a.boat_id = c.boat_id , tb_code_detail e, tb_code_detail d ";
                 sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = e.detail_cd AND e.group_cd ='SECTORAREA' AND a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS' "
 
@@ -134,22 +137,22 @@ module.exports = function (app, io, SQL) {
                     sqlQuery += "AND a.anchor_id = $1";
 
                     SQL.postgresSQL(sqlQuery, [msg], [socket, PAGE_NAME2 + 'search']).then(function (data) {
-                        // console.log(data);
+                    	console.log("$$$$$$$$1:" + JSON.stringify(data));
                     });
 
                 } else if (msg) {//문자
                     sqlQuery += "AND a.anchor_nm like '%'||$1||'%'";
 
                     SQL.postgresSQL(sqlQuery, [msg], [socket, PAGE_NAME2 + 'search']).then(function (data) {
-                        // console.log(data);
+                    	console.log("$$$$$$$$2:" + JSON.stringify(data));
                     });
 
                 } else {//아무것도 없을때
                     SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME2 + 'search']).then(function (data) {
-                        // console.log(data);
+                    	console.log("$$$$$$$$3:" + JSON.stringify(data));
                     });
                 }
-
+                
                 newData = false;
 
             });
@@ -215,7 +218,8 @@ module.exports = function (app, io, SQL) {
             //변경,신규(저장)
             socket.on(PAGE_NAME2 + 'update_data', function (msg) {
                 var newColumns = COLUM2.slice();
-
+                console.log("$$$$$$$$$221 newColumns : " + newColumns);
+                console.log("$$$$$$$$$221 msg : " + msg);
                 if (newData) {
                     var sqlData = SQL.AuToSQLData(newColumns, msg.save);
 
@@ -224,12 +228,13 @@ module.exports = function (app, io, SQL) {
 
                     //신규저장
                     var sqlQuery = SQL.AuToQuerySQL("INSERT", DBNAME2, newColumns);
-
+                    console.log("$$$$$$$$$230 sqlQuery : " + sqlQuery);
+                    console.log("$$$$$$$$$230 sqlData  : " + sqlData);
 
                     SQL.postgresSQL(sqlQuery, sqlData);
 
                     // 신규 저장후 모두 출력
-                    var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm, a.sector_id, a.boat_id, c.boat_nm, a.anchor_status, b.sector_nm, b.sectorarea_cd,e.detail_nm as sectorarea_nm,d.detail_nm as anchor_status_nm "
+                    var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,e.detail_nm as sectorarea_nm, b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm, a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status,  b.sectorarea_cd  "
                     sqlQuery += "FROM  tb_anchor_sector b, tb_anchor a left outer join tb_boat c on a.boat_id = c.boat_id , tb_code_detail e, tb_code_detail d ";
                     sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = e.detail_cd AND e.group_cd ='SECTORAREA' AND a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS' "
                     SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME2 + 'search'])

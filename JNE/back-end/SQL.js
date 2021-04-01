@@ -27,7 +27,8 @@ module.exports = {
      * @param socketdata : 소켓으로 보낼데이터 입력 [소켓 기본값 : 필수, 주고받을 이벤트명]
     */
     postgresSQL(sql, params = null, socketdata = []) {
-        console.log(sql, params)
+        console.log("########## sql :"+sql)
+        console.log("########## params :"+params)
         if (!API.isEmpty(params)) {
             return new Promise(resolve => (
 
@@ -228,12 +229,18 @@ module.exports = {
         if (Colums.length <= Object.keys(save).length) {
             for (let index = 0; index < Object.keys(save).length; index++) {
                 if (Colums[index]) {
+                	console.log("$$$$$$$$$ 232 Colums[index] : " + save[Colums[index]]);
+                	if(save[Colums[index]] == 'null')
+                		save[Colums[index]] = '0';
                     sqlData.push(save[Colums[index]])
                 }
             }
         }else if(Colums.length > Object.keys(save).length) {
             for (let index = 0; index < Colums.length; index++) {
                 if (save[Colums[index]]) {
+                	console.log("$$$$$$$$$ 239 Colums[index] : " + save[Colums[index]]);
+                	if(save[Colums[index]] == 'null')
+                		save[Colums[index]] = '0';
                     sqlData.push(save[Colums[index]])
                 }
             }
@@ -242,12 +249,18 @@ module.exports = {
         if (Colums.length <= Object.keys(search).length) {
             for (let index = 0; index < Object.keys(search).length; index++) {
                 if (Colums[index]) {
+                	console.log("$$$$$$$$$ 248 Colums[index] : " + save[Colums[index]]);
+                	if(save[Colums[index]] == 'null')
+                		save[Colums[index]] = '0';
                     sqlData.push(search[Colums[index]])
                 }
             }
         }else if(Colums.length > Object.keys(search).length) {
             for (let index = 0; index < Colums.length; index++) {
                 if (search[Colums[index]]) {
+                	console.log("$$$$$$$$$ 255 Colums[index] : " + save[Colums[index]]);
+                	if(save[Colums[index]] == 'null')
+                		save[Colums[index]] = '0';
                     sqlData.push(search[Colums[index]])
                 }
             }

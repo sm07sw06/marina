@@ -79,226 +79,31 @@ function MessageObject()
 var mObject = new MessageObject(); //메세지 구조체
 **/
 
+
+function ConfigObject()
+{ 
+	var weather_url; 
+	var weather_point; 
+}
+var configMy  = new ConfigObject(); //메세지 구조체
+
+
 // MQTT에서 전달된 메세지를 인자로 받음
 function DB() {
 	var message ;
 }
 
-// 보트 데이터 분석 처리
-//function boatdata(sData) {
-DB.prototype.SetBoatData = function (sData, callback) {	
-
-	var ssend_time   = sData[0];
-	var sId          = sData[9];
-	var nTemperature = sData[16];
-	var nHumidity    = sData[17];
-	var nGradex      = sData[18];
-	var nGradey      = sData[19];
-	var nGpsquality  = sData[26];  
-	var nLatitude    = sData[22];
-	var nLongitude   = sData[24];
-	var nSatellite   = sData[27];
-	var nGpsage      = sData[33];
-	var sSenttype    = sData[14];
-
-    
-	logger.info("----------------------------------");
-	logger.info('Start SetBoatData insert........');
-	logger.info("  sId          :" + sId          );	
-	logger.info("  nTemperature :" + nTemperature );	
-	logger.info("  nHumidity    :" + nHumidity    );	
-	logger.info("  nGradex      :" + nGradex      );	
-	logger.info("  nGradey      :" + nGradey      );	
-	logger.info("  nGpsquality  :" + nGpsquality  );	
-	logger.info("  nLatitude    :" + nLatitude    );	
-	logger.info("  nLongitude   :" + nLongitude   );	
-	logger.info("  nSatellite   :" + nSatellite   );	
-	logger.info("  nGpsage      :" + nGpsage      );	
-	logger.info("  sSenttype    :" + sSenttype    );	
-	logger.info("  ssend_time   :" + ssend_time   );
-	logger.info("----------------------------------");
-
-	if(nTemperature == "") { nTemperature = 0; }
-	if(nHumidity    == "") { nHumidity    = 0; }
-	if(nTemperature == "nan") { nTemperature = 0; }
-	if(nHumidity    == "nan") { nHumidity    = 0; }
-	if(nGradex      == "") { nGradex      = 0; }
-	if(nGradey      == "") { nGradey      = 0; }
-	if(nGpsquality  == "") { nGpsquality  = 0; }
-	if(nLatitude    == "") { nLatitude    = 0; }
-	if(nLongitude   == "") { nLongitude   = 0; }
-	if(nSatellite   == "") { nSatellite   = 0; }
-	if(nGpsage      == "") { nGpsage      = 0; }
-	if(sSenttype    == "") { sSenttype    = 'R'; }
-	
-// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, sent_type, send_time) \n ";
-	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
-	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "' );  \n";
-	logger.info("[INSERT INTO tb_boatdata]:"+sQueryString);
- 
-	  try {
-
-		  pool.connect(function (err, clientdb, done) {
-				if (err) throw new Error(err);
-				clientdb.query(sQueryString, function (err, res) {
-					if (err) {
-						logger.error("ERROR!!" + err);
-						callback('ERROR');
-				    } else {
-				    	logger.info("Boatdata Insert OK:");
-				    	callback('OK');
-				    }
-					clientdb.release();
-				}); 
-			}); 
-	    } catch (err) {
-			logger.error("ERROR:"+err);
-			callback('ERROR');
-		} 
-}
-
 //정박지 데이터 분석 처리
-function anchordata(sData) {
-
-	var sId          = sData[0];
-	var nTemperature = sData[1];
-	var nHumidity    = sData[2];
-	var nDistance    = sData[3];
-	var ssend_time    = sData[4];
-	var sStatus   = "";
-
-	if(nTemperature == "")  { nTemperature = 0; }
-	if(nHumidity    == "")  { nHumidity = 0; }
-	if(nDistance    == "")  { nDistance = 0; }
-
-	logger.info("----------------------------------");
-	logger.info('Start anchordata insert........');
-	logger.info("  sId          :" + sId          );	
-	logger.info("  nTemperature :" + nTemperature );	
-	logger.info("  nHumidity    :" + nHumidity    );	
-	logger.info("  ssend_time   :" + ssend_time   );
-	logger.info("  nDistance    :" + nDistance   );
-	logger.info("----------------------------------");
-
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.tb_anchordata(marina_id, machine_id, send_time, temperature, humidity, distance)  \n";
-	    sQueryString += "values(1,'" + sId + "','"  + ssend_time + "',"  + nTemperature + ","  + nHumidity + ","  + nDistance + "  );  \n";
-	logger.info(sQueryString);
-
-   try {
-
-		pool.connect(function (err, clientdb, done) {
-			if (err) throw new Error(err);
-			clientdb.query(sQueryString, function (err, res) {
-				if (err) {
-					logger.error("ERROR!!" + err);
-					//callback('ERROR');
-			    } else {
-			    	logger.info("Anchordata Insert OK:");
-			    }
-				clientdb.release();
-			}); 
-		}); 
-    } catch (e) {
-		logger.error("ERROR:"+err);
-		//callback('ERROR');
-	}
-
-	 
-}
-
-
-//정박지 데이터 분석 처리
-function lidardata(sData) {
-		
-	var sId       		= sData[00];
-	var nAngleMin   	= sData[01];
-	var nAngleMax 		= sData[02];
-	var nLoadMin 		= sData[03];
-	var nShipMax 		= sData[04];
-	var nLoadThreshold 	= sData[05];
-	var nShipThreshold 	= sData[06];
-	var nTempo 			= sData[07];
-	var nHuminity 		= sData[08];
-	var ssend_time 		= sData[09];
-	var nLoadLeftCount 	= sData[10];
-	var nShipLeftCount 	= sData[11];
-	var nLoadRightCount = sData[12];
-	var nShipRightCount = sData[13];
-	var sLoadLeftYn 	= sData[14];
-	var sShipLeftYn 	= sData[15];
-	var sLoadRightYn 	= sData[16];
-	var sShipRightYn 	= sData[17];
-	var sLongData  		= sData[18];
-
-    if(nAngleMin       == "")  { nAngleMin       = 0; }
-    if(nAngleMax       == "")  { nAngleMax       = 0; }
-    if(nLoadMin        == "")  { nLoadMin        = 0; }
-    if(nShipMax        == "")  { nShipMax        = 0; }
-    if(nLoadThreshold  == "")  { nLoadThreshold  = 0; }
-    if(nShipThreshold  == "")  { nShipThreshold  = 0; }
-    if(nTempo          == "")  { nTempo          = 0; }
-    if(nHuminity       == "")  { nHuminity        = 0; }
-    if(nLoadLeftCount  == "")  { nLoadLeftCount  = 0; }
-    if(nShipLeftCount  == "")  { nShipLeftCount  = 0; }
-    if(nLoadRightCount == "")  { nLoadRightCount = 0; }
-    if(nShipRightCount == "")  { nShipRightCount = 0; }
-
-	logger.info("----------------------------------");
-	logger.info('Start lidardata insert........');
-    logger.info("  sId                :" + sId               );
-    logger.info("  nAngleMin          :" + nAngleMin         );
-    logger.info("  nAngleMax          :" + nAngleMax         );
-    logger.info("  nLoadMin           :" + nLoadMin          );
-    logger.info("  nShipMax           :" + nShipMax          );
-    logger.info("  nLoadThreshold     :" + nLoadThreshold    );
-    logger.info("  nShipThreshold     :" + nShipThreshold    );
-    logger.info("  nTempo             :" + nTempo            );
-    logger.info("  nHuminity          :" + nHuminity         );
-    logger.info("  ssend_time         :" + ssend_time        );
-    logger.info("  nLoadLeftCount     :" + nLoadLeftCount    );
-    logger.info("  nShipLeftCount     :" + nShipLeftCount    );
-    logger.info("  nLoadRightCount    :" + nLoadRightCount   );
-    logger.info("  nShipRightCount    :" + nShipRightCount   );
-    logger.info("  sLoadLeftYn        :" + sLoadLeftYn       );
-    logger.info("  sShipLeftYn        :" + sShipLeftYn       );
-    logger.info("  sLoadRightYn       :" + sLoadRightYn      );
-    logger.info("  sShipRightYn       :" + sShipRightYn      );
-    logger.info("  sLongData          :" + sLongData         );
-	logger.info("----------------------------------");
+function getCalcRssiDistance(rssi) {
 	
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString = "INSERT INTO public.tb_lidardata(marina_id, machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,temperature,huminity,send_time,  \n";
-	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  \n";
-	sQueryString += " values(1,'" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
-	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + ssend_time ;
-	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )  \n" ;
-	logger.info(sQueryString);
-
-    try {
-
-		pool.connect(function (err, clientdb, done) {
-			if (err) throw new Error(err);
-			clientdb.query(sQueryString, function (err, res) {
-				if (err) {
-					logger.error("ERROR!!" + err);
-					//callback('ERROR');
-			    } else {
-			    	logger.info("Lidardata Insert OK:");
-			    }
-				clientdb.release();
-			});
-		}); 
-    } catch (e) {
-		logger.error("ERROR:"+err);
-		//callback('ERROR');
-	}
-		
+	var c = 256 ;  //전파속도 256kbps
+	var f = 2.405; //주파수 2.405GHz
+	var dist = 0;
+	
+	var dist = (c / (4 * 3.14 * f)) * Math.pow(10,(rssi/20));
+	
+	return dist;
 }
-
-
-
 
 //정박지 데이터 분석 처리
 function rssidata(sData) {
@@ -364,34 +169,10 @@ DB.prototype.SetDB = function(message) {
 };
 
 
-// MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
-//DB.prototype.InsertDBBoatData = function(message) {
-//	boatdata(message);
-//};
-
-
-//MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
-DB.prototype.InsertDBAnchorData = function(message) {
-	anchordata(message);
-};
-
-//MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
-DB.prototype.InsertDBLidarData = function(message) {
-	lidardata(message);
-};
-
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.InsertDBRssiData = function(message) {
 	rssidata(message);
 };
-
-
-function ConfigObject()
-{ 
-	var weather_url; 
-	var weather_point; 
-}
-var configMy  = new ConfigObject(); //메세지 구조체
 
 
 // 환경변수값 추출
@@ -481,6 +262,170 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 	}
 
 };
+
+
+
+//보트 데이터 분석 처리
+DB.prototype.SetBoatData = function (sData, callback) {	
+
+	var ssend_time   = sData[0];
+	var sId          = sData[9];
+	var nTemperature = sData[16];
+	var nHumidity    = sData[17];
+	var nGradex      = sData[18];
+	var nGradey      = sData[19];
+	var nGpsquality  = sData[26];  
+	var nLatitude    = sData[22];
+	var nLongitude   = sData[24];
+	var nSatellite   = sData[27];
+	var nGpsage      = sData[33];
+	var sSenttype    = sData[14];
+
+ 
+	logger.info("----------------------------------");
+	logger.info('Start SetBoatData insert........');
+	logger.info("  sData        :" + sData        );	
+	logger.info("  sId          :" + sId          );	
+	logger.info("  nTemperature :" + nTemperature );	
+	logger.info("  nHumidity    :" + nHumidity    );	
+	logger.info("  nGradex      :" + nGradex      );	
+	logger.info("  nGradey      :" + nGradey      );	
+	logger.info("  nGpsquality  :" + nGpsquality  );	
+	logger.info("  nLatitude    :" + nLatitude    );	
+	logger.info("  nLongitude   :" + nLongitude   );	
+	logger.info("  nSatellite   :" + nSatellite   );	
+	logger.info("  nGpsage      :" + nGpsage      );	
+	logger.info("  sSenttype    :" + sSenttype    );	
+	logger.info("  ssend_time   :" + ssend_time   );
+	logger.info("----------------------------------");
+
+	if(nTemperature == "") { nTemperature = 0; }
+	if(nHumidity    == "") { nHumidity    = 0; }
+	if(nTemperature == "nan") { nTemperature = 0; }
+	if(nHumidity    == "nan") { nHumidity    = 0; }
+	if(nGradex      == "") { nGradex      = 0; }
+	if(nGradey      == "") { nGradey      = 0; }
+	if(nGpsquality  == "") { nGpsquality  = 0; }
+	if(nLatitude    == "") { nLatitude    = 0; }
+	if(nLongitude   == "") { nLongitude   = 0; }
+	if(nSatellite   == "") { nSatellite   = 0; }
+	if(nGpsage      == "") { nGpsage      = 0; }
+	if(sSenttype    == "") { sSenttype    = 'R'; }
+	
+//아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, sent_type, send_time) \n ";
+	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
+	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "' );  \n";
+	logger.info("[INSERT INTO tb_boatdata]:"+sQueryString);
+
+	  try {
+
+		  pool.connect(function (err, clientdb, done) {
+				if (err) throw new Error(err);
+				clientdb.query(sQueryString, function (err, res) {
+					if (err) {
+						logger.error("ERROR!!" + err);
+						callback('ERROR');
+				    } else {
+				    	logger.info("Boatdata Insert OK:");
+				    	callback('OK');
+				    }
+					clientdb.release();
+				}); 
+			}); 
+	    } catch (err) {
+			logger.error("ERROR:"+err);
+			callback('ERROR');
+		} 
+}
+
+//정박지 데이터 분석 처리
+DB.prototype.SetLidarData = function (sData, callback) {	
+	var sId       		= sData[00];
+	var nAngleMin   	= sData[01];
+	var nAngleMax 		= sData[02];
+	var nLoadMin 		= sData[03];
+	var nShipMax 		= sData[04];
+	var nLoadThreshold 	= sData[05];
+	var nShipThreshold 	= sData[06];
+	var nTempo 			= sData[07];
+	var nHuminity 		= sData[08];
+	var ssend_time 		= sData[09];
+	var nLoadLeftCount 	= sData[10];
+	var nShipLeftCount 	= sData[11];
+	var nLoadRightCount = sData[12];
+	var nShipRightCount = sData[13];
+	var sLoadLeftYn 	= sData[14];
+	var sShipLeftYn 	= sData[15];
+	var sLoadRightYn 	= sData[16];
+	var sShipRightYn 	= sData[17];
+	var sLongData  		= sData[18];
+
+ if(nAngleMin       == "")  { nAngleMin       = 0; }
+ if(nAngleMax       == "")  { nAngleMax       = 0; }
+ if(nLoadMin        == "")  { nLoadMin        = 0; }
+ if(nShipMax        == "")  { nShipMax        = 0; }
+ if(nLoadThreshold  == "")  { nLoadThreshold  = 0; }
+ if(nShipThreshold  == "")  { nShipThreshold  = 0; }
+ if(nTempo          == "")  { nTempo          = 0; }
+ if(nHuminity       == "")  { nHuminity        = 0; }
+ if(nLoadLeftCount  == "")  { nLoadLeftCount  = 0; }
+ if(nShipLeftCount  == "")  { nShipLeftCount  = 0; }
+ if(nLoadRightCount == "")  { nLoadRightCount = 0; }
+ if(nShipRightCount == "")  { nShipRightCount = 0; }
+
+	logger.info("----------------------------------");
+	logger.info('Start lidardata insert........');
+ logger.info("  sId                :" + sId               );
+ logger.info("  nAngleMin          :" + nAngleMin         );
+ logger.info("  nAngleMax          :" + nAngleMax         );
+ logger.info("  nLoadMin           :" + nLoadMin          );
+ logger.info("  nShipMax           :" + nShipMax          );
+ logger.info("  nLoadThreshold     :" + nLoadThreshold    );
+ logger.info("  nShipThreshold     :" + nShipThreshold    );
+ logger.info("  nTempo             :" + nTempo            );
+ logger.info("  nHuminity          :" + nHuminity         );
+ logger.info("  ssend_time         :" + ssend_time        );
+ logger.info("  nLoadLeftCount     :" + nLoadLeftCount    );
+ logger.info("  nShipLeftCount     :" + nShipLeftCount    );
+ logger.info("  nLoadRightCount    :" + nLoadRightCount   );
+ logger.info("  nShipRightCount    :" + nShipRightCount   );
+ logger.info("  sLoadLeftYn        :" + sLoadLeftYn       );
+ logger.info("  sShipLeftYn        :" + sShipLeftYn       );
+ logger.info("  sLoadRightYn       :" + sLoadRightYn      );
+ logger.info("  sShipRightYn       :" + sShipRightYn      );
+ logger.info("  sLongData          :" + sLongData         );
+	logger.info("----------------------------------");
+	
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString = "INSERT INTO public.tb_lidardata(marina_id, machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,temperature,huminity,send_time,  \n";
+	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  \n";
+	sQueryString += " values(1,'" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
+	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + ssend_time ;
+	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )  \n" ;
+	logger.info(sQueryString);
+
+ try {
+
+		pool.connect(function (err, clientdb, done) {
+			if (err) throw new Error(err);
+			clientdb.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+					callback('ERROR');
+			    } else {
+			    	logger.info("Lidardata Insert OK:");
+			    	callback('OK');
+			    }
+				clientdb.release();
+			});
+		}); 
+ } catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+		
+}
 
 
 
@@ -897,9 +842,16 @@ DB.prototype.SetXY = function(mObject, callback) {
 
 	
 	/***
+	 * RSSI값을 이용한 거리 게산
+	 * d = (C/4pif)*10^(L/20)
+	 **/
+	var dist1 = getCalcRssiDistance(20);
+	logger.info('   dist1  : ' + dist1);
+		 
+	/***
 	 * 삼각 측정에의한 좌표 계산
 	 **/
-	 
+	
 	mObject.x = 100;
 	mObject.y = 100;
 	callback('OK',mObject);

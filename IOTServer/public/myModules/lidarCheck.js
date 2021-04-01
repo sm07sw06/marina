@@ -79,9 +79,15 @@ LidarCheck.prototype.getLidarCheck = function() {
             db.GetRegAnchorMachindId(mObject, function(rtn){
 	            if (rtn == 'OK') {
 	                //최근 정박 이력 확인
-	            	db.InsertDBLidarData(sData);  
-	                logger.info('등록된 단말기 있음'); 
-	                callback(null, "OK", mObject);  
+	    			db.SetLidarData(sData, function(rtn){;    
+		    			if (rtn == 'OK') {
+//			                logger.info('등록된 단말기 있음'); 
+			                callback(null, "OK", mObject);  
+		    			} else {
+//			                logger.info('등록된 단말기 있음'); 
+			                callback(null, "ERROR", mObject);  
+		    			}
+	    			});
 	            } else {
 	                logger.info('등록된 단말기 없음'); 
 	                callback(null, "ERROR", mObject);  //

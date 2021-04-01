@@ -16,7 +16,7 @@ module.exports = function (app, io, SQL) {
 
             //장치 관리 찾기(조회)
             socket.on(PAGE_NAME1 + 'search_data', function (msg) {
-                var sqlQuery = "SELECT a.boat_id, a.boat_nm, b.machine_id  FROM tb_boat a ";
+                var sqlQuery = "SELECT a.boat_id, a.boat_nm, COALESCE(b.machine_id,'') as machine_id  FROM tb_boat a ";
                 sqlQuery += "left outer join tb_boat_device b on a.marina_id = b.marina_id AND a.boat_id = b.boat_id ";
                 sqlQuery += "WHERE (a.marina_id = 1) ";
                 var param = msg.searchData;
@@ -63,7 +63,7 @@ module.exports = function (app, io, SQL) {
                     
                     // 신규 저장후 출력
                     var sqlData = SQL.AuToSQLData(COLUM, msg.save)
-                    var sqlQuery = "SELECT a.boat_id, a.boat_nm, b.machine_id  FROM tb_boat a ";
+                    var sqlQuery = "SELECT a.boat_id, a.boat_nm, COALESCE(b.machine_id,'') as machine_id  FROM tb_boat a ";
                     sqlQuery += "left outer join tb_boat_device b on a.marina_id = b.marina_id AND a.boat_id = b.boat_id ";
                     sqlQuery += "WHERE (a.marina_id = 1) and (b.boat_id=$1 and a.boat_nm=$2 and b.machine_id=$3)";
                     SQL.postgresSQL(sqlQuery, sqlData, [socket, PAGE_NAME1 + 'search']).then(function (data) {
@@ -120,14 +120,15 @@ module.exports = function (app, io, SQL) {
         //장치 관리 tb_anchor_lidar
         {
             const PAGE_NAME2 = '1_3_2_';
-            const COLUM = ["marina_id", "machine_id", "left_right",'anchor_id'];
+            const COLUM = ["anchor_id", "anchor_nm", "machine_id", "left_right", "marina_id"];
             const DBNAME = "tb_anchor_lidar";
+            
 
             // var //newData = false;
 
             //장치 관리 찾기(조회)
             socket.on(PAGE_NAME2 + 'search_data', function (msg) {
-                var sqlQuery = "SELECT a.anchor_id, a.marina_id, a.anchor_nm, b.machine_id, b.left_right FROM tb_anchor a ";
+                var sqlQuery = "SELECT a.anchor_id, a.marina_id,   a.anchor_nm, COALESCE(b.machine_id,'') as machine_id, COALESCE(b.left_right,'') as left_right FROM tb_anchor a ";
                 sqlQuery += "left outer join tb_anchor_lidar b on a.marina_id = b.marina_id AND a.anchor_id = b.anchor_id ";
                 sqlQuery += "WHERE a.marina_id = 1 ";
 
@@ -168,7 +169,7 @@ module.exports = function (app, io, SQL) {
                     SQL.postgresSQL(sqlQuery, sqlData);
 
                     // 신규 저장후 출력
-                    var sqlQuery = "SELECT a.anchor_id, a.marina_id, a.anchor_nm, b.machine_id, b.left_right FROM tb_anchor a ";
+                    var sqlQuery = "SELECT  a.anchor_id, a.marina_id,   a.anchor_nm, COALESCE(b.machine_id,'') as machine_id, COALESCE(b.left_right,'') as left_right FROM tb_anchor a ";
                     sqlQuery += "left outer join tb_anchor_lidar b on a.marina_id = b.marina_id AND a.anchor_id = b.anchor_id ";
                     sqlQuery += "WHERE a.marina_id = $1 and b.machine_id=$2 and b.left_right=$3 and a.anchor_id=$4";
                     SQL.postgresSQL(sqlQuery, sqlData, [socket, PAGE_NAME2 + 'search']).then(function (data) {

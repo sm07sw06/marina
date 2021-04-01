@@ -204,7 +204,7 @@ const socket = io();
 	const LOG_OUT2 = "#anchorInfo_log";
 	//key값 설정(html 입력 id = '' 값 )
 	const INPUT2 = ['anchor_id', 'anchor_nm', 'sectorarea_nm', 'sector_nm', 'anchor_status_nm',
-		'boat_nm', 'sector_id', 'boat_id', 'anchor_status'];
+		'boat_nm',  'boat_id', 'anchor_status'];
 	var num = 0, clickData = new Object(), sendData = new Object();
 
 	//입력값 초기화
@@ -235,6 +235,9 @@ const socket = io();
 
 	//조회값 출력
 	socket.on(PAGE_NAME2 + 'search', function (data) {
+		
+		console.log("$$$$$$$$$ data:" + data);
+		
 		// 검색어 초기화
 		document.getElementById('t_search2').value = "";
 
