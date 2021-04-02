@@ -432,11 +432,11 @@ DB.prototype.SetLidarData = function (sData, callback) {
 //등록된 만말기 인지 확인 
 DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 
-//	logger.info("----------------------------------");
-//	logger.info('Start GetRegAnchorMachindId........');
-//	logger.info('  marinaId  : ' + mObject.marinaId);
-//	logger.info('  machineId : ' + mObject.machineId);
-//	logger.info("----------------------------------");
+	logger.info("----------------------------------");
+	logger.info('Start GetRegAnchorMachindId........');
+	logger.info('  marinaId  : ' + mObject.marinaId);
+	logger.info('  machineId : ' + mObject.machineId);
+	logger.info("----------------------------------");
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
@@ -444,7 +444,7 @@ DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 	    sQueryString += "  FROM tb_anchor_lidar   \n";
 	    sQueryString += " WHERE marina_id = " + mObject.marinaId +  " AND machine_id = '" + mObject.machineId + "' " ;
 	
-//	logger.info(sQueryString);
+ 	logger.info(sQueryString);
 
 	try {	
 		pool.connect(function (err, clientdb, done) {
