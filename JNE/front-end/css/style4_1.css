@@ -99,12 +99,12 @@ body { color:#fff; background-color:#292e31; }
 
 .center_wrap .boat_info { margin-top:15px; width:100%; border:2px solid #3f4749; box-sizing:border-box; border-radius:10px; text-align:center; box-shadow:5px 5px 5px rgba(0,0,0, .25); }
 .center_wrap .boat_info .left_info { float:left; width:50%; padding:29px 0; }
-.center_wrap .boat_info .left_info h2 { background-color:red; display:inline-block; padding:20px; font-size:20px; color:yellow; font-weight:bold; }
+.center_wrap .boat_info .left_info h2 { background-color:red;    display:inline-block; padding:10px; font-size:20px; color:yellow;  font-weight:bold; }
 .center_wrap .boat_info .left_info h3 { background-color:yellow; display:inline-block; padding:10px; font-size:20px; color:#292e31; font-weight:bold; }
 .center_wrap .boat_info .left_info span { display:inline-block; font-size:18px; margin-left:15px; }
 
 .center_wrap .boat_info .right_info { float:left; width:50%; padding:29px 0; }
-.center_wrap .boat_info .right_info h2 { background-color:#1389f7; display:inline-block; padding:20px; font-size:20px; font-weight:bold; }
+.center_wrap .boat_info .right_info h2 { background-color:#1389f7; display:inline-block; padding:10px; font-size:20px; font-weight:bold; }
 .center_wrap .boat_info .right_info span { display:inline-block; font-size:18px; margin-left:15px; }
 
 

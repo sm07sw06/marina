@@ -33,13 +33,13 @@ module.exports = function (app, io, SQL) {
 
             // 전체 현황
             var sqlQuery = "SELECT a.marina_id, b.sectorarea_cd ,c.detail_nm as sectorarea_nm, count(*) as cnt FROM tb_anchor a,tb_anchor_sector b,tb_code_detail c "
-            sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = c.detail_cd AND c.group_cd = 'SECTORAREA' GROUP BY a.marina_id, b.sectorarea_cd, sectorarea_nm"
+            sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND a.anchor_status = '1' AND b.sectorarea_cd = c.detail_cd AND c.group_cd = 'SECTORAREA' GROUP BY a.marina_id, b.sectorarea_cd, sectorarea_nm"
             SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME + 'total']);
 
 
             // 보트정보
             var sqlQuery = "SELECT a.marina_id, b.sectorarea_cd ,c.detail_nm as sectorarea_nm, count(*) as cnt FROM tb_anchor a,tb_anchor_sector b,tb_code_detail c "
-            sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = c.detail_cd AND c.group_cd = 'SECTORAREA' GROUP BY a.marina_id, b.sectorarea_cd, sectorarea_nm"
+            sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND a.anchor_status = '1'  b.sectorarea_cd = c.detail_cd AND c.group_cd = 'SECTORAREA' GROUP BY a.marina_id, b.sectorarea_cd, sectorarea_nm"
             SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME + 'about_boat']);
 
         });

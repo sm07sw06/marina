@@ -26,8 +26,8 @@ socket.on(PAGE_NAME1 + 'marina', function (data) {
 socket.on(PAGE_NAME1 + 'warning_boat', function (data) {
     var latitude = Number(data.latitude).toFixed(2)
     var longitude = Number(data.longitude).toFixed(2)
-    var warning = '<h2>재난요청</h2>'+'<h3>경도 / 위도'
-    warning+='<br>' + latitude + ' / ' + longitude
+    var warning = '<h2>재난요청</h2>'+'&nbsp<h3>경도 / 위도 : '
+    warning+='' + latitude + ' / ' + longitude
 
     $('#warning_boat').append(warning);
     $('#warning_boat').append($("<span>").text(data.boat_nm));
