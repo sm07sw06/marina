@@ -102,36 +102,47 @@ function getCalcRssiDistance(rssi) {
 	
 	var dist = (c / (4 * 3.14 * f)) * Math.pow(10,(rssi/20));
 	
-	return dist;
+	return dist/1000;   // LDH   mm -> m
 }
 
 //정박지 데이터 분석 처리
 function rssidata(sData) {
-
-	var marinaId    = 1;
-	var machineId   = sData[0];  //정박단말기ID
-	var sendTime 	= sData[1];  //전송시각
-	var machineNm   = sData[2];  //정박단말기명
-	var transId     = sData[3];  //중계기ID
-	var boatId    	= sData[4];  //보트ID
-	var rssi    	= sData[5];  //rssi
+	
+	var marinaId     = 1;
+	var machineId    = sData[0];  //정박단말기ID
+	var sendTime 	 = sData[1];  //전송시각
+	var machineNm    = sData[2];  //정박단말기명
+	var transId      = sData[3];  //중계기ID
+	var boatId    	 = sData[4];  //보트ID
+	
+//    if(typeof sData[7] == "undefined" ) {		// LDH
+//		logger.info('undefined........');
+//		var sendRecvTime = sData[1];  //보트전송기각
+//		var rssi    	 = sData[5];  //rssi
+//	} else {
+//		logger.info('not undefined.......');
+		var sendRecvTime = sData[5];  //보트전송기각
+		var rssi    	 = sData[6];  //rssi
+//	}
 
 	if(rssi == "")  { rssi = 0; }
 
 	logger.info("----------------------------------");
 	logger.info('Start rssidata insert........');
+	logger.info("  length      :" + sData.length);
     logger.info("  marinaId    :"+marinaId);
     logger.info("  machineId   :"+machineId);
     logger.info("  machineNm   :"+machineNm);
     logger.info("  sendTime    :"+sendTime);   
     logger.info("  transId     :"+transId);
     logger.info("  boatId      :"+boatId);
+    logger.info("  sendRecvTime:"+sendRecvTime);
     logger.info("  rssi        :"+rssi);
 	logger.info("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, rssi)  \n";
-	    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "',"  + rssi + "  );  \n";
+	var sQueryString  = "INSERT INTO public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
+	    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "','"  + sendRecvTime + "',"  + rssi + "  );  \n";
 	logger.info(sQueryString);
 
  try {
@@ -268,8 +279,8 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 //보트 데이터 분석 처리
 DB.prototype.SetBoatData = function (sData, callback) {	
 
-	var ssend_time   = sData[0];
 	var sId          = sData[9];
+	var ssend_time   = sData[15];
 	var nTemperature = sData[16];
 	var nHumidity    = sData[17];
 	var nGradex      = sData[18];
@@ -531,7 +542,7 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 
 	try {
 		//	var sQueryString  = "SELECT anchor.anchor_status FROM tb_anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.machineId + "'";
-		var sQueryString  = "SELECT /* SelectAnchorYN */ 1 FROM tb_anchor_lidar  \n WHERE marina_id = " + mObject.marinaId + " AND machine_id = '" + mObject.machineId + "'"; // LDH 시점 확인 
+		var sQueryString  = "SELECT /* SelectAnchorYN */ 1 FROM tb_anchor_lidar  \n WHERE marina_id = " + mObject.marinaId + " AND machine_id = '" + mObject.machineId + "'"; //  
 		logger.info(sQueryString);
 
 		pool.connect(function (err, clientdb, done) {
@@ -832,7 +843,14 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 DB.prototype.SetXY = function(mObject, callback) {
 	
 	var machine_id ;
-	
+
+	var dist = [];
+	var posx = 0.0; //기준점 X
+	var posy = 0.0; //기준점 Y
+	var posa = 0.0; //2차 기준점 위치
+	var calx = 0.0;
+	var caly = 0.0;
+		
 	logger.info("-------!@#$%!@#$%!@#$%!@#$%!@#$%!@#$%---------------------------");
 	logger.info('Start SetXY........');
     logger.info('   marinaId  : ' + mObject.marinaId);
@@ -841,52 +859,92 @@ DB.prototype.SetXY = function(mObject, callback) {
 	logger.info("----------------------------------");
 
 	
-	/***
-	 * RSSI값을 이용한 거리 게산
-	 * d = (C/4pif)*10^(L/20)
-	 **/
-	var dist1 = getCalcRssiDistance(20);
-	logger.info('   dist1  : ' + dist1);
-		 
-	/***
-	 * 삼각 측정에의한 좌표 계산
-	 **/
-	
-	mObject.x = 100;
-	mObject.y = 100;
-	callback('OK',mObject);
-	
-/***
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE public.tb_boatdata \n";
-        sQueryString += "   SET positionx  = " + mObject.x + ", positiony = "  + mObject.y + " \n";
-        sQueryString += " WHERE marina_id  = "  + mObject.marinaId  + "  \n";
-        sQueryString += "   AND machine_id = '" + mObject.machineId + "' \n";
-        sQueryString += "   AND send_time  = '" + mObject.sendTime  + "' \n";
-	logger.info(sQueryString);
+	/* 보트 신호건에 대한 RSSI 값 3개 찾기 */
+	var sQueryString  = "SELECT /* SetXY */ b.marina_id,b.machine_id,b.send_time, r.boat_recv_id, r.rssi, r.send_recv_time ,d.positionx,d.positiony,d.set_order,d.gate_class \n";
+    	sQueryString += "  from tb_boatdata b, tb_rssidata r , tb_anchor_device d \n";
+    	sQueryString += " WHERE b.machine_id = r.boat_recv_id  \n";
+    	sQueryString += "   AND r.machine_id = d.machine_id  \n";
+    	sQueryString += "   AND r.marina_id  = d.marina_id  \n";
+    	sQueryString += "   AND b.send_time BETWEEN to_char((to_timestamp(r.send_recv_time, 'YYYYMMDDHH24MISS') - interval '4 sec'),'YYYYMMDDHH24MISS') \n";
+    	sQueryString += "   AND to_char((to_timestamp(r.send_recv_time, 'YYYYMMDDHH24MISS') + interval '4 sec'),'YYYYMMDDHH24MISS')  \n";
+    	sQueryString += "   AND b.marina_id  = "  + mObject.marinaId  + "  \n";
+    	sQueryString += "   AND b.machine_id = '" + mObject.machineId + "' \n";
+    	sQueryString += "   AND b.send_time  = '" + mObject.sendTime  + "' \n";
+    	sQueryString += " ORDER by d.set_order \n";
 
+    logger.info(sQueryString);
+	
     try {
 
-		pool.connect(function (err, clientdb, done) {
-			if (err) throw new Error(err);
-			clientdb.query(sQueryString, function (err, res) {
-				if (err) {
-					logger.error("ERROR!!" + err);
-					callback('ERROR', mObject);
-			    } else {
-	    	
-			    	callback('OK',mObject);
-			    }
-				clientdb.release();
-			}); 
-		}); 
+        pool.connect(function (err, clientdb, done) {
+            if (err) throw new Error(err);
+            clientdb.query(sQueryString, function (err, res) {
+                if (err) {
+                    logger.error("ERROR!!" + err);
+                    callback('ERROR', mObject);
+                } else {
+                    if( res.rowCount == 3 ) { 
+                    	logger.info("	RSSI 계산 시작...");
+                        for(var i = 0; i < res.rowCount ; i ++) {
+                        	
+                        	if(res.rows[i].set_order == 1) {
+                        		posx = Number(res.rows[i].positionx);
+                        		posy = Number(res.rows[i].positiony);
+                        		logger.info('   posx : ' + posx);
+                        		logger.info('   posy : ' + posy);
+                        	}
+                        	if(res.rows[i].set_order == 2) {
+                        		posa = Number(res.rows[i].positionx - posx);
+                        		logger.info('   posa : ' + posa);
+                        	}
+                        	/***
+                        	 * RSSI값을 이용한 거리 게산
+                        	 * d = (C/4pif)*10^(L/20)
+                        	 *  res.rows[i].rssi;
+                        	 **/
+                        	dist[i] = getCalcRssiDistance(res.rows[i].rssi);  //RSSI
+                        }  
+                    	logger.info('   dist[0] : ' + dist[0]);
+                    	logger.info('   dist[1] : ' + dist[1]);
+                    	logger.info('   dist[2] : ' + dist[2]);
+
+                        /***
+                    	 * 삼각 측정에의한 좌표 계산
+                    	 **/
+                        calx = ((Math.pow(dist[0],2) - Math.pow(dist[1],2) + Math.pow(posa,2)) / (2 * posa)); 
+                        logger.info("calx==:" + calx);
+                        
+                        if(( Math.pow(dist[0],2) - Math.pow(calx,2) ) == 0) {
+                        	caly = 0;
+                        } else {
+                        	caly = Math.sqrt( Math.abs(Math.pow(dist[0],2) - Math.pow(calx,2)) );
+                        }
+                        logger.info("caly:" + caly);
+                        	
+                        calx = Math.round((calx + posx),2);
+                        caly = Math.round((caly + posy),2);
+                        
+                        logger.info("calx:" + calx);
+                        logger.info("caly:" + caly);
+                        
+                    	mObject.x = calx; 
+                    	mObject.y = caly;
+                        logger.info("mObject.x:" + mObject.x);
+                        logger.info("mObject.y:" + mObject.y);
+                        
+                    	callback('OK', mObject);                        
+                    } else {
+                    	logger.info("RSSI 건수 오류");
+                        callback("ERROR", null);
+                    }
+                }
+                clientdb.release();
+            }); 
+        }); 
     } catch (e) {
-		logger.error("ERROR:"+err);
-		callback('ERROR',mObject);
-	}
-	
-	***/
-    
+        logger.error("ERROR:"+err);
+        callback('ERROR',mObject);
+    }
 };
 
 DB.prototype.SetXYUpdate = function(mObject, callback) {

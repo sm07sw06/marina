@@ -132,7 +132,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 	                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
 	                        } else {
 	                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.(미등록된 보트 탐지)!!");
-	                            // 미등록 보트 정박 처리 // LDH
+	                            // 미등록 보트 정박 처리 // 
 	                            db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
 	                                if (rtn == 'OK') {
 	                                    logger.info('보트 정박 처리 성공2'); 
@@ -190,7 +190,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 	                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
 	                        } else {
 	                            logger.info("범위내에 등록된 보트가 존재하지 않습니다.(미등록된 보트 탐지)!!");
-	                            // 미등록 보트 정박 처리 // LDH
+	                            // 미등록 보트 정박 처리 //  
 	                            db.SetBoatAnchor("0", mObject2, function(rtn){ //status = 0 미정박
 	                                if (rtn == 'OK') {
 	                                    logger.info('보트 정박 처리 성공4');

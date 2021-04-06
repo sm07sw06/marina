@@ -22,9 +22,9 @@ const logFormat = winston.format.combine(
 
 const transport = new DailyRotateFile({
 	filename: config.get('logConfig.logFolder') + config.get('logConfig.logFile'),
-	datePattern: 'YYYY-MM-DD-HH',
+	datePattern: 'YYYY-MM-DD',
 	zippedArchive: true,
-	maxSize: '20m',
+	maxSize: '500m',
 	maxFiles: '14d',
 	prepend: true,
 	level: config.get('logConfig.logLevel'),

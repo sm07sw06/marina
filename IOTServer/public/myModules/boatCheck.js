@@ -73,10 +73,8 @@ function getAreaAnalysis(mObject) {
                 if (rtn == 'OK') {
                 	mObject.x = mObject2.x;
                 	mObject.y = mObject2.y;
-                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject2.x); //보트 입항중
-                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject2.y); //보트 입항중
-                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject.x); //보트 입항중
-                	logger.error('삼각측정에 의한 좌표 Update OK'+mObject.y); //보트 입항중
+                	logger.error('삼각측정에 의한 좌표 Update OK : '+mObject.x); //보트 입항중
+                	logger.error('삼각측정에 의한 좌표 Update OK : '+mObject.y); //보트 입항중
                     callback(null,'OK', mObject);  
                 } else {
                     callback(null, 'ERROR', mObject);   
@@ -141,17 +139,19 @@ function getAreaAnalysis(mObject) {
             logger.info('   longitude :' + mObject.longitude );  
             logger.info("==================================");
             
-            // 보트 일출항 이력 갱신
-            db.UpdateBoatHist(mObject, function(rtn){
-                if (rtn == 'OK' ) {
-                    logger.info('정박상태 확인3'); 
-                    callback(null, result, mObject); 
-                    //최근 정박 이력 확인
-                } else {
-                    logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
-                    callback(null,'ERROR', rtn); 
-                }   
-            });          
+            if (result == 'OK' ) {
+	            // 보트 일출항 이력 갱신
+	            db.UpdateBoatHist(mObject, function(rtn){
+	                if (rtn == 'OK' ) {
+	                    logger.info('정박상태 확인3'); 
+	                    callback(null, result, mObject); 
+	                    //최근 정박 이력 확인
+	                } else {
+	                    logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
+	                    callback(null,'ERROR', rtn); 
+	                }   
+	            });  
+            }
         },
         function(result, mObject, callback) {
             
@@ -207,8 +207,8 @@ BoatCheck.prototype.getBoatCheck = function() {
     var sData = this.message;  // MQTT에서 보내온 메세지
 
     mObject.marinaId    = 1;
-    mObject.sendTime    = sData[0];
     mObject.machineId   = sData[9];
+    mObject.sendTime    = sData[15];
     mObject.temperature = sData[16];
     mObject.humidity    = sData[17];
     mObject.gradex      = sData[18];
@@ -240,7 +240,7 @@ BoatCheck.prototype.getBoatCheck = function() {
     db.GetRegBoatMachindId(mObject, function(rtn){
         if (rtn == 'OK') {
 			logger.info('등록된 보트 디바이스임'); 
-			db.SetBoatData(sData, function(rtn){;    // LDH
+			db.SetBoatData(sData, function(rtn){;    // 
 				if (rtn == 'OK') {
 					if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
 						logger.info('!! SOS 신호 처리중...'); 
