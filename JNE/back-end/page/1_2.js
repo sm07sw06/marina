@@ -15,8 +15,9 @@ module.exports = function (app, io, SQL) {
 
         //찾기(조회)
         socket.on(PAGE_NAME + 'search_data', function (msg) {
-            var sqlQuery = "SELECT a.boat_id,b.user_nm, a.boat_nm, b.user_cd, c.detail_nm AS boat_status, a.boat_desc, a.user_id FROM tb_boat a, tb_user_info b, tb_code_detail c ";
-            sqlQuery += "WHERE a.user_id = b.user_id and a.boat_status = c.detail_cd and c.group_cd = 'BOAT_STATUS' ";
+            var sqlQuery  = "SELECT a.boat_id,b.user_nm, a.boat_nm, b.user_cd, c.detail_nm AS boat_status, a.boat_desc, a.user_id \n";
+            	sqlQuery += "  FROM tb_boat a LEFT OUTER JOIN tb_user_info b ON a.user_id = b.user_id \n";
+            	sqlQuery += "                 LEFT OUTER JOIN tb_code_detail c ON 'a.boat_status' = c.detail_cd AND c.group_cd = 'BOAT_STATUS' ";
 
             if (msg) {//문자
                 sqlQuery += "and (a.boat_nm LIKE '%'||$1||'%');";

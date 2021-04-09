@@ -87,6 +87,10 @@ module.exports = {
     AuToQuerySQL(query, DBname, columns = [], columnsSearch = []) {
         var sqlQuery;
 
+        console.log("$$$$$$$$$ query : " + query.toString()); 
+        console.log("$$$$$$$$$ columns : " + columns.toString()); 
+        console.log("$$$$$$$$$ columnsSearch : " + columnsSearch.toString()); 
+        
         switch (query) {
             case "INSERT":
                 sqlQuery = "INSERT INTO " + DBname
@@ -128,6 +132,7 @@ module.exports = {
                 sqlQuery = "UPDATE " + DBname
 
                 if (!API.isEmpty(columns) && columnsSearch.length == 1) {
+                	console.log("$$$$$$$$$ UPDATE 131 ");
                     var data = '';
                     sqlQuery += " SET " + columnsSearch.toString() + "=$1";
 
@@ -141,10 +146,12 @@ module.exports = {
                     sqlQuery += " WHERE (" + columns.toString() + ")=(" + data + ")";
 
                 } else if (!API.isEmpty(columns) && API.isEmpty(columnsSearch) && columns.length == 1) {
+                	console.log("$$$$$$$$$ UPDATE 145 ");
                     sqlQuery += " SET " + columns.toString() + "=$1";
                     sqlQuery += " WHERE " + columns.toString() + "=$2";
 
                 } else if (!API.isEmpty(columns) && !API.isEmpty(columnsSearch)) {
+                	console.log("$$$$$$$$$ UPDATE 150 ");
                     var data = '';
                     let i = 1;
                     for (; i <= columnsSearch.length; i++) {
@@ -167,6 +174,7 @@ module.exports = {
                     sqlQuery += " WHERE (" + columns.toString() + ")=(" + data + ")";
 
                 } else if (!API.isEmpty(columns) && API.isEmpty(columnsSearch)) {
+                	console.log("$$$$$$$$$ UPDATE 173 ");                	
                     var data = '';
                     let i = 1;
                     for (; i <= columns.length; i++) {
@@ -227,6 +235,7 @@ module.exports = {
     AuToSQLData(Colums, save = {}, search = {}) {
         var sqlData = [];
         if (Colums.length <= Object.keys(save).length) {
+        	console.log("$$$$$$$$$ 238 ............"+Object.keys(save).length);
             for (let index = 0; index < Object.keys(save).length; index++) {
                 if (Colums[index]) {
                 	console.log("$$$$$$$$$ 232 Colums[index] : " + save[Colums[index]]);
@@ -236,6 +245,7 @@ module.exports = {
                 }
             }
         }else if(Colums.length > Object.keys(save).length) {
+        	console.log("$$$$$$$$$ 248 ............"+ Colums.length);
             for (let index = 0; index < Colums.length; index++) {
                 if (save[Colums[index]]) {
                 	console.log("$$$$$$$$$ 239 Colums[index] : " + save[Colums[index]]);
@@ -247,25 +257,27 @@ module.exports = {
         }
 
         if (Colums.length <= Object.keys(search).length) {
+        	console.log("$$$$$$$$$ 260 ............"+ Object.keys(search).length);
             for (let index = 0; index < Object.keys(search).length; index++) {
                 if (Colums[index]) {
-                	console.log("$$$$$$$$$ 248 Colums[index] : " + save[Colums[index]]);
-                	if(save[Colums[index]] == 'null')
-                		save[Colums[index]] = '0';
+                	console.log("$$$$$$$$$ 248 Colums[index] : " + search[Colums[index]]);
+                	if(search[Colums[index]] == 'null')
+                		search[Colums[index]] = '0';
                     sqlData.push(search[Colums[index]])
                 }
             }
         }else if(Colums.length > Object.keys(search).length) {
+        	console.log("$$$$$$$$$ 270 ............"+Colums.length);
             for (let index = 0; index < Colums.length; index++) {
                 if (search[Colums[index]]) {
-                	console.log("$$$$$$$$$ 255 Colums[index] : " + save[Colums[index]]);
-                	if(save[Colums[index]] == 'null')
-                		save[Colums[index]] = '0';
+                	console.log("$$$$$$$$$ 255 Colums[index] : " + search[Colums[index]]);
+                	if(search[Colums[index]] == 'null')
+                		search[Colums[index]] = '0';
                     sqlData.push(search[Colums[index]])
                 }
             }
         }
-        
+        console.log("$$$$$$$$$ 280 sqlData : " + sqlData);
         return sqlData;
     },
 

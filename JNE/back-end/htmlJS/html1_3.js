@@ -17,7 +17,7 @@ function Default_InPut(data) {
 //장치 관리 tb_boat_device
 {
     //key값 설정(html 입력 id = '' 값 )
-    const INPUT1 = ["boat_id", "boat_nm", "machine_id"], PAGE_NAME1 = '1_3_1_';
+    const INPUT1 = ["boat_id", "boat_nm",  "machine_id"], PAGE_NAME1 = '1_3_1_';
     let clickBoatData = new Object();
 
     //회원관리 조회(조회)
@@ -177,7 +177,7 @@ function Default_InPut(data) {
         // 출력값 구성 잡기
         $("#anchor_log").append($("<li class=anchor_lidar id=search2" + num + ">"));
         for (var key in data)
-            if (key == 'marina_id' || key == 'anchor_nm' || key == 'machine_id')
+            if (key == 'anchor_id' || key == 'anchor_nm' || key == 'machine_id' || key == 'left_right')
                 $('#search2' + num).append($('<span>').text(data[key]));
 
         //해당 회원 클릭시

@@ -17,7 +17,7 @@ module.exports = function (app, io, SQL) {
             //찾기(조회)
             socket.on(PAGE_NAME1 + 'search_data', function (msg) {
                 var sqlQuery = "SELECT a.marina_id, a.sector_id, a.sector_nm, a.sectorarea_cd,b.detail_nm as sectorarea_nm , a.sector_desc, a.gpsx1, a.gpsy1, a.gpsx2, a.gpsy2 FROM public.tb_anchor_sector a, tb_code_detail b "
-                sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' ";
+                sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' order by a.sector_nm ";
 
                 if (Number(msg)) {
                     sqlQuery += "AND a.sector_id = $1";
@@ -75,7 +75,7 @@ module.exports = function (app, io, SQL) {
 
                     // 신규 저장후 모두 출력
                     var sqlQuery = "SELECT a.marina_id, a.sector_id, a.sector_nm, a.sectorarea_cd,b.detail_nm as sectorarea_nm , a.sector_desc, a.gpsx1, a.gpsy1, a.gpsx2, a.gpsy2 FROM public.tb_anchor_sector a, tb_code_detail b "
-                    sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' ";
+                    sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' order by a.sector_nm";
                     SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME1 + 'search'])
 
                 } else {
@@ -89,7 +89,7 @@ module.exports = function (app, io, SQL) {
                     // 신규 저장후 모두 출력
                     var sqlQuery = "SELECT a.marina_id, a.sector_id, a.sector_nm, a.sectorarea_cd,b.detail_nm as sectorarea_nm , a.sector_desc, a.gpsx1, a.gpsy1, a.gpsx2, a.gpsy2 FROM public.tb_anchor_sector a, tb_code_detail b "
                     sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' ";
-                    sqlQuery += 'and (sector_nm,gpsx1,gpsx2,gpsy1,gpsy2,sector_desc,sector_id,sectorarea_cd) = ($1,$2,$3,$4,$5,$6,$7,$8)';
+                    sqlQuery += 'and (sector_nm,gpsx1,gpsx2,gpsy1,gpsy2,sector_desc,sector_id,sectorarea_cd) = ($1,$2,$3,$4,$5,$6,$7,$8) order by a.sector_nm';
                     SQL.postgresSQL(sqlQuery, Object.values(msg.save), [socket, PAGE_NAME1 + 'search'])
                 }
 
@@ -107,7 +107,7 @@ module.exports = function (app, io, SQL) {
 
                 // 신규 저장후 모두 출력
                 var sqlQuery = "SELECT a.marina_id, a.sector_id, a.sector_nm, a.sectorarea_cd,b.detail_nm as sectorarea_nm , a.sector_desc, a.gpsx1, a.gpsy1, a.gpsx2, a.gpsy2 FROM public.tb_anchor_sector a, tb_code_detail b "
-                sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' ";
+                sqlQuery += "WHERE a.sectorarea_cd = b.detail_cd AND b.group_cd ='SECTORAREA' order by a.sector_nm";
                 SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME1 + 'search'])
 
                 newData = false;
@@ -122,6 +122,7 @@ module.exports = function (app, io, SQL) {
             const PAGE_NAME2 = '2_1_2_';
             const DBNAME2 = 'tb_anchor';
             const COLUM2 = ['anchor_id', 'anchor_nm', 'sector_id', 'boat_id', 'anchor_status'];
+            const KEY2   = ['anchor_id'];
             var newData = false;//, searchMemData;
 
         	const INPUT2 = ['anchor_id', 'anchor_nm', 'sectorarea_nm', 'sector_nm', 'anchor_status_nm',
@@ -129,25 +130,33 @@ module.exports = function (app, io, SQL) {
         	
             //찾기(조회)
             socket.on(PAGE_NAME2 + 'search_data', function (msg) {
-                var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,e.detail_nm as sectorarea_nm, b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm, a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status,  b.sectorarea_cd "
-                sqlQuery += "FROM  tb_anchor_sector b, tb_anchor a left outer join tb_boat c on a.boat_id = c.boat_id , tb_code_detail e, tb_code_detail d ";
-                sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = e.detail_cd AND e.group_cd ='SECTORAREA' AND a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS' "
+                var sqlQuery  = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,b.detail_nm as sectorarea_nm "
+                    sqlQuery += "      ,b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm ";
+                	sqlQuery += "      ,a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status, b.sectorarea_cd "
+                    sqlQuery += "  FROM tb_anchor a left outer join (select bb.marina_id, bb.sector_id, bb.sector_nm, bb.sectorarea_cd, ee.detail_nm  ";
+                	sqlQuery += "                                      from tb_anchor_sector bb left outer join tb_code_detail ee on  bb.sectorarea_cd = ee.detail_cd AND ee.group_cd ='SECTORAREA'"
+                    sqlQuery += "                                   ) b on  a.marina_id = b.marina_id AND a.sector_id = b.sector_id  ";
+                	sqlQuery += "                   left outer join tb_boat c on a.boat_id = c.boat_id 	"
+                    sqlQuery += "                   left outer join tb_code_detail d on a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS'";
 
                 if (Number(msg)) {
-                    sqlQuery += "AND a.anchor_id = $1";
+                    sqlQuery += " AND a.anchor_id = $1";
+                	sqlQuery += " order by a.anchor_nm"
 
                     SQL.postgresSQL(sqlQuery, [msg], [socket, PAGE_NAME2 + 'search']).then(function (data) {
                     	console.log("$$$$$$$$1:" + JSON.stringify(data));
                     });
 
                 } else if (msg) {//문자
-                    sqlQuery += "AND a.anchor_nm like '%'||$1||'%'";
+                    sqlQuery += " AND a.anchor_nm like '%'||$1||'%'";
+                	sqlQuery += " order by a.anchor_nm"
 
                     SQL.postgresSQL(sqlQuery, [msg], [socket, PAGE_NAME2 + 'search']).then(function (data) {
                     	console.log("$$$$$$$$2:" + JSON.stringify(data));
                     });
 
                 } else {//아무것도 없을때
+                	sqlQuery += " order by a.anchor_nm"
                     SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME2 + 'search']).then(function (data) {
                     	console.log("$$$$$$$$3:" + JSON.stringify(data));
                     });
@@ -218,40 +227,65 @@ module.exports = function (app, io, SQL) {
             //변경,신규(저장)
             socket.on(PAGE_NAME2 + 'update_data', function (msg) {
                 var newColumns = COLUM2.slice();
-                console.log("$$$$$$$$$221 newColumns : " + newColumns);
-                console.log("$$$$$$$$$221 msg : " + msg);
+                var newKeys = KEY2.slice();
+                console.log("$$$$$$$$$231 newColumns : " + newColumns);
+                console.log("$$$$$$$$$231 newKeys : " + newKeys);
                 if (newData) {
-                    var sqlData = SQL.AuToSQLData(newColumns, msg.save);
-
+                    var sqlData = SQL.AuToSQLData(newColumns, msg.save, msg.search );
+                                      
                     newColumns.unshift("marina_id");
+                    newKeys.unshift("marina_id");
                     sqlData.unshift(1);
+                    console.log("$$$$$$$$$240 newColumns2 : " + newColumns);
+                    console.log("$$$$$$$$$240 newKeys2 : " + newKeys);
 
                     //신규저장
                     var sqlQuery = SQL.AuToQuerySQL("INSERT", DBNAME2, newColumns);
-                    console.log("$$$$$$$$$230 sqlQuery : " + sqlQuery);
-                    console.log("$$$$$$$$$230 sqlData  : " + sqlData);
+                    console.log("$$$$$$$$$245 sqlQuery : " + sqlQuery);
+                    console.log("$$$$$$$$$245 sqlData  : " + sqlData);
 
                     SQL.postgresSQL(sqlQuery, sqlData);
 
                     // 신규 저장후 모두 출력
-                    var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,e.detail_nm as sectorarea_nm, b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm, a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status,  b.sectorarea_cd  "
-                    sqlQuery += "FROM  tb_anchor_sector b, tb_anchor a left outer join tb_boat c on a.boat_id = c.boat_id , tb_code_detail e, tb_code_detail d ";
-                    sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = e.detail_cd AND e.group_cd ='SECTORAREA' AND a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS' "
+                    var sqlQuery  = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,b.detail_nm as sectorarea_nm "
+                        sqlQuery += "      ,b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm ";
+                    	sqlQuery += "      ,a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status, b.sectorarea_cd "
+                        sqlQuery += "  FROM tb_anchor a left outer join (select bb.marina_id, bb.sector_id, bb.sector_nm, bb.sectorarea_cd, ee.detail_nm  ";
+                    	sqlQuery += "                                      from tb_anchor_sector bb left outer join tb_code_detail ee on  bb.sectorarea_cd = ee.detail_cd AND ee.group_cd ='SECTORAREA'"
+                        sqlQuery += "                                   ) b on  a.marina_id = b.marina_id AND a.sector_id = b.sector_id  ";
+                    	sqlQuery += "                   left outer join tb_boat c on a.boat_id = c.boat_id 	"
+                        sqlQuery += "                   left outer join tb_code_detail d on a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS'";
+                    	sqlQuery += " order by a.anchor_nm"                    	
+
                     SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME2 + 'search'])
 
                 } else {
+                	
+                    newColumns.unshift("marina_id");
+                    newKeys.unshift("marina_id");
+                    
+                    console.log("$$$$$$$$$267 newColumns2 : " + newColumns);
+                    console.log("$$$$$$$$$267 newKeys2 : " + newKeys);
+                    
                     var sqlData = SQL.AuToSQLData(COLUM2, msg.save, msg.search);
-
+                    console.log("$$$$$$$$$245 sqlData2 : " + sqlData);
                     //변경 
-                    var sqlQuery = SQL.AuToQuerySQL("UPDATE", DBNAME2, COLUM2);
-
+                    var sqlQuery = SQL.AuToQuerySQL("UPDATE", DBNAME2, newKeys, COLUM2);
+                    console.log("$$$$$$$$$245 sqlQuery2 : " + sqlQuery);
+                    
                     SQL.postgresSQL(sqlQuery, sqlData);
 
                     // 변경후 저장 모두 출력
-                    var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm, a.sector_id, a.boat_id, c.boat_nm, a.anchor_status, b.sector_nm, b.sectorarea_cd,e.detail_nm as sectorarea_nm,d.detail_nm as anchor_status_nm "
-                    sqlQuery += "FROM  tb_anchor_sector b, tb_anchor a left outer join tb_boat c on a.boat_id = c.boat_id , tb_code_detail e, tb_code_detail d ";
-                    sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = e.detail_cd AND e.group_cd ='SECTORAREA' AND a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS' "
-                    sqlQuery += "AND (a.anchor_id,a.anchor_nm,a.sector_id,a.boat_id,a.anchor_status)=($1,$2,$3,$4,$5)"
+                    var sqlQuery  = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,b.detail_nm as sectorarea_nm "
+                        sqlQuery += "      ,b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm ";
+                    	sqlQuery += "      ,a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status, b.sectorarea_cd "
+                        sqlQuery += "  FROM tb_anchor a left outer join (select bb.marina_id, bb.sector_id, bb.sector_nm, bb.sectorarea_cd, ee.detail_nm  ";
+                    	sqlQuery += "                                      from tb_anchor_sector bb left outer join tb_code_detail ee on  bb.sectorarea_cd = ee.detail_cd AND ee.group_cd ='SECTORAREA'"
+                        sqlQuery += "                                   ) b on  a.marina_id = b.marina_id AND a.sector_id = b.sector_id  ";
+                    	sqlQuery += "                   left outer join tb_boat c on a.boat_id = c.boat_id 	"
+                        sqlQuery += "                   left outer join tb_code_detail d on a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS'";
+                    	sqlQuery += " WHERE (a.anchor_id,a.anchor_nm,a.sector_id,a.boat_id,a.anchor_status)=($1,$2,$3,$4,$5)  order by a.anchor_nm"
+                       	sqlQuery += " order by a.anchor_nm"                    	
 
                     var sqlData = SQL.AuToSQLData(COLUM2, msg.save);
                     
@@ -276,9 +310,15 @@ module.exports = function (app, io, SQL) {
                 SQL.postgresSQL(sqlQuery, sqlData);
 
                 // 신규 저장후 모두 출력
-                var sqlQuery = "SELECT a.marina_id, a.anchor_id,a.anchor_nm, a.sector_id, a.boat_id, c.boat_nm, a.anchor_status, b.sector_nm, b.sectorarea_cd,e.detail_nm as sectorarea_nm,d.detail_nm as anchor_status_nm "
-                    sqlQuery += "FROM  tb_anchor_sector b, tb_anchor a left outer join tb_boat c on a.boat_id = c.boat_id , tb_code_detail e, tb_code_detail d ";
-                    sqlQuery += "WHERE a.marina_id = b.marina_id AND a.sector_id = b.sector_id AND b.sectorarea_cd = e.detail_cd AND e.group_cd ='SECTORAREA' AND a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS' "
+                var sqlQuery  = "SELECT a.marina_id, a.anchor_id,a.anchor_nm,b.detail_nm as sectorarea_nm "
+                    sqlQuery += "      ,b.sector_nm, a.sector_id, d.detail_nm as anchor_status_nm ";
+                	sqlQuery += "      ,a.boat_id, COALESCE(c.boat_nm,' ') as boat_nm, a.anchor_status, b.sectorarea_cd "
+                    sqlQuery += "  FROM tb_anchor a left outer join (select bb.marina_id, bb.sector_id, bb.sector_nm, bb.sectorarea_cd, ee.detail_nm  ";
+                	sqlQuery += "                                      from tb_anchor_sector bb left outer join tb_code_detail ee on  bb.sectorarea_cd = ee.detail_cd AND ee.group_cd ='SECTORAREA'"
+                    sqlQuery += "                                   ) b on  a.marina_id = b.marina_id AND a.sector_id = b.sector_id  ";
+                	sqlQuery += "                   left outer join tb_boat c on a.boat_id = c.boat_id 	"
+                    sqlQuery += "                   left outer join tb_code_detail d on a.anchor_status = d.detail_cd AND d.group_cd ='ANCHOR_STATUS'";
+                	sqlQuery += " order by a.anchor_nm"                    	
                 SQL.postgresSQL(sqlQuery, null, [socket, PAGE_NAME2 + 'search'])
 
                 newData = false;

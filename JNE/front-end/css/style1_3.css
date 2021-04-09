@@ -32,17 +32,19 @@
 .board_wrap > ul > li {  text-align:center; }
 .board_wrap > ul > li:first-child { border-top:1px solid #999; border-bottom:1px solid #999; background-color:#e4e4e2; }
 .board_wrap > ul > li:first-child > span { float:left; font-weight:bold; display:block; line-height:48px; }
-.board_wrap > ul > li:first-child > span:nth-child(1) { width:20%; }
-.board_wrap > ul > li:first-child > span:nth-child(2) { width:60%; }
+.board_wrap > ul > li:first-child > span:nth-child(1) { width:10%; }
+.board_wrap > ul > li:first-child > span:nth-child(2) { width:50%; }
 .board_wrap > ul > li:first-child > span:nth-child(3) { width:20%; }
+.board_wrap > ul > li:first-child > span:nth-child(4) { width:20%; }
 
 .board_wrap  > ul > li > ul { width:100%; }
 .board_wrap  > ul > li > ul > li { border-bottom:1px solid #ccc; cursor:pointer; }
 .board_wrap  > ul > li > ul > li:hover { background-color:#e4e4e2; }
 .board_wrap  > ul > li > ul > li > span { display:inline-block; color:#555; line-height:40px; }
-.board_wrap  > ul > li > ul > li > span:nth-child(1) { width:20%; }
-.board_wrap  > ul > li > ul > li > span:nth-child(2) { width:60%; }
+.board_wrap  > ul > li > ul > li > span:nth-child(1) { width:10%; }
+.board_wrap  > ul > li > ul > li > span:nth-child(2) { width:50%; }
 .board_wrap  > ul > li > ul > li > span:nth-child(3) { width:20%; }
+.board_wrap  > ul > li > ul > li > span:nth-child(4) { width:20%; }
 
 .deviceJoin_wrap { width:100%; margin-top:15px; }
 .deviceJoin_wrap > ul { width:100%; max-width:1000px; padding:15px 0; margin:0 auto; }
