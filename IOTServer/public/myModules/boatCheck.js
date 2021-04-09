@@ -26,7 +26,9 @@ function MessageObject()
     var gradex;  // MQTT에서 전달 받은 GPS 위도 
     var gradey;  // MQTT에서 전달 받은 GPS 경도
     var latitude;   // 위도
+    var latitudeDir;   // 위도
     var longitude;  // 경도
+    var longitudeDir;  // 경도
     var cctv_cd  ;  // cctv
     var photo_base64; //전송이미지 텍스트
     var last_upd_tm;  //최종수정시각
@@ -48,17 +50,17 @@ function BoatCheck(message) {
 function getAreaAnalysis(mObject) { 
 
 
-    logger.info("==================================");
-    logger.info('Start getAreaAnalysis........'     );
-    logger.info('   marinaId :' + mObject.marinaId  );
-    logger.info('   machineId:' + mObject.machineId );
-    logger.info('   boatId   :' + mObject.boatId    );
-    logger.info('   gradex   :' + mObject.gradex    );
-    logger.info('   gradey   :' + mObject.gradey    );
-    logger.info('   latitude :' + mObject.latitude  );
-    logger.info('   longitude:' + mObject.longitude );
-    logger.info('   sendTime :' + mObject.sendTime  );    
-    logger.info("==================================");
+    logger.debug("==================================");
+    logger.debug('Start getAreaAnalysis........'     );
+    logger.debug('   marinaId :' + mObject.marinaId  );
+    logger.debug('   machineId:' + mObject.machineId );
+    logger.debug('   boatId   :' + mObject.boatId    );
+    logger.debug('   gradex   :' + mObject.gradex    );
+    logger.debug('   gradey   :' + mObject.gradey    );
+    logger.debug('   latitude :' + mObject.latitude  );
+    logger.debug('   longitude:' + mObject.longitude );
+    logger.debug('   sendTime :' + mObject.sendTime  );    
+    logger.debug("==================================");
     
    // mObject.gradex = 100;         // LDH  GPS 구역내로 설정
    // mObject.gradey = 55;
@@ -68,13 +70,13 @@ function getAreaAnalysis(mObject) {
     
     async.waterfall([
         function(callback) {
-            logger.info('!! 삼각측정에 의한 좌표 계산...'); 
+            logger.debug('!! 삼각측정에 의한 좌표 계산...'); 
             db.SetXY(mObject, function(rtn, mObject2){
                 if (rtn == 'OK') {
                 	mObject.x = mObject2.x;
                 	mObject.y = mObject2.y;
-                	logger.error('삼각측정에 의한 좌표 Update OK : '+mObject.x); //보트 입항중
-                	logger.error('삼각측정에 의한 좌표 Update OK : '+mObject.y); //보트 입항중
+                	logger.debug('삼각측정에 의한 좌표 Update OK : '+mObject.x); //보트 입항중
+                	logger.debug('삼각측정에 의한 좌표 Update OK : '+mObject.y); //보트 입항중
                     callback(null,'OK', mObject);  
                 } else {
                     callback(null, 'ERROR', mObject);   
@@ -83,13 +85,13 @@ function getAreaAnalysis(mObject) {
         },
         function(result, mObject, callback) {
         	if(result == "OK") {
-	            logger.info('!! 삼각측정에 의한 좌표 Update...'); 
+	            logger.debug('!! 삼각측정에 의한 좌표 Update...'); 
 	            db.SetXYUpdate(mObject, function(rtn){
 	                if (rtn == 'OK') {
-	                    logger.info('삼각측정에 의한 좌표 Update OK'); //보트출항중
+	                    logger.debug('삼각측정에 의한 좌표 Update OK'); //보트출항중
                         callback(null,'OK', mObject);  
 	                } else {
-	                    logger.error('삼각측정에 의한 좌표 Update Error'); //보트 입항중
+	                    logger.debug('삼각측정에 의한 좌표 Update Error'); //보트 입항중
 	                    callback(null, 'ERROR', mObject);   
 	                }   
 	            });
@@ -99,25 +101,25 @@ function getAreaAnalysis(mObject) {
         },        
         function(result, mObject, callback) {
         	if(result == "OK") {
-	            logger.info('!! 출입구역영역안에 있는지 판단중...'); 
+	            logger.debug('!! 출입구역영역안에 있는지 판단중...'); 
 	            db.SelectGateBound(mObject, function(rtn){
 	                if (rtn == 'OK') {
-	                    logger.info('출입구역 영역안에 있슴'); //보트출항중
+	                    logger.debug('출입구역 영역안에 있슴'); //보트출항중
 	                    //최근 정박 이력 확인
-	                    logger.info('!! 최근 정박 이력 확인중...'); 
+	                    logger.debug('!! 최근 정박 이력 확인중...'); 
 	                    db.SelectLastAnchor(mObject, function(rtn){
 	                        if (rtn == 'OK') {
-	                            logger.info('보트는 마지막으로 정박상태에 있었음...현재 출항중'); //보트출항중
+	                            logger.debug('보트는 마지막으로 정박상태에 있었음...현재 출항중'); //보트출항중
 	                            mObject.boatInout = '0' 
 	                        } else {
-	                            logger.info('보트는 마지막으로 외부에 있었음...현재 입항중'); //보트출항중
+	                            logger.debug('보트는 마지막으로 외부에 있었음...현재 입항중'); //보트출항중
 	                            mObject.boatInout = '1' 
 	                        }   
 	                        callback(null,'GPS', mObject);  
 	                    });    
 	                } else {
-	                    logger.info('출입구역 영역밖에 있슴'); //보트출항중
-	                    logger.info('보트 이동중'); //보트 입항중
+	                    logger.debug('출입구역 영역밖에 있슴'); //보트출항중
+	                    logger.debug('보트 이동중'); //보트 입항중
 	                    mObject.boatInout = '9' 
 	                    callback(null, 'OK', mObject);   
 	                }   
@@ -127,27 +129,27 @@ function getAreaAnalysis(mObject) {
         	}
         },
         function(result, mObject, callback) {
-            logger.info("==================================");
-            logger.info('!! 보트 일출항 이력 갱신중...'); 
-            logger.info('   marinaId  :' + mObject.marinaId);
-            logger.info('   machineId :' + mObject.machineId);
-            logger.info('   sendTime  :' + mObject.sendTime);
-            logger.info('   boatInout :' + mObject.boatInout);
-            logger.info('   gradex    :' + mObject.gradex  );
-            logger.info('   gradey    :' + mObject.gradey );
-            logger.info('   latitude  :' + mObject.latitude  );
-            logger.info('   longitude :' + mObject.longitude );  
-            logger.info("==================================");
+            logger.debug("==================================");
+            logger.debug('!! 보트 일출항 이력 갱신중...'); 
+            logger.debug('   marinaId  :' + mObject.marinaId);
+            logger.debug('   machineId :' + mObject.machineId);
+            logger.debug('   sendTime  :' + mObject.sendTime);
+            logger.debug('   boatInout :' + mObject.boatInout);
+            logger.debug('   gradex    :' + mObject.gradex  );
+            logger.debug('   gradey    :' + mObject.gradey );
+            logger.debug('   latitude  :' + mObject.latitude  );
+            logger.debug('   longitude :' + mObject.longitude );  
+            logger.debug("==================================");
             
             if (result == 'OK' ) {
 	            // 보트 일출항 이력 갱신
 	            db.UpdateBoatHist(mObject, function(rtn){
 	                if (rtn == 'OK' ) {
-	                    logger.info('정박상태 확인3'); 
+	                    logger.debug('정박상태 확인3'); 
 	                    callback(null, result, mObject); 
 	                    //최근 정박 이력 확인
 	                } else {
-	                    logger.info('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
+	                    logger.debug('보트단말기 정박상태 분석3'); //보트단말기 정박상태 분석2
 	                    callback(null,'ERROR', rtn); 
 	                }   
 	            });  
@@ -156,36 +158,36 @@ function getAreaAnalysis(mObject) {
         function(result, mObject, callback) {
             
             if(result != "ERROR") {
-	            if(result == "GPS") {
+//	            if(result == "GPS") {
 	                // 대쉬보드에 현재 운항 상태 적용
-	                logger.info("==================================");
-	                logger.info('!! 대쉬보드에 현재 운항 상태 적용중2...'); 
-	                logger.info('   marinaId  :' + mObject.marinaId);
-	                logger.info('   machineId :' + mObject.machineId);
-	                logger.info('   sendTime  :' + mObject.sendTime);
-	                logger.info('   boatInout :' + mObject.boatInout);
-	                logger.info('   gradex    :' + mObject.gradex  );
-	                logger.info('   gradey    :' + mObject.gradey );              
-	                logger.info('   latitude  :' + mObject.latitude  );
-	                logger.info('   longitude :' + mObject.longitude );              
-	                logger.info("==================================");
+	                logger.debug("==================================");
+	                logger.debug('!! 대쉬보드에 현재 운항 상태 적용중2...'); 
+	                logger.debug('   marinaId  :' + mObject.marinaId);
+	                logger.debug('   machineId :' + mObject.machineId);
+	                logger.debug('   sendTime  :' + mObject.sendTime);
+	                logger.debug('   boatInout :' + mObject.boatInout);
+	                logger.debug('   gradex    :' + mObject.gradex  );
+	                logger.debug('   gradey    :' + mObject.gradey );              
+	                logger.debug('   latitude  :' + mObject.latitude  );
+	                logger.debug('   longitude :' + mObject.longitude );              
+	                logger.debug("==================================");
 	                // 대쉬보드에 현재 운항 상태 적용
 	                db.SetDashBoard(mObject, function(rtn){
 	                    if (rtn == 'OK') {
 	                        //최근 정박 이력 확인
-	                        logger.info('데쉬보드 적용 완료'); 
+	                        logger.debug('데쉬보드 적용 완료'); 
 	                        callback(null, "OK");  
 	                    } else { 
-	                        logger.info('데쉬보드 적용 오류1-1'); //보트단말기 정박상태 분석2
+	                        logger.debug('데쉬보드 적용 오류1-1'); //보트단말기 정박상태 분석2
 	                        callback(null, "ERROR");  //
 	                    }   
 	                });
 	            } 
 	                
-            } else {
-                logger.info('데쉬보드 적용 오류1-2'); //보트단말기 정박상태 분석2
-                callback(null, "ERROR");  //
-            }   
+//            } else {
+//               logger.debug('데쉬보드 적용 오류1-2'); //보트단말기 정박상태 분석2
+//                callback(null, "ERROR");  //
+//            }   
         }
     ],
     function (err, result) {
@@ -202,7 +204,7 @@ BoatCheck.prototype.getBoatCheck = function() {
     var mObject  = new MessageObject(); //메세지 구조체
     var mObject2 = new MessageObject(); //메세지 구조체
 
-    logger.info('Start getBoatCheck........');
+    logger.debug('Start getBoatCheck........');
 
     var sData = this.message;  // MQTT에서 보내온 메세지
 
@@ -214,19 +216,23 @@ BoatCheck.prototype.getBoatCheck = function() {
     mObject.gradex      = sData[18];
     mObject.gradey      = sData[19];
     mObject.latitude    = sData[22];
+    mObject.latitudeDir   = sData[23];
     mObject.longitude   = sData[24];
+    mObject.longitudeDir  = sData[25];
 
-    logger.info("==================================");
-    logger.info('   marinaId   :' + mObject.marinaId)   ;
-    logger.info('   machineId  :' + mObject.machineId   );
-    logger.info('   sendTime   :' + mObject.sendTime    );
-    logger.info('   temperature:' + mObject.temperature );
-    logger.info('   humidity   :' + mObject.humidity    );
-    logger.info('   gradex     :' + mObject.gradex      );
-    logger.info('   gradey     :' + mObject.gradey      );
-    logger.info('   latitude   :' + mObject.latitude    );
-    logger.info('   longitude  :' + mObject.longitude   );
-    logger.info("==================================");
+    logger.debug("==================================");
+    logger.debug('   marinaId   :' + mObject.marinaId)   ;
+    logger.debug('   machineId  :' + mObject.machineId   );
+    logger.debug('   sendTime   :' + mObject.sendTime    );
+    logger.debug('   temperature:' + mObject.temperature );
+    logger.debug('   humidity   :' + mObject.humidity    );
+    logger.debug('   gradex     :' + mObject.gradex      );
+    logger.debug('   gradey     :' + mObject.gradey      );
+    logger.debug('   latitude   :' + mObject.latitude    );
+    logger.debug('   latitudeDir  :' + mObject.latitudeDir   );
+    logger.debug('   longitude  :' + mObject.longitude   );
+    logger.debug('   longitudeDir :' + mObject.longitudeDir  );
+    logger.debug("==================================");
 
     if(mObject.temperature == "") { mObject.temperature = 0; }
     if(mObject.humidity    == "") { mObject.humidity    = 0; }
@@ -235,21 +241,23 @@ BoatCheck.prototype.getBoatCheck = function() {
     if(mObject.latitude    == "") { mObject.latitude    = 0; }
     if(mObject.longitude   == "") { mObject.longitude   = 0; }
 
+    //mObject.gradex = 70; //LDH
+	
     var db = new DB();
    
     db.GetRegBoatMachindId(mObject, function(rtn){
         if (rtn == 'OK') {
-			logger.info('등록된 보트 디바이스임'); 
+			logger.debug('등록된 보트 디바이스임'); 
 			db.SetBoatData(sData, function(rtn){;    // 
 				if (rtn == 'OK') {
-					if ((mObject.gradex > global.grade) || (mObject.gradey > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
-						logger.info('!! SOS 신호 처리중...'); 
+					if ((Math.abs(mObject.gradex) > global.grade) || (Math.abs(mObject.gradey) > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
+						logger.debug('!! SOS 신호 처리중...'); 
 						db.SetSOS(mObject, function(rtn) {
 							if (rtn == 'OK') {
 								//최근 정박 이력 확인
-								logger.info('SOS 완료'); 
+								logger.debug('SOS 완료'); 
 							} else {
-								logger.info('SOS 오류'); //보트단말기 정박상태 분석2
+								logger.debug('SOS 오류'); //보트단말기 정박상태 분석2
 							}   
 						});  
 					} else {
@@ -260,7 +268,7 @@ BoatCheck.prototype.getBoatCheck = function() {
 				}
 			 });    				
         } else {
-            logger.info('등록된 보트 디바이스 아님'); //보트단말기 정박상태 분석2
+            logger.debug('등록된 보트 디바이스 아님'); //보트단말기 정박상태 분석2
         }   
     });          	
     

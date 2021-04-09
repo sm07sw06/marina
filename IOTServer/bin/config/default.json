@@ -29,7 +29,7 @@
   "logConfig": {
     "logFolder": "..//logs//",
     "logFile": "marina-%DATE%.log",
-    "logLevel": "info"
+    "logLevel": "debug"
   }
 }
 

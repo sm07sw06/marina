@@ -26,7 +26,9 @@ function MessageObject()
     var gradex;  // MQTT에서 전달 받은 GPS 위도 
     var gradey;  // MQTT에서 전달 받은 GPS 경도
     var latitude;   // 위도
+    var latitudeDir;   // 위도
     var longitude;  // 경도
+    var longitudeDir;  // 경도
     var cctv_cd  ;  // cctv
     var photo_base64; //전송이미지 텍스트
     var last_upd_tm;  //최종수정시각
@@ -44,7 +46,7 @@ function LidarCheck(message) {
 
 LidarCheck.prototype.getLidarCheck = function() {
     
-    logger.info('Start getLidarCheck........');
+    logger.debug('Start getLidarCheck........');
     
     var mObject  = new MessageObject(); //메세지 구조체
     var mObject2 = new MessageObject(); //메세지 구조체
@@ -53,19 +55,19 @@ LidarCheck.prototype.getLidarCheck = function() {
     
     var sData = this.message;  // MQTT에서 보내온 메세지
     mObject.marinaId   = 1;
-    mObject.machineId  = sData[00];
+    mObject.machineId  = sData[0];
     mObject.sendTime   = sData[09];
     var sShipLeftYn    = sData[15];
     var sShipRightYn   = sData[17];
     
-    logger.info("==================================");
-    logger.info("  marinaId    :"+mObject.marinaId);
-    logger.info("  machineId   :"+mObject.machineId);
-    logger.info("  boatId      :"+mObject.boatId);
-    logger.info("  sendTime    :"+mObject.sendTime);   
-    logger.info("  sShipLeftYn :"+sShipLeftYn);   
-    logger.info("  sShipRightYn:"+sShipRightYn);   
-    logger.info("==================================");
+    logger.debug("==================================");
+    logger.debug("  marinaId    :"+mObject.marinaId);
+    logger.debug("  machineId   :"+mObject.machineId);
+    logger.debug("  boatId      :"+mObject.boatId);
+    logger.debug("  sendTime    :"+mObject.sendTime);   
+    logger.debug("  sShipLeftYn :"+sShipLeftYn);   
+    logger.debug("  sShipRightYn:"+sShipRightYn);   
+    logger.debug("==================================");
 
     mObject.lidarId     = "";
     
@@ -81,15 +83,15 @@ LidarCheck.prototype.getLidarCheck = function() {
 	                //최근 정박 이력 확인
 	    			db.SetLidarData(sData, function(rtn){;    
 		    			if (rtn == 'OK') {
-//			                logger.info('등록된 단말기 있음'); 
+//			                logger.debug('등록된 단말기 있음'); 
 			                callback(null, "OK", mObject);  
 		    			} else {
-//			                logger.info('등록된 단말기 있음'); 
+//			                logger.debug('등록된 단말기 있음'); 
 			                callback(null, "ERROR", mObject);  
 		    			}
 	    			});
 	            } else {
-	                logger.info('등록된 단말기 없음'); 
+	                logger.debug('등록된 단말기 없음'); 
 	                callback(null, "ERROR", mObject);  //
 	            }   
 	        });          	
@@ -100,7 +102,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 	            if ((sShipLeftYn == "1")||(sShipRightYn == "1")) { //lidar 왼쪽 또는 오른쪽에 정박한 경우
 	                
 	                if (sShipLeftYn == "1") { //lidar 왼쪽에 정박한 경우
-	                    logger.info('!! 왼쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
+	                    logger.debug('!! 왼쪽 라이더에 기준 시간 범위내 단말기 수신 정보 찾기중...'); 
 	                    mObject.leftRight = '0';    // 좌
 	            
 	                    //기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
@@ -138,17 +140,17 @@ LidarCheck.prototype.getLidarCheck = function() {
 	                                    logger.info('보트 정박 처리 성공2'); 
 	                                    /***
 	                                    // 보트 일출항 이력 갱신
-	                                    logger.info('!! 보트 일출항 이력 갱신중...'); 
+	                                    logger.debug('!! 보트 일출항 이력 갱신중...'); 
 	                                    db.UpdateBoatHist(mObject2, function(rtn){
 	                                        if (rtn == 'OK') {
-	                                            logger.info('보트 일출항 이력 갱신 성공');  
+	                                            logger.debug('보트 일출항 이력 갱신 성공');  
 	                                        } else {
-	                                            logger.info('보트 일출항 이력 갱신 실패'); 
+	                                            logger.debug('보트 일출항 이력 갱신 실패'); 
 	                                        }   
 	                                    });         
 	                                    ***/ 
 	                                } else {
-	                                    logger.info('보트 정박 처리 실패2'); 
+	                                    logger.debug('보트 정박 처리 실패2'); 
 	                                }     
 	                            });                              
 	                        }

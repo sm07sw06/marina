@@ -45,12 +45,17 @@ function MessageObject()
     var gradex;  // MQTT에서 전달 받은 GPS 위도 
     var gradey;  // MQTT에서 전달 받은 GPS 경도
     var latitude;   // 위도
+    var latitudeDir;   // 위도
     var longitude;  // 경도
+    var longitudeDir;  // 경도
     var cctv_cd  ;  // cctv
     var photo_base64; //전송이미지 텍스트
     var last_upd_tm;  //최종수정시각
     var temperature;
     var humidity   ;
+	var machineNm;  //보트단말기명
+    var x;   // 삼각측정 좌표 X
+    var y;   // 삼각측정 좌표 Y
 }
 
 var mObject  = new MessageObject(); //메세지 구조체

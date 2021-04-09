@@ -66,7 +66,9 @@ function MessageObject()
     var gradex;  // MQTT에서 전달 받은 GPS 위도 
     var gradey;  // MQTT에서 전달 받은 GPS 경도
     var latitude;   // 위도
+    var latitudeDir;   // 위도
     var longitude;  // 경도
+    var longitudeDir;  // 경도
     var cctv_cd  ;  // cctv
     var photo_base64; //전송이미지 텍스트
     var last_upd_tm;  //최종수정시각
@@ -102,7 +104,7 @@ function getCalcRssiDistance(rssi) {
 	
 	var dist = (c / (4 * 3.14 * f)) * Math.pow(10,(rssi/20));
 	
-	return dist/1000;   // LDH   mm -> m
+	return dist/10;   // LDH   mm -> m
 }
 
 //정박지 데이터 분석 처리
@@ -116,34 +118,34 @@ function rssidata(sData) {
 	var boatId    	 = sData[4];  //보트ID
 	
 //    if(typeof sData[7] == "undefined" ) {		// LDH
-//		logger.info('undefined........');
+//		logger.debug('undefined........');
 //		var sendRecvTime = sData[1];  //보트전송기각
 //		var rssi    	 = sData[5];  //rssi
 //	} else {
-//		logger.info('not undefined.......');
+//		logger.debug('not undefined.......');
 		var sendRecvTime = sData[5];  //보트전송기각
 		var rssi    	 = sData[6];  //rssi
 //	}
 
 	if(rssi == "")  { rssi = 0; }
 
-	logger.info("----------------------------------");
-	logger.info('Start rssidata insert........');
-	logger.info("  length      :" + sData.length);
-    logger.info("  marinaId    :"+marinaId);
-    logger.info("  machineId   :"+machineId);
-    logger.info("  machineNm   :"+machineNm);
-    logger.info("  sendTime    :"+sendTime);   
-    logger.info("  transId     :"+transId);
-    logger.info("  boatId      :"+boatId);
-    logger.info("  sendRecvTime:"+sendRecvTime);
-    logger.info("  rssi        :"+rssi);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start rssidata insert........');
+	logger.debug("  length      :" + sData.length);
+    logger.debug("  marinaId    :"+marinaId);
+    logger.debug("  machineId   :"+machineId);
+    logger.debug("  machineNm   :"+machineNm);
+    logger.debug("  sendTime    :"+sendTime);   
+    logger.debug("  transId     :"+transId);
+    logger.debug("  boatId      :"+boatId);
+    logger.debug("  sendRecvTime:"+sendRecvTime);
+    logger.debug("  rssi        :"+rssi);
+	logger.debug("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "INSERT INTO public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
 	    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "','"  + sendRecvTime + "',"  + rssi + "  );  \n";
-	logger.info(sQueryString);
+	logger.debug(sQueryString);
 
  try {
 
@@ -154,7 +156,7 @@ function rssidata(sData) {
 					logger.error("ERROR!!" + err);
 					//callback('ERROR');
 			    } else {
-			    	logger.info("Rssidata Insert OK:");
+			    	logger.debug("Rssidata Insert OK:");
 			    }
 				clientdb.release();
 			}); 
@@ -189,9 +191,9 @@ DB.prototype.InsertDBRssiData = function(message) {
 // 환경변수값 추출
 DB.prototype.GetConfig = function (configMy, callback) {
 
-	logger.info("----------------------------------");
-	logger.info('Start GetConfig........');
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start GetConfig........');
+	logger.debug("----------------------------------");
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
@@ -199,7 +201,7 @@ DB.prototype.GetConfig = function (configMy, callback) {
 	    sQueryString += "  FROM tb_marina m, tb_config c   \n";
 	    sQueryString += " WHERE m.marina_id = c.curr_marina" ;
 	
-	logger.info(sQueryString);
+	logger.debug(sQueryString);
 
 	try {	
 		pool.connect(function (err, clientdb, done) {
@@ -234,11 +236,11 @@ DB.prototype.GetConfig = function (configMy, callback) {
 //등록된 만말기 인지 확인 
 DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 
-//	logger.info("----------------------------------");
-//	logger.info('Start GetRegBoatMachindId........');
-//	logger.info('  marinaId  : ' + mObject.marinaId);
-//	logger.info('  machineId : ' + mObject.machineId);
-//	logger.info("----------------------------------");
+//	logger.debug("----------------------------------");
+//	logger.debug('Start GetRegBoatMachindId........');
+//	logger.debug('  marinaId  : ' + mObject.marinaId);
+//	logger.debug('  machineId : ' + mObject.machineId);
+//	logger.debug("----------------------------------");
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
@@ -246,7 +248,7 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 	    sQueryString += "  FROM tb_boat_device   \n";
 	    sQueryString += " WHERE marina_id = " + mObject.marinaId +  " AND machine_id = '" + mObject.machineId + "' " ;
 	
-//	logger.info(sQueryString);
+//	logger.debug(sQueryString);
 
 	try {	
 		pool.connect(function (err, clientdb, done) {
@@ -257,10 +259,10 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 					callback('ERROR');
 			    } else {
 					if( res.rowCount > 0 ) {
-						logger.info("등록된 보트단말기 있음.........!!");
+						logger.debug("등록된 보트단말기 있음.........!!");
 						callback('OK');
 					} else {
-						logger.info("등록된 보트단말기 없음........!!" + mObject.machineId);
+						logger.debug("등록된 보트단말기 없음........!!" + mObject.machineId);
 						callback('ERROR');
 					}
 			    }
@@ -287,28 +289,32 @@ DB.prototype.SetBoatData = function (sData, callback) {
 	var nGradey      = sData[19];
 	var nGpsquality  = sData[26];  
 	var nLatitude    = sData[22];
+	var sLatitudeDir   = sData[23];
 	var nLongitude   = sData[24];
+	var sLongitudeDir  = sData[25];
 	var nSatellite   = sData[27];
 	var nGpsage      = sData[33];
 	var sSenttype    = sData[14];
 
  
-	logger.info("----------------------------------");
-	logger.info('Start SetBoatData insert........');
-	logger.info("  sData        :" + sData        );	
-	logger.info("  sId          :" + sId          );	
-	logger.info("  nTemperature :" + nTemperature );	
-	logger.info("  nHumidity    :" + nHumidity    );	
-	logger.info("  nGradex      :" + nGradex      );	
-	logger.info("  nGradey      :" + nGradey      );	
-	logger.info("  nGpsquality  :" + nGpsquality  );	
-	logger.info("  nLatitude    :" + nLatitude    );	
-	logger.info("  nLongitude   :" + nLongitude   );	
-	logger.info("  nSatellite   :" + nSatellite   );	
-	logger.info("  nGpsage      :" + nGpsage      );	
-	logger.info("  sSenttype    :" + sSenttype    );	
-	logger.info("  ssend_time   :" + ssend_time   );
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SetBoatData insert........');
+	logger.debug("  sData        :" + sData        );	
+	logger.debug("  sId          :" + sId          );	
+	logger.debug("  nTemperature :" + nTemperature );	
+	logger.debug("  nHumidity    :" + nHumidity    );	
+	logger.debug("  nGradex      :" + nGradex      );	
+	logger.debug("  nGradey      :" + nGradey      );	
+	logger.debug("  nGpsquality  :" + nGpsquality  );	
+	logger.debug("  nLatitude    :" + nLatitude    );	
+	logger.debug("  sLatitudeDir   :" + sLatitudeDir   );	
+	logger.debug("  nLongitude   :" + nLongitude   );	
+	logger.debug("  sLongitudeDir  :" + sLongitudeDir  );	
+	logger.debug("  nSatellite   :" + nSatellite   );	
+	logger.debug("  nGpsage      :" + nGpsage      );	
+	logger.debug("  sSenttype    :" + sSenttype    );	
+	logger.debug("  ssend_time   :" + ssend_time   );
+	logger.debug("----------------------------------");
 
 	if(nTemperature == "") { nTemperature = 0; }
 	if(nHumidity    == "") { nHumidity    = 0; }
@@ -322,12 +328,13 @@ DB.prototype.SetBoatData = function (sData, callback) {
 	if(nSatellite   == "") { nSatellite   = 0; }
 	if(nGpsage      == "") { nGpsage      = 0; }
 	if(sSenttype    == "") { sSenttype    = 'R'; }
-	
+
+
 //아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude, satellite, gpsage, sent_type, send_time) \n ";
-	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude ;
+	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time) \n ";
+	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude + ",'"  + sLatitudeDir + "','" + sLongitudeDir + "' ";
 	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "' );  \n";
-	logger.info("[INSERT INTO tb_boatdata]:"+sQueryString);
+	logger.debug("[INSERT INTO tb_boatdata]:"+sQueryString);
 
 	  try {
 
@@ -338,7 +345,7 @@ DB.prototype.SetBoatData = function (sData, callback) {
 						logger.error("ERROR!!" + err);
 						callback('ERROR');
 				    } else {
-				    	logger.info("Boatdata Insert OK:");
+				    	logger.debug("Boatdata Insert OK:");
 				    	callback('OK');
 				    }
 					clientdb.release();
@@ -385,28 +392,28 @@ DB.prototype.SetLidarData = function (sData, callback) {
  if(nLoadRightCount == "")  { nLoadRightCount = 0; }
  if(nShipRightCount == "")  { nShipRightCount = 0; }
 
-	logger.info("----------------------------------");
-	logger.info('Start lidardata insert........');
- logger.info("  sId                :" + sId               );
- logger.info("  nAngleMin          :" + nAngleMin         );
- logger.info("  nAngleMax          :" + nAngleMax         );
- logger.info("  nLoadMin           :" + nLoadMin          );
- logger.info("  nShipMax           :" + nShipMax          );
- logger.info("  nLoadThreshold     :" + nLoadThreshold    );
- logger.info("  nShipThreshold     :" + nShipThreshold    );
- logger.info("  nTempo             :" + nTempo            );
- logger.info("  nHuminity          :" + nHuminity         );
- logger.info("  ssend_time         :" + ssend_time        );
- logger.info("  nLoadLeftCount     :" + nLoadLeftCount    );
- logger.info("  nShipLeftCount     :" + nShipLeftCount    );
- logger.info("  nLoadRightCount    :" + nLoadRightCount   );
- logger.info("  nShipRightCount    :" + nShipRightCount   );
- logger.info("  sLoadLeftYn        :" + sLoadLeftYn       );
- logger.info("  sShipLeftYn        :" + sShipLeftYn       );
- logger.info("  sLoadRightYn       :" + sLoadRightYn      );
- logger.info("  sShipRightYn       :" + sShipRightYn      );
- logger.info("  sLongData          :" + sLongData         );
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start lidardata insert........');
+ logger.debug("  sId                :" + sId               );
+ logger.debug("  nAngleMin          :" + nAngleMin         );
+ logger.debug("  nAngleMax          :" + nAngleMax         );
+ logger.debug("  nLoadMin           :" + nLoadMin          );
+ logger.debug("  nShipMax           :" + nShipMax          );
+ logger.debug("  nLoadThreshold     :" + nLoadThreshold    );
+ logger.debug("  nShipThreshold     :" + nShipThreshold    );
+ logger.debug("  nTempo             :" + nTempo            );
+ logger.debug("  nHuminity          :" + nHuminity         );
+ logger.debug("  ssend_time         :" + ssend_time        );
+ logger.debug("  nLoadLeftCount     :" + nLoadLeftCount    );
+ logger.debug("  nShipLeftCount     :" + nShipLeftCount    );
+ logger.debug("  nLoadRightCount    :" + nLoadRightCount   );
+ logger.debug("  nShipRightCount    :" + nShipRightCount   );
+ logger.debug("  sLoadLeftYn        :" + sLoadLeftYn       );
+ logger.debug("  sShipLeftYn        :" + sShipLeftYn       );
+ logger.debug("  sLoadRightYn       :" + sLoadRightYn      );
+ logger.debug("  sShipRightYn       :" + sShipRightYn      );
+ logger.debug("  sLongData          :" + sLongData         );
+	logger.debug("----------------------------------");
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString = "INSERT INTO public.tb_lidardata(marina_id, machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,temperature,huminity,send_time,  \n";
@@ -414,7 +421,7 @@ DB.prototype.SetLidarData = function (sData, callback) {
 	sQueryString += " values(1,'" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
 	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + ssend_time ;
 	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )  \n" ;
-	logger.info(sQueryString);
+	logger.debug(sQueryString);
 
  try {
 
@@ -425,7 +432,7 @@ DB.prototype.SetLidarData = function (sData, callback) {
 					logger.error("ERROR!!" + err);
 					callback('ERROR');
 			    } else {
-			    	logger.info("Lidardata Insert OK:");
+			    	logger.debug("Lidardata Insert OK:");
 			    	callback('OK');
 			    }
 				clientdb.release();
@@ -443,11 +450,11 @@ DB.prototype.SetLidarData = function (sData, callback) {
 //등록된 만말기 인지 확인 
 DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 
-	logger.info("----------------------------------");
-	logger.info('Start GetRegAnchorMachindId........');
-	logger.info('  marinaId  : ' + mObject.marinaId);
-	logger.info('  machineId : ' + mObject.machineId);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start GetRegAnchorMachindId........');
+	logger.debug('  marinaId  : ' + mObject.marinaId);
+	logger.debug('  machineId : ' + mObject.machineId);
+	logger.debug("----------------------------------");
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
@@ -455,7 +462,7 @@ DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 	    sQueryString += "  FROM tb_anchor_lidar   \n";
 	    sQueryString += " WHERE marina_id = " + mObject.marinaId +  " AND machine_id = '" + mObject.machineId + "' " ;
 	
- 	logger.info(sQueryString);
+ 	logger.debug(sQueryString);
 
 	try {	
 		pool.connect(function (err, clientdb, done) {
@@ -466,10 +473,10 @@ DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 					callback('ERROR');
 			    } else {
 					if( res.rowCount > 0 ) {
-						logger.info("등록된 정박지단말기 있음.........!!");
+						logger.debug("등록된 정박지단말기 있음.........!!");
 						callback('OK');
 					} else {
-						logger.info("등록된 정박지단말기 없음........!!");
+						logger.debug("등록된 정박지단말기 없음........!!");
 						callback('ERROR');
 					}
 			    }
@@ -488,13 +495,12 @@ DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 //출입구역영역안에 있는지 판단
 DB.prototype.SelectGateBound = function (mObject, callback) {
 
-	logger.info("----------------------------------");
-	logger.info('Start SelectGateBound........');
-	logger.info('  marinaId : ' + mObject.marinaId);
-	logger.info('  GPS X    : ' + mObject.gradex);
-	logger.info('  GPS Y    : ' + mObject.gradey);
-	logger.info("----------------------------------");
-
+	logger.debug("----------------------------------");
+	logger.debug('Start SelectGateBound........');
+	logger.debug('  marinaId : ' + mObject.marinaId);
+	logger.debug('  GPS X    : ' + mObject.gradex);
+	logger.debug('  GPS Y    : ' + mObject.gradey);
+	logger.debug("----------------------------------");
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "SELECT /* SelectGateBound */ sector_nm  \n";
@@ -502,7 +508,7 @@ DB.prototype.SelectGateBound = function (mObject, callback) {
 	    sQueryString += " WHERE marina_id = " + mObject.marinaId + " AND sectorarea_cd = 'Z' AND gpsx1 <= " + mObject.gradex + " AND gpsx2 >= " + mObject.gradex + "  \n" ;
 	    sQueryString += "   AND gpsy1 <= " + mObject.gradey + " AND gpsy2 >= " + mObject.gradey ;
 	
-	logger.info(sQueryString);
+	logger.debug(sQueryString);
 
 	try {	
 		pool.connect(function (err, clientdb, done) {
@@ -513,10 +519,10 @@ DB.prototype.SelectGateBound = function (mObject, callback) {
 					callback('ERROR');
 			    } else {
 					if( res.rowCount > 0 ) {
-						logger.info("GPS 출입영역 안에 있음.........!!");
+						logger.debug("GPS 출입영역 안에 있음.........!!");
 						callback('OK');
 					} else {
-						logger.info("GPS 출입영역 밖에 있음........!!");
+						logger.debug("GPS 출입영역 밖에 있음........!!");
 						callback('ERROR');
 					}
 			    }
@@ -534,16 +540,16 @@ DB.prototype.SelectGateBound = function (mObject, callback) {
 //기 정박상태 인지 확인
 DB.prototype.SelectAnchorYN = function(mObject, callback) {
 	
-	logger.info("----------------------------------");
-	logger.info('Start SelectAnchorYN........');
-	logger.info('  marina_id: '  + mObject.marinaId);
-	logger.info('  machine_id: ' + mObject.machineId);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SelectAnchorYN........');
+	logger.debug('  marina_id: '  + mObject.marinaId);
+	logger.debug('  machine_id: ' + mObject.machineId);
+	logger.debug("----------------------------------");
 
 	try {
 		//	var sQueryString  = "SELECT anchor.anchor_status FROM tb_anchor_lidar LEFT JOIN anchor  ON anchor_lidar.anchor_id = anchor.anchor_id WHERE anchor_lidar.machine_id = '" + mObject.machineId + "'";
 		var sQueryString  = "SELECT /* SelectAnchorYN */ 1 FROM tb_anchor_lidar  \n WHERE marina_id = " + mObject.marinaId + " AND machine_id = '" + mObject.machineId + "'"; //  
-		logger.info(sQueryString);
+		logger.debug(sQueryString);
 
 		pool.connect(function (err, clientdb, done) {
 			if (err) throw new Error(err);
@@ -573,12 +579,12 @@ DB.prototype.SelectAnchorYN = function(mObject, callback) {
 //최근 정박 이력 확인(입항 내역이 있는지 확인)
 DB.prototype.SelectLastAnchor = function(mObject, callback) {
 	
-	logger.info("----------------------------------");
-	logger.info('Start SelectLastAnchor........'    );
-	logger.info('  marinaId :' + mObject.marinaId   );
-	logger.info('  machineId:' + mObject.machineId  );
-	logger.info('  Sendtime :' + mObject.sendTime   );
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SelectLastAnchor........'    );
+	logger.debug('  marinaId :' + mObject.marinaId   );
+	logger.debug('  machineId:' + mObject.machineId  );
+	logger.debug('  Sendtime :' + mObject.sendTime   );
+	logger.debug("----------------------------------");
 
 	try {
 		/***
@@ -601,7 +607,7 @@ DB.prototype.SelectLastAnchor = function(mObject, callback) {
 		    sQueryString += "   AND a.boat_id = b.boat_id     \n";
 		    sQueryString += "   AND b.machine_id = '" + mObject.machineId + "' \n";		
 
-		logger.info(sQueryString);
+		logger.debug(sQueryString);
 
 		pool.connect(function (err, clientdb, done) {
 			if (err) throw new Error(err);
@@ -630,11 +636,11 @@ DB.prototype.SelectLastAnchor = function(mObject, callback) {
 DB.prototype.GetGPSBoatDataSearch = function(mObject, callback) {
 	var machine_id ;
 	
-	logger.info("----------------------------------");
-	logger.info('Start GetGPSBoatDataSearch........');
-	logger.info('  marinaId : ' + mObject.marinaId);
-	logger.info('  sendTime : ' + mObject.sendTime);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start GetGPSBoatDataSearch........');
+	logger.debug('  marinaId : ' + mObject.marinaId);
+	logger.debug('  sendTime : ' + mObject.sendTime);
+	logger.debug("----------------------------------");
 
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
@@ -649,7 +655,7 @@ DB.prototype.GetGPSBoatDataSearch = function(mObject, callback) {
 		sQueryString += "    AND e.latitude BETWEEN s.gpsx1 AND s.gpsx2 AND e.longitude between s.gpsy1 AND s.gpsy2 \n";
 		sQueryString += "    AND s.sectorarea_cd = 'Z' \n";
 		    
-		logger.info("보트 찾기:" + sQueryString);
+		logger.debug("보트 찾기:" + sQueryString);
 
 			pool.connect(function (err, clientdb, done) {
 				if (err) throw new Error(err);
@@ -660,13 +666,13 @@ DB.prototype.GetGPSBoatDataSearch = function(mObject, callback) {
 				    } else {
 						for(var i = 0; i < res.rowCount ; i ++) {
 							mObject.boatId    = res.rows[i].boat_id;
-							logger.info("  boat_id   :" +res.rows[i].boat_id);   
+							logger.debug("  boat_id   :" +res.rows[i].boat_id);   
 						}
 						if( res.rowCount > 0 && !isEmpty(res.rows[0].boat_id)) {
-							logger.info("기준 시간 GPS 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_id);
+							logger.debug("기준 시간 GPS 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_id);
 							callback("OK", mObject);
 						} else {
-							logger.info("기준 시간 GPS 범위내에 단말기 수신 정보가 없습니다.");
+							logger.debug("기준 시간 GPS 범위내에 단말기 수신 정보가 없습니다.");
 							callback("ERROR", mObject);
 						}
 				    }
@@ -695,34 +701,8 @@ DB.prototype.GetAnchorBoatDataSearch = function(mObject, callback) {
 	logger.info('  leftRight: ' + mObject.leftRight);
 	logger.info("----------------------------------");
 /**
- * SELECT AA.machine_id, AA.anchor_id, BB.boat_id 
-  FROM  (  
-        SELECT b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  
-          FROM tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d  
-         WHERE 1 = 1   
-           AND b.machine_id = 'F83224878CA1' 
-           AND b.left_right = '0' 
-   		AND b.anchor_id = c.anchor_id 
-    		AND c.sector_id = d.sector_id  
-   		AND b.marina_id = c.marina_id  
-   		AND c.marina_id = d.marina_id  
-   		AND b.marina_id = 1  
- ) AA LEFT OUTER JOIN 
- ( 
- SELECT f.boat_id ,e.latitude, e.longitude 
-   FROM tb_boatdata e,tb_boat_device f  
-  WHERE e.marina_id = 1 
-    AND e.marina_id  = f.marina_id  
-    AND e.machine_id = f.machine_id 
-    AND e.send_time between to_char((to_timestamp(substring('20210330161007',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS') 
-    AND to_char((to_timestamp(substring('20210330161007',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS') 
- ) BB ON BB.latitude  BETWEEN AA.gpsx1 AND AA.gpsx2 AND BB.longitude between AA.gpsy1 AND AA.gpsy2 
-
-
- */
-	try {		 
-			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-		var sQueryString  = "SELECT /* GetAnchorBoatDataSearch */ AA.machine_id, AA.anchor_id, BB.boat_id \n";
+ * 
+		var sQueryString  = "SELECT // GetAnchorBoatDataSearch /// AA.machine_id, AA.anchor_id, BB.boat_id \n";
 		sQueryString += "  FROM  (  \n";
 		sQueryString += "        SELECT b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2  \n";
 		sQueryString += "          FROM tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d  \n";
@@ -744,7 +724,34 @@ DB.prototype.GetAnchorBoatDataSearch = function(mObject, callback) {
 		sQueryString += "    AND e.send_time between to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS') \n";
 		sQueryString += "    AND to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS') \n";
 		sQueryString += " ) BB ON BB.latitude  BETWEEN AA.gpsx1 AND AA.gpsx2 AND BB.longitude between AA.gpsy1 AND AA.gpsy2 \n";
-		//    sQueryString += "   and a.send_time  between substring('" + mObject.sendTime + "',0,13)||'00' and to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS')";
+
+
+ */
+	try {		 
+			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+		var sQueryString  = "SELECT /* GetAnchorBoatDataSearch */ AA.machine_id, AA.anchor_id, BB.boat_id \n";
+		sQueryString += "  FROM  (  \n";
+		sQueryString += "        SELECT b.machine_id, b.anchor_id, c.sector_id, d.gpsx1, d.gpsx2, d.gpsy1, d.gpsy2 , d.posx1, d.posx2, d.posy1, d.posy2 \n";
+		sQueryString += "          FROM tb_anchor_lidar b, tb_anchor c, tb_anchor_sector d  \n";
+		sQueryString += "         WHERE 1 = 1   \n";
+		sQueryString += "           AND b.machine_id = '" + mObject.machineId + "' \n";
+		sQueryString += "           AND b.left_right = '" + mObject.leftRight + "' \n";
+		sQueryString += "   		AND b.anchor_id = c.anchor_id \n ";
+		sQueryString += "   		AND c.sector_id = d.sector_id  \n";
+		sQueryString += "   		AND b.marina_id = c.marina_id  \n";
+		sQueryString += "   		AND c.marina_id = d.marina_id  \n";
+		sQueryString += "   		AND b.marina_id = " + mObject.marinaId + "  \n";
+		sQueryString += " ) AA LEFT OUTER JOIN \n";
+		sQueryString += " ( \n";
+		sQueryString += " SELECT f.boat_id ,e.latitude, e.longitude, e.positionx, e.positiony  \n";
+		sQueryString += "   FROM tb_boatdata e,tb_boat_device f  \n";
+		sQueryString += "  WHERE e.marina_id = " + mObject.marinaId + " \n";
+		sQueryString += "    AND e.marina_id  = f.marina_id  \n";
+		sQueryString += "    AND e.machine_id = f.machine_id \n";
+		sQueryString += "    AND e.send_time between to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') - interval '1 min'),'YYYYMMDDHH24MISS') \n";
+		sQueryString += "    AND to_char((to_timestamp(substring('" + mObject.sendTime + "',0,13)||'00', 'YYYYMMDDHH24MISS') + interval '1 min'),'YYYYMMDDHH24MISS') \n";
+		sQueryString += " ) BB ON ((BB.latitude  BETWEEN AA.gpsx1 AND AA.gpsx2 AND BB.longitude between AA.gpsy1 AND AA.gpsy2 AND 1 = 0 ) or \n";
+		sQueryString += "          (BB.positionx BETWEEN AA.posx1 AND AA.posx2 AND BB.positiony between AA.posy1 AND AA.posy2 AND 1 = 1)) \n";
 		    logger.info("보트 찾기:" + sQueryString);
 
 			pool.connect(function (err, clientdb, done) {
@@ -788,17 +795,17 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 	
 	var machine_id ;
 	
-	logger.info("----------------------------------");
-	logger.info('Start UpdateBoatHist........');
-    logger.info('   marinaId  : ' + mObject.marinaId);
-	logger.info('   machineId : ' + mObject.machineId);
-	logger.info('   sendTime  : ' + mObject.sendTime);
-	logger.info('   boatInout : ' + mObject.boatInout);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start UpdateBoatHist........');
+    logger.debug('   marinaId  : ' + mObject.marinaId);
+	logger.debug('   machineId : ' + mObject.machineId);
+	logger.debug('   sendTime  : ' + mObject.sendTime);
+	logger.debug('   boatInout : ' + mObject.boatInout);
+	logger.debug("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString = "SELECT /* UpdateBoatHist */ marina_id, boat_id FROM tb_boat_device WHERE machine_id = '" + mObject.machineId + "' limit 1 \n";
-	logger.info(sQueryString);
+	logger.debug(sQueryString);
 
     try {
 
@@ -812,13 +819,13 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 			    	
 					for(var i = 0; i < res.rowCount ; i ++) {
 						mObject.boatId    = res.rows[i].boat_id;
-						logger.info(" boat_id   :" +res.rows[i].boat_id);   
+						logger.debug(" boat_id   :" +res.rows[i].boat_id);   
 					}
 
 			    	sQueryString  = "INSERT INTO /* UpdateBoatHist */ public.tb_boat_hist(marina_id, boat_id,send_time,boatinout)  \n";
 				    sQueryString += "values ( " + mObject.marinaId + ", "  + mObject.boatId + ", '"  + mObject.sendTime + "', '"  + mObject.boatInout + "')  \n";
 				
-				    logger.info(sQueryString);
+				    logger.debug(sQueryString);
 
 					clientdb.query(sQueryString, function (err, res) {
 						if (err) {
@@ -852,11 +859,11 @@ DB.prototype.SetXY = function(mObject, callback) {
 	var caly = 0.0;
 		
 	logger.info("-------!@#$%!@#$%!@#$%!@#$%!@#$%!@#$%---------------------------");
-	logger.info('Start SetXY........');
-    logger.info('   marinaId  : ' + mObject.marinaId);
-	logger.info('   machineId : ' + mObject.machineId);
-	logger.info('   sendTime  : ' + mObject.sendTime);
-	logger.info("----------------------------------");
+	logger.debug('Start SetXY........');
+    logger.debug('   marinaId  : ' + mObject.marinaId);
+	logger.debug('   machineId : ' + mObject.machineId);
+	logger.debug('   sendTime  : ' + mObject.sendTime);
+	logger.debug("----------------------------------");
 
 	
 	/* 보트 신호건에 대한 RSSI 값 3개 찾기 */
@@ -872,7 +879,7 @@ DB.prototype.SetXY = function(mObject, callback) {
     	sQueryString += "   AND b.send_time  = '" + mObject.sendTime  + "' \n";
     	sQueryString += " ORDER by d.set_order \n";
 
-    logger.info(sQueryString);
+    logger.debug(sQueryString);
 	
     try {
 
@@ -884,18 +891,18 @@ DB.prototype.SetXY = function(mObject, callback) {
                     callback('ERROR', mObject);
                 } else {
                     if( res.rowCount == 3 ) { 
-                    	logger.info("	RSSI 계산 시작...");
+                    	logger.debug("	RSSI 계산 시작...");
                         for(var i = 0; i < res.rowCount ; i ++) {
                         	
                         	if(res.rows[i].set_order == 1) {
                         		posx = Number(res.rows[i].positionx);
                         		posy = Number(res.rows[i].positiony);
-                        		logger.info('   posx : ' + posx);
-                        		logger.info('   posy : ' + posy);
+                        		logger.debug('   posx : ' + posx);
+                        		logger.debug('   posy : ' + posy);
                         	}
                         	if(res.rows[i].set_order == 2) {
                         		posa = Number(res.rows[i].positionx - posx);
-                        		logger.info('   posa : ' + posa);
+                        		logger.debug('   posa : ' + posa);
                         	}
                         	/***
                         	 * RSSI값을 이용한 거리 게산
@@ -904,28 +911,28 @@ DB.prototype.SetXY = function(mObject, callback) {
                         	 **/
                         	dist[i] = getCalcRssiDistance(res.rows[i].rssi);  //RSSI
                         }  
-                    	logger.info('   dist[0] : ' + dist[0]);
-                    	logger.info('   dist[1] : ' + dist[1]);
-                    	logger.info('   dist[2] : ' + dist[2]);
+                    	logger.debug('   dist[0] : ' + dist[0]);
+                    	logger.debug('   dist[1] : ' + dist[1]);
+                    	logger.debug('   dist[2] : ' + dist[2]);
 
                         /***
                     	 * 삼각 측정에의한 좌표 계산
                     	 **/
-                        calx = ((Math.pow(dist[0],2) - Math.pow(dist[1],2) + Math.pow(posa,2)) / (2 * posa)); 
-                        logger.info("calx==:" + calx);
+                        calx = (  Math.abs(Math.pow(dist[0],2) - Math.pow(dist[1],2) + Math.pow(posa,2) ) / (2 * posa) ); 
+                        logger.debug("calx==:" + calx);
                         
                         if(( Math.pow(dist[0],2) - Math.pow(calx,2) ) == 0) {
                         	caly = 0;
                         } else {
                         	caly = Math.sqrt( Math.abs(Math.pow(dist[0],2) - Math.pow(calx,2)) );
                         }
-                        logger.info("caly:" + caly);
+                        logger.debug("caly:" + caly);
                         	
                         calx = Math.round((calx + posx),2);
                         caly = Math.round((caly + posy),2);
                         
-                        logger.info("calx:" + calx);
-                        logger.info("caly:" + caly);
+                        logger.debug("calx:" + calx);
+                        logger.debug("caly:" + caly);
                         
                     	mObject.x = calx; 
                     	mObject.y = caly;
@@ -951,14 +958,14 @@ DB.prototype.SetXYUpdate = function(mObject, callback) {
 	
 	var machine_id ;
 	
-	logger.info("----------------------------------");
-	logger.info('Start SetXYUpdate........');
-    logger.info('   marinaId  : ' + mObject.marinaId);
-	logger.info('   machineId : ' + mObject.machineId);
-	logger.info('   sendTime  : ' + mObject.sendTime);
-	logger.info('   x  : ' + mObject.x);
-	logger.info('   y  : ' + mObject.y);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SetXYUpdate........');
+    logger.debug('   marinaId  : ' + mObject.marinaId);
+	logger.debug('   machineId : ' + mObject.machineId);
+	logger.debug('   sendTime  : ' + mObject.sendTime);
+	logger.debug('   x  : ' + mObject.x);
+	logger.debug('   y  : ' + mObject.y);
+	logger.debug("----------------------------------");
 
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
@@ -967,7 +974,7 @@ DB.prototype.SetXYUpdate = function(mObject, callback) {
         sQueryString += " WHERE marina_id  = "  + mObject.marinaId  + "  \n";
         sQueryString += "   AND machine_id = '" + mObject.machineId + "' \n";
         sQueryString += "   AND send_time  = '" + mObject.sendTime  + "' \n";
-	logger.info(sQueryString);
+	logger.debug(sQueryString);
 
     try {
 
@@ -1046,19 +1053,19 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 	
 	var machine_id ;
 	
-	logger.info("----------------------------------");
-	logger.info('Start SetBoatNotAnchor........');
-	logger.info('   marinaId : ' + mObject.marinaId);
-	logger.info('   machineId: ' + mObject.machineId);
-	logger.info('   leftRight: ' + mObject.leftRight);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SetBoatNotAnchor........');
+	logger.debug('   marinaId : ' + mObject.marinaId);
+	logger.debug('   machineId: ' + mObject.machineId);
+	logger.debug('   leftRight: ' + mObject.leftRight);
+	logger.debug("----------------------------------");
 
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "UPDATE /* SetBoatNotAnchor */ tb_ANCHOR a SET boat_id = 0, anchor_status = '0'   " ;
         sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "' AND b.left_right = '" + mObject.leftRight + "') " ;
 
-    logger.info(sQueryString);
+    logger.debug(sQueryString);
 
     try {
 
@@ -1069,7 +1076,7 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 					logger.error("ERROR!!" + err);
 					callback('ERROR');
 			    } else {
-					logger.info("Anchor Update OK:");
+					logger.debug("Anchor Update OK:");
 					callback('OK');			    	
 			    }
 				clientdb.release();
@@ -1089,14 +1096,14 @@ DB.prototype.SetUnregBoatIn = function(mObject, callback) {
 	
 	var machine_id ;
 	
-	logger.info("----------------------------------");
-	logger.info('Start SetUnregBoatIn........');
-	logger.info('   marinaId : ' + mObject.marinaId);
-	logger.info('   sendTime : ' + mObject.sendTime);
-	logger.info('   boatInout : ' + mObject.boatInout);
-	logger.info('   cctv_cd : ' + mObject.cctv_cd);
- 	logger.info('   photo_base64 : ' + mObject.photo_base64);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SetUnregBoatIn........');
+	logger.debug('   marinaId : ' + mObject.marinaId);
+	logger.debug('   sendTime : ' + mObject.sendTime);
+	logger.debug('   boatInout : ' + mObject.boatInout);
+	logger.debug('   cctv_cd : ' + mObject.cctv_cd);
+ 	logger.debug('   photo_base64 : ' + mObject.photo_base64);
+	logger.debug("----------------------------------");
 
 	var sQueryString = "";
 
@@ -1109,7 +1116,7 @@ DB.prototype.SetUnregBoatIn = function(mObject, callback) {
 		        (response) => {
 		        	sQueryString = "INSERT INTO tb_unreg_boatdata(marina_id, boatinout,send_time,photo_base64) \n";
 		        	sQueryString += " values(" + mObject.marinaId+ ",'" + mObject.boatInout + "','"  + mObject.sendTime + "','"  + response + "' )  \n" ;
-		        	logger.info(sQueryString);
+		        	logger.debug(sQueryString);
 
 		    		pool.connect(function (err, clientdb, done) {
 		    			if (err) throw new Error(err);
@@ -1118,7 +1125,7 @@ DB.prototype.SetUnregBoatIn = function(mObject, callback) {
 		    					logger.error("ERROR!!" + err);
 		    					callback('ERROR');
 		    			    } else {
-		    			    	logger.info("tb_unreg_boatdata Insert OK:");
+		    			    	logger.debug("tb_unreg_boatdata Insert OK:");
 		    			    }
 		    				clientdb.release();
 		    			});
@@ -1143,20 +1150,20 @@ DB.prototype.SetUnregBoatIn = function(mObject, callback) {
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.SetDashBoard = function (mObject, callback) {
 	
-	logger.info("----------------------------------");
-	logger.info('Start SetDashBoard........');
-	logger.info('  marinaId : ' + mObject.marinaId);
-	logger.info('  machineId: ' + mObject.machineId);
-	logger.info('  boatId   : ' + mObject.boatId);
-	logger.info('  gradex   : ' + mObject.gradex);
-	logger.info('  gradey   : ' + mObject.gradey);
-	logger.info('  latitude : ' + mObject.latitude);
-	logger.info('  longitude: ' + mObject.longitude);
-	logger.info('  cctv_cd  :[' + mObject.cctv_cd + "]");
-	//logger.info('  photo_base64: ' + mObject.photo_base64);
-	logger.info('  sendTime  :' + mObject.sendTime);
-	logger.info('  boatInout :' + mObject.boatInout);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SetDashBoard........');
+	logger.debug('  marinaId : ' + mObject.marinaId);
+	logger.debug('  machineId: ' + mObject.machineId);
+	logger.debug('  boatId   : ' + mObject.boatId);
+	logger.debug('  gradex   : ' + mObject.gradex);
+	logger.debug('  gradey   : ' + mObject.gradey);
+	logger.debug('  latitude : ' + mObject.latitude);
+	logger.debug('  longitude: ' + mObject.longitude);
+	logger.debug('  cctv_cd  :[' + mObject.cctv_cd + "]");
+	//logger.debug('  photo_base64: ' + mObject.photo_base64);
+	logger.debug('  sendTime  :' + mObject.sendTime);
+	logger.debug('  boatInout :' + mObject.boatInout);
+	logger.debug("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "UPDATE /* SetDashBoard */ tb_io_status " ;
@@ -1175,7 +1182,7 @@ DB.prototype.SetDashBoard = function (mObject, callback) {
 	    sQueryString += "       , last_upd_tm = to_char(now(), 'YYYYMMDDHH24MISS') " ;
         sQueryString += " WHERE marina_id = " + mObject.marinaId  ;
 
-    logger.info(sQueryString);
+    logger.debug(sQueryString);
 
     try {
 
@@ -1186,7 +1193,7 @@ DB.prototype.SetDashBoard = function (mObject, callback) {
 					logger.error("ERROR!!" + err);
 					callback('ERROR');
 			    } else {
-					logger.info("Anchor Update OK:");
+					logger.debug("Anchor Update OK:");
 					callback('OK');			    	
 			    }
 				clientdb.release();
@@ -1204,24 +1211,23 @@ DB.prototype.SetDashBoard = function (mObject, callback) {
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.SetSOS = function (mObject, callback) {
 	
-	logger.info("----------------------------------");
-	logger.info('Start SetSOS........');
-	logger.info('  marinaId : ' + mObject.marinaId);
-	logger.info('  sendTime : ' + mObject.sendTime);
-	logger.info('  boatId   : ' + mObject.boatId);
-	logger.info('  gradex   : ' + mObject.gradex);
-	logger.info('  gradey   : ' + mObject.gradey);
-	logger.info('  latitude : ' + mObject.latitude);
-	logger.info('  longitude: ' + mObject.longitude);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start SetSOS........');
+	logger.debug('  marinaId : ' + mObject.marinaId);
+	logger.debug('  sendTime : ' + mObject.sendTime);
+	logger.debug('  boatId   : ' + mObject.boatId);
+	logger.debug('  gradex   : ' + mObject.gradex);
+	logger.debug('  gradey   : ' + mObject.gradey);
+	logger.debug('  latitude : ' + mObject.latitude);
+	logger.debug('  longitude: ' + mObject.longitude);
+	logger.debug("----------------------------------");
 
+	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO /* SetSOS */ public.tb_sos_list(marina_id, send_time, boat_id,gradex, gradey, latitude, longitude)  \n";
-		sQueryString += " values("  + mObject.marinaId + ",'" + mObject.sendTime + "','"  + mObject.boatId + "' \n" ;
-		sQueryString += "       ,"  + mObject.gradex + ","  + mObject.gradey + ","  + mObject.latitude + ","  + mObject.longitude + " )  \n" ;    
-    logger.info(sQueryString);
+	var sQueryString = "SELECT /* SetSOS */ marina_id, boat_id FROM tb_boat_device WHERE machine_id = '" + mObject.machineId + "' limit 1 \n";
+	logger.debug(sQueryString);
 
-  try {
+    try {
 
 		pool.connect(function (err, clientdb, done) {
 			if (err) throw new Error(err);
@@ -1230,36 +1236,57 @@ DB.prototype.SetSOS = function (mObject, callback) {
 					logger.error("ERROR!!" + err);
 					callback('ERROR');
 			    } else {
-					logger.info("Anchor Update OK:");
-					callback('OK');			    	
+			    	
+					for(var i = 0; i < res.rowCount ; i ++) {
+						mObject.boatId    = res.rows[i].boat_id;
+						logger.debug(" mObject.boatId   :" +res.rows[i].boat_id);   
+					}
+
+					var sQueryString  = "INSERT INTO /* SetSOS */ public.tb_sos_list(marina_id, send_time, boat_id,gradex, gradey, latitude, longitude)  \n";
+					sQueryString += " values("  + mObject.marinaId + ",'" + mObject.sendTime + "','"  + mObject.boatId + "' \n" ;
+					sQueryString += "       ,"  + mObject.gradex + ","  + mObject.gradey + ","  + mObject.latitude + ","  + mObject.longitude + " )  \n" ;    
+				
+				    logger.debug(sQueryString);
+
+					clientdb.query(sQueryString, function (err, res) {
+						if (err) {
+							logger.error("ERROR!!" + err);
+							callback('ERROR');
+					    } else {
+					    	logger.debug("tb_sos_list update OK!!" );
+					    	callback('OK');
+					    }
+					}); 
 			    }
 				clientdb.release();
 			}); 
 		}); 
-  } catch (e) {
+    } catch (e) {
 		logger.error("ERROR:"+err);
 		callback('ERROR');
 	}
+    
+
 };
 
 
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.CCtvReceive = function (mObject, callback) {
     
-	logger.info("----------------------------------");
-	logger.info('Start CCtvReceive........');
-	logger.info('  marinaId 	: ' + mObject.marinaId );
-	logger.info('  sendTime 	: ' + mObject.sendTime );
-	logger.info('  cctv_cd  	: ' + mObject.cctv_cd  );
-	logger.info('  boatinout	: ' + mObject.boatInout);
-	//logger.info('  photo_base64	: ' + mObject.photo_base64);
-	logger.info("----------------------------------");
+	logger.debug("----------------------------------");
+	logger.debug('Start CCtvReceive........');
+	logger.debug('  marinaId 	: ' + mObject.marinaId );
+	logger.debug('  sendTime 	: ' + mObject.sendTime );
+	logger.debug('  cctv_cd  	: ' + mObject.cctv_cd  );
+	logger.debug('  boatinout	: ' + mObject.boatInout);
+	//logger.debug('  photo_base64	: ' + mObject.photo_base64);
+	logger.debug("----------------------------------");
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "INSERT INTO /* CCtvReceive */ public.tb_cctvdata(marina_id, send_time, cctv_cd,photo_base64, boatinout)  \n";
 		sQueryString += " values("  + mObject.marinaId + ",'" + mObject.sendTime + "','"  + mObject.cctv_cd + "' \n" ;
 		sQueryString += "       ,'"  + mObject.photo_base64 + "','"  + mObject.boatInout + "' )  \n" ;    
-    logger.info(sQueryString);
+    logger.debug(sQueryString);
 
   try {
 
@@ -1270,7 +1297,7 @@ DB.prototype.CCtvReceive = function (mObject, callback) {
 					logger.error("ERROR!!" + err);
 					callback('ERROR');
 			    } else {
-					logger.info("Anchor Update OK:");
+					logger.debug("Anchor Update OK:");
 					callback('OK');			    	
 			    }
 				clientdb.release();
