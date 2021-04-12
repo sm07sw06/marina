@@ -119,7 +119,7 @@ client.on("message", function(topic, message) {
 		
 		for (var sKey in obj) {
 		
-			if (obj.hasOwnProperty(sKey)) {
+			if (obj.hasOwnProperty(sKey)) { 
 				
 				var sData = obj[sKey].split(",");
 
