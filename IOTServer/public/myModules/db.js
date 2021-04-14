@@ -108,7 +108,7 @@ function getCalcRssiDistance(rssi) {
 }
 
 //정박지 데이터 분석 처리
-function rssidata(sData) {
+function rssidataInsert(sData) {
 	
 	var marinaId     = 1;
 	var machineId    = sData[0];  //정박단말기ID
@@ -130,7 +130,7 @@ function rssidata(sData) {
 	if(rssi == "")  { rssi = 0; }
 
 	logger.debug("----------------------------------");
-	logger.debug('Start rssidata insert........');
+	logger.debug('Start rssidataInsert insert........');
 	logger.debug("  length      :" + sData.length);
     logger.debug("  marinaId    :"+marinaId);
     logger.debug("  machineId   :"+machineId);
@@ -143,24 +143,26 @@ function rssidata(sData) {
 	logger.debug("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
+	var sQueryString  = "INSERT INTO /* rssidataInsert */ public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
 	    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "','"  + sendRecvTime + "',"  + rssi + "  );  \n";
 	logger.debug(sQueryString);
 
  try {
 
-		pool.connect(function (err, clientdb, done) {
-			if (err) throw new Error(err);
-			clientdb.query(sQueryString, function (err, res) {
-				if (err) {
-					logger.error("ERROR!!" + err);
-					//callback('ERROR');
-			    } else {
-			    	logger.debug("Rssidata Insert OK:");
-			    }
-				clientdb.release();
+	 if( rssi > 0 ) {
+			pool.connect(function (err, clientdb, done) {
+				if (err) throw new Error(err);
+				clientdb.query(sQueryString, function (err, res) {
+					if (err) {
+						logger.error("ERROR!!" + err);
+						//callback('ERROR');
+				    } else {
+				    	logger.debug("Rssidata Insert OK:");
+				    }
+					clientdb.release();
+				}); 
 			}); 
-		}); 
+	 }
   } catch (e) {
 		logger.error("ERROR:"+err);
 		//callback('ERROR');
@@ -184,7 +186,7 @@ DB.prototype.SetDB = function(message) {
 
 //MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
 DB.prototype.InsertDBRssiData = function(message) {
-	rssidata(message);
+	rssidataInsert(message);
 };
 
 
@@ -879,7 +881,7 @@ DB.prototype.SetXY = function(mObject, callback) {
     	sQueryString += "   AND b.send_time  = '" + mObject.sendTime  + "' \n";
     	sQueryString += " ORDER by d.set_order \n";
 
-    logger.debug(sQueryString);
+    logger.debug("882:"+sQueryString);
 	
     try {
 
