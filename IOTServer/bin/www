@@ -133,7 +133,8 @@ client.on("message", function(topic, message) {
 						boatCheck.getBoatCheck();
 					} else if(sKey === "lidarData" && 1 == 1) {
 						// 정박지 단말기에서 보내온 신호 분석
-						var LidarCheck = require('../public/myModules/lidarCheck');
+//						var LidarCheck = require('../public/myModules/lidarCheck');
+						var LidarCheck = require('../public/myModules/lidarCheckSim');
 						var lidarCheck = new LidarCheck(sData); 
 						lidarCheck.getLidarCheck();				
 					} else if(sKey === "rssiData" && 1 == 1) {

@@ -208,70 +208,75 @@ BoatCheck.prototype.getBoatCheck = function() {
 
     var sData = this.message;  // MQTT에서 보내온 메세지
 
-    mObject.marinaId    = 1;
-    mObject.machineId   = sData[9];
-    mObject.sendTime    = sData[15];
-    mObject.temperature = sData[16];
-    mObject.humidity    = sData[17];
-    mObject.gradex      = sData[18];
-    mObject.gradey      = sData[19];
-    mObject.latitude    = sData[22];
-    mObject.latitudeDir   = sData[23];
-    mObject.longitude   = sData[24];
-    mObject.longitudeDir  = sData[25];
-
-    logger.debug("==================================");
-    logger.debug('   marinaId   :' + mObject.marinaId)   ;
-    logger.debug('   machineId  :' + mObject.machineId   );
-    logger.debug('   sendTime   :' + mObject.sendTime    );
-    logger.debug('   temperature:' + mObject.temperature );
-    logger.debug('   humidity   :' + mObject.humidity    );
-    logger.debug('   gradex     :' + mObject.gradex      );
-    logger.debug('   gradey     :' + mObject.gradey      );
-    logger.debug('   latitude   :' + mObject.latitude    );
-    logger.debug('   latitudeDir  :' + mObject.latitudeDir   );
-    logger.debug('   longitude  :' + mObject.longitude   );
-    logger.debug('   longitudeDir :' + mObject.longitudeDir  );
-    logger.debug("==================================");
-
-    if(mObject.temperature == "") { mObject.temperature = 0; }
-    if(mObject.humidity    == "") { mObject.humidity    = 0; }
-    if(mObject.gradex      == "") { mObject.gradex      = 0; }
-    if(mObject.gradey      == "") { mObject.gradey      = 0; }
-    if(mObject.latitude    == "") { mObject.latitude    = 0; }
-    if(mObject.longitude   == "") { mObject.longitude   = 0; }
-
-    //mObject.gradex = 70; //LDH
-	
-    var db = new DB();
-   
-    db.GetRegBoatMachindId(mObject, function(rtn){
-        if (rtn == 'OK') {
-			logger.debug('등록된 보트 디바이스임'); 
-			db.SetBoatData(sData, function(rtn){;    // 
-				if (rtn == 'OK') {
-					if ((Math.abs(mObject.gradex) > global.grade) || (Math.abs(mObject.gradey) > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
-						logger.debug('!! SOS 신호 처리중...'); 
-						db.SetSOS(mObject, function(rtn) {
-							if (rtn == 'OK') {
-								//최근 정박 이력 확인
-								logger.debug('SOS 완료'); 
-							} else {
-								logger.debug('SOS 오류'); //보트단말기 정박상태 분석2
-							}   
-						});  
-					} else {
-						getAreaAnalysis(mObject); //GPS위치가 출입구 구역인지 확인
-					}
-				} else {
-					;;
-				}
-			 });    				
-        } else {
-            logger.debug('등록된 보트 디바이스 아님'); //보트단말기 정박상태 분석2
-        }   
-    });          	
+    mObject.marinaId     = 1;
+    mObject.machineId    = sData[9];
+    mObject.sendTime     = sData[15];
+    mObject.temperature  = sData[16];
+    mObject.humidity     = sData[17];
+    mObject.gradex       = sData[18];
+    mObject.gradey       = sData[19];
+    mObject.latitude     = sData[22];
+    mObject.latitudeDir  = sData[23];
+    mObject.longitude    = sData[24];
+    mObject.longitudeDir = sData[25];
+    var gps_qual         = sData[26];
     
+    if(gps_qual == '1') {
+	    
+	    logger.debug("==================================");
+	    logger.debug('   marinaId     :' + mObject.marinaId    );
+	    logger.debug('   machineId    :' + mObject.machineId   );
+	    logger.debug('   sendTime     :' + mObject.sendTime    );
+	    logger.debug('   temperature  :' + mObject.temperature );
+	    logger.debug('   humidity     :' + mObject.humidity    );
+	    logger.debug('   gradex       :' + mObject.gradex      );
+	    logger.debug('   gradey       :' + mObject.gradey      );
+	    logger.debug('   latitude     :' + mObject.latitude    );
+	    logger.debug('   latitudeDir  :' + mObject.latitudeDir );
+	    logger.debug('   longitude    :' + mObject.longitude   );
+	    logger.debug('   longitudeDir :' + mObject.longitudeDir);
+	    logger.debug('   gps qual     :' + mObject.latitude    );
+	    logger.debug("==================================");
+	
+	    if(mObject.temperature == "") { mObject.temperature = 0; }
+	    if(mObject.humidity    == "") { mObject.humidity    = 0; }
+	    if(mObject.gradex      == "") { mObject.gradex      = 0; }
+	    if(mObject.gradey      == "") { mObject.gradey      = 0; }
+	    if(mObject.latitude    == "") { mObject.latitude    = 0; }
+	    if(mObject.longitude   == "") { mObject.longitude   = 0; }
+	
+	    //mObject.gradex = 70; //LDH
+		
+	    var db = new DB();
+	   
+	    db.GetRegBoatMachindId(mObject, function(rtn){
+	        if (rtn == 'OK') {
+				logger.debug('등록된 보트 디바이스임'); 
+				db.SetBoatData(sData, function(rtn){;    // 
+					if (rtn == 'OK') {
+						if ((Math.abs(mObject.gradex) > global.grade) || (Math.abs(mObject.gradey) > global.grade)) { //기울기가 60도 이상이면 보트가 좌초하는 경우로 자동 SOS 요청신호로 간주
+							logger.debug('!! SOS 신호 처리중...'); 
+							db.SetSOS(mObject, function(rtn) {
+								if (rtn == 'OK') {
+									//최근 정박 이력 확인
+									logger.debug('SOS 완료'); 
+								} else {
+									logger.debug('SOS 오류'); //보트단말기 정박상태 분석2
+								}   
+							});  
+						} else {
+							getAreaAnalysis(mObject); //GPS위치가 출입구 구역인지 확인
+						}
+					} else {
+						;;
+					}
+				 });    				
+	        } else {
+	            logger.debug('등록된 보트 디바이스 아님'); //보트단말기 정박상태 분석2
+	        }   
+	    });    
+    }
+	    
 };
 
 

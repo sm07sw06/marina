@@ -283,20 +283,20 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 //보트 데이터 분석 처리
 DB.prototype.SetBoatData = function (sData, callback) {	
 
-	var sId          = sData[9];
-	var ssend_time   = sData[15];
-	var nTemperature = sData[16];
-	var nHumidity    = sData[17];
-	var nGradex      = sData[18];
-	var nGradey      = sData[19];
-	var nGpsquality  = sData[26];  
-	var nLatitude    = sData[22];
-	var sLatitudeDir   = sData[23];
-	var nLongitude   = sData[24];
-	var sLongitudeDir  = sData[25];
-	var nSatellite   = sData[27];
-	var nGpsage      = sData[33];
-	var sSenttype    = sData[14];
+	var sId           = sData[9];
+	var ssend_time    = sData[15];
+	var nTemperature  = sData[16];
+	var nHumidity     = sData[17];
+	var nGradex       = sData[18];
+	var nGradey       = sData[19];
+	var nGpsquality   = sData[26];  
+	var nLatitude     = sData[22];
+	var sLatitudeDir  = sData[23];
+	var nLongitude    = sData[24];
+	var sLongitudeDir = sData[25];
+	var nSatellite    = sData[27];
+	var nGpsage       = sData[33];
+	var sSenttype     = sData[14];
 
  
 	logger.debug("----------------------------------");
@@ -396,27 +396,27 @@ DB.prototype.SetLidarData = function (sData, callback) {
 
 	logger.debug("----------------------------------");
 	logger.debug('Start lidardata insert........');
- logger.debug("  sId                :" + sId               );
- logger.debug("  nAngleMin          :" + nAngleMin         );
- logger.debug("  nAngleMax          :" + nAngleMax         );
- logger.debug("  nLoadMin           :" + nLoadMin          );
- logger.debug("  nShipMax           :" + nShipMax          );
- logger.debug("  nLoadThreshold     :" + nLoadThreshold    );
- logger.debug("  nShipThreshold     :" + nShipThreshold    );
- logger.debug("  nTempo             :" + nTempo            );
- logger.debug("  nHuminity          :" + nHuminity         );
- logger.debug("  ssend_time         :" + ssend_time        );
- logger.debug("  nLoadLeftCount     :" + nLoadLeftCount    );
- logger.debug("  nShipLeftCount     :" + nShipLeftCount    );
- logger.debug("  nLoadRightCount    :" + nLoadRightCount   );
- logger.debug("  nShipRightCount    :" + nShipRightCount   );
- logger.debug("  sLoadLeftYn        :" + sLoadLeftYn       );
- logger.debug("  sShipLeftYn        :" + sShipLeftYn       );
- logger.debug("  sLoadRightYn       :" + sLoadRightYn      );
- logger.debug("  sShipRightYn       :" + sShipRightYn      );
- logger.debug("  sLongData          :" + sLongData         );
+	logger.debug("  sId                :" + sId               );
+	logger.debug("  왼쪽에 보트 판단 여부        :" + sShipLeftYn       );
+	logger.debug("  오른쪽에 보트 판단 여부      :" + sShipRightYn      );
+	logger.debug("  온도                            :" + nTempo            );
+	logger.debug("  습도                            :" + nHuminity         );
+//	logger.debug("  nAngleMin          :" + nAngleMin         );
+//	logger.debug("  nAngleMax          :" + nAngleMax         );
+//	logger.debug("  nLoadMin           :" + nLoadMin          );
+//	logger.debug("  nShipMax           :" + nShipMax          );
+//	logger.debug("  nLoadThreshold     :" + nLoadThreshold    );
+//	logger.debug("  nShipThreshold     :" + nShipThreshold    );
+//	logger.debug("  ssend_time         :" + ssend_time        );
+//	logger.debug("  nLoadLeftCount     :" + nLoadLeftCount    );
+//	logger.debug("  nShipLeftCount     :" + nShipLeftCount    );
+//	logger.debug("  nLoadRightCount    :" + nLoadRightCount   );
+//	logger.debug("  nShipRightCount    :" + nShipRightCount   );
+//	logger.debug("  sLoadLeftYn        :" + sLoadLeftYn       );
+//	logger.debug("  sLoadRightYn       :" + sLoadRightYn      );
+//	logger.debug("  sLongData          :" + sLongData         );
 	logger.debug("----------------------------------");
-	
+
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString = "INSERT INTO public.tb_lidardata(marina_id, machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,temperature,huminity,send_time,  \n";
 	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  \n";
@@ -1309,6 +1309,68 @@ DB.prototype.CCtvReceive = function (mObject, callback) {
 		logger.error("ERROR:"+err);
 		callback('ERROR');
 	}
+};
+
+
+
+
+//기준 시간 범위내 단말기 수신 정보 찾기(보트 단말기 신호 기록)
+DB.prototype.GetlidarNearBoatSearch = function(mSubObject, callback) {
+	var machine_id ;
+	
+	logger.info("----------------------------------");
+	logger.info('Start GetlidarNearBoatSearch........');
+	logger.info('  marinaId : ' + mSubObject.marinaId);
+	logger.info('  machineId: ' + mSubObject.machineId);
+	logger.info('  sendTime : ' + mSubObject.sendTime);
+	logger.info('  leftRight: ' + mSubObject.leftRight);
+	logger.info("----------------------------------");
+
+	try {		 
+			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+		var sQueryString  = " SELECT rd.boat_recv_id, rd.rssi  \n";
+			sQueryString += "   FROM tb_anchor_device  ad, tb_rssidata rd,tb_lidardata ld \n";
+			sQueryString += "  WHERE 1 = 1 \n";
+			sQueryString += "    AND ad.machine_id = rd.machine_id \n";
+			sQueryString += "    AND ad.machine_id = '" + mSubObject.machineId + "' \n";
+			sQueryString += "    AND ld.send_time = '" + mSubObject.sendTime + "' \n";
+//			sQueryString += "    AND rd.rssi > 55 \n ";
+			sQueryString += "    AND ld.send_time BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '4 sec'),'YYYYMMDDHH24MISS')   \n";
+			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '4 sec'),'YYYYMMDDHH24MISS')    \n";
+			sQueryString += "  ORDER BY rd.rssi  \n";
+			sQueryString += "  LIMIT 1  \n";
+		    logger.info("보트 찾기:" + sQueryString);
+
+			pool.connect(function (err, clientdb, done) {
+				if (err) throw new Error(err);
+				clientdb.query(sQueryString, function (err, res) {
+					if (err) {
+						logger.error("ERROR!!" + err);
+						callback('ERROR');
+				    } else {
+						for(var i = 0; i < res.rowCount ; i ++) {
+							mSubObject.boat_recv_id = res.rows[i].boat_recv_id;
+							mSubObject.rssi         = res.rows[i].rssi;
+							logger.info("  boat_recv_id   :" +res.rows[i].boat_recv_id);   
+							logger.info("  rssi :" +res.rows[i].rssi);   
+						}
+						if( res.rowCount > 0) {
+							logger.info("기준 시간 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_recv_id);
+							callback("OK", mSubObject);
+						} else {
+							logger.info("기준 시간 범위내에 단말기 수신 정보가 없습니다.");
+							callback("ERROR", mSubObject);
+						}
+				    }
+					clientdb.release();
+				});
+			}); 
+	} catch (e) {
+		logger.error("ERROR:"+err);
+		callback('ERROR');
+	}
+			
+
 };
 
 
