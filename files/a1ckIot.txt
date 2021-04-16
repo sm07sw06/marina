@@ -1,0 +1,180 @@
+sudo yum -y install epel-release
+
+sudo yum -y install mosquitto
+
+systemctl restart mosquitto.service
+
+mosquitto.exe -c mosquitto.conf -v
+
+#tcp 포트 1883 허용
+sudo firewall-cmd --zone=public --add-port=1883/tcp --permanent
+sudo firewall-cmd --reload
+
+mosquitto_sub -h localhost -p 1883 -t led
+mosquitto_sub -h localhost -p 1883 -t dht11
+mosquitto_sub -h localhost -p 1883 -t dist
+mosquitto_sub -h localhost -p 1883 -t temp
+mosquitto_sub -h localhost -p 1883 -u "a1ck" -P "topadmin" -t dht11
+
+mosquitto_pub -h localhost -u "a1ck" -P "topadmin" -t dht11 -m "{\"tmp\":25,\"hum\"70}"
+
+mosquitto_pub -h localhost -t led -m 1
+mosquitto_pub -h localhost -t led -m 2
+
+sudo vi /etc/mosquitto/mosquitto.conf
+  allow_anonymous false
+  password_file /etc/mosquitto/passwd
+  
+cd /etc/mosquitto/
+sudo mosquitto_passwd -c /etc/mosquitto/passwd a1ck
+
+
+---Log-------------
+$ sudo vi /etc/mosquitto/mosquitto.conf
+#log_dest file /var/log/mosquitto/mosquitto.log 
+#log_dest topic 
+log_dest syslog 
+log_facility 0 
+log_timestamp false 
+
+log_type error 
+log_type warning 
+log_type notice 
+log_type information 
+
+connection_messages true 
+
+저장 후 종료 하고 서비스를 재시작한다.
+$sudo systemctl mosquitto
+
+syslog 설정에 아래의 내용을 추가하면 mosquitto log를 별도의 파일로 저장한다.
+conf파일을 열어  #### RULES ####  아래에 아래 내용을 추가한다.
+
+$  sudo vi /etc/rsyslog.conf
+local0.* -/var/log/mosquitto.log
+
+저장 후 종료
+
+$ sudo systemctl restart syslog
+
+로그 보는법은
+$ cat /var/log/mosquitto.log              
+$ tail  /var/log/mosquitto.log -n20            끝에 20줄만 보고싶을때
+
+
+####  nodejs ##########################
+###wget https://nodejs.org/dist/v12.19.0/node-v12.19.0.tar.gz
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+source ~/.bashrc
+
+# 원하는 버전으로 설치
+nvm install 10.19.0
+# 최신 LTS 버전으로 설치
+nvm install --lts
+nvm install lts/dubnium # v10.19.0
+nvm install lts/carbon  # v8.17.0
+# 최신 버전으로 설치
+nvm install node
+
+nvm list
+nvm alias default 12.15.0
+
+node -v
+npm -v
+
+npm i pg --save
+
+
+####  mongodb  ##########################
+sudo vi /etc/yum.repos.d/mongodb-org.repo
+	[mongodb-org-3.4]
+	name=MongoDB Repository
+	baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+	gpgcheck=1
+	enabled=1
+	gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
+yum repolist
+sudo yum install mongodb-org
+sudo systemctl start mongod
+sudo systemctl stop mongod
+sudo systemctl reload mongod
+sudo tail -f /var/log/mongodb/mongod.log
+
+https://robomongo.org/
+
+#tcp 포트 27017 허용
+sudo firewall-cmd --zone=public --add-port=27017/tcp --permanent
+sudo firewall-cmd --reload
+
+mongo
+	> show dbs;
+	> use admin;
+	> db;
+	> db.createUser({user:"a1ck",pwd:"topadmin",roles:["root"]});
+	> exit
+
+sudo vi /etc/mongod.conf
+	net:
+	  port: 27017
+	  bindIp: 0.0.0.0  # Listen to local interface only, comment to listen on all interfaces.
+	security:
+	  authorization: 'enabled'
+
+systemctl restart mongod.service
+
+mongo -u a1ck -p topadmin admin
+  use iot;
+  db;
+  db.createUser({user:"a1ck",pwd:"topadmin",roles:["readWrite"]});
+  
+  
+
+####  Arduino  ##########################
+라이브러리관리
+wifiesp => Arduino WiFi library for ESP8266
+
+
+
+############ git.hub ################
+echo "# marina" >> README.md
+  
+  git config --global user.email "sm07sw06@gmail.com"
+  git config --global user.name "sm07sw06"
+  
+
+
+cd D:\workspaceiot
+git init
+git remote add origin https://github.com/sm07sw06/marina.git
+git remote -v
+git clone https://github.com/sm07sw06/marina.git
+
+cd D:\workspaceiot\marina
+git pull origin master
+
+npm i multer
+
+
+
+
+git add .
+git commit -m "add"
+git push origin master
+
+git diff
+
+
+
+git rm -r --cached .
+git add .
+git commit -m "Apply .gitignore"
+
+
+
+############ Docker 설치 for windows 10 ################
+http://docker.com/get-started
+
+docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+
+
+
