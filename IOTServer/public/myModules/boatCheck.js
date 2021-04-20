@@ -221,7 +221,8 @@ BoatCheck.prototype.getBoatCheck = function() {
     mObject.longitudeDir = sData[25];
     var gps_qual         = sData[26];
     
-    if(gps_qual == '1') {
+//  if(gps_qual == '1') {
+    if('1' == '1') {
 	    
 	    logger.debug("==================================");
 	    logger.debug('   marinaId     :' + mObject.marinaId    );

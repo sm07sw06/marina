@@ -6,42 +6,58 @@ EXECUTE PROCEDURE update_time();
 
 
 /* 장치 수집 */
-SELECT DISTINCT machine_id,  FROM public.tb_lidardata;
-SELECT DISTINCT machine_id   FROM public.tb_boatdata;
-SELECT DISTINCT machine_id   FROM public.tb_rssidata;
-SELECT DISTINCT boat_recv_id FROM public.tb_rssidata;
-
-
-
-
 -- delete from tb_boatdata
 -- delete from tb_lidardata
 -- delete from tb_rssidata
 
 SELECT distinct machine_id
+	FROM public.tb_lidardata
+   order by 1	
+	
+SELECT distinct machine_id, boat_recv_id
+	FROM public.tb_rssidata
+   order by 1,2 
+
+
+SELECT distinct machine_id
 	FROM public.tb_boatdata
 	where latitude > 0
+	
 	
 SELECT *
 	FROM public.tb_boatdata
 	where 1 = 1
 --	and latitude > 0 
 -- 	 and machine_id = '0013A20041BB953E'
- 	 and machine_id = '0013A20041BB9636'
+-- 	 and machine_id = '0013A20041BB9636'
 	order by send_time desc	
 	
 SELECT *
 	FROM public.tb_rssidata
 	where 1 = 1
 --	and boat_recv_id = '0013A20041BB953E'
-	and boat_recv_id = '0013A20041BB9636'
+--	and boat_recv_id = '0013A20041BB9636'
 	order by   send_time desc	, send_recv_time desc
 	
 	
 
 /*** logic  */
 
-// setp 1 ( 우측 방향에 보트가 식별시 가장 가까운 보트 찾기)
+function MessageSubObject()
+{ 
+    var marinaId;   //마리나 ID      
+    var machineId;  //보트단말기 ID     
+    var sendTime;   // 전송일시     
+    var boatId;  //보트 ID     
+    var lidarId;   // 정박지단말기 ID  
+    var leftRight;  // 좌우구분   좌우구분 (0:좌, 1:우)
+    var boatInout;  // 입출항구분  
+    var boat_recv_id;  // MQTT에서 전달 받은 GPS 위도 
+    var rssi;  // MQTT에서 전달 받은 GPS 경도
+}
+
+
+// setp 1 ( 우측 방향에 보트 식별시 가장 가까운 보트 찾기)
 
  SELECT rd.boat_recv_id, rd.rssi   // 0013A20041BF1586  46
    FROM tb_anchor_device  ad, tb_rssidata rd,tb_lidardata ld
@@ -55,12 +71,14 @@ SELECT *
   ORDER BY rd.rssi 
   LIMIT 1
 
+
 // setp 2 ( 찾은 보트가 정박 상태 인지 확인)  정박이면 미등록,  아니면 계속
 
 SELECT b.boat_status     // 보트상태 (9:미가입,  1: 정박,  0:출항)
   FROM tb_boat_device bd, tb_boat b
  WHERE bd.boat_id = b.boat_id
    AND bd.machine_id ='0013A20041BF1586'
+   
    
 // setp 3 ( 우측 방향에 있는 가장 가까운 lidar로 식별된 보트의 rssi 찾기)
 

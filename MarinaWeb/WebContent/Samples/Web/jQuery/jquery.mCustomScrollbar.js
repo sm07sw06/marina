@@ -113,7 +113,7 @@ and dependencies (minified).
 			scrolling inertia
 			values: integer (milliseconds)
 			*/
-			scrollInertia:950,
+			scrollInertia:100,
 			/* 
 			auto-adjust scrollbar dragger length
 			values: boolean
@@ -163,7 +163,7 @@ and dependencies (minified).
 				scrolling amount in pixels
 				values: "auto", integer 
 				*/
-				scrollAmount:250,
+				scrollAmount:150,
 				/* 
 				mouse-wheel scrolling axis 
 				the default scrolling direction when both vertical and horizontal scrollbars are present 

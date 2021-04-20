@@ -869,6 +869,10 @@ DB.prototype.SetXY = function(mObject, callback) {
 	
 	var machine_id ;
 
+	callback('OK',mObject);  //LDH
+	
+	/****
+	
 	var dist = [];
 	var posx = 0.0; //기준점 X
 	var posy = 0.0; //기준점 Y
@@ -884,8 +888,8 @@ DB.prototype.SetXY = function(mObject, callback) {
 	logger.debug("----------------------------------");
 
 	
-	/* 보트 신호건에 대한 RSSI 값 3개 찾기 */
-	var sQueryString  = "SELECT /* SetXY */ b.marina_id,b.machine_id,b.send_time, r.boat_recv_id, r.rssi, r.send_recv_time ,d.positionx,d.positiony,d.set_order,d.gate_class \n";
+	// 보트 신호건에 대한 RSSI 값 3개 찾기 
+	var sQueryString  = "SELECT  b.marina_id,b.machine_id,b.send_time, r.boat_recv_id, r.rssi, r.send_recv_time ,d.positionx,d.positiony,d.set_order,d.gate_class \n";
     	sQueryString += "  from tb_boatdata b, tb_rssidata r , tb_anchor_device d \n";
     	sQueryString += " WHERE b.machine_id = r.boat_recv_id  \n";
     	sQueryString += "   AND r.machine_id = d.machine_id  \n";
@@ -922,20 +926,20 @@ DB.prototype.SetXY = function(mObject, callback) {
                         		posa = Number(res.rows[i].positionx - posx);
                         		logger.debug('   posa : ' + posa);
                         	}
-                        	/***
-                        	 * RSSI값을 이용한 거리 게산
-                        	 * d = (C/4pif)*10^(L/20)
-                        	 *  res.rows[i].rssi;
-                        	 **/
+                        	
+                        	// * RSSI값을 이용한 거리 게산
+                        	// * d = (C/4pif)*10^(L/20)
+                        	// *  res.rows[i].rssi;
+                        	
                         	dist[i] = getCalcRssiDistance(res.rows[i].rssi);  //RSSI
                         }  
                     	logger.debug('   dist[0] : ' + dist[0]);
                     	logger.debug('   dist[1] : ' + dist[1]);
                     	logger.debug('   dist[2] : ' + dist[2]);
 
-                        /***
-                    	 * 삼각 측정에의한 좌표 계산
-                    	 **/
+                        
+                    	 //* 삼각 측정에의한 좌표 계산
+                    	 
                         calx = (  Math.abs(Math.pow(dist[0],2) - Math.pow(dist[1],2) + Math.pow(posa,2) ) / (2 * posa) ); 
                         logger.debug("calx==:" + calx);
                         
@@ -970,12 +974,16 @@ DB.prototype.SetXY = function(mObject, callback) {
         logger.error("ERROR:"+err);
         callback('ERROR',mObject);
     }
+    **/
 };
 
 DB.prototype.SetXYUpdate = function(mObject, callback) {
 	
 	var machine_id ;
 	
+	callback('OK',mObject);  //LDH
+	
+	/***
 	logger.debug("----------------------------------");
 	logger.debug('Start SetXYUpdate........');
     logger.debug('   marinaId  : ' + mObject.marinaId);
@@ -987,7 +995,7 @@ DB.prototype.SetXYUpdate = function(mObject, callback) {
 
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE /* SetXYUpdate */ public.tb_boatdata \n";
+	var sQueryString  = "UPDATE   public.tb_boatdata \n";
         sQueryString += "   SET positionx  = " + mObject.x + ", positiony = "  + mObject.y + " \n";
         sQueryString += " WHERE marina_id  = "  + mObject.marinaId  + "  \n";
         sQueryString += "   AND machine_id = '" + mObject.machineId + "' \n";
@@ -1013,7 +1021,7 @@ DB.prototype.SetXYUpdate = function(mObject, callback) {
 		logger.error("ERROR:"+err);
 		callback('ERROR',mObject);
 	}
-    
+    ***/
 };
 
 //계류지에 정박보트 설정
@@ -1402,6 +1410,7 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 	logger.info("----------------------------------");
 	logger.info('Start GetNextlidarBoatSearch........');
 	logger.info('  marinaId : ' + mSubObject.marinaId);
+	logger.info('  machineId : ' + mSubObject.machineId);
 	logger.info('  boat_recv_id : ' + mSubObject.boat_recv_id);
 	logger.info('  sendTime: ' + mSubObject.sendTime);
 	logger.info('  ★★★★★★★★ leftRight: ' + mSubObject.leftRight);
@@ -1410,11 +1419,14 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 		var sQueryString  = " SELECT /* GetNextlidarBoatSearch */ rd.boat_recv_id,rd.rssi \n";
-			sQueryString += "   FROM tb_rssidata rd \n";
+			sQueryString += "   FROM tb_rssidata rd, tb_anchor_lidar al \n";
 			sQueryString += "  WHERE 1 = 1 \n";
 			sQueryString += "    AND rd.boat_recv_id  = '" + mSubObject.boat_recv_id + "' \n";
-			sQueryString += "    AND '" + mSubObject.sendTime + "' BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '4 sec'),'YYYYMMDDHH24MISS') \n";
-			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '4 sec'),'YYYYMMDDHH24MISS')  \n";
+			sQueryString += "    AND al.machine_id  = '" + mSubObject.machineId + "' \n";
+			sQueryString += "    AND al.left_right  = '" + mSubObject.leftRight + "' \n";
+			sQueryString += "    AND al.machine_ref_id = rd.machine_id \n";
+			sQueryString += "    AND '" + mSubObject.sendTime + "' BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '20 sec'),'YYYYMMDDHH24MISS') \n"; // LDH
+			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '20 sec'),'YYYYMMDDHH24MISS')  \n"; // LDH
 			sQueryString += "  ORDER BY rd.rssi  \n";
 			sQueryString += "  LIMIT 1  \n";
 		    logger.info("보트 찾기:" + sQueryString);
