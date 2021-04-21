@@ -1028,8 +1028,8 @@ DB.prototype.SetXYUpdate = function(mObject, callback) {
 
 //계류지에 정박보트 설정
 /*
- * status = 1 : 정박
- * status = 0 : 미정박 
+ * status = 1 : 정상적인 정박
+ * status = 0 : 불법 정박 
  */
 DB.prototype.SetBoatAnchor = function(status, mObject, callback) {
 	
@@ -1046,9 +1046,13 @@ DB.prototype.SetBoatAnchor = function(status, mObject, callback) {
  
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	if(status == '1') {
-		var sQueryString  = "UPDATE /* SetBoatAnchor */ tb_ANCHOR SET boat_id = " + mObject.boatId + ",anchor_status = '1'  where marina_id = " + mObject.marinaId + " AND anchor_id = " + mObject.anchorId;
+		var sQueryString  = "UPDATE /* SetBoatAnchor */ tb_ANCHOR a SET boat_id = " + mObject.boatId + ",anchor_status = '1' \n";
+		    sQueryString += " WHERE a.marina_id = " + mObject.marinaId + "  \n";
+		    sQueryString += "   AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "' AND b.left_right = '" + mObject.leftRight + "') " ;
 	} else {
-		var sQueryString  = "UPDATE /* SetBoatAnchor */ tb_ANCHOR SET boat_id = null ,anchor_status = '1'  where marina_id = " + mObject.marinaId + " AND anchor_id = " + mObject.anchorId;
+		var sQueryString  = "UPDATE /* SetBoatAnchor */ tb_ANCHOR a SET boat_id = null ,anchor_status = '1'  \n";
+			sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " \n";
+		    sQueryString += "   AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "' AND b.left_right = '" + mObject.leftRight + "') " ;
 	}
 
     logger.info(sQueryString);
@@ -1077,6 +1081,9 @@ DB.prototype.SetBoatAnchor = function(status, mObject, callback) {
 
 
 //기준 시간 범위내 단말기 수신 정보 찾기
+/* 보트가 정박 되지않음 
+ *  
+ */
 DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 	
 	var machine_id ;
@@ -1091,7 +1098,7 @@ DB.prototype.SetBoatNotAnchor = function(mObject, callback) {
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "UPDATE /* SetBoatNotAnchor */ tb_ANCHOR a SET boat_id = 0, anchor_status = '0'   " ;
-        sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "' AND b.left_right = '" + mObject.leftRight + "') " ;
+    sQueryString += " WHERE a.marina_id = " + mObject.marinaId + " AND a.anchor_id = (select b.anchor_id from tb_ANCHOR_lidar b where  b.marina_id = " + mObject.marinaId + " AND b.machine_id = '" + mObject.machineId + "' AND b.left_right = '" + mObject.leftRight + "') " ;
 
     logger.debug(sQueryString);
 

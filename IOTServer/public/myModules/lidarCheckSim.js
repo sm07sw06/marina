@@ -213,15 +213,42 @@ LidarCheck.prototype.getLidarCheck = function() {
 		                if(result == "NOOK") {
 		                	
 		                	if(mSubObjectRight.rssi > mSubObjectRight.rssi2) {
-		                        logger.info("※※※※※ 결과 - 미등록 보트1");
-		                        callback(null, "OK", mSubObjectLeft);  
+		                        logger.info("※※※※※ 결과 - 미등록 보트1");  // 정박지에 설정
+	                            db.SetBoatAnchor("0", mSubObjectRight, function(rtn){  //불법정박
+	                                logger.info("SetBoatAnchor result3:" + rtn);
+	                                if (rtn == 'OK') {
+	                                    logger.info('보트 정박 처리 성공3'); 
+	    		                        callback(null, "OK", mSubObjectRight);  
+	                                } else {
+	                                    logger.info('보트 정박 처리 실패3'); 
+	    		                        callback(null, "ERROR", mSubObjectRight);  
+	                                }                                  
+	                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
 		                	} else if(mSubObjectRight.rssi <= mSubObjectRight.rssi2) {
 		                        logger.info("※※※※※ 결과 - 등록 보트1");
-		                        callback(null, "OK", mSubObjectRight);  
+	                            db.SetBoatAnchor("1", mSubObjectRight, function(rtn){  //정상정박
+	                                logger.info("SetBoatAnchor result3:" + rtn);
+	                                if (rtn == 'OK') {
+	                                    logger.info('보트 정박 처리 성공3'); 
+	    		                        callback(null, "OK", mSubObjectRight);  
+	                                } else {
+	                                    logger.info('보트 정박 처리 실패3'); 
+	    		                        callback(null, "ERROR", mSubObjectRight);  
+	                                }                                  
+	                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
 		                	}
 		                } else {
 		                    logger.info(" 오른쪽(왼쪽) 방향에 보트 식별시 가장 가까운 보트 찾기 실폐");
-		                    callback(null, "ERROR", mSubObjectRight);  
+                            db.SetBoatAnchor("1", mSubObjectRight, function(rtn){  // 보트가 정박되지 않음
+                                logger.info("SetBoatNotAnchor result3:" + rtn);
+                                if (rtn == 'OK') {
+                                    logger.info('보트 정박 처리 성공3'); 
+    		                        callback(null, "OK", mSubObjectRight);  
+                                } else {
+                                    logger.info('보트 정박 처리 실패3'); 
+    		                        callback(null, "ERROR", mSubObjectRight);  
+                                }                                  
+                            });                  //기준 시간 범위내 단말기 수신 정보 찾기           
 		                }
 		        }                
 		    ],

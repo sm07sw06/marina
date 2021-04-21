@@ -3,7 +3,7 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "localhost",
+    "host": "192.168.123.105",
     "port": "5432",
     "dialect": "mysql",
     "appport": "3100"
@@ -12,7 +12,7 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "localhost",
+    "host": "192.168.123.105",
     "port": "5432",
     "dialect": "mysql",
     "appport": "3100"
@@ -21,7 +21,7 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "localhost",
+    "host": "192.168.123.105",
     "port": "5432",
     "dialect": "mysql",
     "appport": "3100"
