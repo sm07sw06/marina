@@ -181,7 +181,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 			                            logger.info("  rssi :" + mSubObjectRightRtn.rssi);
 			                            
 			                            mSubObjectRight.boat_recv_id = mSubObjectRightRtn.boat_recv_id;
-			                            mSubObjectRight.rssi2 = mSubObjectRightRtn.rssi;
+			                            mSubObjectRight.rssi2 = mSubObjectRightRtn.rssi2;
 			                            // 보트 정박 처리
 			                            logger.info('!! 찾은 보트가 정박 상태 인지 확인...'); 
 			                            db.GetBoatInAnchor( mSubObjectRight, function(rtn){  //status = 1 정박
@@ -207,13 +207,15 @@ LidarCheck.prototype.getLidarCheck = function() {
 		            }
 		        },
 		       function(result, mSubObjectRight, callback) {
-		        	
+		        	logger.info(" 최종 판정:" + result);
+		        	logger.info(" mSubObjectRight rssi:" + mSubObjectRight.rssi);
+		        	logger.info(" mSubObjectRight rssi2:" + mSubObjectRight.rssi2);
 		                if(result == "NOOK") {
 		                	
 		                	if(mSubObjectRight.rssi > mSubObjectRight.rssi2) {
 		                        logger.info("※※※※※ 결과 - 미등록 보트1");
 		                        callback(null, "OK", mSubObjectLeft);  
-		                	} else if(mSubObjectLeft.rssi <= mSubObjectLeft.rssi2) {
+		                	} else if(mSubObjectRight.rssi <= mSubObjectRight.rssi2) {
 		                        logger.info("※※※※※ 결과 - 등록 보트1");
 		                        callback(null, "OK", mSubObjectRight);  
 		                	}

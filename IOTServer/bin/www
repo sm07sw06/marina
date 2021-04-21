@@ -82,8 +82,8 @@ var server = http.createServer(app);
 
 // MQTT Server 접속
 const mqtt_options = {
-		  host: 'a1ck.iptime.org',
-		  port: 18839,
+		  host: 'localhost',
+		  port: 1883,
 		  protocol: 'mqtt'
 		};
 
@@ -130,7 +130,7 @@ client.on("message", function(topic, message) {
 						// 보트 단말기에서 보내온 신호 분석
 						var BoatCheck = require('../public/myModules/boatCheck');
 						var boatCheck = new BoatCheck(sData); 
-						boatCheck.getBoatCheck();
+						//boatCheck.getBoatCheck();
 					} else if(sKey === "lidarData" && 1 == 1) {
 						// 정박지 단말기에서 보내온 신호 분석
 //						var LidarCheck = require('../public/myModules/lidarCheck');

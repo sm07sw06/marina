@@ -145,27 +145,29 @@ function rssidataInsert(sData) {
 
 	if(rssi == "")  { rssi = 0; }
 
-	logger.debug("----------------------------------");
-	logger.debug('Start rssidataInsert insert........');
-	logger.debug("  length      :" + sData.length);
-    logger.debug("  marinaId    :"+marinaId);
-    logger.debug("  machineId   :"+machineId);
-    logger.debug("  machineNm   :"+machineNm);
-    logger.debug("  sendTime    :"+sendTime);   
-    logger.debug("  transId     :"+transId);
-    logger.debug("  boatId      :"+boatId);
-    logger.debug("  sendRecvTime:"+sendRecvTime);
-    logger.debug("  rssi        :"+rssi);
-	logger.debug("----------------------------------");
+	if( rssi > 0 ) {
+		
+		logger.debug("----------------------------------");
+		logger.debug('Start rssidataInsert insert........');
+		logger.debug("  length      :" + sData.length);
+	    logger.debug("  marinaId    :"+marinaId);
+	    logger.debug("  machineId   :"+machineId);
+	    logger.debug("  machineNm   :"+machineNm);
+	    logger.debug("  sendTime    :"+sendTime);   
+	    logger.debug("  transId     :"+transId);
+	    logger.debug("  boatId      :"+boatId);
+	    logger.debug("  sendRecvTime:"+sendRecvTime);
+	    logger.debug("  rssi        :"+rssi);
+		logger.debug("----------------------------------");
+	
+		
+		// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+		var sQueryString  = "INSERT INTO /* rssidataInsert */ public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
+		    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "','"  + sendRecvTime + "',"  + rssi + "  );  \n";
+		logger.debug(sQueryString);
+	
+	    try {
 
-	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO /* rssidataInsert */ public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
-	    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "','"  + sendRecvTime + "',"  + rssi + "  );  \n";
-	logger.debug(sQueryString);
-
- try {
-
-	 if( rssi > 0 ) {
 			pool.connect(function (err, clientdb, done) {
 				if (err) throw new Error(err);
 				clientdb.query(sQueryString, function (err, res) {
@@ -178,13 +180,13 @@ function rssidataInsert(sData) {
 					clientdb.release();
 				}); 
 			}); 
-	 }
-  } catch (e) {
-		logger.error("ERROR:"+err);
-		//callback('ERROR');
-	}
-
-	 
+	
+	    } catch (e) {
+			logger.error("ERROR:"+err);
+			//callback('ERROR');
+		}
+	
+	}	 
 }
 
 
@@ -1362,8 +1364,8 @@ DB.prototype.GetlidarNearBoatSearch = function(mSubObject, callback) {
 			sQueryString += "    AND ad.machine_id = '" + mSubObject.machineId + "' \n";
 			sQueryString += "    AND ld.send_time = '" + mSubObject.sendTime + "' \n";
 			sQueryString += "    AND rd.rssi > 0 \n ";
-			sQueryString += "    AND ld.send_time BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '180 sec'),'YYYYMMDDHH24MISS')   \n";   //LDH
-			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '180 sec'),'YYYYMMDDHH24MISS')    \n";  //LDH
+			sQueryString += "    AND ld.send_time BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '30 sec'),'YYYYMMDDHH24MISS')   \n";   //LDH
+			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '30 sec'),'YYYYMMDDHH24MISS')    \n";  //LDH
 			sQueryString += "  ORDER BY rd.rssi  \n";
 			sQueryString += "  LIMIT 1  \n";
 		    logger.info("보트 찾기:" + sQueryString);
@@ -1425,8 +1427,8 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 			sQueryString += "    AND al.machine_id  = '" + mSubObject.machineId + "' \n";
 			sQueryString += "    AND al.left_right  = '" + mSubObject.leftRight + "' \n";
 			sQueryString += "    AND al.machine_ref_id = rd.machine_id \n";
-			sQueryString += "    AND '" + mSubObject.sendTime + "' BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '20 sec'),'YYYYMMDDHH24MISS') \n"; // LDH
-			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '20 sec'),'YYYYMMDDHH24MISS')  \n"; // LDH
+			sQueryString += "    AND '" + mSubObject.sendTime + "' BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '50 sec'),'YYYYMMDDHH24MISS') \n"; // LDH
+			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '50 sec'),'YYYYMMDDHH24MISS')  \n"; // LDH
 			sQueryString += "  ORDER BY rd.rssi  \n";
 			sQueryString += "  LIMIT 1  \n";
 		    logger.info("보트 찾기:" + sQueryString);
@@ -1440,7 +1442,7 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 				    } else {
 						for(var i = 0; i < res.rowCount ; i ++) {
 							mSubObject.boat_recv_id = res.rows[i].boat_recv_id;
-							mSubObject.rssi         = res.rows[i].rssi;
+							mSubObject.rssi2         = res.rows[i].rssi;
 							logger.info("  boat_recv_id   :" +res.rows[i].boat_recv_id);   
 							logger.info("  rssi :" +res.rows[i].rssi);   
 						}
