@@ -60,6 +60,8 @@ public class SetUser extends HttpServlet {
 		   String sPic			= "";
 		   String pwd           = "";
 		   
+		   File f_midir = null;
+		   
 		   HashMap map = new HashMap();
 		   UtilClass   utilClass = new UtilClass();
 		   ResultSet keySet = null;
@@ -78,7 +80,7 @@ public class SetUser extends HttpServlet {
 				logger.debug("SetEmp : isMultipart ");
 				
 				
-				File f_midir = new File(sUpDir);//폴더가 없다면 자동으로 생성 시킨다
+				f_midir = new File(sUpDir);//폴더가 없다면 자동으로 생성 시킨다
 				boolean file_result =  f_midir.mkdirs();
 				
 				logger.debug(f_midir.getAbsoluteFile());
@@ -151,6 +153,7 @@ public class SetUser extends HttpServlet {
 			   if(sCrud.equals("C")) {
 				    String insertSql = "INSERT INTO TB_USER_INFO (USER_CD, USER_NM, PASSWORD, TELEPHONE, EMAIL,APPROWAITCNT, USE_YN, PICTURE) \n";
 					insertSql = insertSql + "VALUES ( '" + sUserCd + "', '" + sUserNm + "', '" + pwd + "', '" + sTelephone + "', '" + sEmail + "',0, 'Y' , '" + sPic + "' )";
+//					insertSql = insertSql + "VALUES ( '" + sUserCd + "', '" + sUserNm + "', '" + pwd + "', '" + sTelephone + "', '" + sEmail + "',0, 'Y' , '" + f_midir.getAbsoluteFile() + "\\" + sPic + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
@@ -189,8 +192,10 @@ public class SetUser extends HttpServlet {
 				    updateSql = updateSql + "      ,USE_YN  = '" + sUseYn  + "'   \n ";
 				    updateSql = updateSql + "      ,EMAIL      = '" + sEmail      + "'   \n ";
 					
-				    if (StringUtils.isNotEmpty(sPic)) 
+				    if (StringUtils.isNotEmpty(sPic)) {
+				    	//updateSql = updateSql + "      ,PICTURE    = '" + f_midir.getAbsoluteFile() + "\\" + sPic + "' \n ";
 				    	updateSql = updateSql + "      ,PICTURE    = '" + sPic + "' \n ";
+			   		}
 					
 				    updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND USER_ID =   " + sUserId  + "   \n ";

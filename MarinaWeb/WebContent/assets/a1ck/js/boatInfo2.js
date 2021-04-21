@@ -5,6 +5,7 @@
 	//rMateGrid 관련 객체
 	var collection;	// 그리드의 데이터 객체
 	var cnt=0;
+	//var gridData = [];
 	var jsonObj = new Object();
 
 
@@ -16,7 +17,6 @@
 	//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
 	//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
 	rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
-	rMateGridH5.create("grid2", "question2", jsVars, "100%", "100%");
 
 
 	// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
@@ -24,143 +24,33 @@
 	// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
 	// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
 	function gridReadyHandler(id) {
-		
-		if (id == "grid1") {		
-			var gridData = [];
-			// rMateGrid 관련 객체
-			gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
-			gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
-	
-			gridApp.setLayout(layoutStr);
-			gridApp.setData(gridData);
-	
-			var layoutCompleteHandler = function(event) {
-				dataGrid = gridRoot.getDataGrid();	// 그리드 객체
-			}
-	
-	
-			var itemDoubleClickHandler = function(event) {
-				var rowIndex = event.rowIndex;
-				console.log(rowIndex);
-				var columnIndex = event.columnIndex;
-				var dataRow = gridRoot.getItemAt(rowIndex);
-				// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
-				var column = dataGrid.getDisplayableColumns()[columnIndex];
-				var dataField = column.getDataField();
-				if (dataField == "BOAT_NM") {
-					editRowIndex = rowIndex;
-					editDataRow = dataRow;
-					editDataField = dataField;
-					// pop up layer window
-					popupLayerGrid();
-				}
-			}		
-			
-			// 사용자가 import를 완료하면 불려집니다.
-			var dataCompleteHandler = function() {
-				dataGrid = gridRoot.getDataGrid();	// 그리드 객체
-				dataGrid.addEventListener("itemDoubleClick", itemDoubleClickHandler);
-				
-				collection = gridRoot.getCollection();
-				gridMovePage(1);
-			}
-			
-			refreshData();
-			
-			gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
-			gridRoot.addEventListener("dataComplete", dataCompleteHandler);
-			gridRoot.addEvent("dblclick", dblclickHandler);
-		} else {
-			var gridData2 = [];
-			// rMateGrid 관련 객체
-			gridApp2 = document.getElementById(id);	// 그리드를 포함하는 div 객체
-			gridRoot2 = gridApp2.getRoot();	// 데이터와 그리드를 포함하는 객체
-	
-			gridApp2.setLayout(layoutStr2);
-			gridApp2.setData(gridData2);
-	
-			var layoutCompleteHandler2 = function(event) {
-				dataGrid2 = gridRoot2.getDataGrid();	// 그리드 객체
-			}
-	
-			var itemDoubleClickHandler2 = function(event) {
-				var rowIndex2 = event.rowIndex;
-				console.log(rowIndex2);
-				var columnIndex2 = event.columnIndex;
-				var dataRow2 = gridRoot2.getItemAt(rowIndex2);
-				// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
-				var column2 = dataGrid2.getDisplayableColumns()[columnIndex2];
-				var dataField2 = column2.getDataField();
-				if (dataField2 == "BOAT_NM") {
-					editRowIndex2 = rowIndex2;
-					editDataRow2 = dataRow2;
-					editDataField2 = dataField2;
-				}
-			}		
-			
-			// 사용자가 import를 완료하면 불려집니다.
-			var dataCompleteHandler2 = function() {
-				dataGrid2 = gridRoot2.getDataGrid();	// 그리드 객체
-				dataGrid2.addEventListener("itemDoubleClick", itemDoubleClickHandler2);
-				
-				collection2 = gridRoot2.getCollection();
-				gridMovePage(1);
-			}
-			
-			refreshData2();
-			
-			gridRoot2.addEventListener("layoutComplete", layoutCompleteHandler2);
-			gridRoot2.addEventListener("dataComplete", dataCompleteHandler2);
-			gridRoot2.addEvent("dblclick", dblclickHandler2);		
+		var gridData = [];
+		// rMateGrid 관련 객체
+		gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+		gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+		gridApp.setLayout(layoutStr);
+		gridApp.setData(gridData);
+
+		var layoutCompleteHandler = function(event) {
+			dataGrid = gridRoot.getDataGrid();	// 그리드 객체
 		}
+		// 사용자가 import를 완료하면 불려집니다.
+		var dataCompleteHandler = function() {
+			collection = gridRoot.getCollection();
+			gridMovePage(1);
+		}
+
+		refreshData();
+		
+		gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+		gridRoot.addEventListener("dataComplete", dataCompleteHandler);
+		gridRoot.addEvent("dblclick", dblclickHandler);
+		
 	}
 
-	var gridApp, gridRoot, dataGrid;
-	var gridApp2, gridRoot2, dataGrid2;
-
-	var editRowIndex;
-	var editDataRow;
-	var editDataField;
-
-	var editRowIndex2;
-	var editDataRow2;
-	var editDataField2;
-	
-	function popupLayerGrid() {
-
-		$.blockUI({
-				//HTML 태그를 문자열로 적용해도 무관함
-				message: $('#question')
-				//css 설정
-				 ,css: {
-					padding:        0,
-					margin:         0,
-					width:          '500px',
-					height:         '460px',
-					top:            '10%',
-					left:           '20%',
-					textAlign:      'center',
-					color:          '#000',
-					border:         '3px none #aaa',
-					backgroundColor:'#f7f7f7',
-					cursor:         'default',
-					fontFamily:     '맑은 고딕',
-					borderRadius:   '3px'
-				}
-				,focusInput: true
-				//모달창 외부 클릭시 닫기
-				,onOverlayClick: $.unblockUI
-		});
-		gridApp2.resize();
-
-	}
-	
-	$(function(){
-		$("#closebtn").click(function(){
-			 //모달창 닫기
-			 $.unblockUI();
-		})
-	})
+	var gridApp, gridRoot;	// 데이터와 그리드를 포함하는 객체
+	var dataGrid;	// 그리드
 
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
@@ -175,16 +65,6 @@
 		}
 	}
 
-	function dblclickHandler2(event) {
-		if(dataGrid2.getSelectedIndex() >= 0 ) {
-			$('#F_USER_ID').val(dataGrid2.getSelectedItem().USER_ID);
-			$('#F_USER_NM').val(dataGrid2.getSelectedItem().USER_NM);
-			//$('#CRUD').val("U");
-			$.unblockUI();
-		}
-	}
-
-	
 	function refreshData()  
 	{
 		var gridData = [];
@@ -216,36 +96,7 @@
 		gridApp.setData(gridData);
 	}
 	
-	function refreshData2()  
-	{
-		var gridData2 = [];
-		jsonObj = {};
 
-		jsonObj.__user_cd = '*';
-		jsonObj.__user_nm = '';
-		jsonObj.__rows     = "20";
-		jsonObj.__page     = "1" ;
-
-		$.ajax({
-		   	url:"GetUserList",
-			data:{param:JSON.stringify(jsonObj)},
-			type:"post",
-		   	dataType:"json",
-			success: function(json_data) {
-		        if(json_data.result == 'OK') {
-			   		$.each(json_data.rows, function(index, value) {
-			   			gridData2.push(value);
-			   		});
-				} else {
-					console.log(json_data2.result); 
-				}
-			}
-		});	
-		gridApp2.clear();
-		gridApp2.setLayout(layoutStr2);
-		gridApp2.setData(gridData2);
-	}
-	
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
@@ -418,23 +269,6 @@
 		</DataGrid>\
 	</rMateGrid>';
 
-	
-	var layoutStr2 =
-		'<rMateGrid>\
-		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
-		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
-			<groupedColumns>\
-				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     	headerText="ID"  width="100"     />\
-				<DataGridColumn dataField="USER_NM" 	 id="colUserNm"   		headerText="이름" width="200"/>\
-				<DataGridColumn dataField="TELEPHONE"    id="colTelephone" 		headerText="연락처" width="100"/>\
-				<DataGridColumn dataField="EMAIL"        id="colEmail" 			headerText="메일" width="100"/>\
-				<DataGridColumn dataField="USER_ID"      id="colUserId" 		width="100"  visible="false"  />\
-			</groupedColumns>\
-		</DataGrid>\
-	</rMateGrid>';
-
-	
 	// 페이징 관련 자바스크립트  visible="false"  
 	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
 
