@@ -49,7 +49,7 @@ function MessageSubObject()
     var lidarId;   // 정박지단말기 ID  
     var leftRight;  // 좌우구분   좌우구분 (0:좌, 1:우)
     var boatInout;  // 입출항구분  
-    var boat_recv_id;  // MQTT에서 전달 받은 GPS 위도 
+    var boatMachineId;  // MQTT에서 전달 받은 GPS 위도 
     var rssi;  // MQTT에서 전달 받은 GPS 경도
     var rssi2;  // MQTT에서 전달 받은 GPS 경도
 }
@@ -127,21 +127,21 @@ LidarCheck.prototype.getLidarCheck = function() {
 		            	mSubObjectRight.machineId = mObject.machineId;  //보트단말기 ID     
 		                mSubObjectRight.sendTime = mObject.sendTime;   // 전송일시     
 		                mSubObjectRight.boatId = "";  //보트 ID     
-		                mSubObjectRight.boat_recv_id =  "";  // MQTT에서 전달 받은 GPS 위도 
+		                mSubObjectRight.boatMachineId =  "";  // MQTT에서 전달 받은 GPS 위도 
 		                mSubObjectRight.rssi = 0.0;  // MQTT에서 전달 받은 GPS 경도
 	                
 	                    logger.debug('!! 오른쪽  라이더에  단말기 수신 정보 찾기중...'); 
 	                    mSubObjectRight.leftRight = '1';    // 우
 	            
 	                    // 왼쪽(오른쪽) 방향에 보트 식별시 가장 가까운 보트 찾기(보트 단말기 신호 기록)
-	                    db.GetlidarNearBoatSearch(mSubObjectRight, function(result, mSubObjectRightRtn){ 
+	                    db.GetlidarNearBoatSearch(mSubObjectRight, function(result, mSubObjectRightRtn){  // LDH boatId 찾는 방법 ??? 
 	                        if(result == "OK") {
 	                            logger.info("범위내에 등록된 보트가 존재합니다.!!");
-	                            logger.info("  boat_recv_id : " + mSubObjectRightRtn.boat_recv_id);
+	                            logger.info("  boatMachineId : " + mSubObjectRightRtn.boatMachineId);
 	                            logger.info("  rssi :" + mSubObjectRightRtn.rssi);
 	                            logger.info(' ＆＆＆＆＆＆＆＆  leftRight: ' + mSubObjectRight.leftRight);	
 	                            
-	                            mSubObjectRight.boat_recv_id = mSubObjectRightRtn.boat_recv_id;
+	                            mSubObjectRight.boatMachineId = mSubObjectRightRtn.boatMachineId;
 	                            mSubObjectRight.rssi = mSubObjectRightRtn.rssi;
 	                            // 보트 정박 처리
 	                            logger.info('!! 찾은 보트가 정박 상태 인지 확인...'); 
@@ -177,10 +177,10 @@ LidarCheck.prototype.getLidarCheck = function() {
 			                    db.GetNextlidarBoatSearch(mSubObjectRight, function(result, mSubObjectRightRtn){ 
 			                        if(result == "OK") {
 			                            logger.info("범위내에 등록된 보트가 존재합니다.!!");
-			                            logger.info("  boat_recv_id : " + mSubObjectRightRtn.boat_recv_id);
+			                            logger.info("  boatMachineId : " + mSubObjectRightRtn.boatMachineId);
 			                            logger.info("  rssi :" + mSubObjectRightRtn.rssi);
 			                            
-			                            mSubObjectRight.boat_recv_id = mSubObjectRightRtn.boat_recv_id;
+			                            mSubObjectRight.boatMachineId = mSubObjectRightRtn.boatMachineId;
 			                            mSubObjectRight.rssi2 = mSubObjectRightRtn.rssi2;
 			                            // 보트 정박 처리
 			                            logger.info('!! 찾은 보트가 정박 상태 인지 확인...'); 
@@ -290,7 +290,7 @@ LidarCheck.prototype.getLidarCheck = function() {
 		            	mSubObjectLeft.machineId = mObject.machineId;  //보트단말기 ID     
 		                mSubObjectLeft.sendTime = mObject.sendTime;   // 전송일시     
 		                mSubObjectLeft.boatId = "";  //보트 ID     
-		                mSubObjectLeft.boat_recv_id =  "";  // MQTT에서 전달 받은 GPS 위도 
+		                mSubObjectLeft.boatMachineId =  "";  // MQTT에서 전달 받은 GPS 위도 
 		                mSubObjectLeft.rssi = 0.0;  // MQTT에서 전달 받은 GPS 경도
 		                
 	                    logger.debug('!! 왼쪽 라이더에  단말기 수신 정보 찾기중...'); 
@@ -300,11 +300,11 @@ LidarCheck.prototype.getLidarCheck = function() {
 	                    db.GetlidarNearBoatSearch(mSubObjectLeft, function(result, mSubObjectLeftRtn){ 
 	                        if(result == "OK") {
 	                            logger.info("범위내에 등록된 보트가 존재합니다.!!");
-	                            logger.info("  boat_recv_id : " + mSubObjectLeftRtn.boat_recv_id);
+	                            logger.info("  boatMachineId : " + mSubObjectLeftRtn.boatMachineId);
 	                            logger.info("  rssi :" + mSubObjectLeftRtn.rssi);
 	                            logger.info(' ＆＆＆＆＆＆＆＆  leftRight: ' + mSubObjectLeft.leftRight);	
 
-	                            mSubObjectLeft.boat_recv_id = mSubObjectLeftRtn.boat_recv_id;
+	                            mSubObjectLeft.boatMachineId = mSubObjectLeftRtn.boatMachineId;
 	                            mSubObjectLeft.rssi = mSubObjectLeftRtn.rssi;
 	                            // 보트 정박 처리
 	                            logger.info('!! 찾은 보트가 정박 상태 인지 확인...'); 
@@ -343,10 +343,10 @@ LidarCheck.prototype.getLidarCheck = function() {
 			                    db.GetNextlidarBoatSearch(mSubObjectLeft, function(result, mSubObjectLeftRtn){ 
 			                        if(result == "OK") {
 			                            logger.info("범위내에 등록된 보트가 존재합니다.!!");
-			                            logger.info("  boat_recv_id : " + mSubObjectLeftRtn.boat_recv_id);
+			                            logger.info("  boatMachineId : " + mSubObjectLeftRtn.boatMachineId);
 			                            logger.info("  rssi :" + mSubObjectLeftRtn.rssi);
 			                            
-			                            mSubObjectLeft.boat_recv_id = mSubObjectLeftRtn.boat_recv_id;
+			                            mSubObjectLeft.boatMachineId = mSubObjectLeftRtn.boatMachineId;
 			                            mSubObjectLeft.rssi2 = mSubObjectLeftRtn.rssi;
 			                            // 보트 정박 처리
 			                            logger.info('!! 찾은 보트가 정박 상태 인지 확인...'); 

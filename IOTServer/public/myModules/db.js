@@ -90,7 +90,7 @@ function MessageSubObject()
     var lidarId;   // 정박지단말기 ID  
     var leftRight;  // 좌우구분   좌우구분 (0:좌, 1:우)
     var boatInout;  // 입출항구분  
-    var boat_recv_id;  // MQTT에서 전달 받은 GPS 위도 
+    var boatMachineId;  // MQTT에서 전달 받은 GPS 위도 
     var rssi;  // MQTT에서 전달 받은 GPS 경도
 }
 
@@ -162,7 +162,7 @@ function rssidataInsert(sData) {
 	
 		
 		// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-		var sQueryString  = "INSERT INTO /* rssidataInsert */ public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_recv_id, send_recv_time, rssi)  \n";
+		var sQueryString  = "INSERT INTO /* rssidataInsert */ public.tb_rssidata(marina_id, machine_id, send_time, machine_nm, trans_id, boat_machine_id, send_recv_time, rssi)  \n";
 		    sQueryString += "values(1,'" + machineId + "','"  + sendTime + "','"  + machineNm + "','"  + transId + "','"  + boatId + "','"  + sendRecvTime + "',"  + rssi + "  );  \n";
 		logger.debug(sQueryString);
 	
@@ -891,9 +891,9 @@ DB.prototype.SetXY = function(mObject, callback) {
 
 	
 	// 보트 신호건에 대한 RSSI 값 3개 찾기 
-	var sQueryString  = "SELECT  b.marina_id,b.machine_id,b.send_time, r.boat_recv_id, r.rssi, r.send_recv_time ,d.positionx,d.positiony,d.set_order,d.gate_class \n";
+	var sQueryString  = "SELECT  b.marina_id,b.machine_id,b.send_time, r.boat_machine_id, r.rssi, r.send_recv_time ,d.positionx,d.positiony,d.set_order,d.gate_class \n";
     	sQueryString += "  from tb_boatdata b, tb_rssidata r , tb_anchor_device d \n";
-    	sQueryString += " WHERE b.machine_id = r.boat_recv_id  \n";
+    	sQueryString += " WHERE b.machine_id = r.boat_machine_id  \n";
     	sQueryString += "   AND r.machine_id = d.machine_id  \n";
     	sQueryString += "   AND r.marina_id  = d.marina_id  \n";
     	sQueryString += "   AND b.send_time BETWEEN to_char((to_timestamp(r.send_recv_time, 'YYYYMMDDHH24MISS') - interval '4 sec'),'YYYYMMDDHH24MISS') \n";
@@ -1361,7 +1361,7 @@ DB.prototype.GetlidarNearBoatSearch = function(mSubObject, callback) {
 
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-		var sQueryString  = " SELECT /* GetlidarNearBoatSearch */ rd.boat_recv_id, rd.rssi  \n";
+		var sQueryString  = " SELECT /* GetlidarNearBoatSearch */ rd.boat_machine_id, rd.rssi  \n";
 			sQueryString += "   FROM tb_anchor_device  ad, tb_rssidata rd,tb_lidardata ld \n";
 			sQueryString += "  WHERE 1 = 1 \n";
 			sQueryString += "    AND ad.marina_id   = rd.marina_id \n";
@@ -1385,13 +1385,14 @@ DB.prototype.GetlidarNearBoatSearch = function(mSubObject, callback) {
 						callback('ERROR');
 				    } else {
 						for(var i = 0; i < res.rowCount ; i ++) {
-							mSubObject.boat_recv_id = res.rows[i].boat_recv_id;
-							mSubObject.rssi         = res.rows[i].rssi;
-							logger.info("  boat_recv_id   :" +res.rows[i].boat_recv_id);   
+							logger.info("  boat_machine_id   :" +res.rows[i].boat_machine_id);   
 							logger.info("  rssi :" +res.rows[i].rssi);   
 						}
 						if( res.rowCount > 0) {
-							logger.info("기준 시간 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_recv_id);
+							//mSubObject.boatId 		 = res.rows[0].boat_machine_id;
+							mSubObject.boatMachineId = res.rows[0].boat_machine_id;
+							mSubObject.rssi          = res.rows[0].rssi;
+							logger.info("기준 시간 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_machine_id);
 							callback("OK", mSubObject);
 						} else {
 							logger.info("기준 시간 범위내에 단말기 수신 정보가 없습니다.");
@@ -1420,17 +1421,17 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 	logger.info('Start GetNextlidarBoatSearch........');
 	logger.info('  marinaId : ' + mSubObject.marinaId);
 	logger.info('  machineId : ' + mSubObject.machineId);
-	logger.info('  boat_recv_id : ' + mSubObject.boat_recv_id);
+	logger.info('  boatMachineId : ' + mSubObject.boatMachineId);
 	logger.info('  sendTime: ' + mSubObject.sendTime);
 	logger.info('  ★★★★★★★★ leftRight: ' + mSubObject.leftRight);
 	logger.info("----------------------------------");
 
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-		var sQueryString  = " SELECT /* GetNextlidarBoatSearch */ rd.boat_recv_id,rd.rssi \n";
+		var sQueryString  = " SELECT /* GetNextlidarBoatSearch */ rd.boat_machine_id,rd.rssi \n";
 			sQueryString += "   FROM tb_rssidata rd, tb_anchor_lidar al \n";
 			sQueryString += "  WHERE 1 = 1 \n";
-			sQueryString += "    AND rd.boat_recv_id  = '" + mSubObject.boat_recv_id + "' \n";
+			sQueryString += "    AND rd.boat_machine_id  = '" + mSubObject.boatMachineId + "' \n";
 			sQueryString += "    AND al.machine_id  = '" + mSubObject.machineId + "' \n";
 			sQueryString += "    AND al.left_right  = '" + mSubObject.leftRight + "' \n";
 			sQueryString += "    AND al.machine_ref_id = rd.machine_id \n";
@@ -1448,13 +1449,13 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 						callback('ERROR');
 				    } else {
 						for(var i = 0; i < res.rowCount ; i ++) {
-							mSubObject.boat_recv_id = res.rows[i].boat_recv_id;
+							mSubObject.boatMachineId = res.rows[i].boat_machine_id;
 							mSubObject.rssi2         = res.rows[i].rssi;
-							logger.info("  boat_recv_id   :" +res.rows[i].boat_recv_id);   
+							logger.info("  boat_machine_id   :" +res.rows[i].boat_machine_id);   
 							logger.info("  rssi :" +res.rows[i].rssi);   
 						}
 						if( res.rowCount > 0) {
-							logger.info("기준 시간 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_recv_id);
+							logger.info("기준 시간 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_machine_id);
 							callback("OK", mSubObject);
 						} else {
 							logger.info("기준 시간 범위내에 단말기 수신 정보가 없습니다.");
@@ -1481,7 +1482,7 @@ DB.prototype.GetBoatInAnchor = function(mSubObject, callback) {
 	logger.info("----------------------------------");
 	logger.info('Start GetBoatInAnchor........');
 	logger.info('  marinaId : ' + mSubObject.marinaId);
-	logger.info('  boat_recv_id : ' + mSubObject.boat_recv_id);
+	logger.info('  boatMachineId : ' + mSubObject.boatMachineId);
 	logger.info('  rssi: ' + mSubObject.rssi);
 	logger.info("----------------------------------");
 
@@ -1491,7 +1492,7 @@ DB.prototype.GetBoatInAnchor = function(mSubObject, callback) {
 			sQueryString += "   FROM tb_boat_device bd, tb_boat b \n";
 			sQueryString += "  WHERE bd.boat_id = b.boat_id \n";
 			sQueryString += "    AND bd.marina_id = '" + mSubObject.marinaId + "' \n";
-			sQueryString += "    AND bd.machine_id = '" + mSubObject.boat_recv_id + "' \n";
+			sQueryString += "    AND bd.machine_id = '" + mSubObject.boatMachineId + "' \n";
 		    logger.info("보트 찾기:" + sQueryString);
 
 			pool.connect(function (err, clientdb, done) {
