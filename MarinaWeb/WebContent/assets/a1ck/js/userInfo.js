@@ -295,15 +295,15 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
 				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     	headerText="ID"  width="100"     />\
-				<DataGridColumn dataField="USER_NM" 	 id="colUserNm"   		headerText="이름" width="200"/>\
-				<DataGridColumn dataField="TELEPHONE"    id="colTelephone" 		headerText="연락처" width="100"/>\
-				<DataGridColumn dataField="EMAIL"        id="colEmail" 			headerText="메일" width="100"/>\
-				<DataGridColumn dataField="USER_ID"      id="colUserId" 		width="100"  visible="false"  />\
-				<DataGridColumn dataField="APPROWAITCNT" id="colApprowaitcnt" 	width="100"  visible="false"  />\
+				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     	headerText="코드"  	width="100"     />\
+				<DataGridColumn dataField="USER_NM" 	 id="colUserNm"   		headerText="이름" 	width="200"/>\
+				<DataGridColumn dataField="TELEPHONE"    id="colTelephone" 		headerText="연락처" 	width="100"/>\
+				<DataGridColumn dataField="EMAIL"        id="colEmail" 			headerText="메일" 	width="100"/>\
+				<DataGridColumn dataField="USER_ID"      id="colUserId" 		width="100"   visible="false"  />\
+				<DataGridColumn dataField="APPROWAITCNT" id="colApprowaitcnt" 	width="100"   visible="false"  />\
 				<DataGridColumn dataField="PASSWORD"     id="colPassword" 		width="100"   visible="false"  />\
-				<DataGridColumn dataField="PASSWORDORG"  id="colPasswordOrg" 	width="100"  visible="false"  />\
-				<DataGridColumn dataField="USE_YN" 		 id="colUseYn" width="80"/>\
+				<DataGridColumn dataField="PASSWORDORG"  id="colPasswordOrg" 	width="100"   visible="false"  />\
+				<DataGridColumn dataField="USE_YN" 		 id="colUseYn" 			headerText="사용여부"		width="80"   />\
 			</groupedColumns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\

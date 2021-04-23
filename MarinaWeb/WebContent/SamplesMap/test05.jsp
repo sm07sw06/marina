@@ -42,11 +42,11 @@ function mapReadyHandler(id) {
 
 // Map Data 경로 정의
 // setMapDataBase함수로 mapDataBase를 문자열로 넣어줄 경우 주석처리나 삭제하십시오.
-var mapDataBaseURL = "./MapDataBaseXml/SouthKorea.xml";
+var mapDataBaseURL = "./MapDataBaseXml/Vietnam.xml";
 
 // MapChart Source 선택
 // MapSource 디렉토리의 지도 이미지중 택일가능하며, 이외에 사용자가 작성한 별도의 Svg이미지를 지정할 수 있습니다.(매뉴얼 참조)
-var sourceURL = "./MapSource/SouthKorea.svg";
+var sourceURL = "./MapSource/Vietnam.svg";
 
 // rMateMapChart 를 생성합니다.
 // 파라메터 (순서대로) 
@@ -63,24 +63,15 @@ rMateMapChartH5.create("map1", "mapHolder", mapVars, "100%", "100%");
 var layoutStr = '\
 <?xml version="1.0" encoding="utf-8"?>\
 <rMateMapChart>\
-	<MapChart id="mainMap1" showDataTips="true" dataTipType="Type3">\
+	<MapChart id="mainMap1" showDataTips="true" dataTipType="Type2">\
 		<series>\
-			<MapSeries id="mapseries" interactive="true" selectionMarking="line" color="#ffffff" labelPosition="inside" displayName="Map" selectionFontColor="#5244da">\
+			<MapSeries id="mapseries" interactive="true" selectionMarking="line" color="#616D99" labelPosition="inside" displayName="Map" localFill="#b4bbd5" rollOverFill="transparent" transparentValue="40">\
 				<showDataEffect>\
 					<SeriesInterpolate duration="1000"/>\
 				</showDataEffect>\
 				<stroke>\
-					<Stroke color="#48a5d0" weight="1" alpha="1"/>\
+					<Stroke color="#9DA6C7" weight="0.8" alpha="1"/>\
 				</stroke>\
-				<rollOverFill>\
-					<SolidColor color="#2e7dca"/>\
-				</rollOverFill>\
-				<selectionStroke>\
-					<Stroke color="#48a5d0" weight="1" alpha="0.25"/>\
-				</selectionStroke>\
-				<localFill>\
-					<SolidColor color="#62bfea"/>\
-				</localFill>\
 			</MapSeries>\
 		</series>\
 	</MapChart>\
@@ -105,7 +96,7 @@ var mapData;
 <body>
 	<div class="wrapper">
 		<div class="header">
-			<div class="headerTitle">대한민국 시도</div>
+			<div class="headerTitle">베트남</div>
 		</div>
 		<div id="content">
 			<!-- 차트가 삽입될 DIV -->

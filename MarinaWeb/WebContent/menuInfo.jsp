@@ -81,27 +81,15 @@
                             </a>
                             <ul>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00005" >
+                                    <a href="noAuth.jsp" id="menu00036" >
                                         <i class="entypo-user"></i>
                                         <span class="title">보트단말기관리</span>
                                     </a>
                                 </li>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00006" >
+                                    <a href="noAuth.jsp" id="menu00037" >
                                         <i class="entypo-user"></i>
-                                        <span class="title">중계기관리</span>
-                                    </a>
-                                </li>
-                                <li >
-                                    <a href="noAuth.jsp" id="menu00007" >
-                                        <i class="entypo-user"></i>
-                                        <span class="title">정박센서장치관리</span>
-                                    </a>
-                                </li>
-                                <li >
-                                    <a href="noAuth.jsp" id="menu00008" >
-                                        <i class="entypo-user"></i>
-                                        <span class="title">충돌방지장치관리</span>
+                                        <span class="title">계류지단말기관리</span>
                                     </a>
                                 </li>
                             </ul>

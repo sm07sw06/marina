@@ -81,34 +81,26 @@
             <ol class="breadcrumb bc-3" >
                 <li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
                 <li><a href="#">기초정보관리</a></li>
-                <li><a href="#">보트정보 관리</a></li>
-                <li class="active"><strong>보트기초정보관리</strong></li>
+                <li><a href="#">장치 관리</a></li>
+                <li class="active"><strong>계류지단말기 관리</strong></li>
             </ol>
     
-            <div class='myTitleBox'>보트기초정보관리</div>
+            <div class='myTitleBox'>계류지단말기 관리</div>
                 <!--  search form start -->
                 <div class=" search_cond col-lg-12">
                     <form class="search-form"> 
                         <div class="col-lg-12">
                             <div class="col-sm-8" >
-                                <input class="icheck-13" type="radio" id="C_USE_Y" name="C_USE_YN" value="Y" checked>
-                                <label for="C_USE_YN">사용</label>&nbsp;&nbsp;
-                                <input class="icheck-13" type="radio" id="C_USE_N" name="C_USE_YN" value="N" >
-                                <label for="C_USE_YN">미사용</label>&nbsp;&nbsp;
-                                <input class="icheck-13" type="radio" id="C_USE_A" name="C_USE_YN" value="A" >
-                                <label for="C_USE_YN">전체</label>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <div class="col-sm-3">
+                                <div class="col-sm-5">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" id="C_BOAT_NM"  name="C_BOAT_NM"  placeholder="이름또는 ID를 입력하세요." >
+                                        <input type="text" class="form-control" id="C_MACHINE_ID"  name="C_MACHINE_ID"  placeholder="검색조건을 입력하세요." >
                                         <div class="input-group-addon">
                                             <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-archive"></i></a>
                                         </div>                                      
-                                        <input type="hidden" id="C_BOAT_ID"  name="C_BOAT_ID"   >
                                     </div>
                                 </div>                              
                                 <button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
-                                <button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp;
+                                <button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp; 
                                 <button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red"    >삭제</button>&nbsp;&nbsp;
                                 <button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue"   >저장</button>
                             </div>
@@ -140,7 +132,7 @@
                         <div class="panel panel-primary" data-collapsed="0">
                             <!-- panel head -->
                             <div class="panel-heading">
-                                <div class="panel-title">보트정보 상세</div>
+                                <div class="panel-title">계류지단말기 상세</div>
                                 <div class="panel-options">
                                     <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
                                 </div>
@@ -152,49 +144,24 @@
                             
                                     <input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
                                     <input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
+                                            <input type="hidden" class="form-control" id="F_MARINA_ID">
                             
                                     <div class="form-group">
-                                        <label for="f_name" class="col-sm-3 control-label">보트ID</label>
+                                        <label for="f_name" class="col-sm-3 control-label">단말기 No</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="F_BOAT_ID" readonly>
+                                            <input type="text" class="form-control" id="F_MACHINE_ID">
                                         </div>
                                     </div>
-                                                                    
                                     <div class="form-group">
-                                        <label for="f_orgNm" class="col-sm-3 control-label">보트명</label>
+                                        <label for="f_name" class="col-sm-3 control-label">보트명</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="F_BOAT_NM"   >
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="f_name" class="col-sm-3 control-label">회원명</label>
-                                        <div class="col-sm-8">
-                                            <input type="hidden" class="form-control" id="F_USER_ID" readonly>
+                                            <input type="hidden" class="form-control" id="F_BOAT_ID" readonly>
                                             <div class="input-group ">
-	                                            <input type="text" class="form-control" id="F_USER_NM"  readonly >
+	                                            <input type="text" class="form-control" id="F_BOAT_NM"  readonly >
 		                                        <div class="input-group-addon">
-		                                            <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-user-add"></i></a>
+		                                            <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-list-add"></i></a>
 		                                        </div>                                      
 		                                    </div>
-                                        </div>
-                                    </div>
-    
-                                    <div class="form-group">
-                                        <label for="f_orgNm" class="col-sm-3  control-label">정박상태</label>
-                                        <div class="col-sm-8">                              
-                                            <div >
-                                                <select class="form-control" id="F_BOAT_STATUS" name="F_BOAT_STATUS" >
-                                                <%=codeClass.getComboBoxByCodeList("BOAT_STATUS", "", true) %>
-                                                </select>                                                       
-                                            </div>                                                  
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="form-group">
-                                        <label for="f_orgNm" class="col-sm-3 control-label">설명</label>
-                                        <div class="col-sm-8">
-                                            <textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_BOAT_DESC" id="F_BOAT_DESC" ></textarea>
                                         </div>
                                     </div>
 
@@ -214,10 +181,8 @@
 
 
     
-
-    
 	<div id="question" style="display:none; background-color:#f7f7f7; font-size:16px; color:#353535; letter-spacing:-0.2px; border-radius:3px;">
-		<div style="background-color:#213d64; font-size:15px; color:#ffffff; padding:8px; border-top-left-radius:3px; border-top-right-radius:3px;">회원 정보 찾기</div>
+		<div style="background-color:#213d64; font-size:15px; color:#ffffff; padding:8px; border-top-left-radius:3px; border-top-right-radius:3px;">보트 찾기</div>
 		<div style="width:100%; height:360px;">
 			<div id="question2" style="padding:10px; height:360px;"></div>
 		</div>
@@ -253,7 +218,7 @@
     <!-- Demo Settings -->
     <!-- script src="assets/js/neon-demo.js"></script -->
     <script src="assets/a1ck/js/a1ck-js.js"></script>       
-    <script src="assets/a1ck/js/boatInfo.js"></script>      
+    <script src="assets/a1ck/js/deviceAnchorAssign.js"></script>      
 
 </body>
 </html>

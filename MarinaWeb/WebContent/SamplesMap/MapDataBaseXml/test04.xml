@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Map>
+	<Province code="100" label="강원도" symbol="A1-1" />
+	<Province code="200" label="경기도" symbol="A1-2" />
+	<Province code="300" label="경상도" symbol="A2-1" />
+	<Province code="400" label="전라도" symbol="A2-2" />
+</Map>

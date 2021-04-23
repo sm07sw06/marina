@@ -485,6 +485,23 @@
 		<servlet-name>SetBoat</servlet-name>
 		<url-pattern>/SetBoat</url-pattern>
 	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetBoatDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.GetBoatDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatDevice</servlet-name>
+		<url-pattern>/GetBoatDevice</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetBoatDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.SetBoatDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetBoatDevice</servlet-name>
+		<url-pattern>/SetBoatDevice</url-pattern>
+	</servlet-mapping>	
+
 
 	<servlet>
 		<servlet-name>GetAnchorSectorList</servlet-name>
@@ -518,6 +535,22 @@
 	<servlet-mapping>
 		<servlet-name>SetAnchor</servlet-name>
 		<url-pattern>/SetAnchor</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetAnchorDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAnchorDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorDevice</servlet-name>
+		<url-pattern>/GetAnchorDevice</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAnchorDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAnchorDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAnchorDevice</servlet-name>
+		<url-pattern>/SetAnchorDevice</url-pattern>
 	</servlet-mapping>	
 				   
 	 <filter>

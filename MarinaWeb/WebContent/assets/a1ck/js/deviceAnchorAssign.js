@@ -18,14 +18,12 @@
 	rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
 	rMateGridH5.create("grid2", "question2", jsVars, "100%", "100%");
 
-
 	// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
 	// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
 	// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
 	// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
 	function gridReadyHandler(id) {
-		
-		if (id == "grid1") {		
+		if (id == "grid1") {			
 			var gridData = [];
 			// rMateGrid 관련 객체
 			gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
@@ -38,7 +36,6 @@
 				dataGrid = gridRoot.getDataGrid();	// 그리드 객체
 			}
 	
-	
 			var itemDoubleClickHandler = function(event) {
 				var rowIndex = event.rowIndex;
 				console.log(rowIndex);
@@ -47,7 +44,7 @@
 				// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
 				var column = dataGrid.getDisplayableColumns()[columnIndex];
 				var dataField = column.getDataField();
-				if (dataField == "BOAT_NM") {
+				if (dataField == "ANCHOR_NM") {
 					editRowIndex = rowIndex;
 					editDataRow = dataRow;
 					editDataField = dataField;
@@ -91,7 +88,7 @@
 				// 컬럼중 숨겨진 컬럼(visible false인 컬럼)이 있으면 getDisplayableColumns()를 사용하여 컬럼을 가져옵니다.
 				var column2 = dataGrid2.getDisplayableColumns()[columnIndex2];
 				var dataField2 = column2.getDataField();
-				if (dataField2 == "BOAT_NM") {
+				if (dataField2 == "ANCHOR_NM") {
 					editRowIndex2 = rowIndex2;
 					editDataRow2 = dataRow2;
 					editDataField2 = dataField2;
@@ -111,8 +108,9 @@
 			
 			gridRoot2.addEventListener("layoutComplete", layoutCompleteHandler2);
 			gridRoot2.addEventListener("dataComplete", dataCompleteHandler2);
-			gridRoot2.addEvent("dblclick", dblclickHandler2);		
+			gridRoot2.addEvent("dblclick", dblclickHandler2);				
 		}
+
 	}
 
 	var gridApp, gridRoot, dataGrid;
@@ -161,43 +159,44 @@
 			 $.unblockUI();
 		})
 	})
+	
 
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_BOAT_ID').val(dataGrid.getSelectedItem().BOAT_ID);
-			$('#F_BOAT_NM').val(dataGrid.getSelectedItem().BOAT_NM);
-			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
-			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
-			$('#F_BOAT_STATUS').val(dataGrid.getSelectedItem().BOAT_STATUS);
-			$('#F_BOAT_DESC').val(dataGrid.getSelectedItem().BOAT_DESC);
+			$('#F_MARINA_ID').val(dataGrid.getSelectedItem().MARINA_ID);
+			$('#F_MACHINE_ID').val(dataGrid.getSelectedItem().MACHINE_ID);
+			$('#F_ANCHOR_ID').val(dataGrid.getSelectedItem().ANCHOR_ID);
+			$('#F_ANCHOR_NM').val(dataGrid.getSelectedItem().ANCHOR_NM);
 			$('#CRUD').val("U");
+			$('#F_MACHINE_ID' ).attr("readonly", true); //설정
+			$("input#F_F_MACHINE_ID").focus();
 		}
 	}
-
+	
 	function dblclickHandler2(event) {
 		if(dataGrid2.getSelectedIndex() >= 0 ) {
-			$('#F_USER_ID').val(dataGrid2.getSelectedItem().USER_ID);
-			$('#F_USER_NM').val(dataGrid2.getSelectedItem().USER_NM);
+			$('#F_ANCHOR_ID').val(dataGrid2.getSelectedItem().ANCHOR_ID);
+			$('#F_ANCHOR_NM').val(dataGrid2.getSelectedItem().ANCHOR_NM);
 			//$('#CRUD').val("U");
 			$.unblockUI();
 		}
 	}
-
 	
+	
+
 	function refreshData()  
 	{
 		var gridData = [];
 		jsonObj = {};
 
-		jsonObj.__boat_id = $('#C_BOAT_ID').val();
-		jsonObj.__boat_nm = $('#C_BOAT_NM').val();
-		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
+		jsonObj.__marina_id = '1';
+		jsonObj.__machine_id = $('#C_MACHINE_ID').val();
 		jsonObj.__rows    = '20';
 		jsonObj.__page    = '1';
 
 		$.ajax({
-		   	url:"GetBoatList",
+		   	url:"GetAnchorDevice",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -221,13 +220,13 @@
 		var gridData2 = [];
 		jsonObj = {};
 
-		jsonObj.__user_cd = '*';
-		jsonObj.__user_nm = '';
+		jsonObj.__boat_id = '';
+		jsonObj.__boat_nm = '%';
 		jsonObj.__rows     = "20";
 		jsonObj.__page     = "1" ;
 
 		$.ajax({
-		   	url:"GetUserList",
+		   	url:"GetBoatList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -246,55 +245,42 @@
 		gridApp2.setData(gridData2);
 	}
 	
+	
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_BOAT_ID'   ).val("");
-		$('#F_BOAT_NM'   ).val("");
-		$('#F_USER_ID'   ).val("");
-		$('#F_USER_ID'   ).val('1');		
-		$('#F_USER_NM'   ).val("");
-		$('#F_BOAT_DESC' ).val("");
+		$('#F_MARINA_ID' ).val("1");
+		$('#F_MACHINE_ID').val("");
+		$('#F_ANCHOR_ID'   ).val("");
+		$('#F_ANCHOR_NM'   ).val("");
 		$('#CRUD'        ).val("C");
-		$('#F_BOAT_ID' ).attr("readonly", true); //설정
-		$("input#F_BOAT_NM").focus();
-
-		$('#F_BOAT_STATUS').val("");
-		$('#F_BOAT_STATUS option:eq(0)').prop("selected", true);
-		
+		$('#F_MACHINE_ID' ).attr("readonly", false); //설정
+		$("input#F_F_MACHINE_ID").focus();
 	});
 
 	$('#btnSave').click(function (e) {
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.boat_id     = $("input#F_BOAT_ID").val();
-		obj.boat_nm     = $("input#F_BOAT_NM").val();
-		obj.boat_desc   = $("textarea#F_BOAT_DESC").val();
-		obj.user_id     = $("input#F_USER_ID").val();
-		obj.boat_status = $('select#F_BOAT_STATUS option:selected').val();		
+		obj.marina_id   = $("input#F_MARINA_ID").val();
+		obj.machine_id  = $("input#F_MACHINE_ID").val();
+		obj.boat_id     = $("input#F_ANCHOR_ID").val();
 		obj.crud        = $("#CRUD").val();
 
-		console.log('boat_nm:'+ obj.boat_nm);
-		console.log('boat_desc:'+ obj.boat_desc);
-		console.log('boat_status:'+ obj.boat_status);
+		console.log('marina_id:'+ obj.marina_id);
+		console.log('machine_id:'+ obj.machine_id);
+		console.log('boat_id:'+ obj.boat_id);
 		
-		if(obj.boat_nm == ''){
-			alert("[알림] 구보트명을 입력하세요.");
-			$("input#F_BOAT_NM").focus();
+		if(obj.machine_id == ''){
+			alert("[알림] 단말기 No를 입력하세요.");
+			$("input#F_MACHINE_ID").focus();
 		    return;
 		}
-		if(obj.user_id == ''){
-			alert("[알림] 회원을 선택하세요.");
-			$("input#F_USER_ID").focus();
-		    return;
-		}
-
 		
 		$("#SetBoatForm").ajaxForm({
-			url : 'SetBoat',
+			url : 'SetBoatDevice',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -320,23 +306,20 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.boat_id   = $("input#F_BOAT_ID").val();
+		obj.marina_id   = $("input#F_MARINA_ID").val();
+		obj.machine_id  = $("input#F_MACHINE_ID").val();
 		obj.crud        = "D";
 		
 		var input = confirm('삭제하시겠습니까?'); 
 		if(!input) return;
 
-		if(obj.boat_id == ''){
-			alert("[알림] 보트를 선택하세요.");
-			$("input#F_BOAT_NM").focus();
+		if(obj.machine_id == ''){
+			alert("[알림] 단말기 No를 선택하세요.");
+			$("input#F_MACHINE_ID").focus();
 		    return;
 		}
-		
-		console.log('F_BOAT_ID:'+ obj.boat_id);
-		console.log('sCrud:'+ obj.crud);
-
 		$("#SetBoatForm").ajaxForm({
-			url : 'SetBoat',
+			url : 'SetBoatDevice',
 			dataType:'json',
 			type: 'post',
 			data : {param:JSON.stringify(obj)},
@@ -403,20 +386,20 @@
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<columns>\
-				<DataGridColumn dataField="ID" 			id="colNo" 			 headerText="No"	itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="BOAT_ID"   	id="colBoatId"   	 headerText="ID"    width="100" visible="false" />\
-				<DataGridColumn dataField="BOAT_NM" 	id="colBoatNm" 		 headerText="보트명"  width="200" />\
-				<DataGridColumn dataField="USER_ID"     id="colUserId" 		 headerText="회원"   width="100" visible="false" />\
-				<DataGridColumn dataField="USER_NM"     id="colUserNm" 		 headerText="회원명"  width="100" />\
-				<DataGridColumn dataField="BOAT_STATUS" id="colBoatStatus" 	 headerText="상태"   width="100" visible="false" />\
-				<DataGridColumn dataField="DETAIL_NM"   id="colBoatStatusNm" headerText="상태"   width="100" />\
-				<DataGridColumn dataField="BOAT_DESC"   id="colBoatDesc" 	 headerText="설명"   width="100" visible="false" />\
+				<DataGridColumn dataField="ID" 			id="colNo" 			 headerText="No"		itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="MARINA_ID"  	id="colMarinaId"   	 headerText="마리나"    	width="100" visible="false" />\
+				<DataGridColumn dataField="MACHINE_ID"  id="colMachineId" 	 headerText="단말기No"   	width="100"  />\
+				<DataGridColumn dataField="LEFT_RIGHT"  id="colLeftRight" 	 headerText="좌우구분"   	width="100"  />\
+				<DataGridColumn dataField="ANCHOR_ID"   id="colBoatId"   	 headerText="ID"    	width="100" visible="false" />\
+				<DataGridColumn dataField="ANCHOR_NM" 	id="colBoatNm" 		 headerText="보트명"  	width="200" />\
+				<DataGridColumn dataField="MACHINE_REF_ID"  id="colMachineRefId" 	 headerText="연관단말기 No"   width="100"  />\
 			</columns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
 			</dataProvider>\
 		</DataGrid>\
 	</rMateGrid>';
+
 
 	
 	var layoutStr2 =
@@ -425,15 +408,14 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
 				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="USER_CD"   	 id="colUserCd"     	headerText="ID"  width="100"     />\
-				<DataGridColumn dataField="USER_NM" 	 id="colUserNm"   		headerText="이름" width="200"/>\
-				<DataGridColumn dataField="TELEPHONE"    id="colTelephone" 		headerText="연락처" width="100"/>\
-				<DataGridColumn dataField="EMAIL"        id="colEmail" 			headerText="메일" width="100"/>\
-				<DataGridColumn dataField="USER_ID"      id="colUserId" 		width="100"  visible="false"  />\
+				<DataGridColumn dataField="ANCHOR_ID"   	 id="colBoatId"     	headerText="ID"  width="100"     />\
+				<DataGridColumn dataField="ANCHOR_NM" 	 id="colBoatNm"   		headerText="보트명" width="200"/>\
 			</groupedColumns>\
 		</DataGrid>\
 	</rMateGrid>';
 
+	
+	
 	
 	// 페이징 관련 자바스크립트  visible="false"  
 	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
@@ -530,6 +512,3 @@
 			colNo.indexStartNo = (gridCurrentPage - 1) * gridRowsPerPage + 1;
 	}
 	
-
-	$("input#F_BOAT_NM").focus();
-	$('#F_USER_ID').val('1');

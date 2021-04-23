@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,11 +16,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.a1ck.util.CodeClass;
 import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
 
-public class GetBoatList extends HttpServlet {
+public class GetBoatDevice extends HttpServlet {
     private static final long serialVersionUID = 1L;
     ResultSet rs;
     Statement stmt;
@@ -32,7 +28,7 @@ public class GetBoatList extends HttpServlet {
 	
 	public Connection connectionDest = null;
 	
-    public GetBoatList() {
+    public GetBoatDevice() {
 //    	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
 
@@ -45,39 +41,40 @@ public class GetBoatList extends HttpServlet {
 		
 		try{
 
-			logger.debug("getBoatList ***** Start GetBoatList *****"); 
+			logger.debug("getBoatDevice ***** Start GetBoatDevice *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
 			
-			String sBoatId = "";
-			String sBoatNm = "";
-			String sRows   = "";
-			String sPage   = "";
+			String sMarinaId  = "";
+			String sMachineId = "";
+			String sRows      = "";
+			String sPage      = "";
 
 				
   			String Obj = request.getParameter("param");
 			
-			logger.debug("getBoatList jsonParam:" + Obj);
+			logger.debug("getBoatDevice jsonParam:" + Obj);
 			
 			if(Obj != null){
 				
-				logger.debug("getBoatList DEBUG"); 
+				logger.debug("getBoatDevice DEBUG"); 
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(Obj.toString());
 
-	            logger.debug("getBoatList json:" + json); 
+	            logger.debug("getBoatDevice json:" + json); 
 
-	            sBoatId = (String)json.get("__boat_id");
-	            sBoatNm = (String)json.get("__boat_nm");
-	            sRows   = (String)json.get("__rows");
-	            sPage   = (String)json.get("__page");
+	            sMarinaId   = (String)json.get("__marina_id");
+	            sMachineId 	= (String)json.get("__machine_id");
+	            sRows       = (String)json.get("__rows");
+	            sPage       = (String)json.get("__page");
+	            
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
-				logger.debug("getBoatList sBoatId:" + sBoatId);
-				logger.debug("getBoatList sBoatNm:" + sBoatNm);
-				logger.debug("getBoatList nRows:" + sRows);
-				logger.debug("getBoatList nPage:" + sPage);
+				logger.debug("getBoatDevice sMarinaId:" + sMarinaId);
+				logger.debug("getBoatDevice sMachineId:" + sMachineId);
+				logger.debug("getBoatDevice nRows:" + sRows);
+				logger.debug("getBoatDevice nPage:" + sPage);
 			} 
 			
 			connectionDest = conMgr.getConnection();
@@ -85,19 +82,16 @@ public class GetBoatList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.BOAT_ID, A.BOAT_NM, A.USER_ID, B.USER_NM, A.BOAT_STATUS,C.DETAIL_NM,A.BOAT_DESC  \n ";
-			sQuery += "   FROM TB_BOAT A LEFT OUTER JOIN TB_USER_INFO B ON A.USER_ID = B.USER_ID  \n ";
-			sQuery += "                  LEFT OUTER JOIN TB_CODE_DETAIL C on A.BOAT_STATUS = C.DETAIL_CD AND C.GROUP_CD = 'BOAT_STATUS' \n ";
-			sQuery += "  WHERE 1 = 1 \n ";
+			sQuery  = " SELECT B.MARINA_ID, a.BOAT_ID, a.BOAT_NM, b.MACHINE_ID \n ";
+			sQuery += "   FROM tb_boat_device b  left outer join tb_boat a on b.marina_id = a.marina_id AND b.boat_id = a.boat_id \n ";
+			sQuery += "  WHERE b.marina_id =  " + sMarinaId + " \n";
 
-			if( !StringUtils.equals(sBoatId, "") && !StringUtils.equals(sBoatId, null) )  {
-				sQuery += "    AND A.BOAT_ID = '" + sBoatId + "' \n";
-			} else if( !StringUtils.equals(sBoatNm, "") && !StringUtils.equals(sBoatNm, null) ) {
-					sQuery += "    AND A.BOAT_NM like '%" + sBoatNm + "%' \n";
+			if( !StringUtils.equals(sMachineId, "") && !StringUtils.equals(sMachineId, null) )  {
+				sQuery += "    AND b.MACHINE_ID = '" + sMachineId + "' \n";
 			}			
-			sQuery += "  ORDER BY A.BOAT_NM \n ";
+			sQuery += "  ORDER BY b.MACHINE_ID \n ";
 			
-			logger.debug("getBoatList sQuery1:" + sQuery); 
+			logger.debug("getBoatDevice sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -109,25 +103,18 @@ public class GetBoatList extends HttpServlet {
 	        while(rs.next()){
 				JSONObject datas = new JSONObject();
 				
-				datas.put("BOAT_ID"   	, rs.getString("BOAT_ID"));	
-				datas.put("BOAT_NM"   	, rs.getString("BOAT_NM"));	
-				datas.put("USER_ID"   	, rs.getString("USER_ID"));	 
-				datas.put("USER_NM"   	, rs.getString("USER_NM"));	
+				datas.put("MARINA_ID"   	, rs.getString("MARINA_ID"));	
+				datas.put("MACHINE_ID"   	, rs.getString("MACHINE_ID"));	
 
-				if (!StringUtils.isEmpty(rs.getString("BOAT_STATUS"))) 
-					datas.put("BOAT_STATUS" , rs.getString("BOAT_STATUS"));	
+				if (!StringUtils.isEmpty(rs.getString("BOAT_ID"))) 
+					datas.put("BOAT_ID" , rs.getString("BOAT_ID"));	
 				else
-					datas.put("BOAT_STATUS" , " " );
+					datas.put("BOAT_ID" , " " );
 				
-				if (!StringUtils.isEmpty(rs.getString("DETAIL_NM"))) 
-					datas.put("DETAIL_NM" , rs.getString("DETAIL_NM"));	
+				if (!StringUtils.isEmpty(rs.getString("BOAT_NM"))) 
+					datas.put("BOAT_NM" , rs.getString("BOAT_NM"));	
 				else
-					datas.put("DETAIL_NM" , " " );
-				
-				if (!StringUtils.isEmpty(rs.getString("BOAT_DESC"))) 
-					datas.put("BOAT_DESC" , rs.getString("BOAT_DESC"));	
-				else
-					datas.put("BOAT_DESC" , " " );
+					datas.put("BOAT_NM" , " " );
 				
 				seriesArray.add(datas);
 				jsonobj.put("rows"  ,seriesArray);   
@@ -139,7 +126,7 @@ public class GetBoatList extends HttpServlet {
 				int total = nCount / Integer.parseInt(sRows);
 				
 				jsonobj.put("records" , nCount  );  
-				jsonobj.put("page"    , Integer.parseInt(sPage)      ); 
+				jsonobj.put("page"    , Integer.parseInt(sPage)); 
 				jsonobj.put("total"   , total     );  
 				jsonobj.put("result"  , "OK"      );  
 			} else {  
@@ -152,7 +139,7 @@ public class GetBoatList extends HttpServlet {
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			logger.debug("getBoatList :" + jsonobj.toString() ); 
+			logger.debug("getBoatDevice :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			//connectionDest.close();

@@ -175,7 +175,7 @@ if(el){
 
 							
 									<div class="form-group">
-										<label for="f_sabun" class="col-sm-3 control-label">ID</label>
+										<label for="f_sabun" class="col-sm-3 control-label">코드</label>
 										<div class="col-sm-8">
 											<input type="text" class="form-control"   id="F_USER_CD" name="F_USER_CD"  >
 											<input type="hidden" class="form-control" id="F_USER_ID" name="F_USER_ID" >
