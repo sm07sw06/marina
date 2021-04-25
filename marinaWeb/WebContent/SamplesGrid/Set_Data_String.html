@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// 데이터가 CSV형일 경우 넣어줍니다. (설정을 안할경우 xml로 인식하여 오류가 발생합니다)
+// csv, fastCsv가 설정가능하며 다른 점은 다음과 같습니다.
+// csv : CSV 표준(RFC-4180)에 따라 파싱하며, 필드 데이터가 문자열인 경우 '"',',','\n' 를 포함할 경우 사용합니다.
+// fastCsv : CSV 형식으로 파싱하며, 필드 데이터에 '"',',','\n' 가 포함되지 않아 레코드 구분은 '\n', 필드 구분은 ','로만 분리가 가능할 경우 사용합니다.
+jsVars += "&dataType=csv";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr3);
+	gridApp.setData(gridData3);
+
+	var layoutCompleteHandler = function(event) {
+		dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+	}
+
+	gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+}
+
+var gridApp, gridRoot, dataGrid;
+
+// XML 형태로 데이터 넣기
+function changeXMLData() {
+	gridApp.setDataType("xml");
+	gridApp.setLayout(layoutStr2);
+	gridApp.setData(gridData2);
+}
+
+// JSON 형태로 데이터 넣기
+function changeJSONData() {
+	gridApp.setDataType("json");
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+}
+
+// CSV 형태로 데이터 넣기
+function changeCSVData() {
+	gridApp.setDataType("csv");
+	gridApp.setLayout(layoutStr3);
+	gridApp.setData(gridData3);
+}
+
+// TSV 형태로 데이터 넣기
+function changeTSVData() {
+	gridApp.setDataType("tsv");
+	gridApp.setLayout(layoutStr3);
+	gridApp.setData(gridData4);
+}
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" verticalAlign="middle" selectionMode="multipleRows" sortableColumns="false" textAlign="center">\
+		<columns>\
+			<DataGridColumn dataField="From" width="80"/>\
+			<DataGridColumn dataField="Subject" width="120"/>\
+			<DataGridColumn dataField="ReceiveDate" headerText="Receive"/>\
+			<DataGridColumn dataField="SendDate" headerText="Send"/>\
+			<DataGridColumn dataField="CC"/>\
+			<DataGridColumn dataField="Level"/>\
+			<DataGridColumn dataField="Length" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="AttachCount" textAlign="right" formatter="{numfmt}" width="60"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>';
+
+var layoutStr2 =
+'<rMateGrid>\
+<!--\n\
+showDataTips 열의 셀에 대한 데이터팁(툴팁) 표시여부 (false,true중 택일, 기본 false)\n\
+dataTipJsFunction 자바스크립트를 이용한 데이터팁(툴팁) 변경기능 (자바스크립트에서 선언한 함수명을 넣어줍니다)\n\
+-->\n\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<PercentFormatter id="percfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" verticalAlign="middle" sortableColumns="false">\
+		<columns>\
+			<DataGridColumn id="dg1col1" dataField="Year" textAlign="center"/>\
+			<DataGridColumn id="dg1col2" dataField="Quarter" textAlign="center"/>\
+			<DataGridColumn id="dg1col3" dataField="Month" textAlign="center"/>\
+			<DataGridColumn id="dg1col4" dataField="Seoul" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn id="dg1col5" dataField="Busan" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn id="dg1col6" dataField="Incheon" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn id="dg1col7" dataField="NewYork" textAlign="right" headerText="New York"/>\
+			<DataGridColumn id="dg1col8" dataField="LA" textAlign="right" headerText="L.A."/>\
+			<DataGridColumn id="dg1col9" dataField="Washington" textAlign="right"/>\
+			<DataGridColumn id="dg1col10" dataField="Revenue" textAlign="right"/>\
+			<DataGridColumn id="dg1col11" dataField="Percent" textAlign="right" formatter="{percfmt}"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>';
+
+var layoutStr3 =
+'<rMateGrid>\
+<!--\n\
+데이터가 CSV나 TSV일 경우 필드는 순서에서 따라 F0, F1, F2, F3... 의 방식으로 생성됩니다.\n\
+-->\n\
+	<DateFormatter id="datefmt" formatString="YY년 MM월 DD일"/>\
+	<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" verticalAlign="middle" selectionMode="multipleRows">\
+		<columns>\
+			<DataGridColumn dataField="F0" headerText="From" width="80"/>\
+			<DataGridColumn dataField="F1" headerText="Subject" width="120"/>\
+			<DataGridColumn dataField="F2" headerText="Receive" formatter="{datefmt}"/>\
+			<DataGridColumn dataField="F3" headerText="Send" formatter="{datefmt}"/>\
+			<DataGridColumn dataField="F4" headerText="CC"/>\
+			<DataGridColumn dataField="F6" headerText="Level"/>\
+			<DataGridColumn dataField="F5" headerText="Length" textAlign="right" formatter="{numfmt}"/>\
+			<DataGridColumn dataField="F7" headerText="AttachCount" textAlign="right" formatter="{numfmt}"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>';
+
+var gridData= '\
+[\
+	{"Selected": false,"From": "Amit", "Subject": "GMC-1 Release1","ReceiveDate": "2013/12/07","SendDate": "2013/12/06","CC": "Jim","Length": 75126,"Level": 1,"AttachCount": 1},\
+	{"Selected": true,"From": "Amit","Subject": "GMC-1 Release2","ReceiveDate": "2013/12/07","SendDate": "2013/12/06","CC": "Jim","Length": 95822,"Level": 1,"AttachCount": 2},\
+	{"Selected": false,"From": "Amit","Subject": "GMC-1 Release3","ReceiveDate": "2013/12/11","SendDate": "2013/12/11","CC": "Jim","Length": 1862456,"Level": 3,"AttachCount": 0},\
+	{"Selected": false,"From": "Barb","Subject": "GMC-1 Release3","ReceiveDate": "2013/12/08","SendDate": "2013/12/08","CC": "Anant","Length": 65488,"Level": 8,"AttachCount": 31},\
+	{"From": "Harry","Subject": "GMC-1 Release2","ReceiveDate": "2014/02/06","SendDate": "2014/02/06","CC": "Ram", "Length": 2468,"Level": 6,"AttachCount": 2},\
+	{"From": "Harry", "Subject": "GMC-1 Release3", "ReceiveDate": "2014/02/06", "SendDate": "2014/02/06", "CC": "Ram", "Length": 863145, "Level": 1, "AttachCount": 0},\
+	{"From": "John", "Subject": "GMC-1 Release2", "ReceiveDate": "2014/07/06", "SendDate": "2014/07/06", "CC": "Jim", "Length": 6514, "Level": 4, "AttachCount": 0},\
+	{"From": "John", "Subject": "GMC-1 Release3", "ReceiveDate": "2014/07/06", "SendDate": "2014/07/06", "CC": "Jim", "Length": 325418, "Level": 2, "AttachCount": 1},\
+	{"From": "Phill", "Subject": "GMC-1 Release1", "ReceiveDate": "2014/08/06", "SendDate": "2014/07/05", "CC": "Jim", "Length": 2464, "Level": 8, "AttachCount": 12},\
+	{"From": "Phill", "Subject": "GMC-1 Release1", "ReceiveDate": "2014/08/06", "SendDate": "2014/07/22", "CC": "Jim", "Length": 9841, "Level": 9, "AttachCount": 31},\
+	{"From": "Phill", "Subject": "GMC-1 Release3", "ReceiveDate": "2014/08/06", "SendDate": "2014/07/27", "CC": "Jim", "Length": 1575, "Level": 1, "AttachCount": 0},\
+	{"From": "Phill", "Subject": "GMC-1 Release4", "ReceiveDate": "2014/08/06", "SendDate": "2014/07/06", "CC": "Jim", "Length": 91559, "Level": 3, "AttachCount": 1},\
+	{"From": "Jerry", "Subject": "GMC-1 Release4", "ReceiveDate": "2014/21/06", "SendDate": "2014/21/06", "CC": "Boa", "Length": 4510, "Level": 3, "AttachCount": 2},\
+	{"From": "Jerry", "Subject": "GMC-1 Release5", "ReceiveDate": "2014/19/06", "SendDate": "2014/19/06", "CC": "Boa", "Length": 10569, "Level": 2, "AttachCount": 1},\
+	{"From": "Jerry", "Subject": "GMC-1 Release6", "ReceiveDate": "2014/22/06", "SendDate": "2014/22/06", "CC": "Boa", "Length": 56956, "Level": 1, "AttachCount": 0}\
+]';
+
+var gridData2 = '\
+<?xml version="1.0" encoding="utf-8"?>\
+<RevenuesAnalysis>\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>1/4</Quarter>\
+		<Month>1</Month>\
+		<Seoul>109520</Seoul>\
+		<Busan>40454</Busan>\
+		<Incheon>82477</Incheon>\
+		<NewYork>47424</NewYork>\
+		<LA>103225</LA>\
+		<Washington>61161</Washington>\
+		<Revenue>444260</Revenue>\
+		<Percent>40</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>1/4</Quarter>\
+		<Month>2</Month>\
+		<Seoul>15749</Seoul>\
+		<Busan>29714</Busan>\
+		<Incheon>31393</Incheon>\
+		<NewYork>45006</NewYork>\
+		<LA>17945</LA>\
+		<Washington>90148</Washington>\
+		<Revenue>229956</Revenue>\
+		<Percent>20</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>1/4</Quarter>\
+		<Month>3</Month>\
+		<Seoul>14766</Seoul>\
+		<Busan>97314</Busan>\
+		<Incheon>103216</Incheon>\
+		<NewYork>86072</NewYork>\
+		<LA>52863</LA>\
+		<Washington>93789</Washington>\
+		<Revenue>448020</Revenue>\
+		<Percent>40</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>2/4</Quarter>\
+		<Month>4</Month>\
+		<Seoul>52352</Seoul>\
+		<Busan>56859</Busan>\
+		<Incheon>15688</Incheon>\
+		<NewYork>65438</NewYork>\
+		<LA>39181</LA>\
+		<Washington>109514</Washington>\
+		<Revenue>339031</Revenue>\
+		<Percent>31</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>2/4</Quarter>\
+		<Month>5</Month>\
+		<Seoul>100842</Seoul>\
+		<Busan>30391</Busan>\
+		<Incheon>23745</Incheon>\
+		<NewYork>72742</NewYork>\
+		<LA>102195</LA>\
+		<Washington>30407</Washington>\
+		<Revenue>360322</Revenue>\
+		<Percent>33</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>2/4</Quarter>\
+		<Month>6</Month>\
+		<Seoul>19217</Seoul>\
+		<Busan>75298</Busan>\
+		<Incheon>70807</Incheon>\
+		<NewYork>36447</NewYork>\
+		<LA>100805</LA>\
+		<Washington>84934</Washington>\
+		<Revenue>387508</Revenue>\
+		<Percent>36</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>3/4</Quarter>\
+		<Month>7</Month>\
+		<Seoul>74324</Seoul>\
+		<Busan>64947</Busan>\
+		<Incheon>101350</Incheon>\
+		<NewYork>34673</NewYork>\
+		<LA>24486</LA>\
+		<Washington>57781</Washington>\
+		<Revenue>357561</Revenue>\
+		<Percent>28</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>3/4</Quarter>\
+		<Month>8</Month>\
+		<Seoul>85932</Seoul>\
+		<Busan>95733</Busan>\
+		<Incheon>40327</Incheon>\
+		<NewYork>69255</NewYork>\
+		<LA>80024</LA>\
+		<Washington>102739</Washington>\
+		<Revenue>474011</Revenue>\
+		<Percent>37</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>3/4</Quarter>\
+		<Month>9</Month>\
+		<Seoul>101804</Seoul>\
+		<Busan>65098</Busan>\
+		<Incheon>79194</Incheon>\
+		<NewYork>101669</NewYork>\
+		<LA>30608</LA>\
+		<Washington>73020</Washington>\
+		<Revenue>451393</Revenue>\
+		<Percent>35</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>4/4</Quarter>\
+		<Month>10</Month>\
+		<Seoul>92130</Seoul>\
+		<Busan>91881</Busan>\
+		<Incheon>45166</Incheon>\
+		<NewYork>65524</NewYork>\
+		<LA>45348</LA>\
+		<Washington>72708</Washington>\
+		<Revenue>412757</Revenue>\
+		<Percent>36</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>4/4</Quarter>\
+		<Month>11</Month>\
+		<Seoul>80925</Seoul>\
+		<Busan>70537</Busan>\
+		<Incheon>25347</Incheon>\
+		<NewYork>29360</NewYork>\
+		<LA>76296</LA>\
+		<Washington>42766</Washington>\
+		<Revenue>325230</Revenue>\
+		<Percent>29</Percent>\
+	</RegionalRevenue>\
+\
+	<RegionalRevenue>\
+		<Year>2013</Year>\
+		<Quarter>4/4</Quarter>\
+		<Month>12</Month>\
+		<Seoul>99008</Seoul>\
+		<Busan>30598</Busan>\
+		<Incheon>99124</Incheon>\
+		<NewYork>22776</NewYork>\
+		<LA>107805</LA>\
+		<Washington>38384</Washington>\
+		<Revenue>397696</Revenue>\
+		<Percent>35</Percent>\
+	</RegionalRevenue>\
+\
+</RevenuesAnalysis>\
+';
+
+var gridData3 = 'Amit,GMC-1 Release1,2006/12/07,2006/12/06,Jim,75126,1,1\n\
+Amit,GMC-1 Release2,2006/12/07,2006/12/06,Jim,95822,1,2\n\
+Amit,GMC-1 Release3,2006/12/11,2006/12/11,Jim,1862456,3,0\n\
+Barb,GMC-1 Release3,2006/12/08,2006/12/08,Anant,65488,8,31\n\
+Barb,GMC-1 Release4,2006/12/06,2006/12/06,Anant,4851568,8,1\n\
+Harry,GMC-1 Release2,2006/11/28,2006/11/28,Ram,13548,1,0\n\
+Harry,GMC-1 Release3,2006/12/08,2006/12/08,Ram,1235,1,12\n\
+John,GMC-1 Release2,2006/12/07,2006/12/07,Jim,84621877,5,20\n\
+John,GMC-1 Release3,2006/12/07,2006/12/06,Jim,51846,5,3\n\
+Phill,GMC-1 Release1,2006/12/08,2006/12/08,Jim,31680,3,5\n\
+Phill,GMC-1 Release1,2006/12/08,2006/12/08,Jim,1813,2,0\n\
+Phill,GMC-1 Release3,2006/12/08,2006/12/08,Jim,13548,2,1\n\
+Phill,GMC-1 Release4,2006/12/08,2006/12/08,Jim,16588,1,0\n\
+김철수,GMC-1 Release4,2006/11/21,2006/11/21,박순이,5158,9,0\n\
+김철수,GMC-1 Release5,2006/11/19,2006/11/19,이미자,216815,8,2\n\
+김철수,GMC-1 Release6,2006/11/22,2006/11/20,박만수,312566,7,3';
+
+var gridData4 = "Amit	GMC-1 Release1	2006/12/07	2006/12/06	Jim	75126	1	1\n\
+Amit	GMC-1 Release2	2006/12/07	2006/12/06	Jim	95822	1	2\n\
+Amit	GMC-1 Release3	2006/12/11	2006/12/11	Jim	1862456	3	0\n\
+Barb	GMC-1 Release3	2006/12/08	2006/12/08	Anant	65488	8	31";
+
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			그리드에서 문자열 형태의 JSON, XML, CSV, TSV 데이터를 동적으로 넣어주는 예제입니다.
+		</div>
+		<div class="headerDesc">
+			<span class="greenProp">setDataType</span>으로 DataType을 변경한 뒤에 <span class="greenProp">setData</span>로 설정하는 예제를 보실 수 있습니다.<br>
+			데이터가 <span class="orangeProp">CSV</span>일 경우에는 <span class="greenProp">dataType</span>을 <span class="greenProp">csv</span>나 <span class="greenProp">fastCsv</span>로<br>
+			데이터가 <span class="orangeProp">TSV</span>일 경우에는 <span class="greenProp">dataType</span>을 <span class="greenProp">tsv</span>나 <span class="greenProp">fastTsv</span>로<br>
+			(데이터가 CSV나 TSV일 경우 필드는 순서에서 따라 F0, F1, F2, F3... 의 방식으로 생성됩니다.)<br>
+			데이터가 <span class="orangeProp">xml</span>일 경우에는 <span class="greenProp">dataType</span>을 <span class="greenProp">xml</span>로<br>
+			데이터가 <span class="orangeProp">json</span>일 경우에는 <span class="greenProp">dataType</span>을 <span class="greenProp">json</span>으로 설정해줘야 합니다.<br>
+			자세한 내용은 아래의 Source 탭이나 페이지 소스로 확인할 수 있습니다.
+		</div>
+		<div class="headerButtons">
+			<span class="button button_top" onclick="changeXMLData();">XML Data 변경<img src="Web/Images/btnRight.png"></span>
+			<span class="button button_top" onclick="changeJSONData();">JSON Data 변경<img src="Web/Images/btnRight.png"></span>
+			<span class="button button_top" onclick="changeCSVData();">CSV Data 변경<img src="Web/Images/btnRight.png"></span>
+			<span class="button button_top" onclick="changeTSVData();">TSV Data 변경<img src="Web/Images/btnRight.png"></span>
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>

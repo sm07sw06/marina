@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<style>
+body { margin: 0px; font-family: Arial, "맑은 고딕"; }
+</style>
+
+<script type="text/javascript">
+function checkSelect() {
+	if (inputForm.actual.selectedIndex == 0) {
+		alert("actual을 선택하세요");
+		return;
+	}
+	opener.changeItem(inputForm.actual.value);
+	self.close();
+}
+</script>
+</head>
+
+<body>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr style="height:50px">
+		<td align="center" valign="middle" style="background-color:#1b3458">
+			<div style="color:#ffffff; font-weight:bold;">다음 값을 선택하세요</div>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" style="height:70px;">
+			<form id="inputForm" name="inputForm">
+				<div>
+					<span style="margin-right:10px;">Actual</span>
+					<select name="actual" style="width:100px;">
+						<option value="">선택</option>
+						<option value="10000">10000</option>
+						<option value="20000">20000</option>
+						<option value="30000">30000</option>
+						<option value="40000">40000</option>
+						<option value="50000">50000</option>
+					</select>
+				</div>
+			<!--table border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td align="right">Actual</td>
+					<td width="10"></td>
+					<td align="left">
+						<select name="actual">
+							<option value="">선택</option>
+							<option value="10000">10000</option>
+							<option value="20000">20000</option>
+							<option value="30000">30000</option>
+							<option value="40000">40000</option>
+							<option value="50000">50000</option>
+						</select>
+					</td>
+				</tr>
+				</form>
+			</table-->
+		</td>
+	</tr>
+	<tr>
+		<td align="center" valign="top">
+			<input type="button" style="width:200px; border-style:none; padding:10px; color:#ffffff; font-size:16px; background-color:#7bacd6;" id="savebtn" value="수정" onClick="checkSelect()"/>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

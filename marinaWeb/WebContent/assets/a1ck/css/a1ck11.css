@@ -1,0 +1,168 @@
+.myTitleBox {
+  #border: 1px solid #444;
+  background: #f3f3f3;
+  margin: 2px 2px 2px 2px;
+  padding: 0.35em 0.625em 0.75em;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+body {
+    color: #444444;
+}
+
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    color: #444444;
+}
+
+.search_cond {
+	margin : 10px 10px 10px 0;
+}
+
+.container-fluid-userinfo {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    height:620px;
+}
+
+.panel-primary-userinfo {
+    border-color: #ebebeb;
+    -webkit-border-radius: 3px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 3px;
+    -moz-background-clip: padding;
+    border-radius: 3px;
+    background-clip: padding-box;
+    height:620px;
+}
+.page-container .main-content {
+  position: relative;
+  display: table-cell;
+  vertical-align: top;
+  padding: 20px;
+  background: #ffffff;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+}
+@media screen and (max-width: 767px) {
+  .page-container .main-content {
+    display: block;
+  }
+}
+
+.page-container .main-content .footline {
+	position: fixed;
+  	bottom: 0;	
+}
+
+.page-container .main-content .main-sub-content {
+	position: relative;
+	clear: both;
+ 	zoom: 1;
+ 	vertical-align: top;
+	padding: 1px;
+	background: #ffffff;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+    height: 100%;
+    
+}
+.page-container .main-content .head-content {
+  position: relative;
+  vertical-align: top;
+  padding: 2px;
+  background: #ffffff;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+@media screen and (max-width: 767px) {
+  .page-container .main-content .head-content {
+    display: block;
+  }
+}
+
+.breadcrumb.bc-3 {
+  padding-left: 5px;
+  padding-right: 0;
+  background-color: transparent;
+}
+
+.form-grou1ps-bordered > .form-group {
+  padding-bottom: 5px;
+  padding-top: 5px;
+  margin-bottom: 0px;
+}
+
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+  background-color: #FFFFF4;
+}
+
+.input-search {
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+.input-search .input-search-box input{
+	margin-left:20px;
+}
+.input-search .input-search-icon {
+	position:relative;
+	z-index:100;
+	align:right;
+	margin-left:150px;
+	margin-top:-20px;
+}
+
+.sabun_panel {
+  padding: 0;
+  margin: 0;
+  width:100%;  
+}
+.sabun_panel .sabun_panel_left {
+	float: left;
+	width: 75%;
+	height:550px;
+}
+.sabun_panel .sabun_panel_right {
+	float: right;
+	width: 24%;
+	height:550px;
+	overflow: auto;
+	background-color: white;
+	border: 1px dotted gray;
+	#background-color: #F2F7FD; /* light blue */
+	border-color: #B8D6FB; /* darker light blue */	
+}
+
+.list-group2 {
+  margin-bottom: 10px;
+  padding-left: 0;
+}
+.list-group2-item {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 0px solid #ddd;
+}
+.list-group2-item:first-child {
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.list-group2-item:last-child {
+  margin-bottom: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+

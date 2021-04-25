@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Map>
+	<Anchor code="100" label="A1-1" symbol="A1-1"/>
+	<Anchor code="200" label="A1-2" symbol="A1-2"/>
+	<Anchor code="300" label="A2-1" symbol="A2-1"/>
+	<Anchor code="400" label="A2-2" symbol="A2-2"/>
+</Map>

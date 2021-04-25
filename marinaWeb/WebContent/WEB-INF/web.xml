@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+
+	<display-name>marinaWeb</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file> 
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+
+<!-- 	
+	<servlet>
+	    <servlet-name>DBCPInit</servlet-name>
+	    <servlet-class>com.a1ck.util.DBCPInit</servlet-class>
+	    <init-param>
+	        <param-name>jdbcDriver</param-name>
+	        <param-value>com.mysql.jdbc.Driver</param-value>
+	    </init-param>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+ -->
+	<servlet>
+		<servlet-name>Jersey RESTful Application</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>com.a1ck</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey RESTful Application</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+	
+<!-- 	<servlet>
+		<servlet-name>QuartzInitializer</servlet-name>
+		<servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
+		<init-param>
+			<param-name>config-file</param-name>
+			<param-value>/quartz.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>shutdown-on-unload</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>wait-on-shutdown</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>start-scheduler-on-load</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet> -->
+	
+	<servlet>
+		<servlet-name>CodeController</servlet-name>
+		<servlet-class>com.a1ck.util.CodeController</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>GetCodeList</servlet-name>
+		<servlet-class>com.a1ck.comm.GetCodeList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetCodeList</servlet-name>
+		<url-pattern>/GetCodeList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GetLogin</servlet-name>
+		<servlet-class>com.a1ck.auth.GetLogin</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetLogin</servlet-name>
+		<url-pattern>/GetLogin</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetLogin</servlet-name>
+		<servlet-class>com.a1ck.auth.SetLogin</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetLogin</servlet-name>
+		<url-pattern>/SetLogin</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GetMenuList</servlet-name>
+		<servlet-class>com.a1ck.auth.GetMenuList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetMenuList</servlet-name>
+		<url-pattern>/GetMenuList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetMenuList</servlet-name>
+		<servlet-class>com.a1ck.auth.SetMenuList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetMenuList</servlet-name>
+		<url-pattern>/SetMenuList</url-pattern>
+	</servlet-mapping>
+
+	
+	<servlet>
+		<servlet-name>GetFirstPage</servlet-name>
+		<servlet-class>com.a1ck.page.GetFirstPage</servlet-class>
+	</servlet>
+  <servlet-mapping>
+    <servlet-name>GetFirstPage</servlet-name>
+    <url-pattern>/GetFirstPage</url-pattern>
+  </servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetChartLinePage</servlet-name>
+		<servlet-class>com.a1ck.page.GetChartLinePage</servlet-class>
+	</servlet>
+  <servlet-mapping>
+    <servlet-name>GetChartLinePage</servlet-name>
+    <url-pattern>/GetChartLinePage</url-pattern>
+  </servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetChartAreaPage</servlet-name>
+		<servlet-class>com.a1ck.page.GetChartAreaPage</servlet-class>
+	</servlet>
+  <servlet-mapping>
+    <servlet-name>GetChartAreaPage</servlet-name>
+    <url-pattern>/GetChartAreaPage</url-pattern>
+  </servlet-mapping>
+  
+	<servlet>
+		<servlet-name>GetServerCombo</servlet-name>
+		<servlet-class>com.a1ck.asset.GetServerCombo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetServerCombo</servlet-name>
+		<url-pattern>/GetServerCombo</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetServerList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetServerList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetServerList</servlet-name>
+		<url-pattern>/GetServerList</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetServerList2</servlet-name>
+		<servlet-class>com.a1ck.asset.GetServerList2</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetServerList2</servlet-name>
+		<url-pattern>/GetServerList2</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetServer</servlet-name>
+		<servlet-class>com.a1ck.asset.SetServer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetServer</servlet-name>
+		<url-pattern>/SetServer</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GetWorkList</servlet-name>
+		<servlet-class>com.a1ck.comm.GetWorkList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetWorkList</servlet-name>
+		<url-pattern>/GetWorkList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetWork</servlet-name>
+		<servlet-class>com.a1ck.comm.SetWork</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetWork</servlet-name>
+		<url-pattern>/SetWork</url-pattern>
+	</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>GetAgentList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAgentList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAgentList</servlet-name>
+		<url-pattern>/GetAgentList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetAgent</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAgent</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAgent</servlet-name>
+		<url-pattern>/SetAgent</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>GetDaemonList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetDaemonList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetDaemonList</servlet-name>
+		<url-pattern>/GetDaemonList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetDaemon</servlet-name>
+		<servlet-class>com.a1ck.asset.SetDaemon</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetDaemon</servlet-name>
+		<url-pattern>/SetDaemon</url-pattern>
+	</servlet-mapping>
+		
+
+	<servlet>
+		<servlet-name>GetTableList</servlet-name>
+		<servlet-class>com.a1ck.comm.GetTableList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetTableList</servlet-name>
+		<url-pattern>/GetTableList</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetTableListPop</servlet-name>
+		<servlet-class>com.a1ck.comm.GetTableListPop</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetTableListPop</servlet-name>
+		<url-pattern>/GetTableListPop</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetTable</servlet-name>
+		<servlet-class>com.a1ck.comm.SetTable</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetTable</servlet-name>
+		<url-pattern>/SetTable</url-pattern>
+	</servlet-mapping>
+			
+	<servlet>
+		<servlet-name>GetUserList</servlet-name>
+		<servlet-class>com.a1ck.user.GetUserList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUserList</servlet-name>
+		<url-pattern>/GetUserList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetUser</servlet-name>
+		<servlet-class>com.a1ck.user.SetUser</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetUser</servlet-name>
+		<url-pattern>/SetUser</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>GetUserGroup</servlet-name>
+		<servlet-class>com.a1ck.user.GetUserGroup</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUserGroup</servlet-name>
+		<url-pattern>/GetUserGroup</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetUserGroup</servlet-name>
+		<servlet-class>com.a1ck.user.SetUserGroup</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetUserGroup</servlet-name>
+		<url-pattern>/SetUserGroup</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>SetUserGroupMember</servlet-name>
+		<servlet-class>com.a1ck.user.SetUserGroupMember</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetUserGroupMember</servlet-name>
+		<url-pattern>/SetUserGroupMember</url-pattern>
+	</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>GetJobList</servlet-name>
+		<servlet-class>com.a1ck.job.GetJobList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetJobList</servlet-name>
+		<url-pattern>/GetJobList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetJob</servlet-name>
+		<servlet-class>com.a1ck.job.SetJob</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetJob</servlet-name>
+		<url-pattern>/SetJob</url-pattern>
+	</servlet-mapping>
+			
+			
+	<servlet>
+		<servlet-name>GetJobHistory</servlet-name>
+		<servlet-class>com.a1ck.job.GetJobHistory</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetJobHistory</servlet-name>
+		<url-pattern>/GetJobHistory</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetJobHistory</servlet-name>
+		<servlet-class>com.a1ck.job.SetJobHistory</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetJobHistory</servlet-name>
+		<url-pattern>/SetJobHistory</url-pattern>
+	</servlet-mapping>
+			
+	<servlet>
+		<servlet-name>GetJobMonitor</servlet-name>
+		<servlet-class>com.a1ck.job.GetJobMonitor</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetJobMonitor</servlet-name>
+		<url-pattern>/GetJobMonitor</url-pattern>
+	</servlet-mapping>			
+			
+	<servlet>
+		<servlet-name>GetAuthList</servlet-name>
+		<servlet-class>com.a1ck.auth.GetAuthList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAuthList</servlet-name>
+		<url-pattern>/GetAuthList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAuth</servlet-name>
+		<servlet-class>com.a1ck.auth.SetAuth</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAuth</servlet-name>
+		<url-pattern>/SetAuth</url-pattern>
+	</servlet-mapping>			
+			
+	<servlet>
+		<servlet-name>GetCodeManager</servlet-name>
+		<servlet-class>com.a1ck.comm.GetCodeManager</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetCodeManager</servlet-name>
+		<url-pattern>/GetCodeManager</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetCodeManager</servlet-name>
+		<servlet-class>com.a1ck.comm.SetCodeManager</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetCodeManager</servlet-name>
+		<url-pattern>/SetCodeManager</url-pattern>
+	</servlet-mapping>			
+		
+<!-- manage  Serverlet List -->
+	<servlet>
+		<servlet-name>GetScheduleList</servlet-name>
+		<servlet-class>com.a1ck.manage.GetScheduleList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetScheduleList</servlet-name>
+		<url-pattern>/GetScheduleList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetScheduleList</servlet-name>
+		<servlet-class>com.a1ck.manage.SetScheduleList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetScheduleList</servlet-name>
+		<url-pattern>/SetScheduleList</url-pattern>
+	</servlet-mapping>	
+	
+	<servlet>
+		<servlet-name>GetScheduleConnectTest</servlet-name>
+		<servlet-class>com.a1ck.manage.GetScheduleConnectTest</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetScheduleConnectTest</servlet-name>
+		<url-pattern>/GetScheduleConnectTest</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GetScheduleColumn</servlet-name>
+		<servlet-class>com.a1ck.manage.GetScheduleColumn</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetScheduleColumn</servlet-name>
+		<url-pattern>/GetScheduleColumn</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SetScheduleColumn</servlet-name>
+		<servlet-class>com.a1ck.manage.SetScheduleColumn</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetScheduleColumn</servlet-name>
+		<url-pattern>/SetScheduleColumn</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SendEmailByUser</servlet-name>
+		<servlet-class>com.a1ck.manage.SendEmailByUser</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SendEmailByUser</servlet-name>
+		<url-pattern>/SendEmailByUser</url-pattern>
+	</servlet-mapping>
+	
+<!-- 	<servlet>
+		<servlet-name>QuartzInitializer</servlet-name>
+		<servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
+		<init-param>
+			<param-name>config-file</param-name>
+			<param-value>/quartz.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>shutdown-on-unload</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>wait-on-shutdown</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>start-scheduler-on-load</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet> -->
+	
+<!--   	<listener>
+	  <listener-class>com.a1ck.quarts.CronQuartzScheduler</listener-class>
+	 </listener> -->
+	   
+
+	<servlet>
+		<servlet-name>GetUserEntryList</servlet-name>
+		<servlet-class>com.a1ck.user.GetUserEntryList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUserEntryList</servlet-name>
+		<url-pattern>/GetUserEntryList</url-pattern>
+	</servlet-mapping>			
+
+	<servlet>
+		<servlet-name>GetBoatList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetBoatList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatList</servlet-name>
+		<url-pattern>/GetBoatList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetBoat</servlet-name>
+		<servlet-class>com.a1ck.asset.SetBoat</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetBoat</servlet-name>
+		<url-pattern>/SetBoat</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetBoatDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.GetBoatDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatDevice</servlet-name>
+		<url-pattern>/GetBoatDevice</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetBoatDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.SetBoatDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetBoatDevice</servlet-name>
+		<url-pattern>/SetBoatDevice</url-pattern>
+	</servlet-mapping>	
+
+
+	<servlet>
+		<servlet-name>GetAnchorSectorList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAnchorSectorList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorSectorList</servlet-name>
+		<url-pattern>/GetAnchorSectorList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAnchorSector</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAnchorSector</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAnchorSector</servlet-name>
+		<url-pattern>/SetAnchorSector</url-pattern>
+	</servlet-mapping>			
+		
+	<servlet>
+		<servlet-name>GetAnchorList</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAnchorList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorList</servlet-name>
+		<url-pattern>/GetAnchorList</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAnchor</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAnchor</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAnchor</servlet-name>
+		<url-pattern>/SetAnchor</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetAnchorDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.GetAnchorDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorDevice</servlet-name>
+		<url-pattern>/GetAnchorDevice</url-pattern>
+	</servlet-mapping>			
+	<servlet>
+		<servlet-name>SetAnchorDevice</servlet-name>
+		<servlet-class>com.a1ck.asset.SetAnchorDevice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetAnchorDevice</servlet-name>
+		<url-pattern>/SetAnchorDevice</url-pattern>
+	</servlet-mapping>	
+				   
+	 <filter>
+		<filter-name>cors</filter-name>
+		<filter-class>com.a1ck.SimpleCORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>cors</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+</web-app>

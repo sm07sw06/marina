@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rMateGridH5 (RiaMore Soft)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<!-- rMateGridH5 CSS -->
+<link rel="stylesheet" type="text/css" href="../rMateGridH5/Assets/rMateH5.css"/>
+<!-- rMateGridH5 라이센스 -->
+<script type="text/javascript" src="../LicenseKey/rMateGridH5License.js"></script>
+<!-- rMateGridH5 라이브러리 -->
+<script type="text/javascript" src="../rMateGridH5/JS/rMateGridH5.js"></script>
+
+<script type="text/javascript">
+// ----------------------- 그리드 설정 시작 -------------------------------------
+
+// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
+var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+
+// rMateDataGrid 를 생성합니다.
+// 파라메터 (순서대로)
+//  1. 그리드의 id ( 임의로 지정하십시오. )
+//  2. 그리드가 위치할 div 의 id (즉, 그리드의 부모 div 의 id 입니다.)
+//  3. 그리드 생성 시 필요한 환경 변수들의 묶음인 jsVars
+//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
+//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
+rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
+
+// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
+// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
+// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
+// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
+function gridReadyHandler(id) {
+	// rMateGrid 관련 객체
+	gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+	gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+
+	gridApp.setLayout(layoutStr);
+	gridApp.setData(gridData);
+}
+
+var gridApp, gridRoot;
+
+//----------------------- 그리드 설정 끝 -----------------------
+
+var layoutStr =
+'<rMateGrid>\
+	<DataGrid id="dg1" horizontalScrollPolicy="auto" verticalAlign="middle">\
+		<columns>\
+			<DataGridColumn dataField="country" width="120" headerText="국가" textAlign="center"/>\
+			<DataGridColumn dataField="capital" headerText="수도" textAlign="center"/>\
+			<DataGridColumn dataField="desc" headerText="설명" itemRenderer="HtmlItem" width="350" />\
+			<DataGridColumn dataField="site" textAlign="center" headerText="\&lt\;span style=\'text-align:center\;display:inline-block\'\&gt\;\&lt\;span style=\'color:\#97e500\'\&gt\;수도\&lt\;\/span\&gt\;\&lt\;br\&gt\;홈페이지\&lt\;\/span\&gt\;" itemRenderer="HtmlItem"/>\
+		</columns>\
+	</DataGrid>\
+</rMateGrid>\
+';
+
+var gridData = [
+	  {
+		"country": "Korea",
+		"capital": "서울",
+		"desc": "<span style='font-size:12px;'><b>대한민국의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 1000만</span><br>면적 : 605.25 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>꽃 : 개나리 </span>",
+		"site": "<a href='http://www.seoul.go.kr' target='_blank'>서울특별시청 홈페이지</a>"
+	  },
+	  {
+		"country": "Korea",
+		"capital": "부산",
+		"desc": "<span style='font-size:12px;'><b>대한민국의 남부해안도시</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 360만</span><br>면적 : 765.64 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>꽃 : 동백꽃 </span>",
+		"site": "<a href='http://www.busan.go.kr' target='_blank'>부산광역시청 홈페이지</a>"
+	  },
+	  {
+		"country": "U.S.A",
+		"capital": "워싱턴",
+		"desc": "<span style='font-size:12px;'><b>미국의 수도, 동부에 위치</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 58만</span><br>면적 : 159 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 국회의사당, 백악관 등</span>",
+		"site": "<a href='http://www.dc.gov' target='_blank'>워싱턴DC 주정부</a>"
+	  },
+	  {
+		"country": "Japan",
+		"capital": "도쿄",
+		"desc": "<span style='font-size:12px;'><b>일본열도의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 1280만</span><br>면적 : 2187.05 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>꽃 : 왕벗나무</span>",
+		"site": "<a href='http://www.metro.tokyo.jp' target='_blank'>도쿄시청 홈페이지</a>"
+	  },
+	  {
+		"country": "China",
+		"capital": "베이징",
+		"desc": "<span style='font-size:12px;'><b>중국의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 1690만</span><br>면적 : 16410.54 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>꽃 : 측백나무</span>",
+		"site": "<a href='http://www.beijing.gov.cn' target='_blank'>베이징시 홈페이지</a>"
+	  },
+	  {
+		"country": "England",
+		"capital": "런던",
+		"desc": "<span style='font-size:12px;'><b>영국의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 750만</span><br>면적 : 1578 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 템즈강,버킹엄궁전</span>",
+		"site": "<a href='http://www.london.gov.uk' target='_blank'>런던시 홈페이지</a>"
+	  },
+	  {
+		"country": "France",
+		"capital": "파리",
+		"desc": "<span style='font-size:12px;'><b>프랑스의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 216만</span><br>면적 : 105 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 센강,개선문,몽마르트</span>",
+		"site": "<a href='http://www.paris.fr' target='_blank'>파리시 홈페이지</a>"
+	  },
+	  {
+		"country": "Germany",
+		"capital": "베를린",
+		"desc": "<span style='font-size:12px;'><b>독일의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 337만</span><br>면적 : 891.75 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 슈프레강,브란덴부르크</span>",
+		"site": "<a href='http://www.berlin.de' target='_blank'>베를린시 홈페이지</a>"
+	  },
+	  {
+		"country": "Russia",
+		"capital": "모스코바",
+		"desc": "<span style='font-size:12px;'><b>러시아의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 1047만</span><br>면적 : 1000 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 모스코바강, 크렘린</span>",
+		"site": "<a href='http://www.mos.ru' target='_blank'>모스코바시 홈페이지</a>"
+	  },
+	  {
+		"country": "Brazil",
+		"capital": "브라질리아",
+		"desc": "<span style='font-size:12px;'><b>남미 브라질의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 260만</span><br>면적 : 5802 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 계획도시,브라질의사당</span>",
+		"site": "<a href='http://www.brasilia.df.gov.br' target='_blank'>브라질리아 홈페이지</a>"
+	  },
+	  {
+		"country": "Australia",
+		"capital": "캔버라",
+		"desc": "<span style='font-size:12px;'><b>호주의 수도</b></span> <span style='font-size:10px;'> <span color='#0000FF'>인구 : 35만</span><br>면적 : 814.2 Km2 </span> <br> <span style='font-size:11px; color:#FF0000'>명소 : 호주 국립 박물관</span>",
+		"site": "<a href='http://www.act.gov.au' target='_blank'>캔버라 시 의회 홈페이지</a>"
+	}
+];
+
+</script>
+<!-- 샘플 작동을 위한 css와 js -->
+<script type="text/javascript" src="./Web/JS/util.js"></script>
+<link rel="stylesheet" type="text/css" href="./Web/rMateGridH5Sample.css"/>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="./Web/syntax/shCore.js"></script>
+<script type="text/javascript" src="./Web/syntax/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet" href="./Web/syntax/shCoreDefault.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="headerTitle">
+			컬럼의 헤더와 셀 내용에 HTML(폰트관련 속성)을 삽입한 예제입니다.
+		</div>
+		<div class="headerDesc">
+			<span class="classProp">수도홈페이지</span> 헤더를 HTML 으로 적용하였고, <span class="classProp">설명</span>과 <span class="classProp">수도홈페이지</span> 주소에
+			<span class="classProp">&lt;A&gt;</span>태그와 <span class="classProp">&lt;span&gt;</span> 태그를 적용했습니다.<br>
+			열에 HTML 렌더러를 적용하시려면 <span class="greenProp">itemRenderer</span>를 <span class="greenProp">HtmlItem</span>으로 설정해 줘야 합니다.
+		</div>
+	</div>
+	<div class="content">
+		<!-- 그리드가 삽입될 DIV -->
+		<div id="gridHolder"></div>
+	</div>
+	<div id="updater">
+		<div id="updaterTab">
+			<ul id="updaterTabUl">
+				<li id="updaterTabUlLayout" class="non_active_li">Layout</li>
+				<li id="updaterTabUlData" class="non_active_li">Data</li>
+				<li id="updaterTabUlSource" class="non_active_li">Source</li>
+				<li id="updaterTabUlBlank">Layout과 Data를 수정후 적용할 수 있습니다.</li>
+			</ul>
+		</div>
+		<div id="updaterTarea">
+			<textarea id="updaterTareaLayout" class="updaterTextarea"></textarea>
+			<textarea id="updaterTareaData" class="updaterTextarea"></textarea>
+			<pre id="updaterTareaSource" class="brush:js toolbar:false" name="updaterTareaSource"></pre>
+			<span id="btn_update">수정적용</span>
+		</div>
+	</div>
+</body>
+</html>
