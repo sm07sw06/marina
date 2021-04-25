@@ -1,10 +1,2 @@
 /.metadata/
-IOTServer/.settings/
-IOTServer/node_modules/
-IOTServer/.project/
-IOTServer/logs/*.*
-IOTServer/package.json
-marinaWeb/.settings/
-marinaWeb/.classpath
-marinaWeb/.project
-marinaWeb/target/
+
