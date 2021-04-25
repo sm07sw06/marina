@@ -1,3 +1,7 @@
 /.metadata/
 IOTServer/logs/*.*
 IOTServer/package.json
+marinaWeb/.settings/
+marinaWeb/.classpath
+marinaWeb/.project
+marinaWeb/target/
