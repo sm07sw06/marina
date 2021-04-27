@@ -133,11 +133,12 @@ public class CodeClass extends HttpServlet {
 				selChk = "";
 				if(first)  {
 					if(nInposFirst == 0 && bean.getCode().equals(value)) {
+						logger.debug("bean.getCode:" + bean.getCode());
 						selChk = " selected";
 						nInposFirst = 1;
 					}
 				} else if(value != null && value.length() > 0 ) {
-					//logger.debug("bean.getCode:" + bean.getCode());
+					logger.debug("bean.getCode:" + bean.getCode());
 					if(bean.getCode().equals(value)) {
 						selChk = " selected";
 					}
@@ -150,9 +151,44 @@ public class CodeClass extends HttpServlet {
 			resultList.add(sb.toString());
 		}
 		
-		//logger.debug(resultList.toString());
+		logger.debug(resultList.toString());
 		return resultList.toString();
 		
-	}	
+	}
+	
+	public String getComboBoxByCodeListAll(String grpCD, String value, boolean first) {
+		ArrayList<String> resultList = new ArrayList<>();
+		ArrayList<CodeDetail> codeList = getHashMap().get(grpCD);
+		StringBuffer sb = new StringBuffer();
+		String selChk = "";
+		if(codeList != null && codeList.size() > 0 ) {
+			int nInposFirst = 0;
+			sb.append("<option value='%'>-전체-</option>");
+			for(CodeDetail bean : codeList) {
+				selChk = "";
+				if(first)  {
+					if(nInposFirst == 0 && bean.getCode().equals(value)) {
+						logger.debug("bean.getCode:" + bean.getCode());
+						selChk = " selected";
+						nInposFirst = 1;
+					}
+				} else if(value != null && value.length() > 0 ) {
+					logger.debug("bean.getCode:" + bean.getCode());
+					if(bean.getCode().equals(value)) {
+						selChk = " selected";
+					}
+				}
+				
+				sb.append("<option value='" + bean.getCode() + "'" + selChk + ">");
+				sb.append(bean.getCodeNm());
+				sb.append("</option>");
+			}
+			resultList.add(sb.toString());
+		}
+		
+		logger.debug(resultList.toString());
+		return resultList.toString();
+		
+	}		
 	 
 }

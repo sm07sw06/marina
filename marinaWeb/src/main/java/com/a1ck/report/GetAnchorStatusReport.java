@@ -1,4 +1,4 @@
-package com.a1ck.asset;
+package com.a1ck.report;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,7 +24,7 @@ import com.a1ck.util.CodeClass;
 import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
 
-public class GetAnchorList extends HttpServlet {
+public class GetAnchorStatusReport extends HttpServlet {
     private static final long serialVersionUID = 1L;
     ResultSet rs;
     Statement stmt;
@@ -32,7 +32,7 @@ public class GetAnchorList extends HttpServlet {
     private final Logger logger = LogManager.getLogger(this.getClass().getName() + ".class");
 	public Connection connectionDest = null;
 	
-    public GetAnchorList() {
+    public GetAnchorStatusReport() {
 //    	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
 
@@ -45,39 +45,39 @@ public class GetAnchorList extends HttpServlet {
 		
 		try{
 
-			logger.debug("getAnchorList ***** Start GetAnchorList *****"); 
+			logger.debug("getAnchorStatusReport ***** Start GetAnchorList *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
 			
 			String sMarinaId = "";
-			String sAnchorId = "";
 			String sAnchorNm = "";
+			String sSectorAreaCd = "";
 			String sRows     = "";
 			String sPage     = "";
 
 				
   			String Obj = request.getParameter("param");
 			
-			logger.debug("getAnchorList jsonParam:" + Obj);
+			logger.debug("getAnchorStatusReport jsonParam:" + Obj);
 			
 			if(Obj != null){
 				
-				logger.debug("getAnchorList DEBUG"); 
+				logger.debug("getAnchorStatusReport DEBUG"); 
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(Obj.toString());
 
-	            logger.debug("getAnchorList json:" + json); 
+	            logger.debug("getAnchorStatusReport json:" + json); 
 
 	            sMarinaId = (String)json.get("__marina_id");
-	            sAnchorId = (String)json.get("__anchor_id");
-	            sAnchorNm = (String)json.get("__anchor_Nm");
+	            sAnchorNm = (String)json.get("__anchor_nm");
+	            sSectorAreaCd = (String)json.get("__sectorarea_cd");
 	            sRows   = (String)json.get("__rows");
 	            sPage   = (String)json.get("__page");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
-				logger.debug("getAnchorList sAnchorId:" + sAnchorId);
-				logger.debug("getAnchorList sAnchorNm:" + sAnchorNm);
+				logger.debug("getAnchorStatusReport sAnchorId:" + sAnchorNm);
+				logger.debug("getAnchorStatusReport sSectorAreaCd:" + sSectorAreaCd);
 			} 
 			
 			connectionDest = conMgr.getConnection();
@@ -85,24 +85,26 @@ public class GetAnchorList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.MARINA_ID,A.ANCHOR_ID, A.ANCHOR_NM, B.SECTOR_ID, B.SECTOR_NM, C.BOAT_ID, C.BOAT_NM, A.ANCHOR_STATUS, D.DETAIL_NM AS ANCHOR_STATUS_NM \n ";
+			sQuery  = " SELECT A.MARINA_ID,A.ANCHOR_ID, A.ANCHOR_NM, B.SECTOR_ID, B.SECTOR_NM, C.BOAT_ID, C.BOAT_NM, A.ANCHOR_STATUS, D.DETAIL_NM AS ANCHOR_STATUS_NM, E.DETAIL_NM AS SECTORAREA_NM \n ";
 			sQuery += "   FROM TB_ANCHOR A LEFT OUTER JOIN TB_ANCHOR_SECTOR B ON A.SECTOR_ID = B.SECTOR_ID AND A.MARINA_ID = B.MARINA_ID  \n ";
 			sQuery += "                    LEFT OUTER JOIN TB_BOAT C ON A.BOAT_ID = C.BOAT_ID, \n ";
-			sQuery += "        TB_CODE_DETAIL D \n ";
+			sQuery += "        TB_CODE_DETAIL  D, TB_CODE_DETAIL E  \n ";
 			sQuery += "  WHERE 1 = 1  \n ";
 			sQuery += "    AND A.MARINA_ID = " + sMarinaId + " \n ";
 			sQuery += "    AND A.ANCHOR_STATUS = D.DETAIL_CD  \n ";
 			sQuery += "    AND D.GROUP_CD = 'ANCHOR_STATUS'  \n ";
+			sQuery += "    AND B.SECTORAREA_CD = E.DETAIL_CD  \n ";
+			sQuery += "    AND E.GROUP_CD = 'SECTORAREA' \n ";
 			
-			if( !StringUtils.equals(sAnchorId, "") && !StringUtils.equals(sAnchorId, null) )  {
-				sQuery += "    AND A.ANCHOR_ID = '" + sAnchorId + "' \n";
-			} else if( !StringUtils.equals(sAnchorNm, "") && !StringUtils.equals(sAnchorNm, null) ) {
-					sQuery += "    AND A.ANCHOR_NM like '%" + sAnchorNm + "%' \n";
+			if( !StringUtils.equals(sAnchorNm, "") && !StringUtils.equals(sAnchorNm, null) )  {
+				sQuery += "    AND A.ANCHOR_NM LIKE '%" + sAnchorNm + "%' \n";
+			} else if( !StringUtils.equals(sSectorAreaCd, "") && !StringUtils.equals(sSectorAreaCd,"") ) {
+					sQuery += "    AND B.SECTORAREA_CD like '%" + sSectorAreaCd + "%' \n";
 			}		
 			
 			sQuery += "  ORDER BY A.ANCHOR_NM \n ";
 			
-			logger.debug("getAnchorList sQuery1:" + sQuery); 
+			logger.debug("getAnchorStatusReport sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -140,8 +142,13 @@ public class GetAnchorList extends HttpServlet {
 				else
 					datas.put("ANCHOR_STATUS_NM" , " " );
 				
+				if (!StringUtils.isEmpty(rs.getString("SECTORAREA_NM"))) 
+					datas.put("SECTORAREA_NM" , rs.getString("SECTORAREA_NM"));	
+				else
+					datas.put("SECTORAREA_NM" , " " );
 				
-				seriesArray.add(datas);
+				
+				seriesArray.add(datas); 
 				jsonobj.put("rows"  ,seriesArray);   
 			
 				nCount++;
@@ -164,7 +171,7 @@ public class GetAnchorList extends HttpServlet {
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			logger.debug("getAnchorList :" + jsonobj.toString() ); 
+			logger.debug("getAnchorStatusReport :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			//connectionDest.close();

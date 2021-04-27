@@ -553,6 +553,16 @@
 		<url-pattern>/SetAnchorDevice</url-pattern>
 	</servlet-mapping>	
 				   
+
+	<servlet>
+		<servlet-name>GetAnchorStatusReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetAnchorStatusReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorStatusReport</servlet-name>
+		<url-pattern>/GetAnchorStatusReport</url-pattern>
+	</servlet-mapping>	
+
 	 <filter>
 		<filter-name>cors</filter-name>
 		<filter-class>com.a1ck.SimpleCORSFilter</filter-class>

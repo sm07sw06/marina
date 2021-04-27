@@ -159,17 +159,20 @@
 			 $.unblockUI();
 		})
 	})
-	
 
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
+			
 			$('#F_MARINA_ID').val(dataGrid.getSelectedItem().MARINA_ID);
 			$('#F_MACHINE_ID').val(dataGrid.getSelectedItem().MACHINE_ID);
 			$('#F_ANCHOR_ID').val(dataGrid.getSelectedItem().ANCHOR_ID);
 			$('#F_ANCHOR_NM').val(dataGrid.getSelectedItem().ANCHOR_NM);
+			$('#F_LEFT_RIGHT').val(dataGrid.getSelectedItem().LEFT_RIGHT);
+			$('#F_MACHINE_REF_ID').val(dataGrid.getSelectedItem().MACHINE_REF_ID);
 			$('#CRUD').val("U");
 			$('#F_MACHINE_ID' ).attr("readonly", true); //설정
+			$('#F_LEFT_RIGHT' ).attr("disabled", true); //설정
 			$("input#F_F_MACHINE_ID").focus();
 		}
 	}
@@ -213,6 +216,7 @@
 		gridApp.clear();
 		gridApp.setLayout(layoutStr);
 		gridApp.setData(gridData);
+		$('#F_MARINA_ID'     ).val("1");
 	}
 	
 	function refreshData2()  
@@ -226,7 +230,7 @@
 		jsonObj.__page     = "1" ;
 
 		$.ajax({
-		   	url:"GetBoatList",
+		   	url:"GetAnchorList",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -251,12 +255,16 @@
 	});
 	
 	$('#btnAdd').click(function (e) {
-		$('#F_MARINA_ID' ).val("1");
-		$('#F_MACHINE_ID').val("");
-		$('#F_ANCHOR_ID'   ).val("");
-		$('#F_ANCHOR_NM'   ).val("");
-		$('#CRUD'        ).val("C");
-		$('#F_MACHINE_ID' ).attr("readonly", false); //설정
+		$('#F_MARINA_ID'     ).val("1");
+		$('#F_MACHINE_ID'    ).val("");
+		$('#F_ANCHOR_ID'     ).val("");
+		$('#F_ANCHOR_NM'     ).val("");
+		$('#F_LEFT_RIGHT'    ).val("");
+		$('#F_MACHINE_REF_ID').val("");
+		$('#F_MACHINE_ID'    ).attr("readonly", false); //설정
+		$('#F_LEFT_RIGHT'    ).attr("disabled", false); //설정
+		$('#F_LEFT_RIGHT option:eq(0)').prop("selected", true);
+		$('#CRUD'            ).val("C");
 		$("input#F_F_MACHINE_ID").focus();
 	});
 
@@ -264,14 +272,18 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.marina_id   = $("input#F_MARINA_ID").val();
-		obj.machine_id  = $("input#F_MACHINE_ID").val();
-		obj.boat_id     = $("input#F_ANCHOR_ID").val();
+		obj.marina_id      = $("input#F_MARINA_ID").val();
+		obj.machine_id     = $("input#F_MACHINE_ID").val();
+		obj.left_right     =  $('select#F_LEFT_RIGHT option:selected').val();		
+		obj.anchor_id      = $("input#F_ANCHOR_ID").val();
+		obj.machine_ref_id = $("input#F_MACHINE_REF_ID").val();
 		obj.crud        = $("#CRUD").val();
 
 		console.log('marina_id:'+ obj.marina_id);
 		console.log('machine_id:'+ obj.machine_id);
-		console.log('boat_id:'+ obj.boat_id);
+		console.log('anchor_id:'+ obj.anchor_id);
+		console.log('machine_ref_id:'+ obj.machine_ref_id);
+		console.log('left_right:'+ obj.left_right);
 		
 		if(obj.machine_id == ''){
 			alert("[알림] 단말기 No를 입력하세요.");
@@ -279,8 +291,14 @@
 		    return;
 		}
 		
+		if(obj.left_right == ''){
+			alert("[알림] 좌우 방향을 선택하세요.");
+			$("input#F_LEFT_RIGHT").focus();
+		    return;
+		}
+		
 		$("#SetBoatForm").ajaxForm({
-			url : 'SetBoatDevice',
+			url : 'SetAnchorDevice',
 			dataType:'json',
 			type: 'post',
 			data:{param:JSON.stringify(obj)},
@@ -306,8 +324,10 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
-		obj.marina_id   = $("input#F_MARINA_ID").val();
-		obj.machine_id  = $("input#F_MACHINE_ID").val();
+		obj.marina_id      = $("input#F_MARINA_ID").val();
+		obj.machine_id     = $("input#F_MACHINE_ID").val();
+		obj.left_right     =  $('select#F_LEFT_RIGHT option:selected').val();		
+
 		obj.crud        = "D";
 		
 		var input = confirm('삭제하시겠습니까?'); 
@@ -319,7 +339,7 @@
 		    return;
 		}
 		$("#SetBoatForm").ajaxForm({
-			url : 'SetBoatDevice',
+			url : 'SetAnchorDevice',
 			dataType:'json',
 			type: 'post',
 			data : {param:JSON.stringify(obj)},
@@ -389,9 +409,9 @@
 				<DataGridColumn dataField="ID" 			id="colNo" 			 headerText="No"		itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
 				<DataGridColumn dataField="MARINA_ID"  	id="colMarinaId"   	 headerText="마리나"    	width="100" visible="false" />\
 				<DataGridColumn dataField="MACHINE_ID"  id="colMachineId" 	 headerText="단말기No"   	width="100"  />\
-				<DataGridColumn dataField="LEFT_RIGHT"  id="colLeftRight" 	 headerText="좌우구분"   	width="100"  />\
-				<DataGridColumn dataField="ANCHOR_ID"   id="colBoatId"   	 headerText="ID"    	width="100" visible="false" />\
-				<DataGridColumn dataField="ANCHOR_NM" 	id="colBoatNm" 		 headerText="보트명"  	width="200" />\
+				<DataGridColumn dataField="LEFT_RIGHT"  id="colLeftRight"    headerText="좌우구분"     width="60" fontWeight="bold" itemEditor="ComboBoxEditor" editorDataField="selectedDataField" itemRendererDataField="code" itemRenderer="DataProviderItem" itemRendererDataProvider="[{\'label\':\'좌\',\'code\':\'0\'},{\'label\':\'우\',\'code\':\'1\'}]"/>\
+				<DataGridColumn dataField="ANCHOR_ID"   id="colAnchor_Id"    headerText="계류지ID"   	width="100" visible="false" />\
+				<DataGridColumn dataField="ANCHOR_NM" 	id="colAnchorNm" 	 headerText="계류지명"  	width="200" />\
 				<DataGridColumn dataField="MACHINE_REF_ID"  id="colMachineRefId" 	 headerText="연관단말기 No"   width="100"  />\
 			</columns>\
 			<dataProvider>\
@@ -408,7 +428,7 @@
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
 				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="ANCHOR_ID"   	 id="colBoatId"     	headerText="ID"  width="100"     />\
+				<DataGridColumn dataField="ANCHOR_ID"    id="colBoatId"     	headerText="ID"  width="100"     />\
 				<DataGridColumn dataField="ANCHOR_NM" 	 id="colBoatNm"   		headerText="보트명" width="200"/>\
 			</groupedColumns>\
 		</DataGrid>\

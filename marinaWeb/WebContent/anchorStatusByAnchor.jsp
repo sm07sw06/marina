@@ -111,22 +111,21 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 			<ol class="breadcrumb bc-3" >
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
 				<li><a href="#">계류지관리</a></li>
-				<li><a href="#">계류지관리</a></li>
-				<li class="active"><strong>계류지 구역관리</strong></li>
+				<li><a href="#">계류지정박상태확인</a></li>
+				<li class="active"><strong>계류지별 정박 상태 </strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>계류지 구역관리</div>
+			<div class='myTitleBox'>계류지별 정박 상태</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
 						<div class="col-lg-12">
-							<div class="col-sm-8" >
-								<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
-								<button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp;
-								<button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red">삭제</button>&nbsp;&nbsp;
-								<button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue">저장</button>
+							<div class="col-sm-4" >
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" id="C_ANCHOR_NM"  name="C_ANCHOR_NM"  placeholder="이름또는 ID를 입력하세요." >
+                                </div>
 							</div>
-							<!-- <button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red" >삭제</button> -->
+							<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
 						</div>
 					</form>
 				</div>
@@ -136,7 +135,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 				<div class="main-sub-content" >
 				
 					<!--  left list start -->
-					<div class="col-lg-8">										
+					<div class="col-lg-12">										
 						<div class="panel panel-primary" data-collapsed="0">
 							<!-- panel body -->
 						<div class="content">
@@ -148,90 +147,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 						</div>
 					</div>
 					<!--  left list end -->
-									
-					<!--  right info start -->
-					<div id="detail-area" class="col-lg-4 container-fluid" style="height:600px;">	  
-					 
-						<div class="panel panel-primary" data-collapsed="0">
-							<!-- panel head -->
-							<div class="panel-heading">
-								<div class="panel-title">구역정보 상세</div>
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-								</div>
-							</div>
-							
-							<!-- panel body -->
-							<div class="panel-body">
-								<form role="form" method="post" name="SetSectorForm" id="SetSectorForm"  class="form-horizontal validate" action="" >
-							
-									<input type="hidden" class="form-control" id="CRUD" name="CRUD"  value="C">
-									<input type="hidden" class="form-control" id="ROWID" name="ROWID"  >
-							
-									<div class="form-group">
-										<label for="f_name" class="col-sm-3 control-label">구역ID</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SECTOR_ID" readonly>
-											<input type="hidden" class="form-control" id="F_MARINA_ID" readonly>
-										</div>
-									</div>
-																	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">구역명</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_SECTOR_NM"   >
-										</div>
-									</div>
-	
-                                   <div class="form-group">
-                                        <label for="f_orgNm" class="col-sm-3  control-label">구역영역</label>
-                                        <div class="col-sm-8">                              
-                                            <div >
-                                                <select class="form-control" id="F_SECTORAREA_CD" name="F_SECTORAREA_CD" >
-                                                <%=codeClass.getComboBoxByCodeList("SECTORAREA", "", true) %>
-                                                </select>                                                       
-                                            </div>                                                  
-                                        </div>
-                                    </div>
-                                    	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도시작</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSX1" maxlength="20" >
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS위도끝</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSX2"  maxlength="20" >
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도시작</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSY1" maxlength="20"  >
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">GPS경도끝</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" id="F_GPSY2" maxlength="20"  >
-										</div>
-									</div>
-	
-									<div class="form-group">
-										<label for="f_orgNm" class="col-sm-3 control-label">설명</label>
-										<div class="col-sm-8">
-											<textarea class="form-control wysihtml5" rows="4" data-stylesheet-url="assets/css/wysihtml5-color.css" name="F_SECTOR_DESC" id="F_SECTOR_DESC" ></textarea>
-										</div>
-									</div>
-
-								</form>
-							</div> <!-- panel-body  -->
-						</div> <!--  id="pannel"  -->
-					</div> <!--  id="detail-area"  -->
-					<!--  right info start -->
-					
+						
 				</div>
 				<!-- main-sub-content end-->
 			</div> <!-- myTitleBox -->
@@ -268,7 +184,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
 	<script src="assets/a1ck/js/a1ck-js.js"></script>		
-	<script src="assets/a1ck/js/anchorSector.js"></script>		
+	<script src="assets/a1ck/js/anchorStatusByAnchor.js"></script>		
 
 </body>
 </html>

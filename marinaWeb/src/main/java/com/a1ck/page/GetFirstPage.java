@@ -50,7 +50,7 @@ public class GetFirstPage extends HttpServlet {
 		
 		try{
 
-			//logger.debug("getFirstPage ***** Start getFirstPage *****"); 
+			////logger.debug("getFirstPage ***** Start getFirstPage *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
@@ -88,7 +88,7 @@ public class GetFirstPage extends HttpServlet {
 			sQuery += "from tb_job_history ";
 			
 			
-			logger.debug("getFirstPage sQuery1:" + sQuery); 
+			//logger.debug("getFirstPage sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 			
@@ -127,13 +127,13 @@ public class GetFirstPage extends HttpServlet {
 				jsonobj.put("result"  , "NOTFOUND");  
 			}
 				
-			//logger.debug(jsonobj.toString());
+			////logger.debug(jsonobj.toString());
 
 			
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			//logger.debug("getFirstPage :" + jsonobj.toString() ); 
+			////logger.debug("getFirstPage :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			conMgr.freeConnection(connectionDest);
@@ -154,7 +154,7 @@ public class GetFirstPage extends HttpServlet {
 		
 		/*
 			//System.out.println("#############");
-			logger.debug("getEmpList ***** Start GetEmpList *****"); 
+			//logger.debug("getEmpList ***** Start GetEmpList *****"); 
 			//System.out.println("#############");
 			
 			String sQuery  = null;  
@@ -168,7 +168,7 @@ public class GetFirstPage extends HttpServlet {
 			
 			if(jsonParam != null){
 	            JSONObject json = new JSONObject(jsonParam.toString());
-	            logger.debug("getEmpList json:" + json); 
+	            //logger.debug("getEmpList json:" + json); 
 	              
 	           // sDvc_id = (String)json.get("dvc_id");
 	            //sDvc_name  = (String)json.get("dvc_name");
@@ -238,13 +238,13 @@ public class GetFirstPage extends HttpServlet {
 				jsonobj.put("count"  , 0         );  // 결과의 성공여부를 확인
 			}
 				
-			//logger.debug(jsonobj.toString());
+			////logger.debug(jsonobj.toString());
 
 			//응답을 하기 위한 준비 작업
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			//logger.debug("getEmpList :" + jsonobj.toString() ); 
+			////logger.debug("getEmpList :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			connectionDest.close();

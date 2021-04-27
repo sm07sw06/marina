@@ -91,19 +91,18 @@
                     <form class="search-form"> 
                         <div class="col-lg-12">
                             <div class="col-sm-8" >
-                                <div class="col-sm-5">
+                                <div class="col-sm-4">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" id="C_MACHINE_ID"  name="C_MACHINE_ID"  placeholder="검색조건을 입력하세요." >
-                                        <div class="input-group-addon">
-                                            <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-archive"></i></a>
-                                        </div>                                      
+                                        <input type="text" class="form-control" id="C_MACHINE_ID"  name="C_MACHINE_ID"  placeholder="단말기No를 입력하세요." >
                                     </div>
                                 </div>                              
-                                <button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
-                                <button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp; 
-                                <button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red"    >삭제</button>&nbsp;&nbsp;
-                                <button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue"   >저장</button>
-                            </div>
+                                <div class="col-sm-4">
+	                                <button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
+	                                <button onclick="return false;" id="btnAdd"     class="btn btn-sm btn-primary">신규</button>&nbsp;&nbsp; 
+	                                <button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red"    >삭제</button>&nbsp;&nbsp;
+	                                <button onclick="return false;" id="btnSave"    class="btn btn-sm btn-blue"   >저장</button>
+	                            </div>
+                           </div>
                             <!-- <button onclick="return false;" id="btnDelete"  class="btn btn-sm btn-red" >삭제</button> -->
                         </div>
                     </form>
@@ -152,12 +151,28 @@
                                             <input type="text" class="form-control" id="F_MACHINE_ID">
                                         </div>
                                     </div>
+                                   <div class="form-group">
+                                        <label for="f_orgNm" class="col-sm-3  control-label">좌우구분</label>
+                                        <div class="col-sm-8">                              
+                                            <div >
+                                                <select class="form-control" id="F_LEFT_RIGHT" name="F_LEFT_RIGHT" >
+                                                <%=codeClass.getComboBoxByCodeList("LEFT_RIGHT", "", true) %>
+                                                </select>                                                       
+                                            </div>                                                  
+                                        </div>
+                                    </div>
                                     <div class="form-group">
-                                        <label for="f_name" class="col-sm-3 control-label">보트명</label>
+                                        <label for="f_name" class="col-sm-3 control-label">연관 단말기 No</label>
                                         <div class="col-sm-8">
-                                            <input type="hidden" class="form-control" id="F_BOAT_ID" readonly>
+                                            <input type="text" class="form-control" id="F_MACHINE_REF_ID">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="f_name" class="col-sm-3 control-label">계류지명</label>
+                                        <div class="col-sm-8">
+                                            <input type="hidden" class="form-control" id="F_ANCHOR_ID" readonly>
                                             <div class="input-group ">
-	                                            <input type="text" class="form-control" id="F_BOAT_NM"  readonly >
+	                                            <input type="text" class="form-control" id="F_ANCHOR_NM"  readonly >
 		                                        <div class="input-group-addon">
 		                                            <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-list-add"></i></a>
 		                                        </div>                                      
@@ -182,7 +197,7 @@
 
     
 	<div id="question" style="display:none; background-color:#f7f7f7; font-size:16px; color:#353535; letter-spacing:-0.2px; border-radius:3px;">
-		<div style="background-color:#213d64; font-size:15px; color:#ffffff; padding:8px; border-top-left-radius:3px; border-top-right-radius:3px;">보트 찾기</div>
+		<div style="background-color:#213d64; font-size:15px; color:#ffffff; padding:8px; border-top-left-radius:3px; border-top-right-radius:3px;">계류지 선택</div>
 		<div style="width:100%; height:360px;">
 			<div id="question2" style="padding:10px; height:360px;"></div>
 		</div>

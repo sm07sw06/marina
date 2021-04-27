@@ -2,6 +2,7 @@ package com.a1ck.asset;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,12 +37,16 @@ public class SetAnchorDevice extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 				
-		   logger.debug("SetBoatDevice start.............:");
+		   logger.debug("SetAnchorDevice start.............:");
 
+		   ResultSet rs;
+		    
 		   String sMarinaId   = "";
-		   String sBoatId     = "";
-		   String sBoatNm     = "";
+		   String sAnchorId   = "";
+		   String sAnchorNm   = "";
 		   String sMachineId  = "";
+		   String sMachineRefId  = "";
+		   String sLeftRight  = "";
 		   String sCrud       = "";
 		   
  		   resp.setContentType("text/html;charset=UTF-8");
@@ -54,12 +59,14 @@ public class SetAnchorDevice extends HttpServlet {
 					JSONObject json;
 					json = (JSONObject) parser.parse(jsonParam.toString());
 	
-		            logger.debug("SetBoatDevice json:" + json); 
+		            logger.debug("SetAnchorDevice json:" + json); 
 		              
 		            sMarinaId   = (String)json.get("marina_id");
-		            sBoatId     = (String)json.get("boat_id");
-		            sBoatNm     = (String)json.get("boat_nm");
+		            sAnchorId   = (String)json.get("anchor_id");
+		            sAnchorNm   = (String)json.get("anchor_nm");
 		            sMachineId  = (String)json.get("machine_id");
+		            sMachineRefId  = (String)json.get("machine_ref_id");
+		            sLeftRight  = (String)json.get("left_right");
 		            sCrud       = (String)json.get("crud");
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
@@ -77,45 +84,104 @@ public class SetAnchorDevice extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO TB_BOAT_DEVICE ( MARINA_ID, MACHINE_ID, BOAT_ID) \n";
+
+					String insertSql = "INSERT INTO TB_ANCHOR_LIDAR ( MARINA_ID, MACHINE_ID, LEFT_RIGHT, ANCHOR_ID, MACHINE_REF_ID) \n";
 				    
-					if( StringUtils.equals(sBoatId, "") || StringUtils.equals(sBoatId, null) )  {
-						sBoatId = "0";
+					if( StringUtils.equals(sAnchorId, "") || StringUtils.equals(sAnchorId, null) )  {
+						sAnchorId = "0";
 					}
-					insertSql = insertSql + "VALUES ( " + sMarinaId + ", '" + sMachineId + "', " + sBoatId + " )";
+					insertSql = insertSql + "VALUES ( " + sMarinaId + ", '" + sMachineId + "', '" + sLeftRight + "', " + sAnchorId + ", '" + sMachineRefId + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
-					logger.debug("SetBoatDevice sql:" + insertSql);
+					logger.debug("SetAnchorDevice sql:" + insertSql);
 					
 					stmt.execute(insertSql);
+
+					
+					String  sQuery  = " SELECT count(*) as NCNT \n ";
+							sQuery += "   FROM TB_ANCHOR_DEVICE \n ";
+							sQuery += "  WHERE 1 = 1 \n ";
+							sQuery += "    AND MARINA_ID  =   " + sMarinaId  + "   \n ";
+							sQuery += "    AND MACHINE_ID =  '" + sMachineId  + "'   \n ";
+
+					logger.debug("getBoatDevice sQuery1:" + sQuery); 
+					
+					rs = stmt.executeQuery(sQuery);
+					int nCount = 0;
+			        while(rs.next()){
+			        	nCount = rs.getInt("NCNT");	
+			        }
+					
+			        if(nCount <= 0 ) {
+					    insertSql = "INSERT INTO TB_ANCHOR_DEVICE ( MARINA_ID, MACHINE_ID) \n";
+					    
+						if( StringUtils.equals(sAnchorId, "") || StringUtils.equals(sAnchorId, null) )  {
+							sAnchorId = "0";
+						}
+						insertSql = insertSql + "VALUES ( " + sMarinaId + ", '" + sMachineId + "' )";
+			
+						stmt = connectionDest.createStatement();
+						
+						logger.debug("SetAnchorDevice sql:" + insertSql);
+						
+						stmt.execute(insertSql);
+
+			        }
+					
 					stmt.close();
 					
 				
 			   } else if(sCrud.equals("D")) {
-				    String updateSql      = "DELETE FROM TB_BOAT_DEVICE \n";
+				    String updateSql      = "DELETE FROM TB_ANCHOR_LIDAR \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND MARINA_ID =   " + sMarinaId  + "   \n ";
 					updateSql = updateSql + "   AND MACHINE_ID =   '" + sMachineId  + "'   \n ";
-
+					updateSql = updateSql + "   AND LEFT_RIGHT =   '" + sLeftRight  + "'   \n ";
 					
 					stmt = connectionDest.createStatement();
-					logger.debug("SetBoatDevice sql:" + updateSql);
+					logger.debug("SetAnchorDevice sql:" + updateSql);
 					stmt.execute(updateSql);
 					
+					String sQuery  = " SELECT count(*) as NCNT \n ";
+					sQuery += "   FROM TB_ANCHOR_LIDAR \n ";
+					sQuery += "  WHERE 1 = 1 \n ";
+					sQuery += "    AND MARINA_ID  =   " + sMarinaId  + "   \n ";
+					sQuery += "    AND MACHINE_ID =  '" + sMachineId  + "'   \n ";
+
+					logger.debug("getBoatDevice sQuery1:" + sQuery); 
+					
+					rs = stmt.executeQuery(sQuery);
+					int nCount = 0;
+			        while(rs.next()){
+			        	nCount = rs.getInt("NCNT");	
+			        }
+					
+			        if(nCount <= 0 ) {
+					    updateSql      = "DELETE FROM TB_ANCHOR_DEVICE \n";
+						updateSql = updateSql + " WHERE 1 = 1 \n ";
+						updateSql = updateSql + "   AND MARINA_ID =   " + sMarinaId  + "   \n ";
+						updateSql = updateSql + "   AND MACHINE_ID =   '" + sMachineId  + "'   \n ";
+						
+						logger.debug("SetAnchorDevice sql:" + updateSql);
+						stmt.execute(updateSql);
+			        }
 					stmt.close();			   
 					
 			   } else {
-				    String updateSql      = "UPDATE TB_BOAT_DEVICE \n";
-				    updateSql = updateSql + "   SET BOAT_ID   	= '" + sBoatId  	+ "' \n ";
+				    String updateSql      = "UPDATE TB_ANCHOR_LIDAR \n";
+				    updateSql = updateSql + "   SET ANCHOR_ID   	= " + sAnchorId  	+ " \n ";
+				    updateSql = updateSql + "      ,MACHINE_REF_ID   	= '" + sMachineRefId  	+ "' \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
-					updateSql = updateSql + "   AND MARINA_ID =   " + sMarinaId  + "   \n ";
-					updateSql = updateSql + "   AND MACHINE_ID =   '" + sMachineId  + "'   \n ";
+					updateSql = updateSql + "   AND MARINA_ID  =    " + sMarinaId   + "   \n ";
+					updateSql = updateSql + "   AND MACHINE_ID =   '" + sMachineId  + "'  \n ";
+					updateSql = updateSql + "   AND LEFT_RIGHT =   '" + sLeftRight  + "'  \n ";
 
 					stmt = connectionDest.createStatement();
-					logger.debug("SetBoatDevice sql:" + updateSql);
+					logger.debug("SetAnchorDevice sql:" + updateSql);
 					stmt.execute(updateSql);
 
+					
 					stmt.close();	
 
 			   }

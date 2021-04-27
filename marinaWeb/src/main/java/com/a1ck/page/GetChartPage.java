@@ -47,7 +47,7 @@ public class GetChartPage extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
 
-			logger.debug("getChartList ***** Start GetChartList *****"); 
+			//logger.debug("getChartList ***** Start GetChartList *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
@@ -80,7 +80,7 @@ public class GetChartPage extends HttpServlet {
 			sQuery += "  GROUP BY substr(job_tm,1,4) ";		
 			sQuery += "  ORDER BY substr(job_tm,1,4) \n ";
 			
-			logger.debug("getChartList sQuery1:" + sQuery); 
+			//logger.debug("getChartList sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -113,13 +113,13 @@ public class GetChartPage extends HttpServlet {
 				jsonobj.put("result"  , "NOTFOUND");  
 			}
 				
-			//logger.debug(jsonobj.toString());
+			////logger.debug(jsonobj.toString());
 
 			//�쓳�떟�쓣 �븯湲� �쐞�븳 以�鍮� �옉�뾽
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			//logger.debug("getChartList :" + jsonobj.toString() ); 
+			////logger.debug("getChartList :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			conMgr.freeConnection(connectionDest);
@@ -142,7 +142,7 @@ public class GetChartPage extends HttpServlet {
 			
 			
 			//System.out.println("#############");
-			logger.debug("getEmpList ***** Start GetEmpList *****"); 
+			//logger.debug("getEmpList ***** Start GetEmpList *****"); 
 			//System.out.println("#############");
 			
 			String sQuery  = null;  
@@ -156,7 +156,7 @@ public class GetChartPage extends HttpServlet {
 			
 			if(jsonParam != null){
 	            JSONObject json = new JSONObject(jsonParam.toString());
-	            logger.debug("getEmpList json:" + json); 
+	            //logger.debug("getEmpList json:" + json); 
 	              
 	           // sDvc_id = (String)json.get("dvc_id");
 	            //sDvc_name  = (String)json.get("dvc_name");
@@ -250,13 +250,13 @@ public class GetChartPage extends HttpServlet {
 			}
 	       
 	        
-			//logger.debug(jsonobj.toString());
+			////logger.debug(jsonobj.toString());
 
 			//응답을 하기 위한 준비 작업
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			//logger.debug("getEmpList :" + jsonobj.toString() ); 
+			////logger.debug("getEmpList :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			connectionDest.close();

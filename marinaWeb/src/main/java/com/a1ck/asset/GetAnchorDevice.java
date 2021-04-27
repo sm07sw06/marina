@@ -82,14 +82,14 @@ public class GetAnchorDevice extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT ad.machine_id, ad.marina_id, ad.positionx, ad.positiony, ad.gate_class, ad.set_order, al.left_right, al.anchor_id, al.machine_ref_id \n ";
-			sQuery += "   FROM tb_anchor_device ad, tb_anchor_lidar al \n ";
+			sQuery  = " SELECT ad.machine_id, ad.marina_id, ad.positionx, ad.positiony, ad.gate_class, ad.set_order, al.left_right, al.anchor_id, al.machine_ref_id,a.anchor_nm \n ";
+			sQuery += "   FROM tb_anchor_device ad, tb_anchor_lidar al   left outer join tb_anchor a on al.anchor_id = a.anchor_id and al.marina_id = a.marina_id  \n ";
 			sQuery += "  WHERE ad.marina_id = al.marina_id \n";
 			sQuery += "    AND ad.machine_id = al.machine_id \n";
 			sQuery += "    AND ad.marina_id =  " + sMarinaId + " \n";
 
 			if( !StringUtils.equals(sMachineId, "") && !StringUtils.equals(sMachineId, null) )  {
-				sQuery += "    AND ad.MACHINE_ID = '" + sMachineId + "' \n";
+				sQuery += "    AND ad.MACHINE_ID LIKE '%" + sMachineId + "%' \n";
 			}			
 			sQuery += "  ORDER BY ad.MACHINE_ID,al.left_right \n ";
 			
@@ -123,6 +123,10 @@ public class GetAnchorDevice extends HttpServlet {
 				else
 					datas.put("MACHINE_REF_ID" , " " );
 
+				if (!StringUtils.isEmpty(rs.getString("ANCHOR_NM"))) 
+					datas.put("ANCHOR_NM" , rs.getString("ANCHOR_NM"));	
+				else
+					datas.put("ANCHOR_NM" , " " );
 
 				
 				seriesArray.add(datas);

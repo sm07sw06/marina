@@ -90,7 +90,7 @@ public class GetBoatList extends HttpServlet {
 			sQuery += "                  LEFT OUTER JOIN TB_CODE_DETAIL C on A.BOAT_STATUS = C.DETAIL_CD AND C.GROUP_CD = 'BOAT_STATUS' \n ";
 			sQuery += "  WHERE 1 = 1 \n ";
 
-			if( !StringUtils.equals(sBoatId, "") && !StringUtils.equals(sBoatId, null) )  {
+			if( !StringUtils.equals(sBoatId.trim(), "") && !StringUtils.equals(sBoatId.trim(), null) )  {
 				sQuery += "    AND A.BOAT_ID = '" + sBoatId + "' \n";
 			} else if( !StringUtils.equals(sBoatNm, "") && !StringUtils.equals(sBoatNm, null) ) {
 					sQuery += "    AND A.BOAT_NM like '%" + sBoatNm + "%' \n";

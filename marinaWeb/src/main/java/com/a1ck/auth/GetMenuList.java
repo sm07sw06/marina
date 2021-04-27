@@ -45,13 +45,13 @@ public class GetMenuList extends HttpServlet {
 			
 			String jsonParam = request.getParameter("param");
 			
-			logger.debug("getCodeManager jsonParam:" + jsonParam); 
+			//logger.debug("getCodeManager jsonParam:" + jsonParam); 
 			
 			if(jsonParam != null){
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(jsonParam.toString());
 
-	            logger.debug("getMenuList json:" + json); 
+	            //logger.debug("getMenuList json:" + json); 
 	              
 	            sUserCd   = (String)json.get("user_cd");
 	            
@@ -62,7 +62,7 @@ public class GetMenuList extends HttpServlet {
 			 
 			stmt = connectionDest.createStatement();
 
-            logger.debug("getMenuList sUserCd:" + sUserCd); 
+            //logger.debug("getMenuList sUserCd:" + sUserCd); 
 
 			if ( StringUtils.equalsIgnoreCase(sUserCd,"*") || StringUtils.equalsIgnoreCase(sUserCd,"admin")) { 
 	   			sQuery  = "\n";
@@ -88,7 +88,7 @@ public class GetMenuList extends HttpServlet {
 	   			
 	   			
 			}
-		    logger.debug("GetMenuList\n" + sQuery);
+		    //logger.debug("GetMenuList\n" + sQuery);
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -119,7 +119,7 @@ public class GetMenuList extends HttpServlet {
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
 
-        	logger.debug(jsonobj.toString());
+        	//logger.debug(jsonobj.toString());
 			
 			stmt.close();
 			//connectionDest.close();

@@ -100,10 +100,7 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="col-sm-3">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" id="C_BOAT_NM"  name="C_BOAT_NM"  placeholder="이름또는 ID를 입력하세요." >
-                                        <div class="input-group-addon">
-                                            <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-archive"></i></a>
-                                        </div>                                      
+                                        <input type="text" class="form-control" id="C_BOAT_NM"  name="C_BOAT_NM"  placeholder="보트명또는 ID를 입력하세요." >
                                         <input type="hidden" id="C_BOAT_ID"  name="C_BOAT_ID"   >
                                     </div>
                                 </div>                              

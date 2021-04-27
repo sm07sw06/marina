@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -35,11 +36,12 @@ public class SetAnchor extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 				
-		   logger.debug("SetSector start.............:");
+		   logger.debug("SetAnchor start.............:");
 
+		   String sMarinaId     = "";
 		   String sAnchorId     = "";
 		   String sAnchorNm     = "";
-		   String sServerId     = "";
+		   String sSectorId     = "";
 		   String sBoatId       = "";
 		   String sAnchorStatus = "";
 		   String sCrud         = "";
@@ -54,14 +56,23 @@ public class SetAnchor extends HttpServlet {
 					JSONObject json;
 					json = (JSONObject) parser.parse(jsonParam.toString());
 	
-		            logger.debug("SetSector json:" + json); 
+		            logger.debug("SetAnchor json:" + json); 
 		              
+		    		sMarinaId      = (String)json.get("marina_id");
 		    		sAnchorId      = (String)json.get("anchor_id");
 		    		sAnchorNm      = (String)json.get("anchor_nm");
-		            sServerId  	   = (String)json.get("server_id");
-		            sBoatId  	   = (String)json.get("boat_id");
+		    		sSectorId  	   = (String)json.get("sector_id");
 		            sAnchorStatus  = (String)json.get("anchor_status");
+		            sBoatId  	   = (String)json.get("boat_id");
 		            sCrud      	   = (String)json.get("crud");
+		            
+		            logger.debug("SetAnchor sMarinaId:[" + sMarinaId + "]");
+		            logger.debug("SetAnchor sAnchorId:[" + sAnchorId + "]");
+		            logger.debug("SetAnchor sAnchorNm:[" + sAnchorNm + "]");
+		            logger.debug("SetAnchor sSectorId:[" + sSectorId + "]");
+		            logger.debug("SetAnchor sAnchorStatus:[" + sAnchorStatus + "]");
+		            logger.debug("SetAnchor sBoatId:[" + sBoatId + "]");
+		            logger.debug("SetAnchor sCrud:[" + sCrud + "]");
 		            
 		            resp.setContentType("application/x-json charset=UTF-8");
 				}
@@ -78,12 +89,12 @@ public class SetAnchor extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO TB_ANCHOR (SECTOR_ID, BOAT_ID, ANCHOR_STATUS, ANCHOR_NM) \n";
-					insertSql = insertSql + "VALUES ( " + sServerId + ", " + sBoatId + ", '" + sAnchorStatus + "', '" + sAnchorNm + "' )";
+				    String insertSql = "INSERT INTO TB_ANCHOR (MARINA_ID, SECTOR_ID, BOAT_ID, ANCHOR_STATUS, ANCHOR_NM) \n";
+					insertSql = insertSql + "VALUES ( " + sMarinaId + ", " + sSectorId + ", " + sBoatId + ", '" + sAnchorStatus + "', '" + sAnchorNm + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
-					logger.debug("SetSector sql:" + insertSql);
+					logger.debug("SetAnchor sql:" + insertSql);
 					
 					stmt.execute(insertSql);
 					stmt.close();
@@ -92,11 +103,12 @@ public class SetAnchor extends HttpServlet {
 			   } else if(sCrud.equals("D")) {
 				    String updateSql      = "DELETE FROM TB_ANCHOR \n";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
+					updateSql = updateSql + "   AND MARINA_ID = " + sMarinaId  + " \n ";
 					updateSql = updateSql + "   AND ANCHOR_ID = " + sAnchorId  + " \n ";
 
 					
 					stmt = connectionDest.createStatement();
-					logger.debug("SetSector sql:" + updateSql);
+					logger.debug("SetAnchor sql:" + updateSql);
 					stmt.execute(updateSql);
 					
 					stmt.close();			   
@@ -104,14 +116,17 @@ public class SetAnchor extends HttpServlet {
 			   } else {
 				    String updateSql      = "UPDATE TB_ANCHOR \n";
 				    updateSql = updateSql + "   SET ANCHOR_NM     = '" + sAnchorNm     + "'   \n ";
-					updateSql = updateSql + "      ,SECTOR_ID 	  =  " + sServerId     + "    \n ";
-					updateSql = updateSql + "      ,BOAT_ID 	  =  " + sBoatId       + "    \n ";
+					updateSql = updateSql + "      ,SECTOR_ID 	  =  " + sSectorId     + "    \n ";
+					if( !StringUtils.equals(sBoatId.trim(), "") && !StringUtils.equals(sBoatId.trim(), null) )  {
+						updateSql = updateSql + "      ,BOAT_ID 	  =  " + sBoatId       + "     \n ";
+					}
 					updateSql = updateSql + "      ,ANCHOR_STATUS = '" + sAnchorStatus + "'    \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
+					updateSql = updateSql + "   AND MARINA_ID = " + sMarinaId  + " \n ";
 					updateSql = updateSql + "   AND ANCHOR_ID =   " + sAnchorId  + "   \n ";
 
 					stmt = connectionDest.createStatement();
-					logger.debug("SetSector sql:" + updateSql);
+					logger.debug("SetAnchor sql:" + updateSql);
 					stmt.execute(updateSql);
 
 					stmt.close();	

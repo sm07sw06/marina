@@ -93,10 +93,7 @@
                             <div class="col-sm-8" >
                                 <div class="col-sm-5">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" id="C_MACHINE_ID"  name="C_MACHINE_ID"  placeholder="검색조건을 입력하세요." >
-                                        <div class="input-group-addon">
-                                            <a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-archive"></i></a>
-                                        </div>                                      
+                                        <input type="text" class="form-control" id="C_MACHINE_ID"  name="C_MACHINE_ID"  placeholder="단말기No를 입력하세요." >
                                     </div>
                                 </div>                              
                                 <button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;

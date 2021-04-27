@@ -111,13 +111,13 @@
                             </a>
                             <ul>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00009" >
+                                    <a href="noAuth.jsp" id="menu00038" >
                                         <i class="entypo-user"></i>
                                         <span class="title">계류지 구역관리</span>
                                     </a>
                                 </li>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00010" >
+                                    <a href="noAuth.jsp" id="menu00039" >
                                         <i class="entypo-user"></i>
                                         <span class="title">계류지 정보관리</span>
                                     </a>
@@ -131,15 +131,15 @@
                             </a>
                             <ul>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00011" >
+                                    <a href="noAuth.jsp" id="menu00041" >
                                         <i class="entypo-user"></i>
                                         <span class="title">계류지별 정박 상태</span>
                                     </a>
                                 </li>
                                 <li >
-                                    <a href="noAuth.jsp" id="menu00012" >
+                                    <a href="noAuth.jsp" id="menu00040" >
                                         <i class="entypo-user"></i>
-                                        <span class="title">보트별 정박 상태</span>
+                                        <span class="title">구역별 정박 상태</span>
                                     </a>
                                 </li>
                             </ul>

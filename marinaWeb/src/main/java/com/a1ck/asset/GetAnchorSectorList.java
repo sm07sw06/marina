@@ -82,8 +82,8 @@ public class GetAnchorSectorList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT S.SECTOR_ID, S.SECTOR_NM, S.GPSX1,  S.GPSX2,  S.GPSY1,  S.GPSY2, S.SECTOR_DESC \n ";
-			sQuery += "   FROM TB_ANCHOR_SECTOR S\n ";
+			sQuery  = " SELECT S.MARINA_ID, S.SECTOR_ID, S.SECTOR_NM,  S.SECTORAREA_CD, S.GPSX1,  S.GPSX2,  S.GPSY1,  S.GPSY2, S.SECTOR_DESC  ,CD.DETAIL_NM AS SECTORAREA_NM\n ";
+			sQuery += "   FROM TB_ANCHOR_SECTOR S  LEFT OUTER JOIN TB_CODE_DETAIL CD ON S.SECTORAREA_CD = CD.DETAIL_CD AND CD.GROUP_CD ='SECTORAREA' \n ";
 			sQuery += "  WHERE 1 = 1    \n ";
 			
 			if( !StringUtils.equals(sAnchorSectorId, "*")) {
@@ -107,6 +107,9 @@ public class GetAnchorSectorList extends HttpServlet {
 				datas.put("SECTOR_ID"   	, rs.getString("SECTOR_ID"));	
 				datas.put("SECTOR_NM"   	, rs.getString("SECTOR_NM"));	
 				datas.put("SECTOR_DESC"   	, rs.getString("SECTOR_DESC"));	
+				datas.put("SECTORAREA_CD" 	, rs.getString("SECTORAREA_CD"));	
+				datas.put("SECTORAREA_NM" 	, rs.getString("SECTORAREA_NM"));	
+				datas.put("MARINA_ID"   	, rs.getString("MARINA_ID"));	
 
 				if (!StringUtils.isEmpty(rs.getString("GPSX1"))) 
 					datas.put("GPSX1" , rs.getString("GPSX1"));	

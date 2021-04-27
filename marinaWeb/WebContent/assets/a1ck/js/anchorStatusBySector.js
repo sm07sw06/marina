@@ -52,34 +52,19 @@
 	var gridApp, gridRoot;	// 데이터와 그리드를 포함하는 객체
 	var dataGrid;	// 그리드
 
-	//레이아웃 로드 완료 이벤트 핸들러 함수
-	function dblclickHandler(event) {
-		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_MARINA_ID').val(dataGrid.getSelectedItem().MARINA_ID);
-			$('#F_SECTOR_ID').val(dataGrid.getSelectedItem().SECTOR_ID);
-			$('#F_SECTOR_NM').val(dataGrid.getSelectedItem().SECTOR_NM);
-			$('#F_SECTORAREA_CD').val(dataGrid.getSelectedItem().SECTORAREA_CD);
-			$('#F_GPSX1').val(dataGrid.getSelectedItem().GPSX1);
-			$('#F_GPSX2').val(dataGrid.getSelectedItem().GPSX2);
-			$('#F_GPSY1').val(dataGrid.getSelectedItem().GPSY1);
-			$('#F_GPSY2').val(dataGrid.getSelectedItem().GPSY2);
-			$('#F_SECTOR_DESC').val(dataGrid.getSelectedItem().SECTOR_DESC);
-			$('#CRUD').val("U");
-		}
-	}
-
 	function refreshData()  
 	{
 		var gridData = [];
 		jsonObj = {};
 
-		jsonObj.__use_yn = $('input[name="C_USE_YN"]:checked').val();	
-		jsonObj.__sector_id = '*';
+		jsonObj.__marina_id = '1';
+		jsonObj.__anchor_nm = '';
+		jsonObj.__sectorarea_cd = $('select#F_SECTORAREA_CD option:selected').val();		
 		jsonObj.__rows      = '20';
 		jsonObj.__page      = '1';
 
 		$.ajax({
-		   	url:"GetAnchorSectorList",
+		   	url:"GetAnchorStatusReport",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -102,112 +87,6 @@
 	$('#btnQuery').click(function (e) {
 		refreshData();
 	});
-	
-	$('#btnAdd').click(function (e) {
-		$('#F_MARINA_ID'   ).val("1");
-		$('#F_SECTORAREA_CD' ).val("");
-		$('#F_SECTOR_ID'   ).val("");
-		$('#F_SECTOR_NM'   ).val("");
-		$('#F_GPSX1'       ).val("");
-		$('#F_GPSX2'       ).val("");
-		$('#F_GPSY1'       ).val("");
-		$('#F_GPSY2'       ).val("");
-		$('#F_SECTOR_DESC' ).val("");
-		$('#CRUD'          ).val("C");
-		$('#F_SECTOR_ID'  ).attr("readonly", true); //설정
-		$("input#F_SECTOR_NM").focus();
-	});
-
-	$('#btnSave').click(function (e) {
-		var formData = new FormData();
-		
-		var obj = new Object();
-		obj.marina_id   = $("input#F_MARINA_ID").val();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.sector_nm   = $("input#F_SECTOR_NM").val();
-		obj.sectorarea_cd =  $('select#F_SECTORAREA_CD option:selected').val();		
-		obj.gpsx1       = $("input#F_GPSX1").val();
-		obj.gpsx2       = $("input#F_GPSX2").val();
-		obj.gpsy1       = $("input#F_GPSY1").val();
-		obj.gpsy2       = $("input#F_GPSY2").val();
-		obj.sector_desc = $("textarea#F_SECTOR_DESC").val();
-		obj.crud        = $("#CRUD").val();
-
-		console.log('sector_nm:'+ obj.sector_nm);
-		
-		if(obj.sector_nm == ''){
-			alert("[알림] 구역명을 입력하세요.");
-			$("input#F_SECTOR_NM").focus();
-		    return;
-		}
-
-		$("#SetSectorForm").ajaxForm({
-			url : 'SetAnchorSector',
-			dataType:'json',
-			type: 'post',
-			data:{param:JSON.stringify(obj)},
-			success: function(json_data) {
-				$('#btnQuery').click();
-				$('#btnAdd').click();
-				alert("정상적으로 처리 되었습니다.");
-			},
-			error : function(data, status){
-		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
-		    			alert("이미 등록되어 있는 아이디 입니다.");
-		    		} else {
-		    			alert("Error");
-		    		}
-		    	}
-			}
-		});	
-		$("#SetSectorForm").submit() ;
-	});
-
-	$('#btnDelete').click(function (e) {
-		var formData = new FormData();
-		
-		var obj = new Object();
-		obj.sector_id   = $("input#F_SECTOR_ID").val();
-		obj.marina_id   = $("input#F_MARINA_ID").val();
-		obj.crud        = "D";
-		
-		var input = confirm('삭제하시겠습니까?'); 
-		if(!input) return;
-
-		if(obj.sector_id == ''){
-			alert("[알림] 구역를 선택하세요.");
-			$("input#F_SECTOR_NM").focus();
-		    return;
-		}
-		
-		console.log('F_SECTOR_ID:'+ obj.sector_id);
-		console.log('sCrud:'+ obj.crud);
-
-		$("#SetSectorForm").ajaxForm({
-			url : 'SetAnchorSector',
-			dataType:'json',
-			type: 'post',
-			data : {param:JSON.stringify(obj)},
-			success: function(json_data) {
-				$('#btnQuery').click();
-				$('#btnAdd').click();
-				alert("정상적으로 처리 되었습니다.");
-			},
-			error : function(data, status){
-		    	if (data != null){
-		    		if (data.error == 2) { // 임의 값 JSON 형식의 {“error”:2} 값을 구역에서 전달
-		    			// data 오브젝트에 error의 값이 2일 때의 이벤트 처리
-		    			alert("이미 등록되어 있는 아이디 입니다.");
-		    		} else {
-		    			alert("Error");
-		    		}
-		    	}
-			}
-		});	
-		$("#SetSectorForm").submit() ;
-	});
-	
 	
 	// 엑셀 export
 	// excelExportSave(url:String, async:Boolean);
@@ -252,21 +131,13 @@
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
-				<DataGridColumn dataField="ID" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="MARINA_ID"   id="colMarinaId"   	headerText="ID"  width="100"  visible="false"   />\
-				<DataGridColumn dataField="SECTOR_ID"   id="colScetorId"   	headerText="구역ID"  width="100"  visible="false"   />\
-				<DataGridColumn dataField="SECTOR_NM" 	id="colSectorNm" 	headerText="구역명" width="300"/>\
-				<DataGridColumn dataField="SECTORAREA_CD" 	id="colSectorAreaCd" 	headerText="구역영역" width="200" visible="false" />\
-				<DataGridColumn dataField="SECTORAREA_NM" 	id="colSectorAreaNm" 	headerText="구역영역" width="200"/>\
-				<DataGridColumnGroup headerText="위도">\
-					<DataGridColumn dataField="GPSX1"   id="colGpsx1" 		headerText="시작" width="150"/>\
-					<DataGridColumn dataField="GPSX2"   id="colGpsx2" 		headerText="끝" width="150" />\
-				</DataGridColumnGroup>\
-				<DataGridColumnGroup headerText="경도">\
-					<DataGridColumn dataField="GPSY1"   id="colGpsy1" 		headerText="시작" width="150"/>\
-					<DataGridColumn dataField="GPSY2"   id="colGpsy2" 		headerText="끝" width="150"/>\
-				</DataGridColumnGroup>\
-				<DataGridColumn dataField="SECTOR_DESC" id="colSectorDesc" 	headerText="설명" width="200"/>\
+				<DataGridColumn dataField="ID" 				id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="MARINA_ID"   	id="colMarinaId"   	headerText="ID"  width="100"  visible="false"   />\
+				<DataGridColumn dataField="SECTORAREA_NM"   id="colScetorAreaNm"   	headerText="구역영역"  width="200"     />\
+				<DataGridColumn dataField="SECTOR_NM" 		id="colSectorNm" 	headerText="구역명" width="200"/>\
+				<DataGridColumn dataField="ANCHOR_NM" 		id="colAnchorNm" 	headerText="계류지명" width="200"/>\
+				<DataGridColumn dataField="ANCHOR_STATUS_NM" id="colAnchorStatusNm" 	headerText="정박상태" width="200"/>\
+				<DataGridColumn dataField="BOAT_NM" 		id="colBoatNm" 	headerText="보트명" width="200"/>\
 			</groupedColumns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
