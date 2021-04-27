@@ -120,13 +120,13 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
 						<div class="col-lg-12">
-							<div class="col-sm-4" >
-                                <div class="input-group ">
+							<div class="col-sm-6" >
+                                <div class="input-group">
                                     <input type="text" class="form-control" id="C_ANCHOR_NM"  name="C_ANCHOR_NM"  placeholder="이름또는 ID를 입력하세요." >
                                 </div>
 							</div>
-							<div class="col-sm-4" >
-                                <div class="input-group ">
+							<div class="col-sm-6" >
+                                <div class="input-group" style="float:right">
 							<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
                                 </div>
 							</div>
