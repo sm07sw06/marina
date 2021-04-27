@@ -125,7 +125,11 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
                                     <input type="text" class="form-control" id="C_ANCHOR_NM"  name="C_ANCHOR_NM"  placeholder="이름또는 ID를 입력하세요." >
                                 </div>
 							</div>
+							<div class="col-sm-4" >
+                                <div class="input-group ">
 							<button onclick="return false;" id="btnQuery"   class="btn btn-sm btn-default">조회</button>&nbsp;&nbsp;
+                                </div>
+							</div>
 						</div>
 					</form>
 				</div>
