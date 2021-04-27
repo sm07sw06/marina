@@ -1,3 +1,7 @@
+http://222.112.0.193:8815/marinaWeb/
+
+
+
 sudo yum -y install epel-release
 
 sudo yum -y install mosquitto
@@ -139,7 +143,7 @@ wifiesp => Arduino WiFi library for ESP8266
 echo "# marina" >> README.md
   
   git config --global user.email "sm07sw06@gmail.com"
-  git config --global user.name "sm07sw06"
+  git config --global user.name "sm07sw06"   // topadmin1!
   
 
 
@@ -153,6 +157,7 @@ cd D:\workspaceiot\marina
 git pull origin master
 
 npm i multer
+npm i http-errors
 
 
 
@@ -175,6 +180,28 @@ git commit -m "Apply .gitignore"
 http://docker.com/get-started
 
 docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+
+
+
+
+
+
+
+############### eclipse setting
+1. Maven 설치 : https://copycoding.tistory.com/176
+
+2. eclipse 설 치 : eclipse-jee-2018-09-win32-x86_64
+
+3. 한글 설정 : https://ssd0908.tistory.com/entry/%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4Eclipse-%ED%95%9C%EA%B8%80%EA%B9%A8%EC%A7%90-%EC%9D%B8%EC%BD%94%EB%94%A9Encoding-%EC%84%A4%EC%A0%95
+
+4. Maven 설정 : 
+https://copycoding.tistory.com/176
+https://crunchify.com/how-to-create-dynamic-web-project-using-maven-in-eclipse/
+
+https://m.blog.naver.com/PostView.nhn?blogId=yeajin0210&logNo=220956953890&proxyReferer=https:%2F%2Fwww.google.com%2F
+
+
+
 
 
 
