@@ -82,7 +82,7 @@ public class CodeController extends HttpServlet {
 				nPos++;
 			}
 	        CodeClass.getHashMap().put(sGroupCdOld, _CODE_LIST);	
- 	        
+ 	        /***
         	String sServerId = "";
         	String sServerNm = "";
         	
@@ -102,7 +102,7 @@ public class CodeController extends HttpServlet {
 	        	
 	        	CodeClass.getHashMapServer().put(sServerId, sServerNm);	
 			}
-			
+			***/
 	        stmt.close();
 	        
 		} catch (Exception e) {

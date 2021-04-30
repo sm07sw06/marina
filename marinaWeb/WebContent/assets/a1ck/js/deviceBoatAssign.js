@@ -2,6 +2,7 @@
 
 	// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
 	var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+	jsVars += "&assetsPath=rMateGridH5/Assets/";
 	//rMateGrid 관련 객체
 	var collection;	// 그리드의 데이터 객체
 	var cnt=0;

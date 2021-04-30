@@ -108,7 +108,7 @@
 				barSpacing: 2
 			});
 		*/
-		
+		/**
 			// JVector Maps
 			var map = $("#map");
 		
@@ -175,7 +175,7 @@
 			            });
 			        }
 			    });
-		
+		**/
 		
 			 /*
 		 	// Rickshaw
