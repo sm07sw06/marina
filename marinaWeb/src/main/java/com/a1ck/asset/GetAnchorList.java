@@ -76,6 +76,7 @@ public class GetAnchorList extends HttpServlet {
 	            sPage   = (String)json.get("__page");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
+				logger.debug("getAnchorList sMarinaId:" + sMarinaId);
 				logger.debug("getAnchorList sAnchorId:" + sAnchorId);
 				logger.debug("getAnchorList sAnchorNm:" + sAnchorNm);
 			} 

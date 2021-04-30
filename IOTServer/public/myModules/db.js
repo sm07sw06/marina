@@ -467,7 +467,7 @@ DB.prototype.SetLidarData = function (sData, callback) {
 
 
 
-//등록된 만말기 인지 확인 
+//등록된 라이더장치 인지 확인 
 DB.prototype.GetRegAnchorMachindId = function (mObject, callback) {
 
 	logger.debug("----------------------------------");
@@ -518,15 +518,15 @@ DB.prototype.SelectGateBound = function (mObject, callback) {
 	logger.debug("----------------------------------");
 	logger.debug('Start SelectGateBound........');
 	logger.debug('  marinaId : ' + mObject.marinaId);
-	logger.debug('  GPS X    : ' + mObject.gradex);
-	logger.debug('  GPS Y    : ' + mObject.gradey);
+	logger.debug('  GPS X    : ' + mObject.latitude);
+	logger.debug('  GPS Y    : ' + mObject.longitude);
 	logger.debug("----------------------------------");
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 	var sQueryString  = "SELECT /* SelectGateBound */ sector_nm  \n";
 	    sQueryString += "  FROM tb_anchor_sector   \n";
-	    sQueryString += " WHERE marina_id = " + mObject.marinaId + " AND sectorarea_cd = 'Z' AND gpsx1 <= " + mObject.gradex + " AND gpsx2 >= " + mObject.gradex + "  \n" ;
-	    sQueryString += "   AND gpsy1 <= " + mObject.gradey + " AND gpsy2 >= " + mObject.gradey ;
+	    sQueryString += " WHERE marina_id = " + mObject.marinaId + " AND sectorarea_cd = 'Z' AND gpsx1 <= " + mObject.latitude + " AND gpsx2 >= " + mObject.latitude + "  \n" ;
+	    sQueryString += "   AND gpsy1 <= " + mObject.longitude + " AND gpsy2 >= " + mObject.longitude ;
 	
 	logger.debug(sQueryString);
 
@@ -1361,18 +1361,23 @@ DB.prototype.GetlidarNearBoatSearch = function(mSubObject, callback) {
 
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-		var sQueryString  = " SELECT /* GetlidarNearBoatSearch */ rd.boat_machine_id, rd.rssi  \n";
-			sQueryString += "   FROM tb_anchor_device  ad, tb_rssidata rd,tb_lidardata ld \n";
+		var sQueryString  = " SELECT /* GetlidarNearBoatSearch */ rd.boat_machine_id, rd.rssi, b.boat_id  \n";
+			sQueryString += "   FROM tb_anchor_device  ad, tb_rssidata rd,tb_lidardata ld, tb_boat b, tb_boat_device bd  \n";
 			sQueryString += "  WHERE 1 = 1 \n";
 			sQueryString += "    AND ad.marina_id   = rd.marina_id \n";
 			sQueryString += "    AND ad.marina_id   = ld.marina_id \n";
-			sQueryString += "    AND ad.machine_id = rd.machine_id \n";
-			sQueryString += "    AND ad.marina_id = " + mSubObject.marinaId + " \n";
-			sQueryString += "    AND ad.machine_id = '" + mSubObject.machineId + "' \n";
-			sQueryString += "    AND ld.send_time = '" + mSubObject.sendTime + "' \n";
-			sQueryString += "    AND rd.rssi > 0 \n ";
-			sQueryString += "    AND ld.send_time BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '30 sec'),'YYYYMMDDHH24MISS')   \n";   //LDH
-			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '30 sec'),'YYYYMMDDHH24MISS')    \n";  //LDH
+			sQueryString += "    AND ad.marina_id   = b.marina_id \n";
+			sQueryString += "    AND ad.marina_id   = bd.marina_id \n";
+			sQueryString += "    AND ad.machine_id  = rd.machine_id \n";
+			sQueryString += "    AND rd.boat_machine_id = bd.machine_id \n";
+			sQueryString += "    AND bd.boat_id     = b.boat_id \n";
+			sQueryString += "    AND ld.marina_id  = "  + mSubObject.marinaId  + " \n";
+			sQueryString += "    AND ld.machine_id = '" + mSubObject.machineId + "' \n";
+			sQueryString += "    AND ld.send_time  = '" + mSubObject.sendTime  + "' \n";
+			sQueryString += "    AND rd.rssi > 10 \n ";
+			sQueryString += "    AND b.boat_status = '0' \n ";
+			sQueryString += "    AND ld.send_time BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '200 sec'),'YYYYMMDDHH24MISS')   \n";   //LDH
+			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '200 sec'),'YYYYMMDDHH24MISS')    \n";  //LDH
 			sQueryString += "  ORDER BY rd.rssi  \n";
 			sQueryString += "  LIMIT 1  \n";
 		    logger.info("보트 찾기:" + sQueryString);
@@ -1390,6 +1395,7 @@ DB.prototype.GetlidarNearBoatSearch = function(mSubObject, callback) {
 						}
 						if( res.rowCount > 0) {
 							//mSubObject.boatId 		 = res.rows[0].boat_machine_id;
+							mSubObject.boatId        = res.rows[0].boat_id;
 							mSubObject.boatMachineId = res.rows[0].boat_machine_id;
 							mSubObject.rssi          = res.rows[0].rssi;
 							logger.info("기준 시간 범위내에 단말기 수신 정보가 있습니다." + res.rows[0].boat_machine_id);
@@ -1429,14 +1435,22 @@ DB.prototype.GetNextlidarBoatSearch = function(mSubObject, callback) {
 	try {		 
 			// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 		var sQueryString  = " SELECT /* GetNextlidarBoatSearch */ rd.boat_machine_id,rd.rssi \n";
-			sQueryString += "   FROM tb_rssidata rd, tb_anchor_lidar al \n";
+			sQueryString += "   FROM tb_rssidata rd, tb_anchor_lidar al, tb_boat b, tb_boat_device bd  \n";
 			sQueryString += "  WHERE 1 = 1 \n";
-			sQueryString += "    AND rd.boat_machine_id  = '" + mSubObject.boatMachineId + "' \n";
+			sQueryString += "    AND rd.marina_id   = al.marina_id \n";
+			sQueryString += "    AND al.marina_id   = b.marina_id \n";
+			sQueryString += "    AND al.marina_id   = bd.marina_id \n";
+			sQueryString += "    AND rd.boat_machine_id = bd.machine_id \n";
+			sQueryString += "    AND bd.boat_id     = b.boat_id \n";
+			sQueryString += "    AND rd.rssi > 10 \n ";
+			sQueryString += "    AND b.boat_status = '0' \n ";
+			sQueryString += "    AND al.marina_id  = '" + mSubObject.marinaId + "' \n";
+			sQueryString += "    AND al.machine_ref_id = rd.machine_id \n";
 			sQueryString += "    AND al.machine_id  = '" + mSubObject.machineId + "' \n";
 			sQueryString += "    AND al.left_right  = '" + mSubObject.leftRight + "' \n";
-			sQueryString += "    AND al.machine_ref_id = rd.machine_id \n";
-			sQueryString += "    AND '" + mSubObject.sendTime + "' BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '50 sec'),'YYYYMMDDHH24MISS') \n"; // LDH
-			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '50 sec'),'YYYYMMDDHH24MISS')  \n"; // LDH
+			sQueryString += "    AND rd.boat_machine_id  = '" + mSubObject.boatMachineId + "' \n";
+			sQueryString += "    AND '" + mSubObject.sendTime + "' BETWEEN to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') - interval '200 sec'),'YYYYMMDDHH24MISS') \n"; // LDH
+			sQueryString += "    AND to_char((to_timestamp(rd.send_recv_time, 'YYYYMMDDHH24MISS') + interval '200 sec'),'YYYYMMDDHH24MISS')  \n"; // LDH
 			sQueryString += "  ORDER BY rd.rssi  \n";
 			sQueryString += "  LIMIT 1  \n";
 		    logger.info("보트 찾기:" + sQueryString);

@@ -224,6 +224,7 @@
 		var gridData2 = [];
 		jsonObj = {};
 
+		jsonObj.__marina_id = '1';
 		jsonObj.__boat_id = '';
 		jsonObj.__boat_nm = '%';
 		jsonObj.__rows     = "20";

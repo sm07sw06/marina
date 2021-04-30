@@ -75,8 +75,8 @@ function getAreaAnalysis(mObject) {
                 if (rtn == 'OK') {
                 	mObject.x = mObject2.x;
                 	mObject.y = mObject2.y;
-                	logger.debug('삼각측정에 의한 좌표 Update OK : '+mObject.x); //보트 입항중
-                	logger.debug('삼각측정에 의한 좌표 Update OK : '+mObject.y); //보트 입항중
+                //	logger.debug('삼각측정에 의한 좌표 Update OK : '+mObject.x); //보트 입항중
+                //	logger.debug('삼각측정에 의한 좌표 Update OK : '+mObject.y); //보트 입항중
                     callback(null,'OK', mObject);  
                 } else {
                     callback(null, 'ERROR', mObject);   
@@ -85,10 +85,10 @@ function getAreaAnalysis(mObject) {
         },
         function(result, mObject, callback) {
         	if(result == "OK") {
-	            logger.debug('!! 삼각측정에 의한 좌표 Update...'); 
+	           // logger.debug('!! 삼각측정에 의한 좌표 Update...'); 
 	            db.SetXYUpdate(mObject, function(rtn){
 	                if (rtn == 'OK') {
-	                    logger.debug('삼각측정에 의한 좌표 Update OK'); //보트출항중
+	           //         logger.debug('삼각측정에 의한 좌표 Update OK'); //보트출항중
                         callback(null,'OK', mObject);  
 	                } else {
 	                    logger.debug('삼각측정에 의한 좌표 Update Error'); //보트 입항중

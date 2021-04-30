@@ -120,7 +120,7 @@ client.on("message", function(topic, message) {
 				//logger.debug("Queue Message:" + sData);
 
 				if( 1 == 1) {  // LDH
-					if(sKey === "boatData" && 1 == 2) {
+					if(sKey === "boatData" && 1 == 1) {
 						logger.debug("************************************************");
 						logger.debug('MQTT On Message ............... ');
 						logger.debug(JSON.stringify(obj));
@@ -139,7 +139,7 @@ client.on("message", function(topic, message) {
 						var LidarCheck = require('../public/myModules/lidarCheckSim');
 						var lidarCheck = new LidarCheck(sData); 
 						lidarCheck.getLidarCheck();				
-					} else if(sKey === "rssiData" && 1 == 2) {
+					} else if(sKey === "rssiData" && 1 == 1) {
 						logger.debug("************************************************");
 						logger.debug('MQTT On Message ............... ');
 						logger.debug(JSON.stringify(obj));
