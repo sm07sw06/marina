@@ -207,6 +207,11 @@ DB.prototype.InsertDBRssiData = function(message) {
 	rssidataInsert(message);
 };
 
+//MQTT에서 잔달된 메세지를 기능별로 구분하여 PostgreSQL에 저장 
+DB.prototype.InsertDBWeather = function(tm, wd, wf, wh, ws, rn) {
+	weatherInsert(tm, wd, wf, wh, ws,rn );
+};
+
 
 // 환경변수값 추출
 DB.prototype.GetConfig = function (configMy, callback) {
@@ -1544,6 +1549,48 @@ DB.prototype.GetBoatInAnchor = function(mSubObject, callback) {
 			
 
 };
+
+
+
+//정박지 데이터 분석 처리
+function weatherInsert(tm, wd, wf, wh, ws, rn) {
+
+	logger.debug("----------------------------------");
+	logger.debug('Start weatherInsert insert........');
+	logger.debug("  tm :" + tm );
+	logger.debug("  wd :" + wd );
+	logger.debug("  wf :" + wf );
+	logger.debug("  wh :" + wh );
+	logger.debug("  ws :" + ws );
+	logger.debug("----------------------------------");
+
+	
+	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+	var sQueryString  = "INSERT INTO /* weatherInsert */ public.tb_weather(tm, wd, wf, wh, ws, rn)  \n";
+	    sQueryString += "values('" + tm + "',replace('"  + wd + "','\"',''),replace('"  + wf + "','\"',''),replace('"  + wh + "','\"',''),replace('"  + ws + "','\"',''),replace('"  + rn + "','\"','')  );  \n";
+	logger.debug(sQueryString);
+
+    try {
+
+		pool.connect(function (err, clientdb, done) {
+			if (err) throw new Error(err);
+			clientdb.query(sQueryString, function (err, res) {
+				if (err) {
+					logger.error("ERROR!!" + err);
+					//callback('ERROR');
+			    } else {
+			    	logger.debug("Weather Insert OK:");
+			    }
+				clientdb.release();
+			}); 
+		}); 
+
+    } catch (e) {
+		logger.error("ERROR:"+err);
+		//callback('ERROR');
+	}
+}
+
 
 //객체를 바로 module.exports에 할당
 module.exports = DB;
