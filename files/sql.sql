@@ -1,3 +1,19 @@
+/****  Database Backup & restore *****/
+1.1 psql -h 192.168.123.103 -U postgres -d postgres
+1.2 CREATE DATABASE mydb WITH ENCODING='UTF8' OWNER=postgres;
+
+2.1 pg_dump -Fc -U postgres -d postgres -h 192.168.123.105 -f ./bbb.dump
+2.2 psql -U postgres -d mydb -h 192.168.123.103
+2.3 DROP database postgres;
+2.4 CREATE DATABASE postgres WITH ENCODING='UTF8' OWNER=postgres;
+2.5 pg_restore -v -U postgres -d postgres -h 192.168.123.103 ./bbb.dump
+
+
+
+CREATE INDEX tb_lidardata_idx1
+ON tb_lidardata (marina_id, machine_id, send_time);
+
+
 /* 최종변경시각 트리거 */
 CREATE TRIGGER update_trigger
 BEFORE UPDATE ON tb_anchor
