@@ -1,0 +1,67 @@
+
+https://gongdae58.tistory.com/tag/Beacon
+
+
+https://m.blog.naver.com/PostView.nhn?blogId=mbkim91&logNo=220774915723&proxyReferer=https:%2F%2Fwww.google.com%2F
+
+
+
+/***** 두GPS 좌표간 거리 구하기 ******/
+
+ #define PI 3.14159265358979323846
+
+/** 
+ * 소수점 도(decmal degree)를 라디안(radian)으로 변환
+ * param[in] deg 변환할 도 값
+ * return 변환된 라디언 값
+ */
+double ConverDecimalFrgreesToRadians(double deg)
+{
+	return (deg * PI / 180 );
+}
+ 
+ 
+ 
+ /**
+  * 라디안(radian)을 수점 도(decmal degree)로 변환
+  * param[in] rad 변환할 라디언 값
+  * return 변환된 도 값
+ */
+double ConverRadiansToDecimalDrgrees(double rad)
+{
+	return (rad * 180 / PI );
+}
+
+/**
+ * 두 좌표간의 거리(미터단위)를 계산
+ * param[in] lat1 좌표1의 위도(도단위)
+ * param[in] lon1 좌표1의 경도(도단위)
+ * param[in] lat2 좌표2의 위도(도단위)
+ * param[in] lon2 좌표2의 경도(도단위)
+ * return 두 좌표간 거리(미터 단위)
+ */
+ 
+double GetDistanceBetweenPoints(double lat1,double lat2,double lon1,double lon2)
+{
+	double theta, dist;
+	if((lat1 == lat2) && (lot1 == lot2)) 
+	{
+		return 0;
+	} 
+	else 
+	{
+		theta = lon1 - lon2;
+		dist = sin(ConverDecimalFrgreesToRadians(lat1)) * sin(ConverDecimalFrgreesToRadians(lat2)) + 
+			   cos(ConverDecimalFrgreesToRadians(lat1)) * cos(ConverDecimalFrgreesToRadians(lat2)) *
+			   cos(ConverDecimalFrgreesToRadians(theta)) ;
+		dist = acos(dist);
+		dist = ConverRadiansToDecimalDrgrees(dist);
+		dist = dist * 60 * 1.1515;
+		dist = dist * 1.609344 * 1000 //미터 단위 변환된환
+		return dist;
+	}
+}
+
+		
+	
+	

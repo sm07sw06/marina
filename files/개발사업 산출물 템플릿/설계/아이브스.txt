@@ -1,0 +1,35 @@
+
+var form = new FormData();
+form.append("attachment", "C:\\Users\\dhlee\\Pictures\\APR2020_1920x1080.png");
+form.append("cameraId", "1234567890");
+form.append("sendtime", "20210128101010");
+
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "null",
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+    "Postman-Token": "7e64c887-12a6-4637-9c5b-b532a850c553"
+  },
+  "processData": false,
+  "contentType": false,
+  "mimeType": "multipart/form-data",
+  "data": form
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+
+
+{
+"sendtime": "2021-03-19T11:05:10",
+"cameraId": "111.111.111.111(카메라IP주소)",
+"attachment": "D:\\image.jpg"
+}
+
+
+
