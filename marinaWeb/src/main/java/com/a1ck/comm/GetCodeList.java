@@ -30,7 +30,7 @@ public class GetCodeList extends HttpServlet {
 	public Connection connectionDest = null;
 	
     //public GetCodeList() {
-    //	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
+    //	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties"  );
 	//}
 
 	@SuppressWarnings("unchecked")
