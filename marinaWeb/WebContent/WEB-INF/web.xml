@@ -563,6 +563,15 @@
 		<servlet-name>GetAnchorStatusReport</servlet-name>
 		<url-pattern>/GetAnchorStatusReport</url-pattern>
 	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetBoatEntryReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetBoatEntryReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatEntryReport</servlet-name>
+		<url-pattern>/GetBoatEntryReport</url-pattern>
+	</servlet-mapping>	
+
 
 	 <filter>
 		<filter-name>cors</filter-name>

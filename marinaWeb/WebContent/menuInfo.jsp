@@ -154,25 +154,25 @@
                     </a>
                     <ul>
                         <li >
-                            <a href="noAuth.jsp" id="menu00013" >
+                            <a href="noAuth.jsp" id="menu00042" >
                                 <i class="entypo-user"></i>
                                 <span class="title">보트 입출항 내역</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00014" >
+                            <a href="noAuth.jsp" id="menu00043" >
                                 <i class="entypo-user"></i>
                                 <span class="title">미확인 보트 입항 내역</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00015" >
+                            <a href="noAuth.jsp" id="menu00044" >
                                 <i class="entypo-user"></i>
                                 <span class="title">입출항 CCTV 확인</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00017" >
+                            <a href="noAuth.jsp" id="menu00045" >
                                 <i class="entypo-user"></i>
                                 <span class="title">구조요청 내역 확인</span>
                             </a>
@@ -187,27 +187,9 @@
                     </a>
                     <ul>
                         <li >
-                            <a href="noAuth.jsp" id="menu00018" >
+                            <a href="noAuth.jsp" id="menu00046" >
                                 <i class="entypo-user"></i>
                                 <span class="title">마리나항 전체 정박현황 관제</span>
-                            </a>
-                        </li>
-                        <li >
-                            <a href="noAuth.jsp" id="menu00019" >
-                                <i class="entypo-user"></i>
-                                <span class="title">마리나항 구역별 정박현황 관제</span>
-                            </a>
-                        </li>
-                        <li >
-                            <a href="noAuth.jsp" id="menu00020" >
-                                <i class="entypo-user"></i>
-                                <span class="title">불법정박 보트 경고/알람</span>
-                            </a>
-                        </li>
-                        <li >
-                            <a href="noAuth.jsp" id="menu00021" >
-                                <i class="entypo-user"></i>
-                                <span class="title">근거리 운항 보트 표시</span>
                             </a>
                         </li>
                     </ul>   
@@ -220,19 +202,19 @@
                     </a>
                     <ul>
                         <li >
-                            <a href="noAuth.jsp" id="menu00022" >
+                            <a href="noAuth.jsp" id="menu00047" >
                                 <i class="entypo-user"></i>
                                 <span class="title">기간별 정박 현황</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00023" >
+                            <a href="noAuth.jsp" id="menu00048" >
                                 <i class="entypo-user"></i>
                                 <span class="title">기간별 미등록 보트 정박 현황</span>
                             </a>
                         </li>
                         <li >
-                            <a href="noAuth.jsp" id="menu00024" >
+                            <a href="noAuth.jsp" id="menu00049" >
                                 <i class="entypo-user"></i>
                                 <span class="title">기간별 회원 사용 현황</span>
                             </a>

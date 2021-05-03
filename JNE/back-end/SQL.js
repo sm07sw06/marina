@@ -4,7 +4,7 @@ const API = require("./API")
 const { Client } = require('pg');
 const client = new Client({
     user: 'postgres',
-    host: '192.168.123.105',
+    host: 'localhost',
     database: 'postgres',
     password: 'topadmin',
     port: 5432,
