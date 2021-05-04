@@ -29,8 +29,7 @@
 	function gridReadyHandler(id) {
 		
 		if (id == "grid1") {	
-			var gridData = [];
-			
+			var gridData = [];			
 			// rMateGrid 관련 객체
 			gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
 			gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체

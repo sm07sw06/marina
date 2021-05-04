@@ -2,6 +2,7 @@
 
 	// rMateGridH5에서 그리드 생성 준비가 완료될 경우 호출할 함수를 지정합니다.
 	var jsVars = "rMateOnLoadCallFunction=gridReadyHandler";
+	jsVars += "&assetsPath=rMateGridH5/Assets/";
 	//rMateGrid 관련 객체
 	var collection;	// 그리드의 데이터 객체
 	var cnt=0;
@@ -17,82 +18,138 @@
 	//  4. 그리드의 가로 사이즈 (생략 가능, 생략 시 100%)
 	//  5. 그리드의 세로 사이즈 (생략 가능, 생략 시 100%)
 	rMateGridH5.create("grid1", "gridHolder", jsVars, "100%", "100%");
-
+	rMateGridH5.create("grid2", "question2" , jsVars, "100%", "100%");
 
 	// 그리드의 속성인 rMateOnLoadCallFunction 으로 설정된 함수.
 	// rMate 그리드의 준비가 완료된 경우 이 함수가 호출됩니다.
 	// 이 함수를 통해 그리드에 레이아웃과 데이터를 삽입합니다.
 	// 파라메터 : id - rMateGridH5.create() 사용 시 사용자가 지정한 id 입니다.
 	function gridReadyHandler(id) {
-		var gridData = [];
-		// rMateGrid 관련 객체
-		gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
-		gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
-
-		gridApp.setLayout(layoutStr);
-		gridApp.setData(gridData);
-
-		var layoutCompleteHandler = function(event) {
-			dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+		if (id == "grid1") {			
+			var gridData = [];
+			// rMateGrid 관련 객체
+			gridApp = document.getElementById(id);	// 그리드를 포함하는 div 객체
+			gridRoot = gridApp.getRoot();	// 데이터와 그리드를 포함하는 객체
+	
+			gridApp.setLayout(layoutStr);
+			gridApp.setData(gridData);
+	
+			var layoutCompleteHandler = function(event) {
+				dataGrid = gridRoot.getDataGrid();	// 그리드 객체
+			}
+			// 사용자가 import를 완료하면 불려집니다.
+			var dataCompleteHandler = function() {
+				collection = gridRoot.getCollection();
+				gridMovePage(1);
+			}
+	
+			refreshData();
+			
+			gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
+			gridRoot.addEventListener("dataComplete", dataCompleteHandler);
+			gridRoot.addEvent("dblclick", dblclickHandler);			
+		} else {
+			var gridData2 = [];
+			// rMateGrid 관련 객체
+			gridApp2 = document.getElementById(id);	// 그리드를 포함하는 div 객체
+			gridRoot2 = gridApp2.getRoot();	// 데이터와 그리드를 포함하는 객체
+	
+			gridApp2.setLayout(layoutStr2);
+			gridApp2.setData(gridData2);
+	
+			var layoutCompleteHandler2 = function(event) {
+				dataGrid2 = gridRoot2.getDataGrid();	// 그리드 객체
+			}
+			
+			// 사용자가 import를 완료하면 불려집니다.
+			var dataCompleteHandler2 = function() {
+				dataGrid2 = gridRoot2.getDataGrid();	// 그리드 객체
+				
+				collection2 = gridRoot2.getCollection();
+				gridMovePage(1);
+			}
+			
+			refreshData2();
+			
+			gridRoot2.addEventListener("layoutComplete", layoutCompleteHandler2);
+			gridRoot2.addEventListener("dataComplete", dataCompleteHandler2);
+			gridRoot2.addEvent("dblclick", dblclickHandler2);			
 		}
-		// 사용자가 import를 완료하면 불려집니다.
-		var dataCompleteHandler = function() {
-			collection = gridRoot.getCollection();
-			gridMovePage(1);
-		}
-
-		refreshData();
-		
-		gridRoot.addEventListener("layoutComplete", layoutCompleteHandler);
-		gridRoot.addEventListener("dataComplete", dataCompleteHandler);
-		gridRoot.addEvent("dblclick", dblclickHandler);
 		
 	}
 
 	var gridApp, gridRoot;	// 데이터와 그리드를 포함하는 객체
 	var dataGrid;	// 그리드
+	var gridApp2, gridRoot2, dataGrid2;
+	
+	function popupLayerGrid() {
 
-	//레이아웃 로드 완료 이벤트 핸들러 함수
-	function dblclickHandler(event) {
-		if(dataGrid.getSelectedIndex() >= 0 ) {
-			$('#F_USER_CD').val(dataGrid.getSelectedItem().USER_CD);
-			$('#F_USER_NM').val(dataGrid.getSelectedItem().USER_NM);
-			$('#F_TELEPHONE').val(dataGrid.getSelectedItem().TELEPHONE);
-			$('#F_EMAIL').val(dataGrid.getSelectedItem().EMAIL);
-			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
-			$('#F_APPROWAITCNT').val(dataGrid.getSelectedItem().APPROWAITCNT);
-			$('#F_PASSWORD').val(dataGrid.getSelectedItem().PASSWORD);
-			$('#F_PASSWORDORG').val(dataGrid.getSelectedItem().PASSWORDORG);
-			$('input[name=F_USE_YN][value="' + dataGrid.getSelectedItem().USE_YN + '"]').prop("checked", true);
-			$('#CRUD').val("U");
-			$('#F_USER_CD').attr('readonly', true);
-			
-	        if ( dataGrid.getSelectedItem().PICTURE.trim() == "" || dataGrid.getSelectedItem().PICTURE == 'null' ) { 
-	        	//console.log('111111');
-	        	$('#F_PICTURE').attr('src', "assets/images/" + "200x150.png");
-	        	$('.fileinput .fileinput-preview img').attr('src', "assets/images/" + "200x150.png");
-	        } else {
-	        	//console.log('222222');
-	        	$('#F_PICTURE').attr('src', "userImages/" + dataGrid.getSelectedItem().PICTURE);
-	        	$('.fileinput .fileinput-preview img').attr('src', "userImages/" + dataGrid.getSelectedItem().PICTURE);
-	        }
-			
-		}
+		$.blockUI({
+				//HTML 태그를 문자열로 적용해도 무관함
+				message: $('#question')
+				//css 설정
+				 ,css: {
+					padding:        0,
+					margin:         0,
+					width:          '500px',
+					height:         '460px',
+					top:            '10%',
+					left:           '20%',
+					textAlign:      'center',
+					color:          '#000',
+					border:         '3px none #aaa',
+					backgroundColor:'#f7f7f7',
+					cursor:         'default',
+					fontFamily:     '맑은 고딕',
+					borderRadius:   '3px'
+				}
+				,focusInput: true
+				//모달창 외부 클릭시 닫기
+				,onOverlayClick: $.unblockUI
+		});
+		gridApp2.resize();
+
 	}
-
+	
+	$(function(){
+		$("#closebtn").click(function(){
+			 //모달창 닫기
+			 $.unblockUI();
+		})
+	})
+	
+	
 	function refreshData()  
 	{
+		
 		var gridData = [];
+		jsonObj = {};
 
-		jsonObj.__user_cd = $('#C_USER_CD').val();
-		jsonObj.__user_nm = $('#C_USER_NM').val();
-		jsonObj.__from    = $('#C_FROM').val();
-		jsonObj.__to      = $('#C_TO').val();
-		jsonObj.__rows    = "20";
-		jsonObj.__page    = "1" ;
+		jsonObj.__marina_id = '1';
+		jsonObj.__cctv_cd = $('#C_CCTV_CD').val();
+		jsonObj.__from  = $('#C_FROM').val().replace(/-/g,"");
+		jsonObj.__to    = $('#C_TO').val().replace(/-/g,"");
+		jsonObj.__rows      = '20';
+		jsonObj.__page      = '1';
 
+		if(jsonObj.__from == ''){
+			alert("[알림] 조회 시작일자를 입력하세요.");
+			$("input#C_FROM").focus();
+		    return;
+		}		
+		if(jsonObj.__to == ''){
+			alert("[알림] 조회 종료일자를 입력하세요.");
+			$("input#C_TO").focus();
+		    return;
+		}		
+		if(jsonObj.__from > jsonObj.__to){
+			alert("[알림] 조회 기간을 확인하세요.");
+			$("input#C_FROM").focus();
+		    return;
+		}		
+		
 		$.ajax({
-		   	url:"GetUserEntryList",
+		   	url:"GetCctvMonitoringReport",
 			data:{param:JSON.stringify(jsonObj)},
 			type:"post",
 		   	dataType:"json",
@@ -108,20 +165,54 @@
 		});	
 		gridApp.clear();
 		gridApp.setLayout(layoutStr);
+		//console.log(gridData);
 		gridApp.setData(gridData);
 	}
 	
+	function refreshData2()  
+	{
+		var gridData2 = [];
+		jsonObj = {};
 
-	$('#f_picture_preview').change(function(){
- 
-		var filesize = this.files[0].size/1024/1024;
-		if(filesize >= 5) {
-			alert("[알림] 첨부파일 사이즈는 5MB 이내로 등록하세요.");
-			$("input#F_USER_CD").focus();
-		    return;			
+		jsonObj.__boat_id = '';
+		jsonObj.__boat_nm = '%';
+		jsonObj.__rows     = "20";
+		jsonObj.__page     = "1" ;
+
+		$.ajax({
+		   	url:"GetCctvMonitoringReport",
+			data:{param:JSON.stringify(jsonObj)},
+			type:"post",
+		   	dataType:"json",
+			success: function(json_data) {
+		        if(json_data.result == 'OK') {
+			   		$.each(json_data.rows, function(index, value) {
+			   			gridData2.push(value);
+			   		});
+				} else {
+					console.log(json_data2.result); 
+				}
+			}
+		});	
+		gridApp2.clear();
+		gridApp2.setLayout(layoutStr2);
+		gridApp2.setData(gridData2);
+	}
+	
+	function dblclickHandler(event) {
+		if(dataGrid.getSelectedIndex() >= 0 ) {
+			console.log(dataGrid.getSelectedIndex());
 		}
- 
-	});
+	}	
+	
+	function dblclickHandler2(event) {
+		if(dataGrid2.getSelectedIndex() >= 0 ) {
+			$('#C_BOAT_ID').val(dataGrid2.getSelectedItem().BOAT_ID);
+			$('#C_BOAT_NM').val(dataGrid2.getSelectedItem().BOAT_NM);
+			$.unblockUI();
+		}
+	}
+	
 	
 	$('#btnQuery').click(function (e) {
 		refreshData();
@@ -135,49 +226,11 @@
 		
 		// 엑셀문서의 제목 행들을 지정합니다.
 		dataGrid.exportTitles = [
-			"년간 매출 보고서",	// 문자열 하나를 기본 제목 스타일로 넣을 경우
-			null,							// 빈라인 - 행 높이는 DataGrid의 exportTitleHeight를 따릅니다.
-			{height:25, fontSize:12, color:"#444444", borderColor:"#999999",	// cells 에 개별 셀에 대한 내용을 정의하는 경우
-				cells: [
-					{text:"", colSpan:7},
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					{text:"담당", border:true},
-					{text:"과장", border:true},
-					{text:"부장", border:true},
-					{text:"대표이사", border:true}
-				]
-			},
-			{height:70, borderColor:"#999999",
-				cells: [
-					{text:"", colSpan:7},
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					{text:"", border:true},
-					{text:"", border:true},
-					{text:"", border:true},
-					{text:"", border:true}
-				]
-			},
-			{height:20, text:""},
-			{height:30, fontSize:14, color:"#333333", text:"아래와 같이 년간 매출을 보고합니다."},		// ojbect로 한 행의 속성을 정의한 경우
-			{height:20, text:""}
+			"입출항 CCTV 확인 보고서",	// 문자열 하나를 기본 제목 스타일로 넣을 경우
 		];
 		// 엑셀문서의 꼬릿말라인들을 지정합니다.
 		dataGrid.exportFooters = [
 			{height:14, text:""},
-			{height:18, fontSize:10, color:"#888888", textAlign:"left", backgroundColor:"#EEEEEE", text:"이 문서는 대외비입니다. 외부에 유출이 안되도록 유의해 주시기 바랍니다."},		// 행의 속성을 정의하여 넣습니다.
-			null,									// 빈라인 - 라인 높이는 DataGrid의 exportFooterHeight를 따릅니다.
-			//inputForm.exportFooter.value,			// 화면에서 넣은 값을 넣어주는 경우.
-			"1111111111111111",			// 화면에서 넣은 값을 넣어주는 경우.
 		];
 		
 		// PagingCollection의 rowsPerPage를 0으로 세팅하여 전체 데이터를 보여주도록 하며 현재 페이지 번호를 저장합니다.
@@ -207,13 +260,15 @@
 	var layoutStr =
 	'<rMateGrid>\
 		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+	    <DateFormatter id="datefmt"/>\
+	    <DateFormatter id="datefmt2" formatString="YY년 MM월 DD일 HH시 NN분 SS초"/>\
 		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
 			<groupedColumns>\
-				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
-				<DataGridColumn dataField="REG_DATE" id="colRegDate" headerText="일자"  width="100"     />\
-				<DataGridColumn dataField="DVC_NM" 	 id="colDvcNm"   headerText="장치"  width="100"/>\
-				<DataGridColumn dataField="USER_NM"  id="colUserNm"  headerText="이름"  width="100"/>\
-				<DataGridColumn dataField="STATUS"   id="colStatus"  headerText="상태"  width="100"/>\
+				<DataGridColumn dataField="ID" 				id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="SEND_TIME"   	id="colSendTime"   	headerText="일시"    width="100" formatter="{datefmt2}"/>\
+				<DataGridColumn dataField="CCTV_CD" 		id="colCctvCd" 		headerText="CCTV"  width="100" />\
+				<DataGridColumn dataField="BOATINOUT_NM"    id="colBoatInoutNm" headerText="입출항"  width="60" />\
+				<DataGridColumn dataField="PHOTO_BASE64" 	id="colPhotoBase64" headerText="사진"    width="200" />\
 			</groupedColumns>\
 			<dataProvider>\
 				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
@@ -221,6 +276,19 @@
 		</DataGrid>\
 	</rMateGrid>';
 
+	var layoutStr2 =
+		'<rMateGrid>\
+		<NumberFormatter id="numfmt" useThousandsSeparator="true"/>\
+		<DataGrid id="dg1" verticalAlign="middle" sortableColumns="true" textAlign="center">\
+			<groupedColumns>\
+				<DataGridColumn dataField="No" id="colNo" itemRenderer="IndexNoItem" textAlign="center" width="40"/>\
+				<DataGridColumn dataField="BOAT_ID"   	 id="colBoatId"     	headerText="ID"  width="100"     />\
+				<DataGridColumn dataField="BOAT_NM" 	 id="colBoatNm"   		headerText="보트명" width="200"/>\
+			</groupedColumns>\
+		</DataGrid>\
+	</rMateGrid>';
+
+	
 	// 페이징 관련 자바스크립트  visible="false"  
 	var gridTotalRowCount;	// 전체 데이터 건수 - html이 구역에서 작성될때 반드시 넣어줘야 하는 변수입니다.
 
@@ -330,8 +398,8 @@
 	    return today = "" + year + "-" + month + "-" + date; 
 	}
 	
-
-	$("input#F_USER_CD").focus();
+	
+	$("input#C_BOAT_NM").focus();
 	$("#C_FROM").val(getToday());
 	$("#C_TO").val(getToday());
 	

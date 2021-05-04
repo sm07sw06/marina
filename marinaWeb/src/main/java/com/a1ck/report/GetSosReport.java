@@ -20,7 +20,7 @@ import org.json.simple.parser.JSONParser;
 import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
 
-public class GetBoatEntryReport extends HttpServlet { 
+public class GetSosReport extends HttpServlet { 
     private static final long serialVersionUID = 1L;
     ResultSet rs;
     Statement stmt;
@@ -28,7 +28,7 @@ public class GetBoatEntryReport extends HttpServlet {
     private final Logger logger = LogManager.getLogger(this.getClass().getName() + ".class");
 	public Connection connectionDest = null;
 	
-    public GetBoatEntryReport() {
+    public GetSosReport() {
 //    	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
 
@@ -41,7 +41,7 @@ public class GetBoatEntryReport extends HttpServlet {
 		
 		try{
 
-			logger.debug("getBoatEntryReport ***** Start GetAnchorList *****"); 
+			logger.debug("***** getSosReport *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
@@ -57,30 +57,29 @@ public class GetBoatEntryReport extends HttpServlet {
 				
   			String Obj = request.getParameter("param");
 			
-			logger.debug("getBoatEntryReport jsonParam:" + Obj);
+			logger.debug("getSosReport jsonParam:" + Obj);
 			
 			if(Obj != null){
 				
-				logger.debug("getBoatEntryReport DEBUG"); 
+				logger.debug("getSosReport DEBUG"); 
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(Obj.toString());
 
-	            logger.debug("getBoatEntryReport json:" + json); 
+	            logger.debug("getSosReport json:" + json); 
 
 	            sMarinaId = (String)json.get("__marina_id");
-	            sBoatId   = (String)json.get("__boat_id");
 	            sBoatNm   = (String)json.get("__boat_nm");
+	            sBoatId   = (String)json.get("__boat_id");
 	            sStartDT  = (String)json.get("__from");
 	            sEndDT    = (String)json.get("__to");
 	            sRows   = (String)json.get("__rows");
 	            sPage   = (String)json.get("__page");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
-				logger.debug("getBoatEntryReport sMarinaId:" + sMarinaId);
-				logger.debug("getBoatEntryReport sBoatId:" + sBoatId);
-				logger.debug("getBoatEntryReport sBoatNm:" + sBoatNm);
-				logger.debug("getBoatEntryReport sStartDT:" + sStartDT);
-				logger.debug("getBoatEntryReport sEndDT:" + sEndDT);
+				logger.debug("getSosReport sMarinaId:" + sMarinaId);
+				logger.debug("getSosReport sBoatNm:" + sBoatNm);
+				logger.debug("getSosReport sStartDT:" + sStartDT);
+				logger.debug("getSosReport sEndDT:" + sEndDT);
 			} 
 			
 			connectionDest = conMgr.getConnection();
@@ -88,25 +87,23 @@ public class GetBoatEntryReport extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.MARINA_ID, A.BOAT_ID, B.BOAT_NM, A.SEND_TIME, A.BOATINOUT,C.DETAIL_NM AS BOATINOUT_NM \n ";
-			sQuery += "   FROM TB_BOAT_HIST A, TB_BOAT B, TB_CODE_DETAIL C  \n ";
+			sQuery  = " SELECT A.MARINA_ID, A.SEND_TIME, A.BOAT_ID, B.BOAT_NM, A.LATITUDE, A.LONGITUDE, \n ";
+			sQuery += "        CASE WHEN A.GRADEX > A.GRADEY THEN A.GRADEX ELSE A.GRADEY END AS GRADE \n ";
+			sQuery += "   FROM TB_SOS_LIST A, TB_BOAT B  \n ";
 			sQuery += "  WHERE 1 = 1  \n ";
-			sQuery += "    AND A.MARINA_ID = B.MARINA_ID \n ";
-			sQuery += "    AND A.BOAT_ID   = B.BOAT_ID  \n ";
-			sQuery += "    AND C.GROUP_CD  = 'BOATINOUT' \n ";
-			sQuery += "    AND A.BOATINOUT = C.DETAIL_CD \n ";
+			sQuery += "    AND A.BOAT_ID = B.BOAT_ID \n ";
 			sQuery += "    AND A.MARINA_ID = " + sMarinaId + " \n ";
 			sQuery += "    AND A.SEND_TIME BETWEEN  '" + sStartDT + "010101' AND '"  + sEndDT + "235959' \n ";
 			
 			if( !StringUtils.equals(sBoatId, "") && !StringUtils.equals(sBoatId, null) )  {
-				sQuery += "    AND b.boat_id = %" + sBoatId + "% \n";
+				sQuery += "    AND b.boat_id = " + sBoatId + " \n";
 			}
 			if( !StringUtils.equals(sBoatNm, "") && !StringUtils.equals(sBoatNm, null) )  {
 				sQuery += "    AND b.boat_nm LIKE '%" + sBoatNm + "%' \n";
-			}
+			}			
 			sQuery += "  ORDER BY a.send_time LIMIT 300\n ";
 			
-			logger.debug("getBoatEntryReport sQuery1:" + sQuery); 
+			logger.debug("getSosReport sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -122,13 +119,19 @@ public class GetBoatEntryReport extends HttpServlet {
 				datas.put("BOAT_ID"   	 , rs.getString("BOAT_ID"));	
 				datas.put("BOAT_NM"   	 , rs.getString("BOAT_NM"));	
 				datas.put("SEND_TIME"    , rs.getString("SEND_TIME"));	
-				datas.put("BOATINOUT_NM" , rs.getString("BOATINOUT_NM"));	
 
-				if (!StringUtils.isEmpty(rs.getString("BOATINOUT_NM"))) 
-					datas.put("BOATINOUT_NM" , rs.getString("BOATINOUT_NM"));	
+				if (!StringUtils.isEmpty(rs.getString("LATITUDE"))) 
+					datas.put("LATITUDE" , rs.getString("LATITUDE"));	
 				else
-					datas.put("BOATINOUT_NM" , " " );
-				
+					datas.put("LATITUDE" , "0" );
+				if (!StringUtils.isEmpty(rs.getString("LONGITUDE"))) 
+					datas.put("LONGITUDE" , rs.getString("LONGITUDE"));	
+				else
+					datas.put("LONGITUDE" , "0" );
+				if (!StringUtils.isEmpty(rs.getString("GRADE"))) 
+					datas.put("GRADE" , rs.getString("GRADE"));	
+				else
+					datas.put("GRADE" , "0" );				
 				
 				seriesArray.add(datas); 
 				jsonobj.put("rows"  ,seriesArray);   
@@ -153,7 +156,7 @@ public class GetBoatEntryReport extends HttpServlet {
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			logger.debug("getBoatEntryReport :" + jsonobj.toString() ); 
+			logger.debug("getSosReport :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			//connectionDest.close();

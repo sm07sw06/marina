@@ -58,6 +58,46 @@
 <!-- 페이징 관련 스타일 -->
 <link rel="stylesheet" type="text/css" href="./assets/a1ck/css/a1ckRef.css">	
 
+<script type="text/javascript" >
+
+function geoFindMe() {
+
+  const status = document.querySelector('#status');
+  const mapLink = document.querySelector('#map-link');
+
+  mapLink.href = '';
+  mapLink.textContent = '';
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    status.textContent = '';
+    mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+    mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+  }
+
+  function error() {
+    status.textContent = 'Unable to retrieve your location';
+  }
+
+  if(!navigator.geolocation) {
+    status.textContent = 'Geolocation is not supported by your browser';
+  } else {
+    status.textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+}
+
+var el = document.querySelector('#find-me');
+if(el){
+  el.addEventListener('click', geoFindMe);
+}
+
+//document.querySelector('#find-me').addEventListener('click', geoFindMe);
+
+</script>
 </head>
 
 <body class="page-body" data-url="http://neon.dev">
@@ -76,12 +116,11 @@
 						
 			<ol class="breadcrumb bc-3" >
 				<li><a href="index.jsp"><i class="fa-home"></i>Home</a></li>
-				<li><a href="#">기초정보관리</a></li>
-				<li><a href="#">회원관리</a></li>
-				<li class="active"><strong>출입내역조회</strong></li>
+				<li><a href="#">선박 입출항 관리</a></li>
+				<li class="active"><strong>구조요청 내역 확인</strong></li>
 			</ol>
 	
-			<div class='myTitleBox'>출입내역조회</div>
+			<div class='myTitleBox'>구조요청 내역 확인</div>
 				<!--  search form start -->
 				<div class=" search_cond col-lg-12">
 					<form class="search-form"> 
@@ -105,11 +144,11 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="input-group ">
-										<input type="text" class="form-control" id="C_USER_NM"  name="C_USER_NM"  placeholder="이름또는 ID를 입력하세요." >
+										<input type="text" class="form-control" id="C_BOAT_NM"  name="C_BOAT_NM"  placeholder="이름또는 ID를 입력하세요." >
 										<div class="input-group-addon">
-											<a href="#"><i class="entypo-user-add"></i></a>
+											<a href="javascript:;" onclick="popupLayerGrid();"><i class="entypo-list-add"></i></a>
 										</div>										
-										<input type="hidden" id="C_USER_CD"  name="C_USER_CD"   >
+										<input type="hidden" id="C_BOAT_ID"  name="C_BOAT_ID"   >
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -122,7 +161,7 @@
 							</div>
 						</div>
 					</form>
-				</div>
+				</div> 
 				<!--  search form end --> 
 
 		
@@ -155,6 +194,22 @@
 		</div> <!--main-content -->
 	</div>
 
+
+
+    
+	<div id="question" style="display:none; background-color:#f7f7f7; font-size:16px; color:#353535; letter-spacing:-0.2px; border-radius:3px;">
+		<div style="background-color:#213d64; font-size:15px; color:#ffffff; padding:8px; border-top-left-radius:3px; border-top-right-radius:3px;">보트 찾기</div>
+		<div style="width:100%; height:360px;">
+			<div id="question2" style="padding:10px; height:360px;"></div>
+		</div>
+		<div style="margin:10px">
+			<input type="button" style="width:100px; border-style:none; padding:10px; color:#ffffff; font-size:12px; background-color:#9ba4b0;" id="closebtn" value="닫기" />
+			<!-- button type="button" class="btn btn-info">닫기</button -->
+		</div>
+	</div>
+	
+
+
 	<!-- Bottom scripts (common) -->
 	<script src="assets/js/gsap/TweenMax.min.js"></script>
 	<script src="assets/js/resizeable.js"></script>
@@ -176,7 +231,7 @@
 	<!-- Demo Settings -->
 	<!-- script src="assets/js/neon-demo.js"></script -->
 	<script src="assets/a1ck/js/a1ck-js.js"></script>		
-	<script src="assets/a1ck/js/userEntryList.js"></script>		
+	<script src="assets/a1ck/js/sosList.js"></script>		
 
 	<!-- Imported scripts on this page -->
 	<script src="assets/a1ck/js/bootstrap-datepicker_a1ck.js"></script>

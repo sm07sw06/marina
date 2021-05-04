@@ -571,8 +571,31 @@
 		<servlet-name>GetBoatEntryReport</servlet-name>
 		<url-pattern>/GetBoatEntryReport</url-pattern>
 	</servlet-mapping>	
-
-
+	<servlet>
+		<servlet-name>GetUnrecognizedBoatReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetUnrecognizedBoatReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUnrecognizedBoatReport</servlet-name>
+		<url-pattern>/GetUnrecognizedBoatReport</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetCctvMonitoringReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetCctvMonitoringReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetCctvMonitoringReport</servlet-name>
+		<url-pattern>/GetCctvMonitoringReport</url-pattern>
+	</servlet-mapping>		
+	<servlet>
+		<servlet-name>GetSosReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetSosReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetSosReport</servlet-name>
+		<url-pattern>/GetSosReport</url-pattern>
+	</servlet-mapping>	
+	
 	 <filter>
 		<filter-name>cors</filter-name>
 		<filter-class>com.a1ck.SimpleCORSFilter</filter-class>

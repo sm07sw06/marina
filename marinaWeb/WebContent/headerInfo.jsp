@@ -20,7 +20,7 @@ window.location.href = "/marinaWeb/login.jsp";
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true">
                     <% if (picture == ""||picture == null) { %><img src="assets/images/thumb-1.png" alt="" class="img-circle" width="44" height="44" /> <%} else { %>
                     <img src="userImages/<%=picture%>" alt="" class="img-circle" width="44"  height="44" /> <% }%>
-                    <%=username%>&nbsp;/&nbsp;<%=orgNm%> 
+                    <%=username%>&nbsp;/&nbsp;<!-- %=orgNm% --> 
                 </a>
                 <ul class="dropdown-menu">
                     <!-- Reverse Caret -->
@@ -56,10 +56,10 @@ window.location.href = "/marinaWeb/login.jsp";
         <ul class="user-info pull-left pull-right-xs pull-none-xsm">
             <!-- Message Notifications syaty -->
             <li class="notifications dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                <!-- a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                     <i class="entypo-mail"></i>
-                    <span class="badge badge-secondary"><%=approwait%></span>
-                </a>
+                    <span class="badge badge-secondary">< %=approwait %></span>
+                </a -->
                 <ul class="dropdown-menu">
                     <li>
                         <form class="top-dropdown-search">
@@ -134,10 +134,10 @@ window.location.href = "/marinaWeb/login.jsp";
             <!-- Message Notifications end -->      
             <!-- Task Notifications -->
             <li class="notifications dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                <!-- a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                     <i class="entypo-list"></i>
-                    <span class="badge badge-warning"><%=approwait%></span>
-                </a>
+                    <span class="badge badge-warning">< %=approwait% ></span>
+                </a -->
                 <ul class="dropdown-menu">
                     <li class="top">
                         <p>You have 6 pending tasks</p>
