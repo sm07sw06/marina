@@ -3,11 +3,11 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.105",
+    "host": "localhost",
     "port": "5432",
     "dialect": "mysql",
     "appport": "3100"
-  },
+  }, 
   "test": {
     "username": "postgres",
     "password": "topadmin",
