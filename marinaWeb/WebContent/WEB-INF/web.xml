@@ -554,15 +554,7 @@
 		<url-pattern>/SetAnchorDevice</url-pattern>
 	</servlet-mapping>	
 				   
-
-	<servlet>
-		<servlet-name>GetAnchorStatusReport</servlet-name>
-		<servlet-class>com.a1ck.report.GetAnchorStatusReport</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>GetAnchorStatusReport</servlet-name>
-		<url-pattern>/GetAnchorStatusReport</url-pattern>
-	</servlet-mapping>	
+				   	
 	<servlet>
 		<servlet-name>GetBoatEntryReport</servlet-name>
 		<servlet-class>com.a1ck.report.GetBoatEntryReport</servlet-class>
@@ -595,6 +587,34 @@
 		<servlet-name>GetSosReport</servlet-name>
 		<url-pattern>/GetSosReport</url-pattern>
 	</servlet-mapping>	
+	<servlet>
+		<servlet-name>GetAnchorStatusReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetAnchorStatusReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAnchorStatusReport</servlet-name>
+		<url-pattern>/GetAnchorStatusReport</url-pattern>
+	</servlet-mapping>	
+	
+	
+	<servlet>
+		<servlet-name>GetUnrecognizedBoatStatusReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetUnrecognizedBoatStatusReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUnrecognizedBoatStatusReport</servlet-name>
+		<url-pattern>/GetUnrecognizedBoatStatusReport</url-pattern>
+	</servlet-mapping>	
+		<servlet>
+		<servlet-name>GetUserStatusReport</servlet-name>
+		<servlet-class>com.a1ck.report.GetUserStatusReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetUserStatusReport</servlet-name>
+		<url-pattern>/GetUserStatusReport</url-pattern>
+	</servlet-mapping>		
+	
+	
 	
 	 <filter>
 		<filter-name>cors</filter-name>

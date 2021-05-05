@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,11 +17,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.a1ck.util.CodeClass;
 import com.a1ck.util.ConnectionManager;
 import com.a1ck.util.ConnectionManagerAll4;
 
-public class GetAnchorStatusReport extends HttpServlet { 
+public class GetUnrecognizedBoatReport extends HttpServlet { 
     private static final long serialVersionUID = 1L;
     ResultSet rs;
     Statement stmt;
@@ -32,7 +28,7 @@ public class GetAnchorStatusReport extends HttpServlet {
     private final Logger logger = LogManager.getLogger(this.getClass().getName() + ".class");
 	public Connection connectionDest = null;
 	
-    public GetAnchorStatusReport() {
+    public GetUnrecognizedBoatReport() {
 //    	PropertyConfigurator.configure(System.getenv("CATALINA_HOME") + "/log4j.properties");
 	}
 
@@ -45,12 +41,14 @@ public class GetAnchorStatusReport extends HttpServlet {
 		
 		try{
 
-			logger.debug(" ***** Start getAnchorStatusReport *****"); 
+			logger.debug("getBoatEntryReport ***** Start GetAnchorList *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
 			
 			String sMarinaId = "";
+			String sBoatId   = "";
+			String sBoatNm   = "";
 			String sStartDT  = "";
 			String sEndDT    = "";
 			String sRows     = "";
@@ -59,25 +57,30 @@ public class GetAnchorStatusReport extends HttpServlet {
 				
   			String Obj = request.getParameter("param");
 			
-			logger.debug("getAnchorStatusReport jsonParam:" + Obj);
+			logger.debug("getBoatEntryReport jsonParam:" + Obj);
 			
 			if(Obj != null){
 				
-				logger.debug("getAnchorStatusReport DEBUG"); 
+				logger.debug("getBoatEntryReport DEBUG"); 
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(Obj.toString());
 
-	            logger.debug("getAnchorStatusReport json:" + json); 
+	            logger.debug("getBoatEntryReport json:" + json); 
 
 	            sMarinaId = (String)json.get("__marina_id");
+	            sBoatId   = (String)json.get("__boat_id");
+	            sBoatNm   = (String)json.get("__boat_nm");
 	            sStartDT  = (String)json.get("__from");
 	            sEndDT    = (String)json.get("__to");
-	            sRows     = (String)json.get("__rows");
-	            sPage     = (String)json.get("__page");
+	            sRows   = (String)json.get("__rows");
+	            sPage   = (String)json.get("__page");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
-				logger.debug("getAnchorStatusReport sStartDT:" + sStartDT);
-				logger.debug("getAnchorStatusReport sEndDT:" + sEndDT);
+				logger.debug("getBoatEntryReport sMarinaId:" + sMarinaId);
+				logger.debug("getBoatEntryReport sBoatId:" + sBoatId);
+				logger.debug("getBoatEntryReport sBoatNm:" + sBoatNm);
+				logger.debug("getBoatEntryReport sStartDT:" + sStartDT);
+				logger.debug("getBoatEntryReport sEndDT:" + sEndDT);
 			} 
 			
 			connectionDest = conMgr.getConnection();
@@ -85,19 +88,18 @@ public class GetAnchorStatusReport extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.MARINA_ID, A.ANCHOR_ID, C.ANCHOR_NM, A.BOAT_ID, B.BOAT_NM, A.ENTER_DT, A.LEAVE_DT \n ";
-			sQuery += "   FROM TB_ANCHOR_HIST A, TB_BOAT B, TB_ANCHOR C  \n ";
+			sQuery  = " SELECT a.marina_id, a.send_time, a.boatinout, c.detail_nm as boatinout_nm, a.anchor_id,b.anchor_nm \n ";
+			sQuery += "   FROM tb_unreg_boatdata a, tb_anchor b, tb_code_detail c  \n ";
 			sQuery += "  WHERE 1 = 1  \n ";
+			sQuery += "    AND a.anchor_id = b.anchor_id \n ";
+			sQuery += "    AND a.boatinout = c.detail_cd  \n ";
+			sQuery += "    AND C.GROUP_CD  = 'BOATINOUT' \n ";
 			sQuery += "    AND A.MARINA_ID = " + sMarinaId + " \n ";
-			sQuery += "    AND A.MARINA_ID = B.MARINA_ID  \n ";
-			sQuery += "    AND A.BOAT_ID   = B.BOAT_ID  \n ";
-			sQuery += "    AND A.MARINA_ID = C.MARINA_ID  \n ";
-			sQuery += "    AND A.ANCHOR_ID = C.ANCHOR_ID  \n ";
-			sQuery += "    AND ( A.ENTER_DT BETWEEN '" + sStartDT + "010101' AND '"  + sEndDT + "235959' OR  \n ";
-			sQuery += "          A.LEAVE_DT BETWEEN '" + sStartDT + "010101' AND '"  + sEndDT + "235959' )	 \n ";
-			sQuery += "  ORDER BY A.ENTER_DT, A.LEAVE_DT \n ";
+			sQuery += "    AND A.SEND_TIME BETWEEN  '" + sStartDT + "010101' AND '"  + sEndDT + "235959' \n ";
 			
-			logger.debug("getAnchorStatusReport sQuery1:" + sQuery); 
+			sQuery += "  ORDER BY a.send_time LIMIT 300\n ";
+			
+			logger.debug("getBoatEntryReport sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -108,24 +110,14 @@ public class GetAnchorStatusReport extends HttpServlet {
 	         
 	        while(rs.next()){
 				JSONObject datas = new JSONObject();
-				sQuery  = " S A.ENTER_DT, A.LEAVE_DT \n ";
-
 				
-				datas.put("MARINA_ID"   , rs.getString("MARINA_ID"));	
-				datas.put("ANCHOR_ID"   , rs.getString("ANCHOR_ID"));	
-				datas.put("ANCHOR_NM"   , rs.getString("ANCHOR_NM"));	
-				datas.put("BOAT_ID"   	, rs.getString("BOAT_ID"));	
-				datas.put("BOAT_NM"   	, rs.getString("BOAT_NM"));	
+				datas.put("MARINA_ID"    , rs.getString("MARINA_ID"));	
+				datas.put("SEND_TIME"    , rs.getString("SEND_TIME"));	
 
-				if (!StringUtils.isEmpty(rs.getString("ENTER_DT"))) 
-					datas.put("ENTER_DT" , rs.getString("ENTER_DT"));	
+				if (!StringUtils.isEmpty(rs.getString("ANCHOR_NM"))) 
+					datas.put("ANCHOR_NM" , rs.getString("ANCHOR_NM"));	
 				else
-					datas.put("ENTER_DT" , " " );
-				
-				if (!StringUtils.isEmpty(rs.getString("LEAVE_DT"))) 
-					datas.put("LEAVE_DT" , rs.getString("LEAVE_DT"));	
-				else
-					datas.put("LEAVE_DT" , " " ); 
+					datas.put("ANCHOR_NM" , " " );
 				
 				
 				seriesArray.add(datas); 
@@ -133,7 +125,7 @@ public class GetAnchorStatusReport extends HttpServlet {
 			
 				nCount++;
 			}
-			
+	        
 			if (nCount> 0 ) {
 				int total = nCount / Integer.parseInt(sRows);
 				
@@ -151,7 +143,7 @@ public class GetAnchorStatusReport extends HttpServlet {
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			logger.debug("getAnchorStatusReport :" + jsonobj.toString() ); 
+			logger.debug("getBoatEntryReport :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			//connectionDest.close();
