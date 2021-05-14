@@ -4,6 +4,9 @@
  *	Developed by Arlind Nushi - www.laborator.co
  */
 
+sessionsabun = "";
+console.log("sessionsabun111:"+sessionsabun);
+
 var neonLogin = neonLogin || {};
 
 ;(function($, window, undefined)

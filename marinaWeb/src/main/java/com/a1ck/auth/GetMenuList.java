@@ -64,7 +64,7 @@ public class GetMenuList extends HttpServlet {
 
             //logger.debug("getMenuList sUserCd:" + sUserCd); 
 
-			if ( StringUtils.equalsIgnoreCase(sUserCd,"*") || StringUtils.equalsIgnoreCase(sUserCd,"admin")) { 
+			if ( StringUtils.equalsIgnoreCase(sUserCd,"*") || StringUtils.equalsIgnoreCase(sUserCd,"admin1")) { 
 	   			sQuery  = "\n";
 	   			sQuery += " SELECT DISTINCT MENU_CD, MENU_NM, MENU_URL, MENU_ORDER, MENU_ID, MENU_DESC, UP_MENU_ID \n";
 	   			sQuery += "   FROM ( \n";
@@ -88,7 +88,7 @@ public class GetMenuList extends HttpServlet {
 	   			
 	   			
 			}
-		    //logger.debug("GetMenuList\n" + sQuery);
+		    logger.debug("GetMenuList\n" + sQuery);
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -119,7 +119,7 @@ public class GetMenuList extends HttpServlet {
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
 
-        	//logger.debug(jsonobj.toString());
+        	logger.debug(jsonobj.toString());
 			
 			stmt.close();
 			//connectionDest.close();

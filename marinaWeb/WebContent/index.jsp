@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=utf-8"%>
+<jsp:useBean id="codeClass" class="com.a1ck.util.CodeClass" scope="page"/>
 
 <html lang="en">
 <head>
@@ -32,10 +33,10 @@
 <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
 <link rel="stylesheet" href="assets/js/select2/select2.css">
 
-<link rel="stylesheet" href="assets/a1ck/css/neon-core.css">
-<link rel="stylesheet" href="assets/a1ck/css/neon-theme.css">
-<link rel="stylesheet" href="assets/a1ck/css/neon-forms.css">
-<link rel="stylesheet" href="assets/a1ck/css/custom.css">
+
+<link rel="stylesheet" href="assets/css/neon-core.css">
+<link rel="stylesheet" href="assets/css/neon-theme.css">
+<link rel="stylesheet" href="assets/css/neon-forms.css">
 <link rel="stylesheet" href="assets/a1ck/css/a1ck.css">
 <!-- 
 <link rel="stylesheet" href="//jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css">
@@ -57,9 +58,7 @@
 <script src="assets/js/bootstrap-datepicker.js"></script>
  -->	
 
- <!-- first load -->
-    <script src="assets/a1ck/js/firstload.js"></script>  
-    	
+	
 <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -73,7 +72,7 @@
 
 
 	<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
-    
+
 	<!-- menu start -->
 	<%@ include file="menuInfo.jsp" %>
 	<!-- menu end-->
@@ -96,10 +95,10 @@
 			$('.bar').sparkline([ [1,4], [2, 3], [3, 2], [4, 1] ], { type: 'bar' });
 			$('.pie').sparkline('html', {type: 'pie',borderWidth: 0, sliceColors: ['#3d4554', '#ee4749','#00b19d']});
 			$('.linechart').sparkline();
-			//$('.pageviews').sparkline('html', {type: 'bar', height: '30px', barColor: '#ff6264'} );
-			//$('.uniquevisitors').sparkline('html', {type: 'bar', height: '30px', barColor: '#00b19d'} );
+			$('.pageviews').sparkline('html', {type: 'bar', height: '30px', barColor: '#ff6264'} );
+			$('.uniquevisitors').sparkline('html', {type: 'bar', height: '30px', barColor: '#00b19d'} );
 		
-		 /*
+		
 			$(".monthly-sales").sparkline([1,2,3,5,6,7,2,3,3,4,3,5,7,2,4,3,5,4,5,6,3,2], {
 				type: 'bar',
 				barColor: '#485671',
@@ -107,8 +106,8 @@
 				barWidth: 10,
 				barSpacing: 2
 			});
-		*/
-		/**
+		
+		
 			// JVector Maps
 			var map = $("#map");
 		
@@ -119,397 +118,41 @@
 				focusOn: { x: 0.5, y: 0.8, scale: 3 }
 			});
 		
-			var obj = new Object();
-			 $.ajax({		        
-			        url: "GetChartAreaPage",
-			        data: {param:JSON.stringify(obj)},
-			        dataType:"json",
-					type:"post",			     
-			        contentType: "application/json; charset=utf-8",		
-			        success: function (json_data) {   
-			        	
-			        	//console.log('json_data.rows[0].FILTER_STAT_CD:'+  json_data.rows[0]);
-			        	
-			        	var sYear    = json_data.rows[0].sYear;	
-			     	    var sSrcSize = json_data.rows[0].sSrcSize;			     	   			     	    
-			     	    
-			            Morris.Line({
-			                element: 'area-chart-demo',
-			                data: [	
-	                	        {Year : sYear, License : sSrcSize}	 
-			                	],		          
-			                xkey: 'Year',
-			                ykeys: ['Year', 'License'],
-			                labels: ['년도', '사용량'],
-							parseTime: false,					
-							hideHover:true
-			            });
-			        }
-			    });
-			          
-			 var lineobj = new Object();
-			 $.ajax({		        
-			        url: "GetChartLinePage",
-			        data: {param:JSON.stringify(lineobj)},
-			        dataType:"json",
-					type:"post",			     
-			        contentType: "application/json; charset=utf-8",		
-			        success: function (json_data) {   
-			        	
-			        	console.log('json_data.rows[0].LINE CHART:'+  json_data.rows[0]);
-			        	
-			        	var sYear    = json_data.rows[0].sYear;	
-			     	    var sSrcSize = json_data.rows[0].sSrcSize;			     	   			     	    
-			     	    var tableName= json_data.rows[0].tableName;
-			     	    
-			            Morris.Line({
-			                element: 'line-chart-demo',
-			                data: [	
-	                	        {License : sSrcSize , Year : sYear}	 
-			                	],		          
-			                xkey: 'License',
-			                ykeys: ['License', 'Year' ],
-			                labels: [ '사용량','년도'],
-							parseTime: false,					
-							hideHover:true
-			            });
-			        }
-			    });
-		**/
 		
-			 /*
-		 	// Rickshaw
-			var seriesData = [ [], [], [] ];
+		
+			// Rickshaw
+			var seriesData = [ [], [] ];
 		
 			var random = new Rickshaw.Fixtures.RandomData(50);
 		
-			for (var i = 0; i < 2; i++)
+			for (var i = 0; i < 50; i++)
 			{
 				random.addData(seriesData);
 			}
 		
-			var graph = new Rickshaw.Graph( {
-				element: document.getElementById("rickshaw-chart-demo"),
-				height: 193,
-				renderer: 'area',
-				stroke: false,
-				preserve: true,
-				series: [{
-						color: '#73c8ff',
-						data: seriesData[0],
-						name: 'ScanDataCount'
-					}, {
-						color: '#e0f2ff',
-						data: seriesData[1],
-						name: 'LoadDataCount'
-					}
-				]
-			} );
 		
-			graph.render();
-		
-			var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-				graph: graph,
-				xFormatter: function(x) {
-					return new Date(x * 1000).toString();
-				}
-			} );
-		
-			var legend = new Rickshaw.Graph.Legend( {
-				graph: graph,
-				element: document.getElementById('rickshaw-legend')
-			} );
-		
-			var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight( {
-				graph: graph,
-				legend: legend
-			} );
-		
-			setInterval( function() {
-				random.removeData(seriesData);
-				random.addData(seriesData);
-				graph.update();
-				
-				console.log('seriesData[0]:'+  seriesData[0].toString());
-				console.log('seriesData[1]:'+  seriesData[1].toString());
-		
-			}, 5000 );
-			*/
 		});
-		 
 		
 		
-		
-		//function getRandomInt(min, max)
-		//{
-		//	return Math.floor(Math.random() * (max - min + 1)) + min;
-		//}
+		function getRandomInt(min, max)
+		{
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
 		</script>
 		
 		
 		<div class="row">
-			<div class="col-sm-2 col-xs-6">
-		
-				<div class="tile-stats tile-green" id="cur_license">
-					<div class="icon"><i class="entypo-users"></i></div>
-					<div class="num" data-start="0" data-end="25" data-postfix="TB/40TB" data-duration="1500" data-delay="300">0</div>
-		
-					<h3>marinaWeb License</h3>
-					<p>Current License Size</p>
-				</div>
-		
-			</div>
-		
-			<div class="col-sm-2 col-xs-6">
-		
-				<div class="tile-stats tile-blue" id="all_job">
-					<div class="icon"><i class="entypo-chart-bar"></i></div>
-					<div class='num' data-start='0' data-end='135' data-postfix='' data-duration='1500' data-delay='600'>0</div>
-		
-					<h3>Today All Job</h3>
-					<p>today all job count</p>
-				</div>
-		
-			</div>
-			
-			<div class="clear visible-xs"></div>
-		
-			<div class="col-sm-2 col-xs-6">
-		
-				<div class="tile-stats tile-aqua" id="scan_success">
-					<div class="icon"><i class="entypo-mail"></i></div>
-					<div class="num" data-start="0" data-end="111" data-postfix="" data-duration="1500" data-delay="1200">0</div>
-		
-					<h3>Today Scan Success </h3>
-					<p>Scan Success Count</p>
-				</div>
-		
-			</div>
-		
-			<div class="col-sm-2 col-xs-6">
-		
-				<div class="tile-stats tile-red" id="scan_fail">
-					<div class="icon"><i class="entypo-rss"></i></div>
-					<div class="num" data-start="0" data-end="24" data-postfix="" data-duration="1500" data-delay="1800">0</div>
-		
-					<h3>Today Scan Fail </h3>
-					<p>Scan fail Count</p>
-				</div>
-		
-			</div>
-			<div class="col-sm-2 col-xs-6">
-		
-				<div class="tile-stats tile-aqua" id="load_success">
-					<div class="icon"><i class="entypo-mail"></i></div>
-					<div class="num" data-start="0" data-end="111" data-postfix="" data-duration="1500" data-delay="1200">0</div>
-		
-					<h3>Today Load Success </h3>
-					<p>Load success Count</p>
-				</div>
-		
-			</div>
-		
-			<div class="col-sm-2 col-xs-6">
-		
-				<div class="tile-stats tile-red" id="load_fail">
-					<div class="icon"><i class="entypo-rss"></i></div>
-					<div class="num" data-start="0" data-end="24" data-postfix="" data-duration="1500" data-delay="1800">0</div>
-		
-					<h3>Today Load Fail</h3>
-					<p>Load fail Count</p>
-				</div>
-		
-			</div>			
-			
 		</div>
 		
 		<br />
+		
+
 		
 		<div class="row">
-			<div class="col-sm-12">
 		
-				<div class="panel panel-primary" id="charts_env">
+
 		
-					<div class="panel-heading">
-						<div class="panel-title">년도별 사용량 추이</div>
-		
-						<div class="panel-options">
-							<ul class="nav nav-tabs">
-								<li class=""><a href="#area-chart" data-toggle="tab">전체 사용량</a></li>
-								<li class="active"><a href="#line-chart" data-toggle="tab">테이블별 사용량</a></li>
-								<!-- <li class=""><a href="#pie-chart" data-toggle="tab">Pie Chart</a></li> -->
-							</ul>
-						</div>
-					</div>
-		
-					<div class="panel-body">
-		
-						<div class="tab-content">
-		
-							<div class="tab-pane" id="area-chart">
-								<div id="area-chart-demo" class="morrischart" style="height: 300px"></div>
-							</div>
-		
-							<div class="tab-pane active" id="line-chart">
-								<div id="line-chart-demo" class="morrischart" style="height: 300px"></div>
-							</div>
-		<!-- 
-							<div class="tab-pane" id="pie-chart">
-								<div id="donut-chart-demo" class="morrischart" style="height: 300px;"></div>
-							</div>
-		-->
-		
-						</div>
-		
-					</div>
-		<!-- 
-					<table class="table table-bordered table-responsive">
-		
-						<thead>
-							<tr>
-								<th width="50%" class="col-padding-1">
-									<div class="pull-left">
-										<div class="h4 no-margin">Pageviews</div>
-										<small>54,127</small>
-									</div>
-									<span class="pull-right pageviews">4,3,5,4,5,6,5</span>
-		
-								</th>
-								<th width="50%" class="col-padding-1">
-									<div class="pull-left">
-										<div class="h4 no-margin">Unique Visitors</div>
-										<small>25,127</small>
-									</div>
-									<span class="pull-right uniquevisitors">2,3,5,4,3,4,5</span>
-								</th>
-							</tr>
-						</thead>
-		
-					</table>
-		-->
-				</div>
-		
-			</div>
-		    
-		    <!-- 
-			<div class="col-sm-4">		
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<div class="panel-title">
-							<h4>
-								실시간 작업 상황
-								<br />
-								<small>현재 스캔카운트 및 로드 카운트</small>
-							</h4>
-						</div>
-		
-						<div class="panel-options">
-							<a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a>
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-							<a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>
-							<a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
-						</div>
-					</div>
-		
-					<div class="panel-body no-padding">
-						<div id="rickshaw-chart-demo">
-							<div id="rickshaw-legend"></div>
-						</div>
-					</div>
-				</div>		
-			</div>
-			-->
-		</div>
-		
-		
-		<br />
-		<!--  
-		<div class="row">
-		
-			<div class="col-sm-4">
-		
-				<div class="panel panel-primary">
-					<table class="table table-bordered table-responsive">
-						<thead>
-							<tr>
-								<th class="padding-bottom-none text-center">
-									<br />
-									<br />
-									<span class="monthly-sales"></span>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="panel-heading">
-									<h4>Monthly Sales</h4>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-		
-			</div>
-			-->
-			<!-- 
-			<div class="col-sm-8">
-		
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<div class="panel-title">Latest Updated Profiles</div>
-		
-						<div class="panel-options">
-							<a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a>
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-							<a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>
-							<a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
-						</div>
-					</div>
-		
-					<table class="table table-bordered table-responsive">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Name</th>
-								<th>Position</th>
-								<th>Activity</th>
-							</tr>
-						</thead>
-		
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>Art Ramadani</td>
-								<td>CEO</td>
-								<td class="text-center"><span class="inlinebar">4,3,5,4,5,6</span></td>
-							</tr>
-		
-							<tr>
-								<td>2</td>
-								<td>Ylli Pylla</td>
-								<td>Font-end Developer</td>
-								<td class="text-center"><span class="inlinebar-2">1,3,4,5,3,5</span></td>
-							</tr>
-		
-							<tr>
-								<td>3</td>
-								<td>Arlind Nushi</td>
-								<td>Co-founder</td>
-								<td class="text-center"><span class="inlinebar-3">5,3,2,5,4,5</span></td>
-							</tr>
-		
-						</tbody>
-					</table>
-				</div>
-		
-			</div>
-		   -->
-		</div>
-		
-		<br />
-		
-		<!-- 
-			<script type="text/javascript">
+		<script type="text/javascript">
 			// Code used to add Todo Tasks
 			jQuery(document).ready(function($)
 			{
@@ -537,70 +180,8 @@
 		
 		<div class="row">
 		
-			<div class="col-sm-3">
-				<div class="tile-block" id="todo_tasks">
-		
-					<div class="tile-header">
-						<i class="entypo-list"></i>
-		
-						<a href="#">
-							Tasks
-							<span>To do list, tick one.</span>
-						</a>
-					</div>
-		
-					<div class="tile-content">
-		
-						<input type="text" class="form-control" placeholder="Add Task" />
-		
-		
-						<ul class="todo-list">
-							<li>
-								<div class="checkbox checkbox-replace color-white">
-									<input type="checkbox" />
-									<label>Website Design</label>
-								</div>
-							</li>
-		
-							<li>
-								<div class="checkbox checkbox-replace color-white">
-									<input type="checkbox" id="task-2" checked />
-									<label>Slicing</label>
-								</div>
-							</li>
-		
-							<li>
-								<div class="checkbox checkbox-replace color-white">
-									<input type="checkbox" id="task-3" />
-									<label>WordPress Integration</label>
-								</div>
-							</li>
-		
-							<li>
-								<div class="checkbox checkbox-replace color-white">
-									<input type="checkbox" id="task-4" />
-									<label>SEO Optimize</label>
-								</div>
-							</li>
-		
-							<li>
-								<div class="checkbox checkbox-replace color-white">
-									<input type="checkbox" id="task-5" checked="" />
-									<label>Minify &amp; Compress</label>
-								</div>
-							</li>
-						</ul>
-		
-					</div>
-		
-					<div class="tile-footer">
-						<a href="#">View all tasks</a>
-					</div>
-		
-				</div>
-			</div>
-		
-			<div class="col-sm-9">
+
+			<div class="col-sm-12">
 		
 				<script type="text/javascript">
 					jQuery(document).ready(function($)
@@ -657,11 +238,11 @@
 			</div>
 		
 		</div>
-		-->
+		
 		<!-- Footer -->
 		<footer class="main">
 			
-			&copy; 2019 <strong>A1ComunicationsKorea</strong>  
+			&copy; 2015 <strong>Neon</strong> Admin Theme by <a href="http://laborator.co" target="_blank">Laborator</a>
 		
 		</footer>
 	</div>
@@ -849,7 +430,7 @@
 		</div>
 	</div>
 
-</div>
+
 
 
 	<!-- Imported styles on this page -->
@@ -865,6 +446,7 @@
 	<script src="assets/js/neon-api.js"></script>
 	<script src="assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
 
+
 	<!-- Imported scripts on this page -->
 	<script src="assets/js/jvectormap/jquery-jvectormap-europe-merc-en.js"></script>
 	<script src="assets/js/jquery.sparkline.min.js"></script>
@@ -875,30 +457,14 @@
 	<script src="assets/js/toastr.js"></script>
 	<script src="assets/js/neon-chat.js"></script>
 
+
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/neon-custom.js"></script>
 
+
 	<!-- Demo Settings -->
 	<script src="assets/js/neon-demo.js"></script>	
-	<!-- script src="assets/a1ck/js/index.js"></script -->
+	<script src="assets/a1ck/js/iwestIndex.js"></script>
 
 </body>
 </html>
-<!-- 
-<html>
-<head>
-<script type="text/javascript">
-//<![CDATA[
-function onLoad() 
-{
-	mainFrame.document.location.href="dashboard.jsp";
-}
-//]]>
-</script>
-</head>
-<frameset cols="1,*"> 
-	<frame src="blank.jsp"  border="0" frameborder="0" > 
-	<frame name="mainFrame" src="javascript:parent.onLoad();" border="0"  frameborder="0">
-</frameset>
-</html>
--->

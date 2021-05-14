@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=utf-8"%>
 <%
+session.removeAttribute("userid");
 session.removeAttribute("username");
 %>
 <html lang="en">
@@ -53,7 +54,7 @@ var baseurl = '';
 		
 		<div class="login-content">
 			
-			<a href="index.jsp" class="logo">
+			<!--  a href="index.jsp" class="logo" -->
 				<!-- img src="assets/images/logo@2x.png" width="120" alt="" / -->
 				<h_1>marina Web</h_1>
 			</a>

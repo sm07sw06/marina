@@ -4,7 +4,8 @@ String userid    = (String)session.getAttribute("userid"   );
 String username  = (String)session.getAttribute("username" );
 String picture   = (String)session.getAttribute("picture"  );
 String orgNm     = (String)session.getAttribute("orgNm"    );
-String approwait = (String)session.getAttribute("approwait");
+String approwait = (String)session.getAttribute("approwait"); 
+String sessionsabun = (String)session.getAttribute("sessionsabun");
 if (userid == ""||userid == null) { %>
 <script>
 window.location.href = "/marinaWeb/login.jsp";

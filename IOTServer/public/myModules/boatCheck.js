@@ -117,11 +117,15 @@ function getAreaAnalysis(mObject) {
 	                        }   
 	                        callback(null,'GPS', mObject);  
 	                    });    
-	                } else {
+	                } else if (rtn == 'NOTOK') {
 	                    logger.debug('출입구역 영역밖에 있슴'); //보트출항중
 	                    logger.debug('보트 이동중'); //보트 입항중
 	                    mObject.boatInout = '9' 
 	                    callback(null, 'OK', mObject);   
+	                } else {
+	                    logger.debug('출입구역 영역 확인 요류'); //보트출항중
+	                    mObject.boatInout = '9' 
+	                    callback(null, 'ERROR', mObject);   
 	                }   
 	            });
         	} else {

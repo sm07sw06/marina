@@ -548,7 +548,7 @@ DB.prototype.SelectGateBound = function (mObject, callback) {
 						callback('OK');
 					} else {
 						logger.debug("GPS 출입영역 밖에 있음........!!");
-						callback('ERROR');
+						callback('NOTOK');
 					}
 			    }
 				clientdb.release();

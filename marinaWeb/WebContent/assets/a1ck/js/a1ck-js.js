@@ -5,6 +5,8 @@
 	var month2 = month.substr(month.length - 2,2);
 	var day2   = day.substr(day.length - 2,2);
 	
+	console.log("sessionsabun:"+sessionsabun);
+	
 	var toDayPoint   = year + "." + month2 + "." +  day2;
 	var toDayNoPoint = year + month2 + day2;
 	

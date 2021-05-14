@@ -41,7 +41,7 @@ public class GetUserStatusReport extends HttpServlet {
 		
 		try{
 
-			logger.debug("getBoatEntryReport ***** Start GetAnchorList *****"); 
+			logger.debug("***** Start GetUserStatusReport *****"); 
 			
 			String sQuery  = null;  
 			int    nCount = 0;
@@ -57,15 +57,15 @@ public class GetUserStatusReport extends HttpServlet {
 				
   			String Obj = request.getParameter("param");
 			
-			logger.debug("getBoatEntryReport jsonParam:" + Obj);
+			logger.debug("getUserStatusReport jsonParam:" + Obj);
 			
 			if(Obj != null){
 				
-				logger.debug("getBoatEntryReport DEBUG"); 
+				logger.debug("getUserStatusReport DEBUG"); 
 				JSONParser parser = new JSONParser();
 				JSONObject json = (JSONObject) parser.parse(Obj.toString());
 
-	            logger.debug("getBoatEntryReport json:" + json); 
+	            logger.debug("getUserStatusReport json:" + json); 
 
 	            sMarinaId = (String)json.get("__marina_id");
 	            sBoatId   = (String)json.get("__boat_id");
@@ -76,11 +76,11 @@ public class GetUserStatusReport extends HttpServlet {
 	            sPage   = (String)json.get("__page");
 	            
 	            response.setContentType("application/x-json charset=UTF-8");
-				logger.debug("getBoatEntryReport sMarinaId:" + sMarinaId);
-				logger.debug("getBoatEntryReport sBoatId:" + sBoatId);
-				logger.debug("getBoatEntryReport sBoatNm:" + sBoatNm);
-				logger.debug("getBoatEntryReport sStartDT:" + sStartDT);
-				logger.debug("getBoatEntryReport sEndDT:" + sEndDT);
+				logger.debug("getUserStatusReport sMarinaId:" + sMarinaId);
+				logger.debug("getUserStatusReport sBoatId:" + sBoatId);
+				logger.debug("getUserStatusReport sBoatNm:" + sBoatNm);
+				logger.debug("getUserStatusReport sStartDT:" + sStartDT);
+				logger.debug("getUserStatusReport sEndDT:" + sEndDT);
 			} 
 			
 			connectionDest = conMgr.getConnection();
@@ -99,7 +99,7 @@ public class GetUserStatusReport extends HttpServlet {
 			
 			sQuery += "  ORDER BY a.send_time LIMIT 300\n ";
 			
-			logger.debug("getBoatEntryReport sQuery1:" + sQuery); 
+			logger.debug("getUserStatusReport sQuery1:" + sQuery); 
 			
 			rs = stmt.executeQuery(sQuery);
 
@@ -143,7 +143,7 @@ public class GetUserStatusReport extends HttpServlet {
 	        response.setContentType("text/plain");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(jsonobj.toString());
-			logger.debug("getBoatEntryReport :" + jsonobj.toString() ); 
+			logger.debug("getUserStatusReport :" + jsonobj.toString() ); 
 			
 			stmt.close();
 			//connectionDest.close();
