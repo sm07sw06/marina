@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Map>
 	<Province code="1000" label=" " symbol="BACK" />
-	<Province code="1010" label="출입문" symbol="A0-0" />
+	<Province code="1010" label="출입문"  symbol="A0-0" />
 	<Province code="1020" label="A1-01" symbol="A1-01" />
 	<Province code="1030" label="A1-02" symbol="A1-02" />
 	<Province code="1040" label="A1-03" symbol="A1-03" />
@@ -184,13 +184,3 @@
 		
 		
 </Map>
-
-<!-- 
-<g id="Layer_1">
-	<g id="BACK">
-		image overflow="visible" width="1444" height="926" xlink:href="marina.jpg"  transform="matrix(0.75 0 0 0.75 0 0)">
-		</image>
-	</g>
-</g>
--->
- 
