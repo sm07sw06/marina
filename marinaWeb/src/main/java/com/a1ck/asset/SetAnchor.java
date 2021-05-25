@@ -41,6 +41,7 @@ public class SetAnchor extends HttpServlet {
 		   String sMarinaId     = "";
 		   String sAnchorId     = "";
 		   String sAnchorNm     = "";
+		   String sSvgCode      = "";
 		   String sSectorId     = "";
 		   String sBoatId       = "";
 		   String sAnchorStatus = "";
@@ -61,6 +62,7 @@ public class SetAnchor extends HttpServlet {
 		    		sMarinaId      = (String)json.get("marina_id");
 		    		sAnchorId      = (String)json.get("anchor_id");
 		    		sAnchorNm      = (String)json.get("anchor_nm");
+		    		sSvgCode       = (String)json.get("svg_code" );
 		    		sSectorId  	   = (String)json.get("sector_id");
 		            sAnchorStatus  = (String)json.get("anchor_status");
 		            sBoatId  	   = (String)json.get("boat_id");
@@ -69,6 +71,7 @@ public class SetAnchor extends HttpServlet {
 		            logger.debug("SetAnchor sMarinaId:[" + sMarinaId + "]");
 		            logger.debug("SetAnchor sAnchorId:[" + sAnchorId + "]");
 		            logger.debug("SetAnchor sAnchorNm:[" + sAnchorNm + "]");
+		            logger.debug("SetAnchor sSvgCode :[" + sSvgCode + "]");
 		            logger.debug("SetAnchor sSectorId:[" + sSectorId + "]");
 		            logger.debug("SetAnchor sAnchorStatus:[" + sAnchorStatus + "]");
 		            logger.debug("SetAnchor sBoatId:[" + sBoatId + "]");
@@ -89,8 +92,8 @@ public class SetAnchor extends HttpServlet {
 				connectionDest.setAutoCommit(false);		
 				
 			   if(sCrud.equals("C")) {
-				    String insertSql = "INSERT INTO TB_ANCHOR (MARINA_ID, SECTOR_ID, BOAT_ID, ANCHOR_STATUS, ANCHOR_NM) \n";
-					insertSql = insertSql + "VALUES ( " + sMarinaId + ", " + sSectorId + ", " + sBoatId + ", '" + sAnchorStatus + "', '" + sAnchorNm + "' )";
+				    String insertSql = "INSERT INTO TB_ANCHOR (MARINA_ID, SECTOR_ID, BOAT_ID, ANCHOR_STATUS, ANCHOR_NM, SVG_CODE) \n";
+					insertSql = insertSql + "VALUES ( " + sMarinaId + ", " + sSectorId + ", " + sBoatId + ", '" + sAnchorStatus + "', '" + sAnchorNm + "', '" + sSvgCode + "' )";
 		
 					stmt = connectionDest.createStatement();
 					
@@ -121,6 +124,7 @@ public class SetAnchor extends HttpServlet {
 						updateSql = updateSql + "      ,BOAT_ID 	  =  " + sBoatId       + "     \n ";
 					}
 					updateSql = updateSql + "      ,ANCHOR_STATUS = '" + sAnchorStatus + "'    \n ";
+					updateSql = updateSql + "      ,SVG_CODE = '" + sSvgCode + "'    \n ";
 					updateSql = updateSql + " WHERE 1 = 1 \n ";
 					updateSql = updateSql + "   AND MARINA_ID = " + sMarinaId  + " \n ";
 					updateSql = updateSql + "   AND ANCHOR_ID =   " + sAnchorId  + "   \n ";

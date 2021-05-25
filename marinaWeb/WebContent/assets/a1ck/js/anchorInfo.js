@@ -338,6 +338,7 @@
 			$('#F_ANCHOR_STATUS').val(dataGrid.getSelectedItem().ANCHOR_STATUS);
 			$('#F_BOAT_ID'      ).val(dataGrid.getSelectedItem().BOAT_ID);
 			$('#F_BOAT_NM'      ).val(dataGrid.getSelectedItem().BOAT_NM);
+			$('#F_SVG_CODE'     ).val(dataGrid.getSelectedItem().SVG_CODE);
 			$('#CRUD').val("U");
 		}
 	}
@@ -373,6 +374,7 @@
 		$('#F_SECTOR_NM'   ).val("");
 		$('#F_BOAT_ID'     ).val("");
 		$('#F_BOAT_NM'     ).val("");
+		$('#F_SVG_CODE'    ).val("");
 		$('#F_ANCHOR_STATUS'	 ).val("");
 		$('#F_ANCHOR_STATUS option:eq(0)').prop("selected", true);		
 		$('#CRUD'          ).val("C");
@@ -391,6 +393,7 @@
 		obj.anchor_nm     = $("input#F_ANCHOR_NM").val();
 		obj.sector_id     = $("input#F_SECTOR_ID").val();
 		obj.boat_id       = $("input#F_BOAT_ID").val();
+		obj.svg_code      = $("input#F_SVG_CODE").val();
 		obj.anchor_status = $('select#F_ANCHOR_STATUS option:selected').val();				
 		obj.crud          = $("#CRUD").val();
 
@@ -403,6 +406,12 @@
 		if(obj.sector_id == ''){
 			alert("[알림] 구역을 선택하세요.");
 			$("input#F_SECTOR_ID").focus();
+		    return;
+		}
+
+		if(obj.svg_code == ''){
+			alert("[알림] SVG코드를 입력하세요.");
+			$("input#F_SVG_CODE").focus();
 		    return;
 		}
 		
@@ -527,6 +536,7 @@
 					<DataGridColumn dataField="ANCHOR_STATUS_NM"   	id="colAnchorStatusNm" 	headerText="정박상태" width="100"/>\
 					<DataGridColumn dataField="BOAT_ID"   			id="colBoatId" 			headerText="보트ID" 	width="100" visible="false"   />\
 					<DataGridColumn dataField="BOAT_NM"   			id="colBoatNm" 			headerText="보트명" 	width="100"/>\
+					<DataGridColumn dataField="SVG_CODE" 			id="colSvgCode" 		headerText="SVG" 	width="100"/>\
 				</columns>\
 				<dataProvider>\
 					<PagingCollection rowsPerPage="18" source="{$gridData}"/>\

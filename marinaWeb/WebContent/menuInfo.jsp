@@ -9,7 +9,8 @@
                 <div class="logo">
                     <a href="index.jsp">
                         <!--  img src="assets/images/logo@2x.png" width="120" alt="" / -->
-                        <h_2>마리나 &nbsp;항만</h_2>
+                        <!--  h_2>마리나 &nbsp;항만</h_2 -->
+                        <img src="./images/jebu.png">
                     </a>
                 </div>
 

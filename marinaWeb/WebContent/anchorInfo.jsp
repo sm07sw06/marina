@@ -238,7 +238,13 @@ function fnModuleInfo3(){
                                         </div>
                                     </div>
 
-	
+									<div class="form-group">
+										<label for="f_orgNm" class="col-sm-3 control-label">SVG</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="F_SVG_CODE"   >
+										</div>
+									</div>
+										
 								</form>
 							</div> <!-- panel-body  -->
 						</div> <!--  id="pannel"  -->

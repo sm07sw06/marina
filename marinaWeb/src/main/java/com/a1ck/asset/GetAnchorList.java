@@ -86,7 +86,7 @@ public class GetAnchorList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.MARINA_ID,A.ANCHOR_ID, A.ANCHOR_NM, B.SECTOR_ID, B.SECTOR_NM, C.BOAT_ID, C.BOAT_NM, A.ANCHOR_STATUS, D.DETAIL_NM AS ANCHOR_STATUS_NM \n ";
+			sQuery  = " SELECT A.MARINA_ID,A.ANCHOR_ID, A.ANCHOR_NM, B.SECTOR_ID, B.SECTOR_NM, C.BOAT_ID, C.BOAT_NM, A.ANCHOR_STATUS, D.DETAIL_NM AS ANCHOR_STATUS_NM,A.SVG_CODE \n ";
 			sQuery += "   FROM TB_ANCHOR A LEFT OUTER JOIN TB_ANCHOR_SECTOR B ON A.SECTOR_ID = B.SECTOR_ID AND A.MARINA_ID = B.MARINA_ID  \n ";
 			sQuery += "                    LEFT OUTER JOIN TB_BOAT C ON A.BOAT_ID = C.BOAT_ID, \n ";
 			sQuery += "        TB_CODE_DETAIL D \n ";
@@ -115,11 +115,15 @@ public class GetAnchorList extends HttpServlet {
 	        while(rs.next()){
 				JSONObject datas = new JSONObject();
 				
+				datas.put("code" 	    	, rs.getString("SVG_CODE"));	
+				datas.put("label" 		  	, rs.getString("ANCHOR_NM"));	
+				datas.put("enabled" 	  	, "true");	
 				datas.put("MARINA_ID"   	, rs.getString("MARINA_ID"));	
 				datas.put("ANCHOR_ID"   	, rs.getString("ANCHOR_ID"));	
 				datas.put("ANCHOR_NM"   	, rs.getString("ANCHOR_NM"));	
 				datas.put("SECTOR_ID"   	, rs.getString("SECTOR_ID"));	
 				datas.put("SECTOR_NM"   	, rs.getString("SECTOR_NM"));	
+				datas.put("SVG_CODE"     	, rs.getString("SVG_CODE"));	
 
 				if (!StringUtils.isEmpty(rs.getString("BOAT_ID"))) 
 					datas.put("BOAT_ID" , rs.getString("BOAT_ID"));	
