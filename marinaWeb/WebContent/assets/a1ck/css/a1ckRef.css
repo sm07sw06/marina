@@ -1175,3 +1175,58 @@ inp1ut {
 }
 
 
+#content, .content{
+	width:100%;
+	height:650px;
+	border: 1px solid #e8e8e8;
+	background-color: #fefefe;
+}
+#content #contentL, .contentL{
+	width:20%;
+	height:100%;
+	border: 1px solid #e8e8e8;
+	background-color: #fefefe;
+	float:left;	
+}
+#content #contentM, .contentM{
+	width:60%;
+	height:100%;
+	border: 1px solid #e8e8e8;
+	background-color: #fefefe;
+	float:left;	
+}
+#content #contentR, .contentR{
+	width:20%;
+	height:100%;
+	border: 1px solid #e8e8e8;
+	background-color: #fefefe;
+	float:right;	
+}
+#content #contentM, .contentM  #contentT{
+	position: relative;
+#	margin-top:10px;	
+	width:100%;
+	height:80%;
+	border: 1px solid #e8e8e8;
+	background-color: #fefefe;
+}
+#content #contentM, .contentM  #contentB{
+	position: relative;
+#	margin-top:5px;	
+	width:100%;
+	height:20%;
+	border: 1px solid #e8e8e8;
+	background-color: #fefefe;
+}
+#mapHolder,.mapHolder {
+#	padding: 25px 35px 25px 35px;
+	padding: 5px 5px 5px 5px;
+	width:100%;
+	height:100%;
+}
+
+#mapHolder2, .mapHolder2{
+	padding: 25px 0 0 0;
+	width:100%;
+	height:100%;
+}

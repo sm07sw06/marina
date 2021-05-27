@@ -384,6 +384,12 @@
 		$("input#F_ANCHOR_NM").focus();
 	});
 
+	$('#btnClear').click(function (e) {
+		$('#F_BOAT_ID'     ).val("");
+		$('#F_BOAT_NM'     ).val("");
+	});
+
+	
 	$('#btnSave').click(function (e) {
 		var formData = new FormData();
 		
@@ -393,6 +399,9 @@
 		obj.anchor_nm     = $("input#F_ANCHOR_NM").val();
 		obj.sector_id     = $("input#F_SECTOR_ID").val();
 		obj.boat_id       = $("input#F_BOAT_ID").val();
+		
+		console.log(obj.boat_id );
+		
 		obj.svg_code      = $("input#F_SVG_CODE").val();
 		obj.anchor_status = $('select#F_ANCHOR_STATUS option:selected').val();				
 		obj.crud          = $("#CRUD").val();

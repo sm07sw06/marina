@@ -189,6 +189,7 @@ var configMy  = new ConfigObject(); //메세지 구조체
 
 
 const job = schedule.scheduleJob('5 5,11,17,23 * * *', function(){
+//const job = schedule.scheduleJob('5,15,25,35,37,45,55 13,14,15,16 * * *', function(){
 	
 	Array.prototype.findByValueOfObject = function(key, value) {
 		console.log('key:' + key);
@@ -269,6 +270,7 @@ const job = schedule.scheduleJob('5 5,11,17,23 * * *', function(){
 						//logger.debug("  풍향1-1 :" + JSON.stringify(res.name.substr(1,res[0].name.length-2))); 
 
 						res = winddirectArray.filter(it => new RegExp(wd1.substr(1,(wd1.length)-2),"i").test(it.id));
+						var wd1nm = JSON.stringify(res[0].name);
 						logger.debug("  풍향1 :" + JSON.stringify(res[0].name)); 
 						//logger.debug("  풍향1-2 :" + JSON.stringify(res)); 
 						//logger.debug("  풍향1-2 :" + getTextLength(res[0].name)); 
@@ -310,7 +312,7 @@ const job = schedule.scheduleJob('5 5,11,17,23 * * *', function(){
 						res = rnYnArray.filter(it => new RegExp(rnYn,"i").test(it.id));
 						logger.debug("  강수형태 :" + JSON.stringify(res[0].name)); 
 						
-						db.InsertDBWeather(getDate, wd1, wf, wh1, ws1, JSON.stringify(res[0].name)); 
+						db.InsertDBWeather(getDate, wd1nm, wf, wh1, ws1, JSON.stringify(res[0].name)); 
 						
 					}
 				}

@@ -125,10 +125,13 @@ public class GetAnchorList extends HttpServlet {
 				datas.put("SECTOR_NM"   	, rs.getString("SECTOR_NM"));	
 				datas.put("SVG_CODE"     	, rs.getString("SVG_CODE"));	
 
-				if (!StringUtils.isEmpty(rs.getString("BOAT_ID"))) 
-					datas.put("BOAT_ID" , rs.getString("BOAT_ID"));	
-				else
+				if (!StringUtils.isEmpty(rs.getString("BOAT_ID"))) { 
+					datas.put("BOAT_ID" , rs.getString("BOAT_ID"));
+					datas.put("STATUS" 	, "ON");	
+				} else {
 					datas.put("BOAT_ID" , " " );
+					datas.put("STATUS" 	, "OFF");	
+				}
 				
 				if (!StringUtils.isEmpty(rs.getString("BOAT_NM"))) 
 					datas.put("BOAT_NM" , rs.getString("BOAT_NM"));	

@@ -605,7 +605,7 @@
 		<servlet-name>GetUnrecognizedBoatStatusReport</servlet-name>
 		<url-pattern>/GetUnrecognizedBoatStatusReport</url-pattern>
 	</servlet-mapping>	
-		<servlet>
+	<servlet>
 		<servlet-name>GetUserStatusReport</servlet-name>
 		<servlet-class>com.a1ck.report.GetUserStatusReport</servlet-class>
 	</servlet>
@@ -614,7 +614,39 @@
 		<url-pattern>/GetUserStatusReport</url-pattern>
 	</servlet-mapping>		
 	
-	
+
+	<servlet>
+		<servlet-name>GetMarina</servlet-name>
+		<servlet-class>com.a1ck.asset.GetMarina</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetMarina</servlet-name>
+		<url-pattern>/GetMarina</url-pattern>
+	</servlet-mapping>		
+	<servlet>
+		<servlet-name>GetWeather</servlet-name>
+		<servlet-class>com.a1ck.asset.GetWeather</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetWeather</servlet-name>
+		<url-pattern>/GetWeather</url-pattern>
+	</servlet-mapping>		
+	<servlet>
+		<servlet-name>GetDashBoard01</servlet-name>
+		<servlet-class>com.a1ck.asset.GetDashBoard01</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetDashBoard01</servlet-name>
+		<url-pattern>/GetDashBoard01</url-pattern>
+	</servlet-mapping>		
+	<servlet>
+		<servlet-name>GetDashBoard02</servlet-name>
+		<servlet-class>com.a1ck.asset.GetDashBoard02</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetDashBoard02</servlet-name>
+		<url-pattern>/GetDashBoard02</url-pattern>
+	</servlet-mapping>		
 	
 	 <filter>
 		<filter-name>cors</filter-name>

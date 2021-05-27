@@ -233,9 +233,10 @@ function fnModuleInfo3(){
 	                                            <input type="text" class="form-control" id="F_BOAT_NM"  readonly >
 		                                        <div class="input-group-addon">
 		                                            <a href="javascript:;" onclick="popupLayerGrid2();"><i class="entypo-list-add"></i></a>
-		                                        </div>                                      
+		                                        </div>
 		                                    </div>
                                         </div>
+		                                <button onclick="return false;" id="btnClear"   class="btn btn-sm btn-default">삭제</button>                                      
                                     </div>
 
 									<div class="form-group">

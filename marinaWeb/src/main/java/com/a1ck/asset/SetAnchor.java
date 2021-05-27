@@ -122,6 +122,8 @@ public class SetAnchor extends HttpServlet {
 					updateSql = updateSql + "      ,SECTOR_ID 	  =  " + sSectorId     + "    \n ";
 					if( !StringUtils.equals(sBoatId.trim(), "") && !StringUtils.equals(sBoatId.trim(), null) )  {
 						updateSql = updateSql + "      ,BOAT_ID 	  =  " + sBoatId       + "     \n ";
+					} else {
+						updateSql = updateSql + "      ,BOAT_ID 	  =  null \n ";
 					}
 					updateSql = updateSql + "      ,ANCHOR_STATUS = '" + sAnchorStatus + "'    \n ";
 					updateSql = updateSql + "      ,SVG_CODE = '" + sSvgCode + "'    \n ";
