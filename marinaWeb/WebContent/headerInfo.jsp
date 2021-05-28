@@ -238,9 +238,10 @@ window.location.href = "/marinaWeb/login.jsp";
         <ul class="list-inline links-list pull-right">
             <li class="sep"></li>
             <li>
-                <a href="login.jsp">
-                    로그아웃 <i class="entypo-logout right"></i>
-                </a>
+                <div id="ctime"></div>
+            </li>
+            <li>
+                <a href="login.jsp">로그아웃 <i class="entypo-logout right"></i></a>
             </li>
         </ul>
     </div>
@@ -250,6 +251,7 @@ window.location.href = "/marinaWeb/login.jsp";
     <script type="text/javascript">
         jQuery(document).ready(function($)
         {
+        	
             // Sample Toastr Notification
             /***
             setTimeout(function()

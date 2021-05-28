@@ -5,7 +5,7 @@
 	var month2 = month.substr(month.length - 2,2);
 	var day2   = day.substr(day.length - 2,2);
 	
-	console.log("sessionsabun:"+sessionsabun);
+//	console.log("sessionsabun:"+sessionsabun);
 	
 	var toDayPoint   = year + "." + month2 + "." +  day2;
 	var toDayNoPoint = year + month2 + day2;
@@ -174,4 +174,28 @@
 		return isAlphabet;
 	}
 
+	function sijak()
+	{
+    	var onul = new Date();
+    	var dd = ["일","월","화","수","목","금","토"];
+    	var yy = onul.getFullYear();
+    	var m = onul.getMonth();
+    	var d = onul.getDate();
+    	var w = onul.getDay();
+    	var h = onul.getHours();
+    	var mi = onul.getMinutes();
+    	var s = onul.getSeconds();
+    	m = dasi(m);
+    	s = dasi(s);
+    	document.getElementById('ctime').innerHTML = yy + "." + m + "." + d + " " + dd[w] + " " + h + ":" + mi + ":" + s;
+    	var t = setTimeout(function(){sijak()},1000);
+    }
+
+	function dasi(i)
+	{
+		if(i<10) {i="0"+i};
+		return i;
+	}        	
+
+	sijak();
 	
