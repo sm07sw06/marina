@@ -189,7 +189,7 @@ var configMy  = new ConfigObject(); //메세지 구조체
 
 
 const job = schedule.scheduleJob('5 5,11,17,23 * * *', function(){
-//const job = schedule.scheduleJob('36 * * * *', function(){
+//const job = schedule.scheduleJob('37 * * * *', function(){
 	
 	Array.prototype.findByValueOfObject = function(key, value) {
 		console.log('key:' + key);

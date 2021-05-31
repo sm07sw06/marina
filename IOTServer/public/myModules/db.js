@@ -1566,10 +1566,12 @@ function weatherInsert(tm, wd, wf, wh, ws, rn) {
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = " SELECT count(*)  \n";
+	var sQueryString  = " SELECT count(*) as cnt \n";
 		sQueryString += "   FROM tb_weather \n";
 		sQueryString += "  WHERE tm = '" + tm + "' \n";
 
+		logger.debug(sQueryString);
+		
 		pool.connect(function (err, clientdb, done) {
 			if (err) throw new Error(err);
 			clientdb.query(sQueryString, function (err, res) {
@@ -1577,7 +1579,10 @@ function weatherInsert(tm, wd, wf, wh, ws, rn) {
 					logger.error("ERROR!!" + err);
 					callback('ERROR');
 			    } else {
-					if( res.rowCount == 0) {
+			    	
+			    	logger.debug(res.rowCount);
+
+					if( res.rows[0].cnt == 0) {
 	
 						// 아래와 같이 .query 로 쿼리를 날릴 수 있다
 						sQueryString  = "INSERT INTO /* weatherInsert */ public.tb_weather(tm, wd, wf, wh, ws, rn)  \n";
