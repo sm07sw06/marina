@@ -1566,29 +1566,41 @@ function weatherInsert(tm, wd, wf, wh, ws, rn) {
 
 	
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO /* weatherInsert */ public.tb_weather(tm, wd, wf, wh, ws, rn)  \n";
-	    sQueryString += "values('" + tm + "',replace('"  + wd + "','\"',''),replace('"  + wf + "','\"',''),replace('"  + wh + "','\"',''),replace('"  + ws + "','\"',''),replace('"  + rn + "','\"','')  );  \n";
-	logger.debug(sQueryString);
-
-    try {
+	var sQueryString  = " SELECT count(*)  \n";
+		sQueryString += "   FROM tb_weather \n";
+		sQueryString += "  WHERE tm = '" + tm + "' \n";
 
 		pool.connect(function (err, clientdb, done) {
 			if (err) throw new Error(err);
 			clientdb.query(sQueryString, function (err, res) {
 				if (err) {
 					logger.error("ERROR!!" + err);
-					//callback('ERROR');
+					callback('ERROR');
 			    } else {
-			    	logger.debug("Weather Insert OK:");
-			    }
-				clientdb.release();
-			}); 
-		}); 
-
-    } catch (e) {
-		logger.error("ERROR:"+err);
-		//callback('ERROR');
-	}
+					if( res.rowCount == 0) {
+	
+						// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+						sQueryString  = "INSERT INTO /* weatherInsert */ public.tb_weather(tm, wd, wf, wh, ws, rn)  \n";
+						sQueryString += "values('" + tm + "',replace('"  + wd + "','\"',''),replace('"  + wf + "','\"',''),replace('"  + wh + "','\"',''),replace('"  + ws + "','\"',''),replace('"  + rn + "','\"','')  );  \n";
+						logger.debug(sQueryString);
+					
+						pool.connect(function (err, clientdb, done) {
+							if (err) throw new Error(err);
+							clientdb.query(sQueryString, function (err, res) {
+								if (err) {
+									logger.error("ERROR!!" + err.code + "::" + err);
+									//callback('ERROR');
+							    } else {
+							    	logger.debug("Weather Insert OK:");
+							    }
+								clientdb.release();
+							}); 
+						}); 
+				
+					}
+				}
+			});
+		});					
 }
 
 
