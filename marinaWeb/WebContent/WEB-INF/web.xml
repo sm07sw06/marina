@@ -647,6 +647,16 @@
 		<servlet-name>GetDashBoard02</servlet-name>
 		<url-pattern>/GetDashBoard02</url-pattern>
 	</servlet-mapping>		
+
+	<servlet>
+		<servlet-name>GetBoatListTest01</servlet-name>
+		<servlet-class>com.a1ck.asset.GetBoatListTest01</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatListTest01</servlet-name>
+		<url-pattern>/GetBoatListTest01</url-pattern>
+	</servlet-mapping>		
+
 	
 	 <filter>
 		<filter-name>cors</filter-name>

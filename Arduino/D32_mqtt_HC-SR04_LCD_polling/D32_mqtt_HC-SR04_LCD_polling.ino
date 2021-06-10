@@ -1,3 +1,6 @@
+#include <Time.h>
+#include <TimeLib.h>
+
 #include <WiFi.h>
 #include "PubSubClient.h"
 #include <LiquidCrystal_I2C.h>
@@ -12,14 +15,20 @@ int port = 1883;
 int LEDPin4 = 4;
 int LEDPin5 = 5;
 
+const char* ntpServer = "192, 168, 123, 105";
+const long  gmtOffset_sec = 9 * 3600;
+const int   daylightOffset_sec = 0;
+
 char gMac[20];
 char gIp[20];
 char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-#define PERIOD 30 * 1000   //30초
+#define PERIOD 10 * 1000   //10초
 unsigned long prev_millis;
+
+struct tm timeinfo; 
 
 // HC-SR04 핀 정의
 #define triggerPin 13
@@ -216,7 +225,23 @@ void setup() {
     }
 
     prev_millis = millis();
+
+       // 표준시와 한국시간이 -9시간 차이
+//   configTime(-9 * 3600, 0, "pool.ntp.org", "time.nist.gov"); 
+   //configTime(9 * 3600, 0, ntpServer); 
+   configTime( gmtOffset_sec, daylightOffset_sec, ntpServer); 
+  
+   
 }
+
+void printLocalTime() { 
+  if(!getLocalTime(&timeinfo)){ 
+    Serial.println("Failed to obtain time"); 
+    return; 
+  } 
+  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S"); 
+}
+
 
 String getRtcTime() {
 
@@ -248,9 +273,6 @@ String getRtcTime() {
 
 void loop() {
 
-    getRtcTime().toCharArray(sCurrentTime, getRtcTime().length()+1);
-//    Serial.println(sCurrentTime);
-    
     // In each loop, make sure there is an Internet connection.
     if (WiFi.status() != WL_CONNECTED) {
         connectWiFi();
@@ -261,19 +283,20 @@ void loop() {
     mqttClient.loop();
 
     // HC-SR04 거리 측정
-    getDistance();
+    ///////////////getDistance();
     // 측정한 거리 CLCD 출력
    // printDistanceLCD();
 
   //  Serial.println("dtostrf");
     char message[1024]="", pDistBuf[16];
     dtostrf(distanceMm , 5,2, pDistBuf);
-
     
-    //strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);
-    //strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);  
-    sprintf(message, "{\"boatData\":\"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior",gMac,"0000,100B,XBEE3,Highest",gMac,"aduino_0",gMac,"4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
+    //Serial.println(sCurrentTime);
     if( ( millis() - prev_millis ) > PERIOD ) {
+        printLocalTime();
+//    getRtcTime().toCharArray(sCurrentTime, getRtcTime().length()+1);  // RTC 
+        strftime(sCurrentTime, sizeof(sCurrentTime), "%Y%m%d%H%M%S", &timeinfo);  //NTP
+        sprintf(message, "{\"boatData\":\"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\"}",sCurrentTime,"Cordinatior",gMac,"0000,100B,XBEE3,Highest",gMac,"aduino_0",gMac,"4B3A,100B,424C,04,R", sCurrentTime, "23,13,04,04,$GPGGA,074615.00,101,,51,,0,00,99.99,,,,,,*67,");
         mqttClient.publish(gTopicPub, message);
         Serial.print("push.......");
         Serial.println(message);

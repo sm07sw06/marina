@@ -4,8 +4,6 @@
  * Module dependencies.
  */
 var app = require('../app');
-var path = require('path');
-var debug = require('debug')('iotserver:server');
 var http = require('http');
 
 const logger = require('../config/winston')  //LDH 
@@ -15,92 +13,24 @@ const schedule = require('node-schedule');
 const request = require('request');
 var HashMap = require('hashmap');
 
-
-var UTIL = require('../public/myModules/util');
-var util = new UTIL();
-
-
-
-//const Sequelize = require('sequelize');
-//const env = process.env.NODE_ENV || 'development';
-//const config = require('../database/config/config')[env];
-//const db = {}; //LDH
-
 /* 공통 환경 변수 설정 */
 global.grade = 0;  //기울기 
 
 process.on('warning', e => console.warn(e.stack));
 
-const { Pool } = require("pg");
-
-const pool = new Pool({
-	host: config.get('development.host'),
-	database: config.get('development.database'),
-	user: config.get('development.username'),
-	password: config.get('development.password'),
-	port: config.get('development.port')
-});
-
-//the pool with emit an error on behalf of any idle clients
-//it contains if a backend error or network partition happens
-pool.on('error', (err, client) => {
-	console.error('Unexpected error on idle client', err) // your callback here
-	process.exit(-1)
-})
-
-//promise - checkout a client
-pool.connect()
-.then(client => {
- return client.query('SELECT grade FROM tb_config') // 보트 기울기
-   .then(res => {
-	   if (res.rowCount > 0) {
-		   global.grade = res.rows[0].grade;
-		   logger.info('데이터베이스 연결됨');
-		   logger.info('서버   : '+ config.get('development.host'));
-		   logger.info('모듈명 : '+ callingModule.GetCallerModule().name);
-		   logger.info('기울기 : '+ global.grade);
-	   } else {
-		   global.grade = 60;  // 기울기 초기값
-	   }
-	   client.release()
-   })
-   .catch(e => {
-     console.log(e.stack) // your callback here
-     client.release()
-   })
-})
-
-pool.end();
-  
-module.exports = db;
-
-
 /**
  * Get port from environment and store in Express.
  */
 
-//var port = normalizePort(process.env.PORT || '3100');
-var port = config.get('development.appport');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-var server = http.createServer(app);
-
 // MQTT Server 접속
 const mqtt_options = {
-		  host: config.get('development.mqttIp'),
-		  port: config.get('development.mqttPort'),
+		  host: '192.168.123.105',
+		  port: 1883,
 		  protocol: 'mqtt'
 		};
 
 var mqtt=require("mqtt");
 var client=mqtt.connect(mqtt_options);
-
-logger.info('server : ' + config.get('development.mqttIp'));
-logger.info('port : ' + port);
-logger.info('current : ' + util.getCurrentTime());
 
 //client.setMaxListeners(0);  //  이벤트를 무한대로 등록
 
@@ -129,35 +59,8 @@ client.on("message", function(topic, message) {
 				
 				var sData = obj[sKey].split(",");
 
-				/***
-				logger.debug("Queue Message1:" + sData[15] + ":::" + util.getCurrentTime()); 
-				logger.debug("Queue Message2:" + sData); 
-				logger.debug("  "); 
-				
-				var geturl = "http://192.168.123.166:3100/data0?data="+ sData;
-				
-//				request(options, function (error, res, body) {
-				request.get({url:geturl}, function (error, res, body) {
-					
-					//logger.debug("Queue Message1:" + error);
-					//logger.debug("Queue Message2:" + res.statusCode);
-					//logger.debug("Queue Message3:" + body);
-					
-					if(!error && res.statusCode == 200) {
-						//logger.debug("body:" + body);
-					}
-					
-				});
-				***/
-	/**			
-				  res.render('data.ejs', {'data' : context}, function(err ,html){
-				      if (err){
-				          console.log(err)
-				      }
-				      //res.end(html) // 응답 종료
-				  })
-		**/		  
-
+				logger.debug("Queue Message:" + sData);
+/***
 				if( 1 == 1) {  // LDH
 					if(sKey === "boatData" && 1 == 1) {
 						logger.debug("************************************************");
@@ -168,6 +71,8 @@ client.on("message", function(topic, message) {
 						var BoatCheck = require('../public/myModules/boatCheck');
 						var boatCheck = new BoatCheck(sData); 
 						boatCheck.getBoatCheck();
+						
+						
 						
 					} else if(sKey === "lidarData" && 1 == 1) {
 						logger.debug("************************************************");
@@ -186,8 +91,8 @@ client.on("message", function(topic, message) {
 						logger.debug("************************************************");
 						db.InsertDBRssiData(sData);    // LDH
 					}
-					
 				}
+**/				
 			}    
 		}
 	} catch (err) {
@@ -195,15 +100,6 @@ client.on("message", function(topic, message) {
 	}
 	
 });
-
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 
 
 
@@ -383,10 +279,6 @@ function normalizePort(val) {
   return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -411,17 +303,3 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
-
-
-	

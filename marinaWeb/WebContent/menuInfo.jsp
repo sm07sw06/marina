@@ -193,6 +193,24 @@
                                 <span class="title">마리나항 전체 정박현황 관제</span>
                             </a>
                         </li>
+                        <li  style="display:none">
+                            <a href="noAuth.jsp" id="menu00050" >
+                                <i class="entypo-user"></i>
+                                <span class="title">시험테스트1</span>
+                            </a>
+                        </li>
+                        <li  style="display:none">
+                            <a href="noAuth.jsp" id="menu00051" >
+                                <i class="entypo-user"></i>
+                                <span class="title">시험테스트2</span>
+                            </a>
+                        </li>
+                        <li  style="display:none">
+                            <a href="noAuth.jsp" id="menu00052" >
+                                <i class="entypo-user"></i>
+                                <span class="title">시험테스트3</span>
+                            </a>
+                        </li>
                     </ul>   
                 </li>
 

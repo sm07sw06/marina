@@ -88,7 +88,7 @@ public class GetSosReport extends HttpServlet {
 			stmt = connectionDest.createStatement();
 			
 			sQuery  = " SELECT A.MARINA_ID, A.SEND_TIME, A.BOAT_ID, B.BOAT_NM, A.LATITUDE, A.LONGITUDE, \n ";
-			sQuery += "        CASE WHEN A.GRADEX > A.GRADEY THEN A.GRADEX ELSE A.GRADEY END AS GRADE \n ";
+			sQuery += "        CASE WHEN ABS(A.GRADEX) > ABS(A.GRADEY) THEN A.GRADEX ELSE A.GRADEY END AS GRADE \n ";
 			sQuery += "   FROM TB_SOS_LIST A, TB_BOAT B  \n ";
 			sQuery += "  WHERE 1 = 1  \n ";
 			sQuery += "    AND A.BOAT_ID = B.BOAT_ID \n ";

@@ -7,7 +7,7 @@
 
 char ssid[]="A1CommAP";
 char pass[]="topwifi7000";
-byte server1[]={192, 168, 123, 105}; // MQTT Server IP
+byte server1[]={192, 168, 123, 166}; // MQTT Server IP
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int port = 1883;
 int LEDPin4 = 4;
@@ -19,7 +19,7 @@ char gTopicPub[256];
 char gTopicSub[256];
 String stIp = "000.000.000.000";
 
-#define PERIOD 30 * 1000   //30초
+#define PERIOD 5 * 1000   //5초
 unsigned long prev_millis;
 
 char  sCurrentTime[18] = {0} ;

@@ -3,44 +3,52 @@
 <head>
 <meta charset="utf-8">
 <title>Insert title here</title>
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- mqtt cdn-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+
+
 <script type="text/javascript">
-   var socket=null;
-   var timer=null;
-   $(document).ready(function(){
-	   socket=io.connect(); // 3000port
-	   // Node.js보낸 데이터를 수신하는 부분
-	   socket.on("socket_evt_mqtt", function(data){
-		   data=JSON.parse(data);
-		   $(".mqttlist").html('<li>'+data.tmp+'('+data.hum+'%)'+'</li>');
-	   });
-	   if(timer==null){
-		   timer=window.setInterval("timer1()", 1000);
-	   }	   
-   });
-  function timer1(){
-	  socket.emit("socket_evt_mqtt", JSON.stringify({}));
-	  console.log("---------");
-  }  
-  function ledOnOff(value){
-      // {"led":1}, {"led":2}
-      socket.emit("socket_evt_led", JSON.stringify({led:Number(value)}));
-  }
-  function ajaxledOnOff(value){
-      if(value=="1") var value="on";
-      else if(value=="2") var value="off";
-      $.ajax({
-         url:"http://192.168.123.105:3000/devices/led/"+value,
-         type:"post",
-         success : ledStatus,
-         error : function(){ alert("error");}
-     });
-  }
- function ledStatus(obj){
-	 $("#led").html("<font color='red'>"+obj.led+"</font> 되었습니다.");	 
- }
+$(document).ready(function(){
+	
+	//var mqtt=require("mqtt");
+	//var client=mqtt.connect(mqtt_options);
+	
+	var port = 9001;
+	
+	var client = new Paho.MQTT.Client("192.168.123.166", Number(port), "clientId");
+	
+	client.onConnectionLost = onConnectionLost;
+	client.onMessageArrived = onMessageArrived;
+	
+	
+	client.connect(
+	    {onSuccess: onConnect}
+	);
+	
+	
+	function onConnect() {
+	    console.log("onConnect");
+	    client.subscribe("chartInfo"); //토픽 설정
+	}
+	
+	function onConnectionLost(responseObject){
+	    if(responseObject.errorCode != 0){
+	        console.log("onConnectionLost:" + responseObject.errorMessage);
+	    }
+	}
+	
+	function onMessageArrived(message) {
+	    console.log("Message arrived: topic=" + message.destinationName + ", message=" + message.payloadString);
+	    if (message.destinationName == "chartInfo") {
+	        var rdata=message.payloadString;
+	        var resultData = JSON.parse(rdata).result; //json형식으로 저장
+	    }
+	}
+});
 </script>
+
 </head>
 <body>
 MQTT 모니터링 서비스

@@ -166,6 +166,7 @@
 	//레이아웃 로드 완료 이벤트 핸들러 함수
 	function dblclickHandler(event) {
 		if(dataGrid.getSelectedIndex() >= 0 ) {
+			$('#F_MARINA_ID').val(dataGrid.getSelectedItem().MARINA_ID);
 			$('#F_BOAT_ID').val(dataGrid.getSelectedItem().BOAT_ID);
 			$('#F_BOAT_NM').val(dataGrid.getSelectedItem().BOAT_NM);
 			$('#F_USER_ID').val(dataGrid.getSelectedItem().USER_ID);
@@ -252,10 +253,11 @@
 	});
 	
 	$('#btnAdd').click(function (e) {
+		$('#F_MARINA_ID'   ).val("1");
 		$('#F_BOAT_ID'   ).val("");
 		$('#F_BOAT_NM'   ).val("");
 		$('#F_USER_ID'   ).val("");
-		$('#F_USER_ID'   ).val('1');		
+//		$('#F_USER_ID'   ).val('1');		
 		$('#F_USER_NM'   ).val("");
 		$('#F_BOAT_DESC' ).val("");
 		$('#CRUD'        ).val("C");
@@ -271,6 +273,7 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
+		obj.marina_id   = $("input#F_MARINA_ID").val();
 		obj.boat_id     = $("input#F_BOAT_ID").val();
 		obj.boat_nm     = $("input#F_BOAT_NM").val();
 		obj.boat_desc   = $("textarea#F_BOAT_DESC").val();
@@ -321,6 +324,7 @@
 		var formData = new FormData();
 		
 		var obj = new Object();
+		obj.marina_id   = $("input#F_MARINA_ID").val();
 		obj.boat_id   = $("input#F_BOAT_ID").val();
 		obj.crud        = "D";
 		
@@ -533,4 +537,5 @@
 	
 
 	$("input#F_BOAT_NM").focus();
-	$('#F_USER_ID').val('1');
+	$('#F_MARINA_ID').val('1');
+//	$('#F_USER_ID').val('1');	

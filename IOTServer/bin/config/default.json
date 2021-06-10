@@ -3,28 +3,34 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.103",
+    "host": "192.168.123.105",
     "port": "5432",
     "dialect": "mysql",
-    "appport": "3100"
+    "appport": "3100",
+    "mqttIp": "192.168.123.105",
+    "mqttPort": "1883"
   }, 
   "test": {
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.103",
+    "host": "192.168.123.105",
     "port": "5432",
     "dialect": "mysql",
-    "appport": "3100"
+    "appport": "3100",
+    "mqttIp": "192.168.123.105",
+    "mqttPort": "1883"
   },
   "production": {
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.103",
+    "host": "192.168.123.105",
     "port": "5432",
     "dialect": "mysql",
-    "appport": "3100"
+    "appport": "3100",
+    "mqttIp": "192.168.123.105",
+    "mqttPort": "1883"
   },
   "logConfig": {
     "logFolder": "..//logs//",

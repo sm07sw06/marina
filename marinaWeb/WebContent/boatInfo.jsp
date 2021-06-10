@@ -154,6 +154,7 @@
                                         <label for="f_name" class="col-sm-3 control-label">보트ID</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="F_BOAT_ID" readonly>
+                                            <input type="hidden" class="form-control" id="F_MARINA_ID" readonly>
                                         </div>
                                     </div>
                                                                     

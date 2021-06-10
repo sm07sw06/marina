@@ -273,7 +273,7 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 	    sQueryString += "  FROM tb_boat_device   \n";
 	    sQueryString += " WHERE marina_id = " + mObject.marinaId +  " AND machine_id = '" + mObject.machineId + "' " ;
 	
-//	logger.debug(sQueryString);
+	logger.debug(sQueryString);
 
 	try {	
 		pool.connect(function (err, clientdb, done) {
@@ -320,7 +320,7 @@ DB.prototype.SetBoatData = function (sData, callback) {
 	var nSatellite    = sData[27];
 	var nGpsage       = sData[33];
 	var sSenttype     = sData[14];
-
+    var indexNo       = sData[37];
  
 	logger.debug("----------------------------------");
 	logger.debug('Start SetBoatData insert........');
@@ -339,6 +339,7 @@ DB.prototype.SetBoatData = function (sData, callback) {
 	logger.debug("  nGpsage      :" + nGpsage      );	
 	logger.debug("  sSenttype    :" + sSenttype    );	
 	logger.debug("  ssend_time   :" + ssend_time   );
+	logger.debug("  indexNo      :" + indexNo   );
 	logger.debug("----------------------------------");
 
 	if(nTemperature == "") { nTemperature = 0; }
@@ -356,9 +357,9 @@ DB.prototype.SetBoatData = function (sData, callback) {
 
 
 //아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time) \n ";
+	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time, indexno) \n ";
 	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude + ",'"  + sLatitudeDir + "','" + sLongitudeDir + "' ";
-	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "' );  \n";
+	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "',"  + indexNo + " );  \n";
 	logger.debug("[INSERT INTO tb_boatdata]:"+sQueryString);
 
 	  try {
@@ -370,8 +371,39 @@ DB.prototype.SetBoatData = function (sData, callback) {
 						logger.error("ERROR!!" + err);
 						callback('ERROR');
 				    } else {
-				    	logger.debug("Boatdata Insert OK:");
-				    	callback('OK');
+				    	logger.debug("Boatdata Insert OK1:");
+//				    	callback('OK');
+				    	
+					    	
+					    	
+							var sQueryString  = "INSERT INTO tb_boatdata_test(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time, indexno, last_upd_tm) \n ";
+							sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude + ",'"  + sLatitudeDir + "','" + sLongitudeDir + "' ";
+							sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "',"  + indexNo + ", to_char(now(), 'YYYYMMDDHH24MISS') );  \n";
+							logger.debug("[INSERT INTO tb_boatdata_test]:"+sQueryString);
+	
+							  try {
+	
+								  pool.connect(function (err, clientdb, done) {
+										if (err) throw new Error(err);
+										clientdb.query(sQueryString, function (err, res) {
+											if (err) {
+												logger.error("ERROR!!" + err);
+												callback('ERROR');
+										    } else {
+										    	logger.debug("Boatdata Insert OK2:");
+										    	callback('OK');
+										    }
+											clientdb.release();
+										}); 
+									}); 
+							    } catch (err) {
+									logger.error("ERROR:"+err);
+									callback('ERROR');
+								} 
+	
+							    
+				    	
+				    	
 				    }
 					clientdb.release();
 				}); 
@@ -380,6 +412,7 @@ DB.prototype.SetBoatData = function (sData, callback) {
 			logger.error("ERROR:"+err);
 			callback('ERROR');
 		} 
+		    
 }
 
 //정박지 데이터 분석 처리
@@ -832,6 +865,7 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 	var sQueryString = "SELECT /* UpdateBoatHist */ marina_id, boat_id FROM tb_boat_device WHERE machine_id = '" + mObject.machineId + "' limit 1 \n";
 	logger.debug(sQueryString);
 
+	var ddd = 0;
     try {
 
 		pool.connect(function (err, clientdb, done) {
@@ -844,15 +878,18 @@ DB.prototype.UpdateBoatHist = function(mObject, callback) {
 			    	
 					for(var i = 0; i < res.rowCount ; i ++) {
 						mObject.boatId    = res.rows[i].boat_id;
-						logger.debug(" boat_id   :" +res.rows[i].boat_id);   
+						logger.debug(" boat_id[" + i + "] : " +res.rows[i].boat_id);   
 					}
 
 			    	sQueryString  = "INSERT INTO /* UpdateBoatHist */ public.tb_boat_hist(marina_id, boat_id,send_time,boatinout)  \n";
 				    sQueryString += "values ( " + mObject.marinaId + ", "  + mObject.boatId + ", '"  + mObject.sendTime + "', '"  + mObject.boatInout + "')  \n";
 				
+				    ddd++;
+					logger.error("ddd:" + ddd);
+					
 				    logger.debug(sQueryString);
-
-					clientdb.query(sQueryString, function (err, res) {
+				    
+					clientdb.query(sQueryString, function (err, response) {
 						if (err) {
 							logger.error("ERROR!!" + err);
 							callback('ERROR');
@@ -1206,21 +1243,21 @@ DB.prototype.SetDashBoard = function (mObject, callback) {
 	logger.debug("----------------------------------");
 
 	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "UPDATE /* SetDashBoard */ tb_io_status " ;
-		sQueryString += "   SET marina_id = " + mObject.marinaId  ;
+	var sQueryString  = "UPDATE /* SetDashBoard */ tb_io_status \n" ;
+		sQueryString += "   SET marina_id = " + mObject.marinaId + " \n"  ;
 
 		if( isEmpty(mObject.boatId)) {
-			sQueryString += "       , boat_id = null, gradex = null, gradey = null, latitude = null, longitude = null " ;
+			sQueryString += "       , boat_id = null, gradex = null, gradey = null, latitude = null, longitude = null \n" ;
 		} else {
-			sQueryString += "       , boat_id = " + mObject.boatId + ", gradex = " + mObject.gradex + ", gradey = " + mObject.gradey + ", latitude = " + mObject.latitude + ", longitude = " + mObject.longitude ;
+			sQueryString += "       , boat_id = " + mObject.boatId + ", gradex = " + mObject.gradex + ", gradey = " + mObject.gradey + ", latitude = " + mObject.latitude + ", longitude = " + mObject.longitude + "\n";
 		}
 		if( isEmpty(mObject.cctv_cd)) {
-			sQueryString += "       , cctv_cd = '', photo_base64 = '' " ;
+			sQueryString += "       , cctv_cd = '', photo_base64 = '' \n" ;
 		} else {
-			sQueryString += "       , cctv_cd = '" + mObject.cctv_cd + "', photo_base64 = '" + mObject.photo_base64 + "' " ;
+			sQueryString += "       , cctv_cd = '" + mObject.cctv_cd + "', photo_base64 = '" + mObject.photo_base64 + "' \n" ;
 		}
-	    sQueryString += "       , last_upd_tm = to_char(now(), 'YYYYMMDDHH24MISS') " ;
-        sQueryString += " WHERE marina_id = " + mObject.marinaId  ;
+	    sQueryString += "       , last_upd_tm = to_char(now(), 'YYYYMMDDHH24MISS') \n" ;
+        sQueryString += " WHERE marina_id = " + mObject.marinaId + "\n" ;
 
     logger.debug(sQueryString);
 

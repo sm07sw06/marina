@@ -2,11 +2,24 @@
 1.1 psql -h 192.168.123.103 -U postgres -d postgres
 1.2 CREATE DATABASE mydb WITH ENCODING='UTF8' OWNER=postgres;
 
-2.1 pg_dump -Fc -U postgres -d postgres -h 192.168.123.105 -f ./bbb.dump
+2.1 pg_dump -Fc -U postgres -d postgres -h 192.168.123.103 -f ./bbb.dump
+2.2 psql -U postgres -d mydb -h localhost
+2.3 DROP database postgres;
+2.4 CREATE DATABASE postgres WITH ENCODING='UTF8' OWNER=postgres;
+2.5 pg_restore -v -U postgres -d postgres -h localhost ./bbb.dump
+
+
+
+
+
+/****  Database Backup & restore *****/
+2.1 pg_dump -Fc -U postgres -d postgres -h localhost -f ./bbb.dump
 2.2 psql -U postgres -d mydb -h 192.168.123.103
 2.3 DROP database postgres;
 2.4 CREATE DATABASE postgres WITH ENCODING='UTF8' OWNER=postgres;
 2.5 pg_restore -v -U postgres -d postgres -h 192.168.123.103 ./bbb.dump
+
+
 
 
 
