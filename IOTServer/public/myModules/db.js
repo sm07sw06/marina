@@ -307,6 +307,7 @@ DB.prototype.GetRegBoatMachindId = function (mObject, callback) {
 DB.prototype.SetBoatData = function (sData, callback) {	
 
 	var sId           = sData[9];
+	var push_time     = sData[0];	
 	var ssend_time    = sData[15];
 	var nTemperature  = sData[16];
 	var nHumidity     = sData[17];
@@ -339,6 +340,7 @@ DB.prototype.SetBoatData = function (sData, callback) {
 	logger.debug("  nGpsage      :" + nGpsage      );	
 	logger.debug("  sSenttype    :" + sSenttype    );	
 	logger.debug("  ssend_time   :" + ssend_time   );
+	logger.debug("  push_time    :" + push_time   );
 	logger.debug("  indexNo      :" + indexNo   );
 	logger.debug("----------------------------------");
 
@@ -357,9 +359,9 @@ DB.prototype.SetBoatData = function (sData, callback) {
 
 
 //아래와 같이 .query 로 쿼리를 날릴 수 있다
-	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time, indexno) \n ";
+	var sQueryString  = "INSERT INTO tb_boatdata(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time, pushtime,indexno) \n ";
 	sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude + ",'"  + sLatitudeDir + "','" + sLongitudeDir + "' ";
-	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "',"  + indexNo + " );  \n";
+	sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "','"  + push_time + "',"  + indexNo + " );  \n";
 	logger.debug("[INSERT INTO tb_boatdata]:"+sQueryString);
 
 	  try {
@@ -376,9 +378,9 @@ DB.prototype.SetBoatData = function (sData, callback) {
 				    	
 					    	
 					    	
-							var sQueryString  = "INSERT INTO tb_boatdata_test(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time, indexno, last_upd_tm) \n ";
+							var sQueryString  = "INSERT INTO tb_boatdata_test(marina_id, machine_id, temperature, humidity, gradex, gradey, gpsquality, latitude, longitude,latitude_direction, longitude_direction, satellite, gpsage, sent_type, send_time,pushtime, indexno, last_upd_tm) \n ";
 							sQueryString += " values(1,'" + sId + "',"  + nTemperature + ","  + nHumidity + ","  + nGradex + ","  + nGradey + ","  + nGpsquality + ","  + nLatitude + "," + nLongitude + ",'"  + sLatitudeDir + "','" + sLongitudeDir + "' ";
-							sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "',"  + indexNo + ", to_char(now(), 'YYYYMMDDHH24MISS') );  \n";
+							sQueryString += ","  + nSatellite + ","  + nGpsage + ",'"  + sSenttype + "','"  + ssend_time + "','"  + push_time + "',"  + indexNo + ", to_char(now(), 'YYYYMMDDHH24MISS.ms') );  \n";
 							logger.debug("[INSERT INTO tb_boatdata_test]:"+sQueryString);
 	
 							  try {
@@ -491,7 +493,30 @@ DB.prototype.SetLidarData = function (sData, callback) {
 					callback('ERROR');
 			    } else {
 			    	logger.debug("Lidardata Insert OK:");
-			    	callback('OK');
+			    	
+				    
+				    	
+				    	// 아래와 같이 .query 로 쿼리를 날릴 수 있다
+				    	var sQueryString = "INSERT INTO public.tb_lidardata_test(marina_id, machine_id,angle_min,angle_max,load_min,ship_max,load_threshold,ship_threshold,temperature,huminity,send_time,pushtime,  \n";
+				    	sQueryString += " load_left_count,ship_left_count,load_right_count,ship_right_count,load_left_yn,ship_left_yn,load_right_yn,ship_right_yn,etcdata)  \n";
+				    	sQueryString += " values(1,'" + sId + "',"  + nAngleMin + ","  + nAngleMax + ","  + nLoadMin + ","  + nShipMax + ","  + nLoadThreshold + ","  + nShipThreshold  ;
+				    	sQueryString += ", " + nTempo + ","  + nHuminity + ",'"  + ssend_time + "','"  + ssend_time ;
+				    	sQueryString += "', " + nLoadLeftCount + ","  + nShipLeftCount + ","  + nLoadRightCount + ","  + nShipRightCount + ",'"  + sLoadLeftYn + "','"  + sShipLeftYn + "','"  + sLoadRightYn + "','"  + sShipRightYn + "','"  + sLongData + "' )  \n" ;
+				    	logger.debug(sQueryString);
+	
+			    		pool.connect(function (err, clientdb, done) {
+			    			if (err) throw new Error(err);
+			    			clientdb.query(sQueryString, function (err, res) {
+			    				if (err) {
+			    					logger.error("ERROR!!" + err);
+			    					callback('ERROR');
+			    			    } else {
+			    			    	logger.debug("Lidardata_test Insert OK:");
+			    			    	callback('OK');
+			    			    }
+			    				clientdb.release();
+			    			});
+			    		}); 
 			    }
 				clientdb.release();
 			});

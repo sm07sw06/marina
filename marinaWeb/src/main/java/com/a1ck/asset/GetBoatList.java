@@ -85,7 +85,7 @@ public class GetBoatList extends HttpServlet {
 			Statement stmt = connectionDest.createStatement();
 			stmt = connectionDest.createStatement();
 			
-			sQuery  = " SELECT A.BOAT_ID, A.BOAT_NM, A.USER_ID, B.USER_NM, A.BOAT_STATUS,C.DETAIL_NM,A.BOAT_DESC  \n ";
+			sQuery  = " SELECT A.MARINA_ID, A.BOAT_ID, A.BOAT_NM, A.USER_ID, B.USER_NM, A.BOAT_STATUS,C.DETAIL_NM,A.BOAT_DESC  \n ";
 			sQuery += "   FROM TB_BOAT A LEFT OUTER JOIN TB_USER_INFO B ON A.USER_ID = B.USER_ID  \n ";
 			sQuery += "                  LEFT OUTER JOIN TB_CODE_DETAIL C on A.BOAT_STATUS = C.DETAIL_CD AND C.GROUP_CD = 'BOAT_STATUS' \n ";
 			sQuery += "  WHERE 1 = 1 \n ";
@@ -110,6 +110,7 @@ public class GetBoatList extends HttpServlet {
 				JSONObject datas = new JSONObject();
 				
 				datas.put("BOAT_ID"   	, rs.getString("BOAT_ID"));	
+				datas.put("MARINA_ID"   	, rs.getString("MARINA_ID"));	
 				datas.put("BOAT_NM"   	, rs.getString("BOAT_NM"));	
 				datas.put("USER_ID"   	, rs.getString("USER_ID"));	 
 				datas.put("USER_NM"   	, rs.getString("USER_NM"));	

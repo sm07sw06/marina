@@ -656,6 +656,14 @@
 		<servlet-name>GetBoatListTest01</servlet-name>
 		<url-pattern>/GetBoatListTest01</url-pattern>
 	</servlet-mapping>		
+	<servlet>
+		<servlet-name>GetBoatListTest02</servlet-name>
+		<servlet-class>com.a1ck.asset.GetBoatListTest02</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetBoatListTest02</servlet-name>
+		<url-pattern>/GetBoatListTest02</url-pattern>
+	</servlet-mapping>		
 
 	
 	 <filter>

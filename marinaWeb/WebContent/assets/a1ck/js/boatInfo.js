@@ -415,6 +415,7 @@
 				<DataGridColumn dataField="USER_NM"     id="colUserNm" 		 headerText="회원명"  width="100" />\
 				<DataGridColumn dataField="BOAT_STATUS" id="colBoatStatus" 	 headerText="상태"   width="100" visible="false" />\
 				<DataGridColumn dataField="DETAIL_NM"   id="colBoatStatusNm" headerText="상태"   width="100" />\
+				<DataGridColumn dataField="MARINA_ID"    id="colMarinaId" 			headerText="마리나" width="100" visible="false" />\
 				<DataGridColumn dataField="BOAT_DESC"   id="colBoatDesc" 	 headerText="설명"   width="100" visible="false" />\
 			</columns>\
 			<dataProvider>\

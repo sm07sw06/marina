@@ -3,11 +3,11 @@
     "username": "postgres",
     "password": "topadmin",
     "database": "postgres",
-    "host": "192.168.123.105",
+    "host": "192.168.123.125",
     "port": "5432",
     "dialect": "mysql",
     "appport": "3100",
-    "mqttIp": "192.168.123.105",
+    "mqttIp": "192.168.123.125",
     "mqttPort": "1883"
   }, 
   "test": {
