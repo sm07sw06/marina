@@ -271,7 +271,7 @@
 				<DataGridColumn dataField="SECTOR_DESC" id="colSectorDesc" 	headerText="설명" width="200"/>\
 			</groupedColumns>\
 			<dataProvider>\
-				<PagingCollection rowsPerPage="18" source="{$gridData}"/>\
+				<PagingCollection rowsPerPage="15" source="{$gridData}"/>\
 			</dataProvider>\
 		</DataGrid>\
 	</rMateGrid>';

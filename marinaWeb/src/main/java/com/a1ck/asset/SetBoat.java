@@ -99,6 +99,15 @@ public class SetBoat extends HttpServlet {
 					stmt.execute(updateSql);
 					
 					stmt.close();			   
+			   } else if(sCrud.equals("B")) {
+				    String updateSql      = "DELETE FROM TB_LIDARDATA_TEST \n";
+					
+					stmt = connectionDest.createStatement();
+					logger.debug("SetBoat sql:" + updateSql);
+					stmt.execute(updateSql);
+					
+					stmt.close();			   
+					
 					
 			   } else if(sCrud.equals("D")) {
 				    String updateSql      = "DELETE FROM TB_BOAT \n";

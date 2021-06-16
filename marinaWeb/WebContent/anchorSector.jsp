@@ -141,7 +141,7 @@ document.querySelector('#find-me').addEventListener('click', geoFindMe);
 							<!-- panel body -->
 						<div class="content">
 							<!-- 그리드가 삽입될 DIV -->
-							<div id="gridHolder" style="width:100%; height:600px;"></div>
+							<div id="gridHolder" style="width:100%; height:550px;"></div>
 							<div class="gridPaging" id="gridPageNavigationDiv"></div>
 						</div>
 							

@@ -2,13 +2,12 @@ package com.a1ck.util;
 
 
 import java.sql.Connection;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 public abstract class ConnectionManager {
 	
-	//public Logger logger = Logger.getLogger(this.getClass().getName()+".class");
-	private final Logger logger = LogManager.getLogger(this.getClass().getName() + ".class");
+	//private final Logger logger = LogManager.getLogger(this.getClass().getName() + ".class");
 	
     protected DBConnectionPoolManager connMgr;
     protected String poolName;

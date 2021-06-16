@@ -1,7 +1,13 @@
 package com.a1ck.util;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Vector;
+
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 public class DBConnectionPool{
 	private int checkedOut;
@@ -14,6 +20,8 @@ public class DBConnectionPool{
 
 	public static final int DEFAULT_MAX_CON=50;
 
+	//private final Logger logger = LogManager.getLogger(this.getClass().getName() + ".class");
+	
 	public DBConnectionPool(String name, String url, String user, String password, int maxConn) {
 		this.name = name;
 		this.url = url;
@@ -29,7 +37,9 @@ public class DBConnectionPool{
 	public synchronized Connection getConnection() throws DBPoolException {
 		Connection conn = null;
 
+		
 		while(freeConnections.size() <= 0) {
+			
 			if(checkedOut < maxConn) {
 				conn = newConnection();
 			break;
@@ -60,6 +70,7 @@ public class DBConnectionPool{
 	}
 
 	private Connection newConnection() {
+		
 		Connection conn = null;
 		try {
 			if(user == null) {
